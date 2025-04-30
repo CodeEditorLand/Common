@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../Source/Function/Response.ts"],
-  "sourcesContent": ["import type Interface from \"../Interface/Response.js\";\n\n/**\n * @module Response\n *\n */\nexport default (async (...Option) =>\n\tnew Response(JSON.stringify(Option[0]), {\n\t\tstatus: Option[1] ?? 200,\n\t\theaders: {\n\t\t\t\"Content-Type\": \"application/json;charset=utf-8\",\n\t\t},\n\t})) satisfies Interface as Interface;\n\nexport const { Response } = await import(\n\t\"@cloudflare/workers-types/experimental/index.js\"\n);\n"],
-  "mappings": ";;AAMA,IAAO,mBAAS,iCAAU,WACzB,IAAI,SAAS,KAAK,UAAU,OAAO,CAAC,CAAC,GAAG;AAAA,EACvC,QAAQ,OAAO,CAAC,KAAK;AAAA,EACrB,SAAS;AAAA,IACR,gBAAgB;AAAA,EACjB;AACD,CAAC,GANc;AAQT,MAAM,EAAE,SAAS,IAAI,MAAM,OACjC,iDACD;",
-  "names": []
-}

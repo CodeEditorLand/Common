@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../Source/Function/Access.ts"],
-  "sourcesContent": ["import type Interface from \"../Interface/Access.js\";\nimport type Data from \"../Interface/Data.js\";\n\n/**\n * @module Access\n *\n */\nexport default (async (...[Key, Identifier, { get }, View]) => {\n\ttry {\n\t\tconst { Vector, Data } = (await get(Identifier, {\n\t\t\ttype: \"json\",\n\t\t})) satisfies unknown as Data;\n\n\t\treturn JSON.parse(\n\t\t\t(await import(\"buffer\")).Buffer.from(\n\t\t\t\tawait (\n\t\t\t\t\tawait import(\"./Decrypt.js\")\n\t\t\t\t).default(\n\t\t\t\t\tawait Uint8ArrayFromObject(Data),\n\t\t\t\t\tKey ?? \"\",\n\t\t\t\t\tawait Uint8ArrayFromObject(Vector),\n\t\t\t\t),\n\t\t\t).toString(),\n\t\t)[View];\n\t} catch (_Error) {\n\t\tconsole.log(_Error);\n\t}\n}) satisfies Interface as Interface;\n\nexport const { default: Uint8ArrayFromObject } = await import(\n\t\"./Uint8ArrayFromObject.js\"\n);\n"],
-  "mappings": ";;AAOA,IAAO,iBAAS,iCAAU,CAAC,KAAK,YAAY,EAAE,IAAI,GAAG,IAAI,MAAM;AAC9D,MAAI;AACH,UAAM,EAAE,QAAQ,KAAK,IAAK,MAAM,IAAI,YAAY;AAAA,MAC/C,MAAM;AAAA,IACP,CAAC;AAED,WAAO,KAAK;AAAA,OACV,MAAM,OAAO,QAAQ,GAAG,OAAO;AAAA,QAC/B,OACC,MAAM,OAAO,cAAc,GAC1B;AAAA,UACD,MAAM,qBAAqB,IAAI;AAAA,UAC/B,OAAO;AAAA,UACP,MAAM,qBAAqB,MAAM;AAAA,QAClC;AAAA,MACD,EAAE,SAAS;AAAA,IACZ,EAAE,IAAI;AAAA,EACP,SAAS,QAAQ;AAChB,YAAQ,IAAI,MAAM;AAAA,EACnB;AACD,GApBgB;AAsBT,MAAM,EAAE,SAAS,qBAAqB,IAAI,MAAM,OACtD,2BACD;",
-  "names": []
-}
