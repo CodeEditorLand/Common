@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../Source/Function/Decrypt.ts"],
-  "sourcesContent": ["import type Interface from \"../Interface/Decrypt.js\";\r\n\r\n/**\r\n * @module Decrypt\r\n *\r\n */\r\n\r\nexport default (async (...[Data, Key, Vector]) =>\r\n\tnew Uint8Array(\r\n\t\tawait (\r\n\t\t\tawait import(\"@cloudflare/workers-types/experimental\")\r\n\t\t).crypto.subtle.decrypt(\r\n\t\t\t{\r\n\t\t\t\tname: \"AES-GCM\",\r\n\t\t\t\tiv: Vector,\r\n\t\t\t\ttagLength: 128,\r\n\t\t\t},\r\n\t\t\tawait (\r\n\t\t\t\tawait import(\"@cloudflare/workers-types/experimental\")\r\n\t\t\t).crypto.subtle.importKey(\r\n\t\t\t\t\"jwk\",\r\n\t\t\t\t{\r\n\t\t\t\t\tkty: \"oct\",\r\n\t\t\t\t\tk: Key ?? \"\",\r\n\t\t\t\t\talg: \"A256GCM\",\r\n\t\t\t\t\text: true,\r\n\t\t\t\t},\r\n\t\t\t\t{\r\n\t\t\t\t\tname: \"AES-GCM\",\r\n\t\t\t\t},\r\n\t\t\t\tfalse,\r\n\t\t\t\t[\"encrypt\", \"decrypt\"],\r\n\t\t\t),\r\n\t\t\tData,\r\n\t\t),\r\n\t)) satisfies Interface as Interface;\r\n"],
-  "mappings": ";;AAOA,IAAO,kBAAS,iCAAU,CAAC,MAAM,KAAK,MAAM,MAC3C,IAAI;AAAA,EACH,OACC,MAAM,OAAO,wCAAwC,GACpD,OAAO,OAAO;AAAA,IACf;AAAA,MACC,MAAM;AAAA,MACN,IAAI;AAAA,MACJ,WAAW;AAAA,IACZ;AAAA,IACA,OACC,MAAM,OAAO,wCAAwC,GACpD,OAAO,OAAO;AAAA,MACf;AAAA,MACA;AAAA,QACC,KAAK;AAAA,QACL,GAAG,OAAO;AAAA,QACV,KAAK;AAAA,QACL,KAAK;AAAA,MACN;AAAA,MACA;AAAA,QACC,MAAM;AAAA,MACP;AAAA,MACA;AAAA,MACA,CAAC,WAAW,SAAS;AAAA,IACtB;AAAA,IACA;AAAA,EACD;AACD,GA5Be;",
-  "names": []
-}

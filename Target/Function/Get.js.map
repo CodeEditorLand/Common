@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../Source/Function/Get.ts"],
-  "sourcesContent": ["import type Interface from \"../Interface/Get.js\";\r\n\r\n/**\r\n * @module Get\r\n *\r\n */\r\nexport default (async (...[Instance]) => {\r\n\tif (typeof Instance === \"string\") {\r\n\t\treturn Instance;\r\n\t}\r\n\r\n\tconst _Map = new Map();\r\n\r\n\tif (typeof Instance === \"object\") {\r\n\t\tfor (const Key in Instance) {\r\n\t\t\tif (Object.prototype.hasOwnProperty.call(Instance, Key)) {\r\n\t\t\t\tif (\r\n\t\t\t\t\ttypeof Instance[Key] === \"object\" &&\r\n\t\t\t\t\t!Array.isArray(Instance[Key])\r\n\t\t\t\t) {\r\n\t\t\t\t\t_Map.set(\r\n\t\t\t\t\t\tKey,\r\n\t\t\t\t\t\tawait (\r\n\t\t\t\t\t\t\tawait import(\"@Function/Get.js\")\r\n\t\t\t\t\t\t).default(Instance[Key]),\r\n\t\t\t\t\t);\r\n\t\t\t\t} else {\r\n\t\t\t\t\t_Map.set(Key, Instance[Key]);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\treturn _Map;\r\n}) satisfies Interface as Interface;\r\n"],
-  "mappings": ";;AAMA,IAAO,cAAS,iCAAU,CAAC,QAAQ,MAAM;AACxC,MAAI,OAAO,aAAa,UAAU;AACjC,WAAO;AAAA,EACR;AAEA,QAAM,OAAO,oBAAI,IAAI;AAErB,MAAI,OAAO,aAAa,UAAU;AACjC,eAAW,OAAO,UAAU;AAC3B,UAAI,OAAO,UAAU,eAAe,KAAK,UAAU,GAAG,GAAG;AACxD,YACC,OAAO,SAAS,GAAG,MAAM,YACzB,CAAC,MAAM,QAAQ,SAAS,GAAG,CAAC,GAC3B;AACD,eAAK;AAAA,YACJ;AAAA,YACA,OACC,MAAM,OAAO,kBAAkB,GAC9B,QAAQ,SAAS,GAAG,CAAC;AAAA,UACxB;AAAA,QACD,OAAO;AACN,eAAK,IAAI,KAAK,SAAS,GAAG,CAAC;AAAA,QAC5B;AAAA,MACD;AAAA,IACD;AAAA,EACD;AAEA,SAAO;AACR,GA5BgB;",
-  "names": []
-}

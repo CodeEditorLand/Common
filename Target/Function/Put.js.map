@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../Source/Function/Put.ts"],
-  "sourcesContent": ["import type Interface from \"../Interface/Put.js\";\r\n\r\n/**\r\n * @module Put\r\n *\r\n */\r\nexport default (async (...[Instance]) => {\r\n\tif (Instance instanceof Map) {\r\n\t\tconst _Value = {} as {\r\n\t\t\t// biome-ignore lint/suspicious/noExplicitAny:\r\n\t\t\t[key: string]: any | ReturnType<Interface>;\r\n\t\t};\r\n\r\n\t\tfor (const [Key, Value] of Instance.entries()) {\r\n\t\t\tif (Value instanceof Map) {\r\n\t\t\t\t_Value[Key] = await (\r\n\t\t\t\t\tawait import(\"@Function/Put.js\")\r\n\t\t\t\t).default(Value);\r\n\t\t\t} else {\r\n\t\t\t\t_Value[Key] = Value;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn _Value;\r\n\t}\r\n\r\n\treturn Instance;\r\n}) satisfies Interface as Interface;\r\n"],
-  "mappings": ";;AAMA,IAAO,cAAS,iCAAU,CAAC,QAAQ,MAAM;AACxC,MAAI,oBAAoB,KAAK;AAC5B,UAAM,SAAS,CAAC;AAKhB,eAAW,CAAC,KAAK,KAAK,KAAK,SAAS,QAAQ,GAAG;AAC9C,UAAI,iBAAiB,KAAK;AACzB,eAAO,GAAG,IAAI,OACb,MAAM,OAAO,kBAAkB,GAC9B,QAAQ,KAAK;AAAA,MAChB,OAAO;AACN,eAAO,GAAG,IAAI;AAAA,MACf;AAAA,IACD;AAEA,WAAO;AAAA,EACR;AAEA,SAAO;AACR,GArBgB;",
-  "names": []
-}

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../Source/Function/Uint8ArrayFromObject.ts"],
-  "sourcesContent": ["import type Interface from \"../Interface/Uint8ArrayFromObject.js\";\r\n\r\n/**\r\n * @module Uint8ArrayFromObject\r\n *\r\n */\r\nexport default (async (...[_Object]) => {\r\n\tconst Keys = Object.keys(_Object)\r\n\t\t.map(Number)\r\n\t\t.sort((a, b) => a - b);\r\n\r\n\tconst _Array = new Uint8Array(Keys.length);\r\n\r\n\tKeys.forEach((Key, Index) => {\r\n\t\t_Array[Index] = _Object[Key] ?? 0;\r\n\t});\r\n\r\n\treturn _Array;\r\n}) satisfies Interface as Interface;\r\n"],
-  "mappings": ";;AAMA,IAAO,+BAAS,iCAAU,CAAC,OAAO,MAAM;AACvC,QAAM,OAAO,OAAO,KAAK,OAAO,EAC9B,IAAI,MAAM,EACV,KAAK,CAAC,GAAG,MAAM,IAAI,CAAC;AAEtB,QAAM,SAAS,IAAI,WAAW,KAAK,MAAM;AAEzC,OAAK,QAAQ,CAAC,KAAK,UAAU;AAC5B,WAAO,KAAK,IAAI,QAAQ,GAAG,KAAK;AAAA,EACjC,CAAC;AAED,SAAO;AACR,GAZgB;",
-  "names": []
-}
