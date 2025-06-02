@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../Source/Function/Redirect.ts"],
-  "sourcesContent": ["import type Interface from \"../Interface/Redirect.js\";\n\n/**\n * @module Redirect\n *\n */\nexport default (async (...Option) =>\n\tResponse.redirect(\n\t\tOption[0] ?? \"\",\n\t\tOption[1] ?? 302,\n\t)) satisfies Interface as Interface;\n\nexport const { Response } = await import(\n\t\"@cloudflare/workers-types/experimental/index.js\"\n);\n"],
-  "mappings": ";;AAMA,IAAO,mBAAS,iCAAU,WACzB,SAAS;AAAA,EACR,OAAO,CAAC,KAAK;AAAA,EACb,OAAO,CAAC,KAAK;AACd,GAJe;AAMT,MAAM,EAAE,SAAS,IAAI,MAAM,OACjC,iDACD;",
-  "names": []
-}
