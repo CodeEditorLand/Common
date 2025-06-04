@@ -3,9 +3,13 @@ serde = { version = "1.0.219", features = ["derive"] }
 toml = { version = "0.8.20" }
 
 [dependencies]
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+url = { workspace = true }
+
 
 [features]
-Development = ["tokio-console"]
 default = []
 
 [lib]
