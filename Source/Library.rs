@@ -11,29 +11,29 @@ pub mod Errors;
 pub mod Runtime;
 
 // Effect and DTO Modules (Grouped by Feature)
-pub mod CommandEffects;
-pub mod ConfigEffects;
-pub mod ConfigurationDto; // DTOs for ConfigEffects
-pub mod DiagnosticsEffects;
-pub mod DocumentDto; // DTOs for DocumentEffects
-pub mod DocumentEffects;
-pub mod FileSystemDto; // DTOs for FsEffects
-pub mod FsEffects;
+pub mod CommandEffect;
+pub mod ConfigEffect;
+pub mod ConfigurationDto; // DTOs for ConfigEffect
+pub mod DiagnosticsEffect;
+pub mod DocumentDto; // DTOs for DocumentEffect
+pub mod DocumentEffect;
+pub mod FileSystemDto; // DTOs for FsEffect
+pub mod FsEffect;
 pub mod HasEnvironment; // A utility trait
-pub mod IpcDto; // DTOs for IpcEffects
-pub mod IpcEffects;
-pub mod LanguageFeatureDto; // DTOs for LanguageFeatureEffects
-pub mod LanguageFeatureEffects;
-pub mod OutputEffects;
-pub mod SecretsEffects;
-pub mod StorageEffects;
-pub mod UiDto; // DTOs for UiEffects
-pub mod UiEffects;
-pub mod WorkspaceEffects;
+pub mod IpcDto; // DTOs for IpcEffect
+pub mod IpcEffect;
+pub mod LanguageFeatureDto; // DTOs for LanguageFeatureEffect
+pub mod LanguageFeatureEffect;
+pub mod OutputEffect;
+pub mod SecretsEffect;
+pub mod StorageEffect;
+pub mod UiDto; // DTOs for UiEffect
+pub mod UiEffect;
+pub mod WorkspaceEffect;
 
 // Re-exporting DTO modules for convenient access under a consistent namespace.
 // This was part of the original design and is kept for compatibility.
-// A more modern approach might have each `...Effects` module export its own
+// A more modern approach might have each `...Effect` module export its own
 // DTOs directly. This structure is maintained as per the provided file
 // contents.
 pub mod Dto {

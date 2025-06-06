@@ -139,7 +139,7 @@ impl<ContextEnv:Environment + Send + Sync + 'static> Runtime<ContextEnv> for Def
 		// trait's generic nature rather than a production-ready executor for all
 		// effect patterns.
 		panic!(
-			"DefaultRuntime::run is a conceptual implementation. For ActionEffects specifically designed to take \
+			"DefaultRuntime::run is a conceptual implementation. For ActionEffect specifically designed to take \
 			 Arc<SpecificAppRuntime> as their accessor, it's typical for SpecificAppRuntime itself to have a method \
 			 like `async fn run(self: Arc<Self>, effect: ActionEffect<Arc<Self>, Err, Out>) -> Result<Out, Err>` \
 			 which directly calls `effect.apply(self).await`."

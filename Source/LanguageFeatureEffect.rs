@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------------------
-// Language Feature Provider Effects (language_feature_effects.rs)
+// Language Feature Provider Effect (language_feature_effects.rs)
 // ---------------------------------------------------------------------------------------------
 // Defines DTOs for language features, the trait
 // (`LanguageFeatureProviderRegistry`) for managing language feature provider

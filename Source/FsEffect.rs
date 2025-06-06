@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------------------
-// Filesystem Effects (fs_effects.rs)
+// Filesystem Effect (fs_effects.rs)
 // ---------------------------------------------------------------------------------------------
 // Defines traits (`FsReader`, `FsWriter`) for abstracting filesystem operations
 // and provides `ActionEffect` constructors for common FS tasks.
