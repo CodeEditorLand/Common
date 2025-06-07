@@ -160,7 +160,7 @@ impl From<serde_json::Error> for CommonError {
 // FsError snippets but doesn't belong in `errors.rs`.
 //
 // Example:
-// // (in fs_effects.rs or a dedicated fs_types.rs)
+// // 
 // #[derive(Debug, Serialize, Deserialize)]
 // pub struct DirEntryInfo {
 //     pub name: String,

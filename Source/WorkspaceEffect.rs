@@ -47,7 +47,7 @@ pub trait WorkspaceProvider: Environment {
 
 	/// Finds files within the workspace matching the given criteria.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `include_pattern_dto`: A DTO (as `Value`) representing glob patterns
 	///   to include.
 	/// * `exclude_pattern_dto`: An optional DTO (as `Value`) for glob patterns

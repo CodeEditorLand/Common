@@ -26,7 +26,7 @@ pub trait DiagnosticsManager: Environment {
 	/// Sets or updates diagnostics for multiple resources from a specific
 	/// owner.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `owner`: A string identifying the source of the diagnostics (e.g.,
 	///   "eslint", "typescript-language-features").
 	/// * `entries_dto_val`: A `serde_json::Value` representing an array of
@@ -46,7 +46,7 @@ pub trait DiagnosticsManager: Environment {
 
 	/// Retrieves all diagnostics, optionally filtered by a resource URI.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `resource_uri_filter_opt`: An optional `serde_json::Value`
 	///   representing `UriComponents` DTO. If `Some`, only diagnostics for that
 	///   specific URI are returned. If `None`, all diagnostics from all owners

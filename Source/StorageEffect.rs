@@ -19,7 +19,7 @@ use crate::{
 pub trait StorageProvider: Environment {
 	/// Retrieves a value from storage.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `is_global_scope`: If `true`, retrieves from global storage;
 	///   otherwise, from workspace storage.
 	/// * `key`: The key of the value to retrieve.
@@ -33,7 +33,7 @@ pub trait StorageProvider: Environment {
 	/// Setting `value_to_set` to `None` (or `Value::Null` via the effect)
 	/// typically deletes the key.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `is_global_scope`: If `true`, updates global storage; otherwise,
 	///   workspace storage.
 	/// * `key`: The key of the value to update.
@@ -55,7 +55,7 @@ pub trait StorageProvider: Environment {
 
 /// Creates an effect to retrieve an item from storage.
 ///
-/// # Arguments
+/// # Argument
 /// * `target_object`: A `serde_json::Value` expected to be an object with:
 ///   - `scope` (boolean, optional): `true` for global, `false` or absent for
 ///     workspace.
@@ -88,7 +88,7 @@ pub fn get_storage_item(target_object:Value) -> ActionEffect<Arc<AppRuntime>, Co
 
 /// Creates an effect to set or update an item in storage.
 ///
-/// # Arguments
+/// # Argument
 /// * `target_object`: A `serde_json::Value` expected to be an object with:
 ///   - `scope` (boolean, optional): `true` for global, `false` or absent for
 ///     workspace.

@@ -1,4 +1,4 @@
-// File: Common/Library.rs
+
 // Serves as the main library entry point for the `Common` crate,
 // declaring and re-exporting all core effects, DTOs, and traits.
 

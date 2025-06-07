@@ -39,7 +39,7 @@ pub struct ActionEffect<E_Accessor:?Sized, Err, Out> {
 impl<E_Accessor:?Sized, Err, Out> ActionEffect<E_Accessor, Err, Out> {
 	/// Creates a new `ActionEffect`.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `func`: A closure that takes an environment accessor (`E_Accessor`)
 	///   and returns a pinned, boxed future. This future represents the
 	///   asynchronous operation of the effect.
@@ -55,7 +55,7 @@ impl<E_Accessor:?Sized, Err, Out> ActionEffect<E_Accessor, Err, Out> {
 	/// `AppRuntime::run`). The `Runtime` is responsible for providing the
 	/// correct `env_accessor`.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `env_accessor`: The environment accessor (e.g., `Arc<AppRuntime>`)
 	///   required by the effect's closure.
 	///

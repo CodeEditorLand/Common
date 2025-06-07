@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------------------
-// Language Feature Provider Effect (language_feature_effects.rs)
+// Language Feature Provider Effect 
 // ---------------------------------------------------------------------------------------------
 // Defines DTOs for language features, the trait
 // (`LanguageFeatureProviderRegistry`) for managing language feature provider
@@ -677,7 +677,7 @@ pub struct ProviderOptionsDto {
 pub trait LanguageFeatureProviderRegistry: Send + Sync {
 	/// Registers a language feature provider.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `sidecar_id` - ID of the sidecar registering the provider.
 	/// * `provider_type` - The type of provider being registered.
 	/// * `selector` - JSON Value representing DocumentSelector.

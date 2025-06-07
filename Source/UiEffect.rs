@@ -158,7 +158,7 @@ pub struct InputBoxOptions {
 pub trait UiProvider: Environment {
 	/// Shows a message to the user.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `severity`: The severity of the message (Info, Warning, Error).
 	/// * `message`: The main text of the message.
 	/// * `options`: Optional `MessageOptions` DTO (passed as `Value` for

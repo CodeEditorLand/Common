@@ -45,7 +45,7 @@ pub trait DocumentProvider: Environment {
 	/// Opens an existing document from a URI or creates a new untitled
 	/// document.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `uri_components_dto`: A `serde_json::Value` representing
 	///   `UriComponents`. If `Value::Null` or an empty object, a new untitled
 	///   document is typically created.
@@ -84,7 +84,7 @@ pub trait DocumentProvider: Environment {
 
 	/// Saves all currently dirty documents.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `include_untitled`: If `true`, prompts to save untitled dirty
 	///   documents. If `false`, untitled documents might be skipped or handled
 	///   differently.
@@ -98,7 +98,7 @@ pub trait DocumentProvider: Environment {
 	/// Applies a collection of content changes to the document at the given
 	/// URI.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `uri`: The URI of the document to modify.
 	/// * `new_version_id`: The expected version ID of the document after these
 	///   changes are applied.

@@ -157,7 +157,7 @@ pub fn establish_host_connection(sidecar_id:String) -> ActionEffect<Arc<AppRunti
 /// This is useful if Mountain acts as a router for certain cross-sidecar
 /// communications.
 ///
-/// # Arguments
+/// # Argument
 /// * `target_sidecar_id` - The ID of the sidecar to which the call should be
 ///   proxied.
 /// * `call_data` - A JSON Value expected to contain `{"method": "methodName",

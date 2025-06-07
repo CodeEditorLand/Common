@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------------------------
-// Filesystem Effect (fs_effects.rs)
+// Filesystem Effect 
 // ---------------------------------------------------------------------------------------------
 // Defines traits (`FsReader`, `FsWriter`) for abstracting filesystem operations
 // and provides `ActionEffect` constructors for common FS tasks.
@@ -92,7 +92,7 @@ pub trait FsReader: Environment + Send + Sync {
 pub trait FsWriter: Environment + Send + Sync {
 	/// Writes byte content to a file.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `path`: The path to the file.
 	/// * `content`: The byte content to write.
 	/// * `create`: If true, create the file if it does not exist. Parent
@@ -103,7 +103,7 @@ pub trait FsWriter: Environment + Send + Sync {
 
 	/// Creates a directory.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `path`: The path to the directory.
 	/// * `recursive`: If true, create parent directories if they do not exist.
 	/// If false and parents don't exist, an error should be returned.
@@ -112,7 +112,7 @@ pub trait FsWriter: Environment + Send + Sync {
 
 	/// Deletes a file or directory.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `path`: The path to delete.
 	/// * `recursive`: If true and `path` is a directory, delete recursively. If
 	///   false and `path` is a non-empty directory, an error should be
@@ -125,7 +125,7 @@ pub trait FsWriter: Environment + Send + Sync {
 
 	/// Renames (moves) a file or directory.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `source`: The current path of the file/directory.
 	/// * `target`: The new path for the file/directory.
 	/// * `overwrite`: If true, replace the target if it exists. If false and
@@ -134,7 +134,7 @@ pub trait FsWriter: Environment + Send + Sync {
 
 	/// Copies a file or directory.
 	///
-	/// # Arguments
+	/// # Argument
 	/// * `source`: The path of the file/directory to copy.
 	/// * `target`: The path to copy to.
 	/// * `overwrite`: If true, replace the target if it exists. If false and
