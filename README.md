@@ -105,7 +105,7 @@ its trait definitions, DTOs, and effect constructors.
 
 ```
 Common/
-└── src/
+└── Source/
     ├── lib.rs                      # Crate root, declares all modules.
     ├── environment/                # The core DI system (Environment, Requires traits).
     ├── effect/                     # The ActionEffect system (ActionEffect, AppRuntime traits).
@@ -182,11 +182,11 @@ Common = { path = "../Common" }
 A developer working within the `Mountain` codebase would use `Common` as
 follows:
 
-1.  **Implement a Trait:** In `Mountain/src/environment/`, provide the concrete
+1.  **Implement a Trait:** In `Mountain/Source/environment/`, provide the concrete
     implementation for a `Common` trait.
 
     ```rust
-    // In Mountain/src/environment/FsProvider.rs
+    // In Mountain/Source/environment/FsProvider.rs
     use Common::fs::{FsReader, FsWriter};
 
     #[async_trait]
