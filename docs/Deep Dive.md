@@ -7,6 +7,8 @@
 </h3> </td>
 </tr></table>
 
+---
+
 # **Common** 👨🏻‍🏭 Deep Dive & Architecture
 
 This document provides a detailed technical overview of the **Common** crate for
