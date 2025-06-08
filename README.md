@@ -11,7 +11,7 @@
 
 # **Common** 👨🏻‍🏭 The Architectural Core of Land
 
-[![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Common/blob/Current/LICENSE)
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Common/tree/Current/LICENSE)
 [![Rust Version](https://img.shields.io/badge/Rust-1.77+-blue.svg)](https://www.rust-lang.org/)
 [![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
 
