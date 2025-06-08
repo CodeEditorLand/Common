@@ -7,6 +7,8 @@
 </h3> </td>
 </tr></table>
 
+---
+
 # **Common** 👨🏻‍🏭 The Architectural Core of Land
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Common/blob/Current/LICENSE)
@@ -37,6 +39,8 @@ implementing the traits and consuming the effects defined in this crate.
     abstract, any component that depends on it can be tested with mock
     implementations of its traits, leading to fast and reliable unit tests.
 
+---
+
 ## Key Features & Concepts 🔐
 
 - **Declarative `ActionEffect` System:** A powerful pattern where operations are
@@ -54,6 +58,8 @@ implementing the traits and consuming the effects defined in this crate.
 - **Universal `CommonError` Enum:** A single, exhaustive `enum` for all possible
   failures, enabling robust and predictable error handling across the entire
   application.
+
+---
 
 ## Core Architecture Principles 🏗️
 
@@ -182,8 +188,8 @@ Common = { path = "../Common" }
 A developer working within the `Mountain` codebase would use `Common` as
 follows:
 
-1.  **Implement a Trait:** In `Mountain/Source/environment/`, provide the concrete
-    implementation for a `Common` trait.
+1.  **Implement a Trait:** In `Mountain/Source/environment/`, provide the
+    concrete implementation for a `Common` trait.
 
     ```rust
     // In Mountain/Source/environment/FsProvider.rs
