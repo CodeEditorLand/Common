@@ -1,3 +1,7 @@
+// File: Common/Source/Error.rs
+// Responsibility: Responsibility could not be determined.
+// Modified: 2025-06-06 23:36:34 UTC
+
 // Land_Common/src/errors.rs
 
 use std::path::PathBuf;

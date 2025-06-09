@@ -1,3 +1,7 @@
+// File: Common/Source/Effect.rs
+// Responsibility: Responsibility could not be determined.
+// Modified: 2025-06-06 23:31:44 UTC
+
 // Land_Common/src/effect.rs
 use std::{future::Future, pin::Pin, sync::Arc};
 

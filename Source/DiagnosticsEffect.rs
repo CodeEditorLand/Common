@@ -1,3 +1,7 @@
+// File: Common/Source/DiagnosticsEffect.rs
+// Responsibility: Responsibility could not be determined.
+// Modified: 2025-06-06 23:31:44 UTC
+
 // Land_Common/src/diagnostics_effects.rs
 use std::sync::Arc;
 

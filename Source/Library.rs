@@ -1,3 +1,7 @@
+// File: Common/Source/Library.rs
+// Responsibility: Responsibility could not be determined.
+// Modified: 2025-06-06 23:51:28 UTC
+
 
 // Serves as the main library entry point for the `Common` crate,
 // declaring and re-exporting all core effects, DTOs, and traits.

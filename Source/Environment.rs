@@ -1,3 +1,7 @@
+// File: Common/Source/Environment.rs
+// Responsibility: Responsibility could not be determined.
+// Modified: 2025-06-04 00:11:51 UTC
+
 // Land_Common/src/environment.rs
 use std::sync::Arc;
 

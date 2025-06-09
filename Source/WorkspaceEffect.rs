@@ -1,3 +1,7 @@
+// File: Common/Source/WorkspaceEffect.rs
+// Responsibility: Responsibility could not be determined.
+// Modified: 2025-06-06 23:31:44 UTC
+
 // Land_Common/src/workspace_effects.rs
 use std::{path::PathBuf, sync::Arc};
 

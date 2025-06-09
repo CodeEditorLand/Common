@@ -1,3 +1,7 @@
+// File: Common/Source/OutputEffect.rs
+// Responsibility: Responsibility could not be determined.
+// Modified: 2025-06-04 00:37:32 UTC
+
 // Land_Common/src/output_effects.rs
 use std::sync::Arc;
 

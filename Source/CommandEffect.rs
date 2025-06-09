@@ -1,3 +1,7 @@
+// File: Common/Source/CommandEffect.rs
+// Responsibility: Responsibility could not be determined.
+// Modified: 2025-06-04 01:10:48 UTC
+
 // Land_Common/src/command_effects.rs
 use std::sync::Arc;
 

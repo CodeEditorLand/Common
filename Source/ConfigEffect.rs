@@ -1,3 +1,7 @@
+// File: Common/Source/ConfigEffect.rs
+// Responsibility: Responsibility could not be determined.
+// Modified: 2025-06-04 00:36:14 UTC
+
 // Land_Common/src/config_effects.rs
 use std::sync::Arc;
 

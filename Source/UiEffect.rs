@@ -1,3 +1,7 @@
+// File: Common/Source/UiEffect.rs
+// Responsibility: Responsibility could not be determined.
+// Modified: 2025-06-06 23:31:44 UTC
+
 // Land_Common/src/ui_effects.rs
 use std::path::PathBuf; // For file dialog results
 use std::sync::Arc;
