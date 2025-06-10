@@ -1,0 +1,65 @@
+use std::path::PathBuf;
+
+use async_trait::async_trait;
+use serde_json::Value;
+use url::Url;
+
+/// @module WorkspaceProvider
+/// @description Defines the abstract service trait for querying and managing
+/// the application's workspace.
+use crate::environment::Environment;
+use crate::error::CommonError;
+
+/// An abstract service contract for an environment component that can provide
+/// information about the current workspace.
+///
+/// This trait is the primary interface for interacting with workspace folders,
+/// configuration paths, trust settings, and for performing workspace-wide
+/// operations like finding files.
+#[async_trait]
+pub trait WorkspaceProvider: Environment + Send + Sync {
+	/// Retrieves information about all currently open workspace folders.
+	/// @returns A `Result` containing a vector of tuples, where each tuple is
+	///   (folder_uri, folder_name, folder_index).
+	async fn GetWorkspaceFoldersInfo(&self) -> Result<Vec<(Url, String, usize)>, CommonError>;
+
+	/// Retrieves information for the specific workspace folder that contains
+	/// the given URI. @param UriToMatch - The URI to find the containing
+	/// folder for.
+	async fn GetWorkspaceFolderInfo(&self, UriToMatch:Url) -> Result<Option<(Url, String, usize)>, CommonError>;
+
+	/// Gets the name of the current workspace.
+	async fn GetWorkspaceName(&self) -> Result<Option<String>, CommonError>;
+
+	/// Gets the path to the workspace configuration file (e.g.,
+	/// `.code-workspace` file), if one exists.
+	async fn GetWorkspaceConfigurationPath(&self) -> Result<Option<PathBuf>, CommonError>;
+
+	/// Checks if the current workspace is trusted by the user.
+	async fn IsWorkspaceTrusted(&self) -> Result<bool, CommonError>;
+
+	/// Requests the user to grant or deny trust to the current workspace via a
+	/// UI prompt. @param Options - Optional DTO with further information for
+	/// the trust prompt.
+	async fn RequestWorkspaceTrust(&self, Options:Option<Value>) -> Result<bool, CommonError>;
+
+	/// Finds files within the workspace matching the given criteria.
+	/// @param IncludePatternDto - A DTO representing the glob pattern to
+	/// include. @param ExcludePatternDto - An optional DTO for files/folders
+	/// to exclude. @param MaxResults - An optional limit on the number of
+	/// results to return. @param UseIgnoreFiles - Whether to respect
+	/// `.gitignore`-style ignore files. @param FollowSymlinks - Whether to
+	/// follow symbolic links during the search.
+	async fn FindFilesInWorkspace(
+		&self,
+		IncludePatternDto:Value,
+		ExcludePatternDto:Option<Value>,
+		MaxResults:Option<usize>,
+		UseIgnoreFiles:bool,
+		FollowSymlinks:bool,
+	) -> Result<Vec<Url>, CommonError>;
+
+	/// Requests that the host application open the specified file path in an
+	/// editor.
+	async fn OpenFile(&self, Path:PathBuf) -> Result<(), CommonError>;
+}
