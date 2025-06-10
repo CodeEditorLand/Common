@@ -1,200 +1,131 @@
-// File: Common/Source/IpcEffect.rs
-// Responsibility: Responsibility could not be determined.
-// Modified: 2025-06-06 23:31:44 UTC
+// Defines the IpcProvider trait and associated effects for Inter-Process
+// Communication. This provides a standardized way to send requests and
+// notifications to sidecar processes.
 
-// Land_Common/src/ipc_effects.rs
+#![allow(non_snake_case, non_camel_case_types)]
 
 use std::sync::Arc;
 
 use async_trait::async_trait;
 use serde_json::Value;
 
-use crate::environment::{Environment, Requires}; // For trait bounds on IpcProvider and in effects
-use crate::runtime::AppRuntime; // Assumed concrete runtime accessor for effects
-use crate::{effect::ActionEffect, errors::CommonError};
+use crate::{
+	Effect::ActionEffect,
+	Environment::{Environment, Requires},
+	Errors::CommonError,
+	IpcDto::ProxyConfiguration,
+	Runtime::AppRuntimeTrait,
+}; // Assuming the DTO is in a dedicated module
 
-/// Identifies the target service or context for an IPC message, mirroring
-/// the MainContext/ExtHostContext pattern in VS Code.
-///
-/// This enum helps in routing messages correctly when a central IPC mechanism
-/// (like Vine) handles communication between Mountain (MainThread) and
-/// various sidecars/extensions (ExtHosts).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum ProxyTarget {
-	// --- For ExtHost -> MainThread calls (Sidecar -> Mountain) ---
-	MainThreadCommands,
-	MainThreadConfiguration,
-	MainThreadDiagnostics,
-	MainThreadDocuments,
-	MainThreadExtensionEnablement, // For managing extension states
-	MainThreadFileSystem,          // For vscode.workspace.fs operations
-	MainThreadLanguageFeatures,    // For registering providers, etc.
-	MainThreadLanguages,           // For language-related queries (e.g., getLanguages)
-	MainThreadOutputService,
-	MainThreadSecrets,
-	MainThreadStorage,
-	MainThreadTerminalService,
-	MainThreadWindow,   // For window-specific actions (e.g., openExternal)
-	MainThreadWebviews, // For webview panel management
-	MainThreadTelemetry,
-	MainThreadWorkspace, // For workspace info, findFiles
-	MainThreadStatusBar, // For managing status bar items
-
-	// --- For MainThread -> ExtHost calls (Mountain -> Sidecar) ---
-	ExtHostCommands,         // To invoke commands registered by an extension
-	ExtHostConfiguration,    // To notify extensions of config changes
-	ExtHostDiagnostics,      // To push diagnostic collections to extensions (less common)
-	ExtHostDocuments,        // To notify extensions of document changes
-	ExtHostExtensionService, // For activation events (e.g., $activateByEvent)
-	ExtHostFileSystemInfo,   // For file system provider info (e.g., $acceptProviderInfos)
-	ExtHostLanguageFeatures, // To invoke language features implemented by extensions
-	ExtHostLanguages,        // If MainThread pushes language info
-	ExtHostOutputService,    // If MainThread manages log levels for extension output
-	ExtHostStorage,          // To notify extensions of Memento changes (e.g., $acceptValue)
-	ExtHostTerminalService,  // For terminal events (e.g., $acceptTerminalClosed)
-	ExtHostEnv,              // For environment-related settings (e.g., telemetry level)
-	ExtHostWebviews,         // For webview-related events/messages
-	ExtHostTelemetry,        /* If MainThread pushes telemetry settings
-	                          * ... other ExtHost services can be added as needed ... */
-}
-
-impl ProxyTarget {
-	/// Returns a string prefix representing the target, often used in
-	/// constructing fully qualified RPC method names.
-	///
-	/// Example: `ProxyTarget::MainThreadCommands.target_prefix()` might return
-	/// "MainThreadCommands". This should align with the service naming
-	/// convention in the specific IPC protocol being used (e.g., matching
-	/// service names in VS Code's `extHost.protocol.ts`).
-	pub fn target_prefix(&self) -> String { format!("{:?}", self) }
-}
-
-/// Trait defining operations for Inter-Process Communication (IPC).
-///
-/// An environment implementing this trait can send notifications and requests
-/// to different sidecars (extensions or other processes).
+/// A trait for environments that can facilitate inter-process communication.
 #[async_trait]
 pub trait IpcProvider: Environment {
-	/// Sends a notification (fire-and-forget message) to a specified sidecar.
-	async fn send_notification_to_sidecar(
+	/// Sends a fire-and-forget notification to a sidecar process.
+	async fn SendNotificationToSidecar(
 		&self,
-		sidecar_id:String,
-		method:String,
-		params:Value,
+		SidecarIdentifier:String,
+		Method:String,
+		Parameters:Value,
 	) -> Result<(), CommonError>;
 
-	/// Sends a request to a specified sidecar and awaits a response.
-	async fn send_request_to_sidecar(
+	/// Sends a request to a sidecar process and awaits a response.
+	async fn SendRequestToSidecar(
 		&self,
-		sidecar_id:String,
-		method:String,
-		params:Value,
-		timeout_ms:u64,
+		SidecarIdentifier:String,
+		Method:String,
+		Parameters:Value,
+		TimeoutMilliseconds:u64,
 	) -> Result<Value, CommonError>;
-
-	// TODO: Consider adding methods for Mountain to send messages to Sky (frontend)
-	// if that also goes through an abstracted IPC mechanism, though typically
-	// that's done via direct Tauri `emit_all` or specific frontend-backend command
-	// invocation.
 }
-
-// --- Effect Constructors ---
 
 /// Creates an effect to send a notification to a sidecar.
-pub fn send_notification_to_sidecar(
-	sidecar_id:String,
-	method:String,
-	params:Value,
-) -> ActionEffect<Arc<AppRuntime>, CommonError, ()> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let sid_clone = sidecar_id.clone();
-		let method_clone = method.clone();
-		let params_clone = params.clone();
+pub fn SendNotification<RuntimeAccessType>(
+	SidecarIdentifier:String,
+	Method:String,
+	Parameters:Value,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, ()>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn IpcProvider>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let SidecarIdentifierClone = SidecarIdentifier.clone();
+		let MethodClone = Method.clone();
+		let ParametersClone = Parameters.clone();
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let ipc_provider:Arc<dyn IpcProvider + Send + Sync> = concrete_env.require();
-			ipc_provider
-				.send_notification_to_sidecar(sid_clone, method_clone, params_clone)
+			let Environment = Accessor.GetEnvironment();
+			let Provider:Arc<dyn IpcProvider> = Environment.require();
+			Provider
+				.SendNotificationToSidecar(SidecarIdentifierClone, MethodClone, ParametersClone)
 				.await
 		})
 	}))
 }
 
-/// Creates an effect to send a request to a sidecar and await its response.
-pub fn send_request_to_sidecar(
-	sidecar_id:String,
-	method:String,
-	params:Value,
-	timeout_ms:u64,
-) -> ActionEffect<Arc<AppRuntime>, CommonError, Value> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let sid_clone = sidecar_id.clone();
-		let method_clone = method.clone();
-		let params_clone = params.clone();
+/// Creates an effect to send a request to a sidecar.
+pub fn SendRequest<RuntimeAccessType>(
+	SidecarIdentifier:String,
+	Method:String,
+	Parameters:Value,
+	TimeoutMilliseconds:u64,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, Value>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn IpcProvider>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let SidecarIdentifierClone = SidecarIdentifier.clone();
+		let MethodClone = Method.clone();
+		let ParametersClone = Parameters.clone();
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let ipc_provider:Arc<dyn IpcProvider + Send + Sync> = concrete_env.require();
-			ipc_provider
-				.send_request_to_sidecar(sid_clone, method_clone, params_clone, timeout_ms)
+			let Environment = Accessor.GetEnvironment();
+			let Provider:Arc<dyn IpcProvider> = Environment.require();
+			Provider
+				.SendRequestToSidecar(SidecarIdentifierClone, MethodClone, ParametersClone, TimeoutMilliseconds)
 				.await
 		})
 	}))
 }
 
-/// Creates an effect that might be used to establish or confirm a connection
-/// to a sidecar.
-///
-/// Currently, this is a placeholder that sends a simple internal notification.
-/// A more robust implementation might involve specific handshake protocols.
-pub fn establish_host_connection(sidecar_id:String) -> ActionEffect<Arc<AppRuntime>, CommonError, ()> {
-	// Expects Arc<AppRuntime>
-	// This could be a specific handshake message or a simple ping.
-	// For now, reuses send_notification_to_sidecar.
-	send_notification_to_sidecar(sidecar_id, "internal_ping_handshake".to_string(), Value::Null)
+/// Creates an effect to establish a connection (e.g., handshake) with a
+/// sidecar. This is implemented as a simple notification for signaling
+/// readiness.
+pub fn EstablishConnection<RuntimeAccessType>(
+	SidecarIdentifier:String,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, ()>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn IpcProvider>>, {
+	SendNotification(SidecarIdentifier, "internal_ping_handshake".to_string(), Value::Null)
 }
 
-/// Creates an effect to proxy an RPC call (originally from one sidecar to
-/// Mountain) to another target sidecar.
-///
-/// This is useful if Mountain acts as a router for certain cross-sidecar
-/// communications.
-///
-/// # Argument
-/// * `target_sidecar_id` - The ID of the sidecar to which the call should be
-///   proxied.
-/// * `call_data` - A JSON Value expected to contain `{"method": "methodName",
-///   "params": ...}`.
-pub fn proxy_call_to_sidecar(
-	target_sidecar_id:String,
-	call_data:Value, // Expected: { "method": string, "params": Value }
-) -> ActionEffect<Arc<AppRuntime>, CommonError, Value> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let target_sid_clone = target_sidecar_id.clone();
-		let call_data_clone = call_data.clone();
+/// Creates an effect to proxy a generic call to a sidecar.
+/// This is a higher-level abstraction over `SendRequest`.
+pub fn ProxyCallToSidecar<RuntimeAccessType>(
+	TargetSidecarIdentifier:String,
+	CallData:Value,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, Value>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn IpcProvider>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let TargetSidecarIdentifierClone = TargetSidecarIdentifier.clone();
+		let CallDataClone = CallData.clone();
 		Box::pin(async move {
-			let method_str = call_data_clone
+			let MethodString = CallDataClone
 				.get("method")
 				.and_then(Value::as_str)
 				.ok_or_else(|| {
-					CommonError::InvalidArg(
-						"call_data.method".to_string(),
-						"Expected a 'method' string field in call_data for proxying.".to_string(),
-					)
+					CommonError::InvalidArg {
+						ArgumentName:"CallData.method".to_string(),
+						Reason:"Expected a 'method' string field in CallData for proxying.".to_string(),
+					}
 				})?
 				.to_string();
-
-			let params_val = call_data_clone.get("params").cloned().unwrap_or(Value::Null);
-
-			let concrete_env = app_runtime_accessor.get_environment();
-			let ipc_provider:Arc<dyn IpcProvider + Send + Sync> = concrete_env.require();
-
-			// Using a default timeout here; could be configurable or part of call_data.
-			let default_timeout_ms = 30000;
-			ipc_provider
-				.send_request_to_sidecar(target_sid_clone, method_str, params_val, default_timeout_ms)
+			let ParametersValue = CallDataClone.get("params").cloned().unwrap_or(Value::Null);
+			let Environment = Accessor.GetEnvironment();
+			let Provider:Arc<dyn IpcProvider> = Environment.require();
+			let Timeout = 30000; // Default timeout for proxied calls
+			Provider
+				.SendRequestToSidecar(TargetSidecarIdentifierClone, MethodString, ParametersValue, Timeout)
 				.await
 		})
 	}))

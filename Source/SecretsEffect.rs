@@ -1,82 +1,86 @@
-// File: Common/Source/SecretsEffect.rs
-// Responsibility: Responsibility could not be determined.
-// Modified: 2025-06-04 00:41:35 UTC
+// Defines the SecretsProvider trait and associated effects for securely
+// storing and retrieving sensitive data like API keys or tokens.
 
-// Land_Common/src/secrets_effects.rs
+#![allow(non_snake_case, non_camel_case_types)]
+
 use std::sync::Arc;
 
 use async_trait::async_trait;
 
-// Ensure AppRuntime is the correct type from your runtime module.
-use crate::runtime::AppRuntime;
 use crate::{
-	effect::ActionEffect,
-	environment::{Environment, Requires},
-	errors::CommonError,
+	Effect::ActionEffect,
+	Environment::{Environment, Requires},
+	Errors::CommonError,
+	Runtime::AppRuntimeTrait,
 };
 
-/// Trait for an environment component that handles secure storage and retrieval
-/// of secrets.
-///
-/// Secrets are typically scoped by an `extension_id` to ensure that extensions
-/// can only access their own secrets.
+/// A trait for environments that can interact with a secure credential store
+/// (e.g., system keyring).
 #[async_trait]
 pub trait SecretsProvider: Environment {
 	/// Retrieves a secret for a given extension and key.
-	/// Returns `Ok(None)` if the secret is not found.
-	async fn get_secret(&self, extension_id:String, key:String) -> Result<Option<String>, CommonError>;
-
+	async fn GetSecret(&self, ExtensionIdentifier:String, Key:String) -> Result<Option<String>, CommonError>;
 	/// Stores a secret for a given extension and key.
-	/// This will typically overwrite any existing secret with the same
-	/// extension ID and key.
-	async fn store_secret(&self, extension_id:String, key:String, value:String) -> Result<(), CommonError>;
-
+	async fn StoreSecret(&self, ExtensionIdentifier:String, Key:String, Value:String) -> Result<(), CommonError>;
 	/// Deletes a secret for a given extension and key.
-	/// Should succeed even if the secret does not exist (idempotent).
-	async fn delete_secret(&self, extension_id:String, key:String) -> Result<(), CommonError>;
+	async fn DeleteSecret(&self, ExtensionIdentifier:String, Key:String) -> Result<(), CommonError>;
 }
 
-// --- Effect Constructors ---
-
 /// Creates an effect to retrieve a secret.
-pub fn get_secret(extension_id:String, key:String) -> ActionEffect<Arc<AppRuntime>, CommonError, Option<String>> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let eid_clone = extension_id.clone();
-		let key_clone = key.clone();
+pub fn GetSecret<RuntimeAccessType>(
+	ExtensionIdentifier:String,
+	Key:String,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, Option<String>>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn SecretsProvider>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let ExtensionIdentifierClone = ExtensionIdentifier.clone();
+		let KeyClone = Key.clone();
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let provider:Arc<dyn SecretsProvider + Send + Sync> = concrete_env.require();
-			provider.get_secret(eid_clone, key_clone).await
+			let Environment = Accessor.GetEnvironment();
+			let Provider:Arc<dyn SecretsProvider> = Environment.require();
+			Provider.GetSecret(ExtensionIdentifierClone, KeyClone).await
 		})
 	}))
 }
 
 /// Creates an effect to store a secret.
-pub fn store_secret(extension_id:String, key:String, value:String) -> ActionEffect<Arc<AppRuntime>, CommonError, ()> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let eid_clone = extension_id.clone();
-		let key_clone = key.clone();
-		let val_clone = value.clone();
+pub fn StoreSecret<RuntimeAccessType>(
+	ExtensionIdentifier:String,
+	Key:String,
+	Value:String,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, ()>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn SecretsProvider>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let ExtensionIdentifierClone = ExtensionIdentifier.clone();
+		let KeyClone = Key.clone();
+		let ValueClone = Value.clone();
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let provider:Arc<dyn SecretsProvider + Send + Sync> = concrete_env.require();
-			provider.store_secret(eid_clone, key_clone, val_clone).await
+			let Environment = Accessor.GetEnvironment();
+			let Provider:Arc<dyn SecretsProvider> = Environment.require();
+			Provider.StoreSecret(ExtensionIdentifierClone, KeyClone, ValueClone).await
 		})
 	}))
 }
 
 /// Creates an effect to delete a secret.
-pub fn delete_secret(extension_id:String, key:String) -> ActionEffect<Arc<AppRuntime>, CommonError, ()> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let eid_clone = extension_id.clone();
-		let key_clone = key.clone();
+pub fn DeleteSecret<RuntimeAccessType>(
+	ExtensionIdentifier:String,
+	Key:String,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, ()>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn SecretsProvider>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let ExtensionIdentifierClone = ExtensionIdentifier.clone();
+		let KeyClone = Key.clone();
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let provider:Arc<dyn SecretsProvider + Send + Sync> = concrete_env.require();
-			provider.delete_secret(eid_clone, key_clone).await
+			let Environment = Accessor.GetEnvironment();
+			let Provider:Arc<dyn SecretsProvider> = Environment.require();
+			Provider.DeleteSecret(ExtensionIdentifierClone, KeyClone).await
 		})
 	}))
 }

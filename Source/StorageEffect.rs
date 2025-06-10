@@ -1,128 +1,95 @@
-// File: Common/Source/StorageEffect.rs
-// Responsibility: Responsibility could not be determined.
-// Modified: 2025-06-06 23:31:44 UTC
+// Defines the StorageProvider trait and associated effects for interacting with
+// Memento-style storage (both global and workspace-scoped).
 
-// Land_Common/src/storage_effects.rs
+#![allow(non_snake_case, non_camel_case_types)]
+
 use std::sync::Arc;
 
 use async_trait::async_trait;
-use serde_json::Value; // For parameters, especially when passed as a single JSON object
+use serde_json::Value;
 
-// Ensure AppRuntime is the correct type from your runtime module.
-use crate::runtime::AppRuntime;
 use crate::{
-	effect::ActionEffect,
-	environment::{Environment, Requires},
-	errors::CommonError,
+	Effect::ActionEffect,
+	Environment::{Environment, Requires},
+	Errors::CommonError,
+	Runtime::AppRuntimeTrait,
 };
 
-/// Trait for an environment component that provides persistent storage
-/// capabilities, similar to VS Code's Memento API (global and workspace
-/// storage).
+/// A trait for environments that can provide key-value storage capabilities.
 #[async_trait]
 pub trait StorageProvider: Environment {
-	/// Retrieves a value from storage.
-	///
-	/// # Argument
-	/// * `is_global_scope`: If `true`, retrieves from global storage;
-	///   otherwise, from workspace storage.
-	/// * `key`: The key of the value to retrieve.
-	///
-	/// # Returns
-	/// `Ok(Some(Value))` if the key exists, `Ok(None)` if not, or `Err` on
-	/// failure.
-	async fn get_storage_value(&self, is_global_scope:bool, key:&str) -> Result<Option<Value>, CommonError>;
-
-	/// Updates or stores a value in storage.
-	/// Setting `value_to_set` to `None` (or `Value::Null` via the effect)
-	/// typically deletes the key.
-	///
-	/// # Argument
-	/// * `is_global_scope`: If `true`, updates global storage; otherwise,
-	///   workspace storage.
-	/// * `key`: The key of the value to update.
-	/// * `value_to_set`: The `serde_json::Value` to store, or `None` to delete
-	///   the key.
-	async fn update_storage_value(
+	/// Retrieves a value from storage based on scope and key.
+	async fn GetStorageValue(&self, IsGlobalScope:bool, Key:&str) -> Result<Option<Value>, CommonError>;
+	/// Updates or deletes a value in storage based on scope and key.
+	/// Setting `ValueToSet` to `None` should delete the key.
+	async fn UpdateStorageValue(
 		&self,
-		is_global_scope:bool,
-		key:String,
-		value_to_set:Option<Value>,
+		IsGlobalScope:bool,
+		Key:String,
+		ValueToSet:Option<Value>,
 	) -> Result<(), CommonError>;
-
-	// Potential future extension:
-	// async fn get_all_storage_keys(&self, is_global_scope: bool) ->
-	// Result<Vec<String>, CommonError>;
 }
 
-// --- Effect Constructors ---
-
-/// Creates an effect to retrieve an item from storage.
-///
-/// # Argument
-/// * `target_object`: A `serde_json::Value` expected to be an object with:
-///   - `scope` (boolean, optional): `true` for global, `false` or absent for
-///     workspace.
-///   - `key` (string, required): The key of the item to retrieve.
-pub fn get_storage_item(target_object:Value) -> ActionEffect<Arc<AppRuntime>, CommonError, Option<Value>> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let target_obj_clone = target_object.clone();
+/// Creates an effect to retrieve a value from storage.
+/// `TargetObject` is a JSON Value expected to contain `scope` (bool) and `key`
+/// (string).
+pub fn GetStorageItem<RuntimeAccessType>(
+	TargetObject:Value,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, Option<Value>>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn StorageProvider>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let TargetObjectClone = TargetObject.clone();
 		Box::pin(async move {
-			// Default to workspace scope (is_global = false) if 'scope' is not provided or
-			// not a bool.
-			let is_global = target_obj_clone.get("scope").and_then(Value::as_bool).unwrap_or(false);
-			let key_str = target_obj_clone
+			let IsGlobal = TargetObjectClone.get("scope").and_then(Value::as_bool).unwrap_or(false);
+			let KeyString = TargetObjectClone
 				.get("key")
 				.and_then(Value::as_str)
 				.ok_or_else(|| {
-					CommonError::InvalidArg(
-						"target_object.key".to_string(),
-						"Expected a 'key' string field in target_object.".to_string(),
-					)
+					CommonError::InvalidArg {
+						ArgumentName:"TargetObject.key".to_string(),
+						Reason:"Expected a 'key' string field in TargetObject.".to_string(),
+					}
 				})?
 				.to_string();
-
-			let concrete_env = app_runtime_accessor.get_environment();
-			let provider:Arc<dyn StorageProvider + Send + Sync> = concrete_env.require();
-			provider.get_storage_value(is_global, &key_str).await
+			let Environment = Accessor.GetEnvironment();
+			let Provider:Arc<dyn StorageProvider> = Environment.require();
+			Provider.GetStorageValue(IsGlobal, &KeyString).await
 		})
 	}))
 }
 
-/// Creates an effect to set or update an item in storage.
-///
-/// # Argument
-/// * `target_object`: A `serde_json::Value` expected to be an object with:
-///   - `scope` (boolean, optional): `true` for global, `false` or absent for
-///     workspace.
-///   - `key` (string, required): The key of the item to set/update.
-/// * `value_to_set`: The `serde_json::Value` to store. If `Value::Null`, the
-///   key is typically deleted.
-pub fn set_storage_item(target_object:Value, value_to_set:Value) -> ActionEffect<Arc<AppRuntime>, CommonError, ()> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let target_obj_clone = target_object.clone();
-		let value_to_set_clone = value_to_set.clone();
+/// Creates an effect to set or delete a value in storage.
+/// `TargetObject` is a JSON Value expected to contain `scope` (bool) and `key`
+/// (string). If `ValueToSet` is `Value::Null`, the effect should delete the
+/// item.
+pub fn SetStorageItem<RuntimeAccessType>(
+	TargetObject:Value,
+	ValueToSet:Value,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, ()>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn StorageProvider>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let TargetObjectClone = TargetObject.clone();
+		let ValueToSetClone = ValueToSet.clone();
 		Box::pin(async move {
-			let is_global = target_obj_clone.get("scope").and_then(Value::as_bool).unwrap_or(false);
-			let key_str = target_obj_clone
+			let IsGlobal = TargetObjectClone.get("scope").and_then(Value::as_bool).unwrap_or(false);
+			let KeyString = TargetObjectClone
 				.get("key")
 				.and_then(Value::as_str)
 				.ok_or_else(|| {
-					CommonError::InvalidArg(
-						"target_object.key".to_string(),
-						"Expected a 'key' string field in target_object.".to_string(),
-					)
+					CommonError::InvalidArg {
+						ArgumentName:"TargetObject.key".to_string(),
+						Reason:"Expected a 'key' string field in TargetObject.".to_string(),
+					}
 				})?
 				.to_string();
-
-			// If value_to_set is JSON null, interpret as a request to delete the item.
-			let value_opt = if value_to_set_clone.is_null() { None } else { Some(value_to_set_clone) };
-
-			let concrete_env = app_runtime_accessor.get_environment();
-			let provider:Arc<dyn StorageProvider + Send + Sync> = concrete_env.require();
-			provider.update_storage_value(is_global, key_str, value_opt).await
+			let ValueOption = if ValueToSetClone.is_null() { None } else { Some(ValueToSetClone) };
+			let Environment = Accessor.GetEnvironment();
+			let Provider:Arc<dyn StorageProvider> = Environment.require();
+			Provider.UpdateStorageValue(IsGlobal, KeyString, ValueOption).await
 		})
 	}))
 }

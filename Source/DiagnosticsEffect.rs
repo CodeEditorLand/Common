@@ -1,106 +1,81 @@
-// File: Common/Source/DiagnosticsEffect.rs
-// Responsibility: Responsibility could not be determined.
-// Modified: 2025-06-06 23:31:44 UTC
+// Defines the DiagnosticsManager trait and associated effects for managing
+// diagnostic markers (errors, warnings, etc.) within the application.
 
-// Land_Common/src/diagnostics_effects.rs
+#![allow(non_snake_case, non_camel_case_types)]
+
 use std::sync::Arc;
 
 use async_trait::async_trait;
-use serde_json::Value; // For flexible DTO structures passed as arguments/return values
+use serde_json::Value;
 
-// Ensure AppRuntime is the correct type from your runtime module.
-use crate::runtime::AppRuntime;
+// DTO for a diagnostic marker (re-exported for convenience if needed).
+// This assumes MarkerDataDto is defined elsewhere, like in LanguageFeatureEffect.
+pub use crate::LanguageFeatureEffect::MarkerDataDto;
 use crate::{
-	effect::ActionEffect,
-	environment::{Environment, Requires},
-	errors::CommonError,
+	Effect::ActionEffect,
+	Environment::{Environment, Requires},
+	Errors::CommonError,
+	Runtime::AppRuntimeTrait,
 };
-// MarkerDataDto is central to diagnostics and is assumed to be defined in
-// language_feature_effects. If it were defined here, it would be: pub use
-// crate::language_feature_effects::MarkerDataDto; For now, the environment
-// implementation will handle the Value structure.
 
-/// Trait for managing diagnostic collections (errors, warnings, etc.) in the
-/// application.
-///
-/// Diagnostics are typically owned by a source (e.g., a linter extension, a
-/// compiler) and associated with specific resource URIs.
+/// A trait for environments that can manage diagnostic collections.
 #[async_trait]
 pub trait DiagnosticsManager: Environment {
-	/// Sets or updates diagnostics for multiple resources from a specific
-	/// owner.
-	///
-	/// # Argument
-	/// * `owner`: A string identifying the source of the diagnostics (e.g.,
-	///   "eslint", "typescript-language-features").
-	/// * `entries_dto_val`: A `serde_json::Value` representing an array of
-	///   entries. Each entry is a tuple: `[UriComponentsValue,
-	///   Option<Vec<MarkerDataDtoAsValue>>]`.
-	///   - `UriComponentsValue`: A JSON Value representing the `UriComponents`
-	///     DTO for the resource.
-	///   - `Option<Vec<MarkerDataDtoAsValue>>`: An optional array of
-	///     `MarkerDataDto` (as JSON Value) for that URI. If `None` or an empty
-	///     `Vec`, all diagnostics from this `owner` for that URI are cleared.
-	async fn set_diagnostics(&self, owner:String, entries_dto_val:Value) -> Result<(), CommonError>;
-
-	/// Clears all diagnostics from a specific owner.
-	/// If no owner is specified (e.g. None, or specific handling), it might
-	/// clear all diagnostics. For now, requires an owner.
-	async fn clear_diagnostics(&self, owner:String) -> Result<(), CommonError>;
-
-	/// Retrieves all diagnostics, optionally filtered by a resource URI.
-	///
-	/// # Argument
-	/// * `resource_uri_filter_opt`: An optional `serde_json::Value`
-	///   representing `UriComponents` DTO. If `Some`, only diagnostics for that
-	///   specific URI are returned. If `None`, all diagnostics from all owners
-	///   for all URIs are returned.
-	///
-	/// # Returns
-	/// A `serde_json::Value` representing an array of tuples:
-	/// `[[UriComponentsValue, Vec<MarkerDataDtoAsValue>]]`.
-	/// Each tuple contains the URI and an array of its associated diagnostics.
-	async fn get_all_diagnostics(&self, resource_uri_filter_opt:Option<Value>) -> Result<Value, CommonError>;
+	/// Sets or clears diagnostics for a given owner and set of resources.
+	async fn SetDiagnostics(&self, Owner:String, EntriesDtoValue:Value) -> Result<(), CommonError>;
+	/// Clears all diagnostics for a given owner.
+	async fn ClearDiagnostics(&self, Owner:String) -> Result<(), CommonError>;
+	/// Retrieves all diagnostics, optionally filtered by a specific resource.
+	async fn GetAllDiagnostics(&self, ResourceUriFilterOption:Option<Value>) -> Result<Value, CommonError>;
 }
 
-// --- Effect Constructors ---
-
-/// Creates an effect to set or update diagnostics.
-pub fn set_diagnostics(owner:String, entries_dto_val:Value) -> ActionEffect<Arc<AppRuntime>, CommonError, ()> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let owner_clone = owner.clone();
-		let entries_clone = entries_dto_val.clone();
+/// Creates an effect to set diagnostics for a specific owner.
+pub fn SetDiagnostics<RuntimeAccessType>(
+	Owner:String,
+	EntriesDtoValue:Value,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, ()>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn DiagnosticsManager>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let OwnerClone = Owner.clone();
+		let EntriesClone = EntriesDtoValue.clone();
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let manager:Arc<dyn DiagnosticsManager + Send + Sync> = concrete_env.require();
-			manager.set_diagnostics(owner_clone, entries_clone).await
+			let Environment = Accessor.GetEnvironment();
+			let Manager:Arc<dyn DiagnosticsManager> = Environment.require();
+			Manager.SetDiagnostics(OwnerClone, EntriesClone).await
 		})
 	}))
 }
 
-/// Creates an effect to clear all diagnostics for a given owner.
-pub fn clear_diagnostics(owner:String) -> ActionEffect<Arc<AppRuntime>, CommonError, ()> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let owner_clone = owner.clone();
+/// Creates an effect to clear all diagnostics for a specific owner.
+pub fn ClearDiagnostics<RuntimeAccessType>(Owner:String) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, ()>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn DiagnosticsManager>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let OwnerClone = Owner.clone();
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let manager:Arc<dyn DiagnosticsManager + Send + Sync> = concrete_env.require();
-			manager.clear_diagnostics(owner_clone).await
+			let Environment = Accessor.GetEnvironment();
+			let Manager:Arc<dyn DiagnosticsManager> = Environment.require();
+			Manager.ClearDiagnostics(OwnerClone).await
 		})
 	}))
 }
 
-/// Creates an effect to retrieve all diagnostics, optionally filtered by URI.
-pub fn get_all_diagnostics(resource_uri_filter_opt:Option<Value>) -> ActionEffect<Arc<AppRuntime>, CommonError, Value> {
-	// Expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let filter_clone = resource_uri_filter_opt.clone();
+/// Creates an effect to get all diagnostics, with an optional resource filter.
+pub fn GetAllDiagnostics<RuntimeAccessType>(
+	ResourceUriFilterOption:Option<Value>,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, Value>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn DiagnosticsManager>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let FilterClone = ResourceUriFilterOption.clone();
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let manager:Arc<dyn DiagnosticsManager + Send + Sync> = concrete_env.require();
-			manager.get_all_diagnostics(filter_clone).await
+			let Environment = Accessor.GetEnvironment();
+			let Manager:Arc<dyn DiagnosticsManager> = Environment.require();
+			Manager.GetAllDiagnostics(FilterClone).await
 		})
 	}))
 }

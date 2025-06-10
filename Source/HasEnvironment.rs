@@ -1,8 +1,3 @@
-// File: Common/Source/HasEnvironment.rs
-// Responsibility: Responsibility could not be determined.
-// Modified: 2025-06-06 23:51:28 UTC
-
-
 // Defines a generic trait for types that contain an environment.
 // This is a conceptual file based on the `Haslanguagefeatureenvironment` trait,
 // generalized to be applicable for any environment type.

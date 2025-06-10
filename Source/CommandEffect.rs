@@ -1,99 +1,101 @@
-// File: Common/Source/CommandEffect.rs
-// Responsibility: Responsibility could not be determined.
-// Modified: 2025-06-04 01:10:48 UTC
+// Defines the CommandExecutor trait and associated effects for command
+// management. This provides a standardized way to execute, register, and query
+// commands within the application's environment.
 
-// Land_Common/src/command_effects.rs
+#![allow(non_snake_case, non_camel_case_types)]
+
 use std::sync::Arc;
 
 use async_trait::async_trait;
 use serde_json::Value;
 
-// Ensure AppRuntime is the correct type from your runtime module.
-// This accessor is used by effects to get to the concrete environment.
-use crate::runtime::AppRuntime;
 use crate::{
-	effect::ActionEffect,
-	environment::{Environment, Requires},
-	errors::CommonError,
-};
+	Effect::ActionEffect,
+	Environment::{Environment, Requires},
+	Errors::CommonError,
+	Runtime::AppRuntimeTrait,
+}; // For the bound on the effect's runtime accessor
 
-/// Trait for executing and managing commands within the application.
-///
-/// An environment implementing this trait can execute predefined or dynamically
-/// registered commands, often involving IPC with sidecars or native handlers.
+/// A trait for environments that can execute commands.
 #[async_trait]
 pub trait CommandExecutor: Environment {
-	/// Executes a command with the given ID and arguments.
-	async fn execute_command(&self, command_id:String, args:Value) -> Result<Value, CommonError>;
-
-	/// Registers a command that can be executed, typically associating it with
-	/// a sidecar.
-	async fn register_command(&self, sidecar_id:String, command_id:String) -> Result<(), CommonError>;
-
-	/// Unregisters a previously registered command.
-	async fn unregister_command(&self, sidecar_id:String, command_id:String) -> Result<(), CommonError>;
-
-	/// Retrieves a list of all currently registered command IDs.
-	async fn get_all_commands(&self) -> Result<Vec<String>, CommonError>;
+	/// Executes a command by its identifier with the given arguments.
+	async fn ExecuteCommand(&self, CommandIdentifier:String, Argument:Value) -> Result<Value, CommonError>;
+	/// Registers a command from a sidecar process.
+	async fn RegisterCommand(&self, SidecarIdentifier:String, CommandIdentifier:String) -> Result<(), CommonError>;
+	/// Unregisters a command from a sidecar process.
+	async fn UnregisterCommand(&self, SidecarIdentifier:String, CommandIdentifier:String) -> Result<(), CommonError>;
+	/// Retrieves a list of all currently registered command identifiers.
+	async fn GetAllCommands(&self) -> Result<Vec<String>, CommonError>;
 }
 
-// --- Effect Constructors ---
-
 /// Creates an effect to execute a command.
-///
-/// The effect, when run, will use the `CommandExecutor` capability of the
-/// environment to dispatch the command.
-pub fn execute_command(command_id:String, args:Value) -> ActionEffect<Arc<AppRuntime>, CommonError, Value> {
-	// Effect expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let cid_clone = command_id.clone();
-		let args_clone = args.clone();
+pub fn ExecuteCommand<RuntimeAccessType>(
+	CommandIdentifier:String,
+	Argument:Value,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, Value>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn CommandExecutor>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let CommandIdentifierClone = CommandIdentifier.clone();
+		let ArgumentClone = Argument.clone();
 		Box::pin(async move {
-			// Get the concrete environment (e.g., MountainEnvironment)
-			let concrete_env = app_runtime_accessor.get_environment();
-			// Require the CommandExecutor capability
-			let executor:Arc<dyn CommandExecutor + Send + Sync> = concrete_env.require();
-			executor.execute_command(cid_clone, args_clone).await
+			let Environment = Accessor.GetEnvironment();
+			let Executor:Arc<dyn CommandExecutor> = Environment.require();
+			Executor.ExecuteCommand(CommandIdentifierClone, ArgumentClone).await
 		})
 	}))
 }
 
 /// Creates an effect to register a command.
-pub fn register_command(sidecar_id:String, command_id:String) -> ActionEffect<Arc<AppRuntime>, CommonError, ()> {
-	// Effect expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let sid_clone = sidecar_id.clone();
-		let cid_clone = command_id.clone();
+pub fn RegisterCommand<RuntimeAccessType>(
+	SidecarIdentifier:String,
+	CommandIdentifier:String,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, ()>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn CommandExecutor>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let SidecarIdentifierClone = SidecarIdentifier.clone();
+		let CommandIdentifierClone = CommandIdentifier.clone();
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let executor:Arc<dyn CommandExecutor + Send + Sync> = concrete_env.require();
-			executor.register_command(sid_clone, cid_clone).await
+			let Environment = Accessor.GetEnvironment();
+			let Executor:Arc<dyn CommandExecutor> = Environment.require();
+			Executor.RegisterCommand(SidecarIdentifierClone, CommandIdentifierClone).await
 		})
 	}))
 }
 
 /// Creates an effect to unregister a command.
-pub fn unregister_command(sidecar_id:String, command_id:String) -> ActionEffect<Arc<AppRuntime>, CommonError, ()> {
-	// Effect expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
-		let sid_clone = sidecar_id.clone();
-		let cid_clone = command_id.clone();
+pub fn UnregisterCommand<RuntimeAccessType>(
+	SidecarIdentifier:String,
+	CommandIdentifier:String,
+) -> ActionEffect<Arc<RuntimeAccessType>, CommonError, ()>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn CommandExecutor>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
+		let SidecarIdentifierClone = SidecarIdentifier.clone();
+		let CommandIdentifierClone = CommandIdentifier.clone();
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let executor:Arc<dyn CommandExecutor + Send + Sync> = concrete_env.require();
-			executor.unregister_command(sid_clone, cid_clone).await
+			let Environment = Accessor.get_environment();
+			let Executor:Arc<dyn CommandExecutor> = Environment.require();
+			Executor.UnregisterCommand(SidecarIdentifierClone, CommandIdentifierClone).await
 		})
 	}))
 }
 
-/// Creates an effect to get all registered command IDs.
-pub fn get_all_commands() -> ActionEffect<Arc<AppRuntime>, CommonError, Vec<String>> {
-	// Effect expects Arc<AppRuntime>
-	ActionEffect::new(Arc::new(move |app_runtime_accessor:Arc<AppRuntime>| {
+/// Creates an effect to get a list of all registered commands.
+pub fn GetAllCommands<RuntimeAccessType>() -> ActionEffect<Arc<RuntimeAccessType>, CommonError, Vec<String>>
+where
+	RuntimeAccessType: AppRuntimeTrait<RuntimeAccessType::EnvironmentType> + Send + Sync + 'static,
+	RuntimeAccessType::EnvironmentType: Requires<Arc<dyn CommandExecutor>>, {
+	ActionEffect::New(Arc::new(move |Accessor:Arc<RuntimeAccessType>| {
 		Box::pin(async move {
-			let concrete_env = app_runtime_accessor.get_environment();
-			let executor:Arc<dyn CommandExecutor + Send + Sync> = concrete_env.require();
-			executor.get_all_commands().await
+			let Environment = Accessor.GetEnvironment();
+			let Executor:Arc<dyn CommandExecutor> = Environment.require();
+			Executor.GetAllCommands().await
 		})
 	}))
 }
