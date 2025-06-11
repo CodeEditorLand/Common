@@ -1,10 +1,10 @@
 
 
-/**
- * @module dto (Webview)
- * @description Aggregates and re-exports all Data Transfer Objects (DTOs)
- * related to the Webview and WebviewPanel APIs.
- */
+//
+// @module dto (Webview)
+// @description Aggregates and re-exports all Data Transfer Objects (DTOs)
+// related to the Webview and WebviewPanel APIs.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

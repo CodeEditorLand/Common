@@ -1,11 +1,11 @@
 
 
-/**
- * @module environment (Common)
- * @description This module defines the core architectural traits for dependency
- * injection and environment context within the application. It provides the
- * foundation for the entire effect system.
- */
+//
+// @module environment (Common)
+// @description This module defines the core architectural traits for dependency
+// injection and environment context within the application. It provides the
+// foundation for the entire effect system.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

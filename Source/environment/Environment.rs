@@ -1,5 +1,5 @@
-//! Defines the core `Environment` marker trait, the foundation of the
-//! application's dependency injection system.
+// Defines the core `Environment` marker trait, the foundation of the
+// application's dependency injection system.
 
 use std::sync::Arc;
 

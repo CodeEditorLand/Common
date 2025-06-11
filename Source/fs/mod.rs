@@ -1,11 +1,11 @@
 
 
-/**
- * @module fs
- * @description This module defines the abstract contract for the Filesystem service.
- * It includes the `FsReader` and `FsWriter` traits, all related DTOs, and the
- * `ActionEffect` constructors for every filesystem operation.
- */
+//
+// @module fs
+// @description This module defines the abstract contract for the Filesystem service.
+// It includes the `FsReader` and `FsWriter` traits, all related DTOs, and the
+// `ActionEffect` constructors for every filesystem operation.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

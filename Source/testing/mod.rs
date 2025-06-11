@@ -1,11 +1,11 @@
 
 
-/**
- * @module testing
- * @description This module defines the abstract contract for the Test service,
- * which is responsible for managing test controllers, test runs, and test results,
- * mirroring the `vscode.test` API.
- */
+//
+// @module testing
+// @description This module defines the abstract contract for the Test service,
+// which is responsible for managing test controllers, test runs, and test results,
+// mirroring the `vscode.test` API.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

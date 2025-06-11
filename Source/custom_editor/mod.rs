@@ -1,11 +1,11 @@
 
 
-/**
- * @module custom_editor
- * @description This module defines the abstract contract for the Custom Editor
- * service, which allows extensions to provide custom, webview-based editors
- * for specific file types.
- */
+//
+// @module custom_editor
+// @description This module defines the abstract contract for the Custom Editor
+// service, which allows extensions to provide custom, webview-based editors
+// for specific file types.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

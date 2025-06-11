@@ -1,12 +1,12 @@
 
 
-/**
- * @module document
- * @description This module defines the abstract contract for the Document service,
- * which is responsible for managing the lifecycle and content of text documents.
- * It includes the `DocumentProvider` trait and the `ActionEffect` constructors
- * for all document operations.
- */
+//
+// @module document
+// @description This module defines the abstract contract for the Document service,
+// which is responsible for managing the lifecycle and content of text documents.
+// It includes the `DocumentProvider` trait and the `ActionEffect` constructors
+// for all document operations.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

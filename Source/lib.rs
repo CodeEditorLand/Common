@@ -1,12 +1,12 @@
 
 
-/**
- * @module Common Crate
- * @description This crate defines the abstract architectural core for the entire
- * application ecosystem. It provides a declarative, effects-based system for
- * building application logic, ensuring a clean separation between the definition
- * of an operation (`ActionEffect`) and its concrete implementation (`Environment`).
- */
+//
+// @module Common Crate
+// @description This crate defines the abstract architectural core for the entire
+// application ecosystem. It provides a declarative, effects-based system for
+// building application logic, ensuring a clean separation between the definition
+// of an operation (`ActionEffect`) and its concrete implementation (`Environment`).
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 
@@ -38,10 +38,10 @@ pub mod webview;
 pub mod workspace;
 
 // --- Global DTO Module ---
-/**
- * A top-level module that re-exports all Data Transfer Objects (DTOs) from the
- * various service modules for convenient access.
- */
+//
+// A top-level module that re-exports all Data Transfer Objects (DTOs) from the
+// various service modules for convenient access.
+//
 pub mod dto {
     pub use crate::config::dto::*;
     pub use crate::fs::dto::*;

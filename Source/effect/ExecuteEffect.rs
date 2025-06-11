@@ -1,5 +1,5 @@
-//! Defines the generic `ExecuteEffect` helper function, providing a more
-//! ergonomic way to run `ActionEffect`s.
+// Defines the generic `ExecuteEffect` helper function, providing a more
+// ergonomic way to run `ActionEffect`s.
 
 use std::sync::Arc;
 

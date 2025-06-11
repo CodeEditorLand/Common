@@ -1,5 +1,5 @@
-//! Defines the `HasEnvironment` trait for any context object that contains and
-//! provides access to an `Environment`.
+// Defines the `HasEnvironment` trait for any context object that contains and
+// provides access to an `Environment`.
 
 use std::sync::Arc;
 

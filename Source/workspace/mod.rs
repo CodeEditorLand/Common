@@ -1,11 +1,11 @@
 
 
-/**
- * @module workspace
- * @description This module defines the abstract contract for the Workspace service.
- * It includes the `WorkspaceProvider` and `WorkspaceEditApplier` traits, and the
- * `ActionEffect` constructors for every workspace-related operation.
- */
+//
+// @module workspace
+// @description This module defines the abstract contract for the Workspace service.
+// It includes the `WorkspaceProvider` and `WorkspaceEditApplier` traits, and the
+// `ActionEffect` constructors for every workspace-related operation.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

@@ -1,11 +1,11 @@
 
 
-/**
- * @module command
- * @description This module defines the abstract contract for the Command service.
- * It includes the `CommandExecutor` trait and the `ActionEffect` constructors for
- * all command operations.
- */
+//
+// @module command
+// @description This module defines the abstract contract for the Command service.
+// It includes the `CommandExecutor` trait and the `ActionEffect` constructors for
+// all command operations.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

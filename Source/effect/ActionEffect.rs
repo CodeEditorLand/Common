@@ -1,5 +1,5 @@
-//! Defines the core `ActionEffect` struct, the fundamental unit of computation 
-//! in the application's declarative, effects-based architecture.
+// Defines the core `ActionEffect` struct, the fundamental unit of computation 
+// in the application's declarative, effects-based architecture.
 
 use std::{future::Future, pin::Pin, sync::Arc};
 

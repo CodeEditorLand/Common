@@ -1,10 +1,10 @@
 
 
-/**
- * @module dto (UI)
- * @description Aggregates and re-exports all Data Transfer Objects (DTOs)
- * related to the user interface service, such as dialogs, messages, and quick picks.
- */
+//
+// @module dto (UI)
+// @description Aggregates and re-exports all Data Transfer Objects (DTOs)
+// related to the user interface service, such as dialogs, messages, and quick picks.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

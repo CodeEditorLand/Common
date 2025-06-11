@@ -1,11 +1,11 @@
 
 
-/**
- * @module sync
- * @description This module defines the abstract contract for the User Data Sync
- * service, responsible for synchronizing settings, snippets, and other user
- * data across different instances of the application.
- */
+//
+// @module sync
+// @description This module defines the abstract contract for the User Data Sync
+// service, responsible for synchronizing settings, snippets, and other user
+// data across different instances of the application.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

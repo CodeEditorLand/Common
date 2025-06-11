@@ -1,12 +1,12 @@
 
 
-/**
- * @module language_feature
- * @description This module defines the abstract contract for all language intelligence
- * services. It includes the main `LanguageFeatureProviderRegistry` trait, all
- * related DTOs, and the `ActionEffect` constructors for every language feature
- * operation. This is the largest and most complex service contract in the application.
- */
+//
+// @module language_feature
+// @description This module defines the abstract contract for all language intelligence
+// services. It includes the main `LanguageFeatureProviderRegistry` trait, all
+// related DTOs, and the `ActionEffect` constructors for every language feature
+// operation. This is the largest and most complex service contract in the application.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

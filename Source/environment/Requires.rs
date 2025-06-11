@@ -1,4 +1,4 @@
-//! Defines the `Requires` trait, the core of the dependency injection system.
+// Defines the `Requires` trait, the core of the dependency injection system.
 
 use std::sync::Arc;
 

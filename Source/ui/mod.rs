@@ -1,11 +1,11 @@
 
 
-/**
- * @module ui
- * @description This module defines the abstract contract for the UI service.
- * It includes the `UiProvider` trait, all related DTOs, and the `ActionEffect`
- * constructors for every UI-related operation.
- */
+//
+// @module ui
+// @description This module defines the abstract contract for the UI service.
+// It includes the `UiProvider` trait, all related DTOs, and the `ActionEffect`
+// constructors for every UI-related operation.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

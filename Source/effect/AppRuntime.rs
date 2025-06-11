@@ -1,5 +1,5 @@
-//! Defines the concrete `AppRuntime` for the Mountain application, which is the
-//! engine responsible for executing `ActionEffect`s.
+// Defines the concrete `AppRuntime` for the Mountain application, which is the
+// engine responsible for executing `ActionEffect`s.
 
 use std::sync::Arc;
 

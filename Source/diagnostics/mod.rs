@@ -1,12 +1,12 @@
 
 
-/**
- * @module diagnostics
- * @description This module defines the abstract contract for the Diagnostics service,
- * which is responsible for managing problems like errors and warnings. It includes
- * the `DiagnosticsManager` trait and the `ActionEffect` constructors for all
- * diagnostic operations.
- */
+//
+// @module diagnostics
+// @description This module defines the abstract contract for the Diagnostics service,
+// which is responsible for managing problems like errors and warnings. It includes
+// the `DiagnosticsManager` trait and the `ActionEffect` constructors for all
+// diagnostic operations.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 

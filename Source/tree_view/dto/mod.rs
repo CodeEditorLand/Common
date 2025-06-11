@@ -1,10 +1,10 @@
 
 
-/**
- * @module dto (TreeView)
- * @description Aggregates and re-exports all Data Transfer Objects (DTOs)
- * related to the Tree View API.
- */
+//
+// @module dto (TreeView)
+// @description Aggregates and re-exports all Data Transfer Objects (DTOs)
+// related to the Tree View API.
+//
 
 #![allow(non_snake_case, non_camel_case_types)]
 
