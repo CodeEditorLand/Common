@@ -6,7 +6,7 @@ use std::sync::Arc;
 
 use serde_json::Value;
 
-use super::LanguageFeatureProviderRegistry::LanguageFeatureProviderRegistry;
+use super::{DTO::ProviderType::ProviderType, LanguageFeatureProviderRegistry::LanguageFeatureProviderRegistry};
 use crate::{
 	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
 	Environment::Requires::Requires,
@@ -32,7 +32,7 @@ use crate::{
 /// An `ActionEffect` that resolves with a unique `u32` handle for the
 /// registration.
 pub fn RegisterProvider<TRunTime>(
-	ProviderType:super::DTO::ProviderType, // This DTO will be added soon
+	ProviderType:ProviderType,
 	SelectorDTO:Value,
 	SidecarIdentifier:String,
 	ExtensionIdentifierDTO:Value,
@@ -40,15 +40,14 @@ pub fn RegisterProvider<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, u32>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
+	TRunTime: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let SelectorClone = SelectorDTO.clone();
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
 		let ExtensionIdentifierClone = ExtensionIdentifierDTO.clone();
 		let OptionsClone = OptionsDTO.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = Environment.Require();
+			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = RunTime.Require();
 			Registry
 				.RegisterProvider(
 					SidecarIdentifierClone,

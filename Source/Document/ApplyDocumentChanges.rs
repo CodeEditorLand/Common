@@ -48,13 +48,12 @@ pub fn ApplyDocumentChanges<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn DocumentProvider>>, {
+	TRunTime: Requires<Arc<dyn DocumentProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let URIClone = URI.clone();
 		let ChangesClone = ChangesDTOCollection.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn DocumentProvider> = Environment.Require();
+			let Provider:Arc<dyn DocumentProvider> = RunTime.Require();
 			Provider
 				.ApplyDocumentChanges(
 					URIClone,

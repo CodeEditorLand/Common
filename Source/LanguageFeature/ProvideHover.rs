@@ -38,12 +38,11 @@ pub fn ProvideHover<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Option<HoverResultDTO>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
+	TRunTime: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let URIClone = DocumentURI.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = Environment.Require();
+			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = RunTime.Require();
 			Registry.ProvideHover(URIClone, PositionDTO).await
 		})
 	}))

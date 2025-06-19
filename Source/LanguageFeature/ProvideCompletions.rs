@@ -43,14 +43,13 @@ pub fn ProvideCompletions<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Option<Value /* SuggestResultDTO */>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
+	TRunTime: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let URIClone = DocumentURI.clone();
 		let ContextClone = ContextDTO.clone();
 		let TokenClone = CancellationTokenValue.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = Environment.Require();
+			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = RunTime.Require();
 			Registry
 				.ProvideCompletions(URIClone, PositionDTO, ContextClone, TokenClone)
 				.await

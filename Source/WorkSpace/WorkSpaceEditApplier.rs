@@ -7,7 +7,7 @@ use async_trait::async_trait;
 
 // Note: WorkSpaceEditDTO is defined in `language_feature::DTO` as it's
 // most commonly used there, but it is a general-purpose DTO.
-use crate::LanguageFeature::DTO::WorkSpaceEditDTO;
+use crate::DTO::WorkSpaceEditDTO::WorkSpaceEditDTO;
 use crate::{Environment::Environment::Environment, Error::CommonError::CommonError};
 
 /// An abstract service contract for an environment component that can apply a

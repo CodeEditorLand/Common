@@ -38,7 +38,7 @@ pub fn ProxyCallToSidecar<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn IPCProvider>>, {
+	TRunTime: Requires<Arc<dyn IPCProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let TargetIdentifierClone = TargetSidecarIdentifier.clone();
 		let CallDataClone = CallData.clone();
@@ -56,8 +56,7 @@ where
 
 			let ParametersValue = CallDataClone.get("Parameters").cloned().unwrap_or(Value::Null);
 
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn IPCProvider> = Environment.Require();
+			let Provider:Arc<dyn IPCProvider> = RunTime.Require();
 
 			// Using a default timeout here; a real implementation might make this
 			// configurable by extracting it from the CallData payload.

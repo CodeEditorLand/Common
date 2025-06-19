@@ -38,13 +38,12 @@ pub fn GetConfiguration<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn ConfigurationProvider>>, {
+	TRunTime: Requires<Arc<dyn ConfigurationProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let SectionClone = Section.clone();
 		let OverridesValueClone = OverridesValue.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn ConfigurationProvider> = Environment.Require();
+			let Provider:Arc<dyn ConfigurationProvider> = RunTime.Require();
 
 			let OverridesParsed:ConfigurationOverridesDTO =
 				serde_json::from_value(OverridesValueClone).map_err(|e| {

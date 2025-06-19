@@ -32,13 +32,12 @@ use crate::{
 pub fn SetDiagnostics<TRunTime>(Owner:String, EntriesDTOValue:Value) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn DiagnosticManager>>, {
+	TRunTime: Requires<Arc<dyn DiagnosticManager>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let OwnerClone = Owner.clone();
 		let EntriesClone = EntriesDTOValue.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Manager:Arc<dyn DiagnosticManager> = Environment.Require();
+			let Manager:Arc<dyn DiagnosticManager> = RunTime.Require();
 			Manager.SetDiagnostics(OwnerClone, EntriesClone).await
 		})
 	}))

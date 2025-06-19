@@ -43,7 +43,8 @@ pub mod WorkSpace;
 //
 // A top-level module that re-exports all Data Transfer Objects (DTOs) from the
 // various service modules for convenient access across the application.
-//
+pub mod DTO;
+
 // pub mod DTO {
 // 	pub use crate::{
 // 		Configuration::DTO::*,

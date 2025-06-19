@@ -33,7 +33,7 @@ use crate::{
 pub fn GetStorageItem<TRunTime>(TargetObject:Value) -> ActionEffect<Arc<TRunTime>, CommonError, Option<Value>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn StorageProvider>>, {
+	TRunTime: Requires<Arc<dyn StorageProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let TargetObjectClone = TargetObject.clone();
 		Box::pin(async move {
@@ -50,8 +50,7 @@ where
 				})?
 				.to_string();
 
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn StorageProvider> = Environment.Require();
+			let Provider:Arc<dyn StorageProvider> = RunTime.Require();
 			Provider.GetStorageValue(IsGlobal, &KeyString).await
 		})
 	}))

@@ -35,13 +35,12 @@ pub fn SaveDocumentAs<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Option<Url>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn DocumentProvider>>, {
+	TRunTime: Requires<Arc<dyn DocumentProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let OriginalURIClone = OriginalURI.clone();
 		let NewTargetURIClone = NewTargetURI.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn DocumentProvider> = Environment.Require();
+			let Provider:Arc<dyn DocumentProvider> = RunTime.Require();
 			Provider.SaveDocumentAs(OriginalURIClone, NewTargetURIClone).await
 		})
 	}))

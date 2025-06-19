@@ -26,11 +26,10 @@ use crate::{
 pub fn UnregisterProvider<TRunTime>(Handle:u32) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
+	TRunTime: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = Environment.Require();
+			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = RunTime.Require();
 			Registry.UnregisterProvider(Handle).await
 		})
 	}))

@@ -33,12 +33,11 @@ pub fn GetAllDiagnostics<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn DiagnosticManager>>, {
+	TRunTime: Requires<Arc<dyn DiagnosticManager>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let FilterClone = ResourceURIFilterOption.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Manager:Arc<dyn DiagnosticManager> = Environment.Require();
+			let Manager:Arc<dyn DiagnosticManager> = RunTime.Require();
 			Manager.GetAllDiagnostics(FilterClone).await
 		})
 	}))

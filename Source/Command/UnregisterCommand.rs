@@ -33,13 +33,12 @@ pub fn UnregisterCommand<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn CommandExecutor>>, {
+	TRunTime: Requires<Arc<dyn CommandExecutor>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
 		let CommandIdentifierClone = CommandIdentifier.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Executor:Arc<dyn CommandExecutor> = Environment.Require();
+			let Executor:Arc<dyn CommandExecutor> = RunTime.Require();
 			Executor.UnregisterCommand(SidecarIdentifierClone, CommandIdentifierClone).await
 		})
 	}))

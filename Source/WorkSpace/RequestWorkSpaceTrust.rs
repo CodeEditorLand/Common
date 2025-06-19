@@ -29,12 +29,11 @@ use crate::{
 pub fn RequestWorkSpaceTrust<TRunTime>(Options:Option<Value>) -> ActionEffect<Arc<TRunTime>, CommonError, bool>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn WorkSpaceProvider>>, {
+	TRunTime: Requires<Arc<dyn WorkSpaceProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let OptionsClone = Options.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn WorkSpaceProvider> = Environment.Require();
+			let Provider:Arc<dyn WorkSpaceProvider> = RunTime.Require();
 			Provider.RequestWorkSpaceTrust(OptionsClone).await
 		})
 	}))

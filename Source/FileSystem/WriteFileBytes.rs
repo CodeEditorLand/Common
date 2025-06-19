@@ -33,13 +33,12 @@ pub fn WriteFileBytes<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn FileSystemWriter>>, {
+	TRunTime: Requires<Arc<dyn FileSystemWriter>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let PathClone = Path.clone();
 		let ContentClone = Content.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Writer:Arc<dyn FileSystemWriter> = Environment.Require();
+			let Writer:Arc<dyn FileSystemWriter> = RunTime.Require();
 			Writer.WriteFile(&PathClone, ContentClone, Create, Overwrite).await
 		})
 	}))

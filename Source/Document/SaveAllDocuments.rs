@@ -29,11 +29,10 @@ use crate::{
 pub fn SaveAllDocuments<TRunTime>(IncludeUntitled:bool) -> ActionEffect<Arc<TRunTime>, CommonError, Vec<bool>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn DocumentProvider>>, {
+	TRunTime: Requires<Arc<dyn DocumentProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn DocumentProvider> = Environment.Require();
+			let Provider:Arc<dyn DocumentProvider> = RunTime.Require();
 			Provider.SaveAllDocuments(IncludeUntitled).await
 		})
 	}))

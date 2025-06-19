@@ -8,7 +8,7 @@ use async_trait::async_trait;
 use serde_json::Value;
 use url::Url;
 
-use super::DTO::{HoverResultDTO::HoverResultDTO, PositionDTO::PositionDTO};
+use super::DTO::{HoverResultDTO::HoverResultDTO, PositionDTO::PositionDTO, ProviderType::ProviderType};
 use crate::{Environment::Environment::Environment, Error::CommonError::CommonError};
 
 /// An abstract service contract for an environment component that can register,
@@ -37,7 +37,7 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 	async fn RegisterProvider(
 		&self,
 		SidecarIdentifier:String,
-		ProviderType:ProviderType, // This DTO will be added in a future batch
+		ProviderType:ProviderType,
 		SelectorDTO:Value,
 		ExtensionIdentifierDTO:Value,
 		OptionsDTO:Option<Value /* ProviderOptionsDTO */>,

@@ -38,13 +38,12 @@ pub fn ShowMessage<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Option<String>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn UserInterfaceProvider>>, {
+	TRunTime: Requires<Arc<dyn UserInterfaceProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let MessageClone = Message.clone();
 		let OptionsClone = OptionsValue.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn UserInterfaceProvider> = Environment.Require();
+			let Provider:Arc<dyn UserInterfaceProvider> = RunTime.Require();
 			Provider.ShowMessage(Severity, MessageClone, Some(OptionsClone)).await
 		})
 	}))

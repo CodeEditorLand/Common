@@ -26,12 +26,11 @@ use crate::{
 pub fn ReadDirectory<TRunTime>(Path:PathBuf) -> ActionEffect<Arc<TRunTime>, CommonError, Vec<(String, FileTypeDTO)>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn FileSystemReader>>, {
+	TRunTime: Requires<Arc<dyn FileSystemReader>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let PathClone = Path.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Reader:Arc<dyn FileSystemReader> = Environment.Require();
+			let Reader:Arc<dyn FileSystemReader> = RunTime.Require();
 			Reader.ReadDirectory(&PathClone).await
 		})
 	}))

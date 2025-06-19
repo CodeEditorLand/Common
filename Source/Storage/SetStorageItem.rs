@@ -34,7 +34,7 @@ use crate::{
 pub fn SetStorageItem<TRunTime>(TargetObject:Value, ValueToSet:Value) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn StorageProvider>>, {
+	TRunTime: Requires<Arc<dyn StorageProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let TargetObjectClone = TargetObject.clone();
 		let ValueToSetClone = ValueToSet.clone();
@@ -55,8 +55,7 @@ where
 			// A JSON null from the caller signals deletion to the provider.
 			let ValueOption = if ValueToSetClone.is_null() { None } else { Some(ValueToSetClone) };
 
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn StorageProvider> = Environment.Require();
+			let Provider:Arc<dyn StorageProvider> = RunTime.Require();
 			Provider.UpdateStorageValue(IsGlobal, KeyString, ValueOption).await
 		})
 	}))

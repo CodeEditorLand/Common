@@ -31,12 +31,11 @@ use crate::{
 pub fn CreateTerminal<TRunTime>(OptionsValue:Value) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn TerminalProvider>>, {
+	TRunTime: Requires<Arc<dyn TerminalProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let OptionsClone = OptionsValue.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn TerminalProvider> = Environment.Require();
+			let Provider:Arc<dyn TerminalProvider> = RunTime.Require();
 			Provider.CreateTerminal(OptionsClone).await
 		})
 	}))

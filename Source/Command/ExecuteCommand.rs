@@ -39,13 +39,12 @@ pub fn ExecuteCommand<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn CommandExecutor>>, {
+	TRunTime: Requires<Arc<dyn CommandExecutor>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let CommandIdentifierClone = CommandIdentifier.clone();
 		let ArgumentClone = Argument.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Executor:Arc<dyn CommandExecutor> = Environment.Require();
+			let Executor:Arc<dyn CommandExecutor> = RunTime.Require();
 			Executor.ExecuteCommand(CommandIdentifierClone, ArgumentClone).await
 		})
 	}))

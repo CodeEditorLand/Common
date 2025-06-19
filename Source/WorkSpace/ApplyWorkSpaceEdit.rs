@@ -7,10 +7,10 @@ use std::sync::Arc;
 
 use super::WorkSpaceEditApplier::WorkSpaceEditApplier;
 use crate::{
+	DTO::WorkSpaceEditDTO::WorkSpaceEditDTO,
 	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
 	Environment::Requires::Requires,
 	Error::CommonError::CommonError,
-	LanguageFeature::DTO::WorkSpaceEditDTO,
 };
 
 /// Creates an effect that, when executed, will apply a `WorkSpaceEdit` to the
@@ -31,12 +31,11 @@ use crate::{
 pub fn ApplyWorkSpaceEdit<TRunTime>(EditDTO:WorkSpaceEditDTO) -> ActionEffect<Arc<TRunTime>, CommonError, bool>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn WorkSpaceEditApplier>>, {
+	TRunTime: Requires<Arc<dyn WorkSpaceEditApplier>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let EditDTOClone = EditDTO.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Applier:Arc<dyn WorkSpaceEditApplier> = Environment.Require();
+			let Applier:Arc<dyn WorkSpaceEditApplier> = RunTime.Require();
 			Applier.ApplyWorkSpaceEdit(EditDTOClone).await
 		})
 	}))

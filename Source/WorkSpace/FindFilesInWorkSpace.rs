@@ -41,13 +41,12 @@ pub fn FindFilesInWorkSpace<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Vec<Url>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn WorkSpaceProvider>>, {
+	TRunTime: Requires<Arc<dyn WorkSpaceProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let IncludeClone = IncludePatternDTO.clone();
 		let ExcludeClone = ExcludePatternDTO.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn WorkSpaceProvider> = Environment.Require();
+			let Provider:Arc<dyn WorkSpaceProvider> = RunTime.Require();
 			Provider
 				.FindFilesInWorkSpace(IncludeClone, ExcludeClone, MaxResults, UseIgnoreFiles, FollowSymlinks)
 				.await

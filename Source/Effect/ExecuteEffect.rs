@@ -30,7 +30,7 @@ pub async fn ExecuteEffect<TRunTime, TCapability, TError, TOutput>(
 where
 	TRunTime: ApplicationRunTime,
 	TCapability: ?Sized + Send + Sync,
-	TRunTime::EnvironmentType: crate::Environment::Requires::Requires<Arc<TCapability>>,
+	TRunTime: crate::Environment::Requires::Requires<Arc<TCapability>>,
 	TError: Send + Sync + 'static,
 	TOutput: Send + Sync + 'static, {
 	RunTime.Run(Effect).await

@@ -32,12 +32,11 @@ pub fn ShowOpenDialog<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Option<Vec<PathBuf>>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn UserInterfaceProvider>>, {
+	TRunTime: Requires<Arc<dyn UserInterfaceProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let OptionsClone = Options.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn UserInterfaceProvider> = Environment.Require();
+			let Provider:Arc<dyn UserInterfaceProvider> = RunTime.Require();
 			Provider.ShowOpenDialog(OptionsClone).await
 		})
 	}))

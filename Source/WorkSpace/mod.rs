@@ -10,7 +10,8 @@
 pub mod WorkSpaceEditApplier;
 pub mod WorkSpaceProvider;
 
-// pub use self::{WorkSpaceEditApplier::WorkSpaceEditApplier, WorkSpaceProvider::WorkSpaceProvider};
+// pub use self::{WorkSpaceEditApplier::WorkSpaceEditApplier,
+// WorkSpaceProvider::WorkSpaceProvider};
 
 // --- Effect Constructors ---
 pub mod ApplyWorkSpaceEdit;

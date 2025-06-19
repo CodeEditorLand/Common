@@ -29,13 +29,12 @@ pub fn RegisterOutputChannel<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, String>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn OutputChannelManager>>, {
+	TRunTime: Requires<Arc<dyn OutputChannelManager>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let NameClone = Name.clone();
 		let LanguageIdentifierClone = LanguageIdentifier.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Manager:Arc<dyn OutputChannelManager> = Environment.Require();
+			let Manager:Arc<dyn OutputChannelManager> = RunTime.Require();
 			Manager.RegisterChannel(NameClone, LanguageIdentifierClone).await
 		})
 	}))

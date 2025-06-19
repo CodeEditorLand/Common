@@ -28,13 +28,12 @@ use crate::{
 pub fn Copy<TRunTime>(Source:PathBuf, Target:PathBuf, Overwrite:bool) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn FileSystemWriter>>, {
+	TRunTime: Requires<Arc<dyn FileSystemWriter>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let SourceClone = Source.clone();
 		let TargetClone = Target.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Writer:Arc<dyn FileSystemWriter> = Environment.Require();
+			let Writer:Arc<dyn FileSystemWriter> = RunTime.Require();
 			Writer.Copy(&SourceClone, &TargetClone, Overwrite).await
 		})
 	}))

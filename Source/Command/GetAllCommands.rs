@@ -26,11 +26,10 @@ use crate::{
 pub fn GetAllCommands<TRunTime>() -> ActionEffect<Arc<TRunTime>, CommonError, Vec<String>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn CommandExecutor>>, {
+	TRunTime: Requires<Arc<dyn CommandExecutor>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Executor:Arc<dyn CommandExecutor> = Environment.Require();
+			let Executor:Arc<dyn CommandExecutor> = RunTime.Require();
 			Executor.GetAllCommands().await
 		})
 	}))

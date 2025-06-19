@@ -28,11 +28,11 @@ pub trait ApplicationRunTime: HasEnvironment + Send + Sync + 'static {
 	/// it to the effect's encapsulated function, which is then awaited.
 	async fn Run<TCapability, TError, TOutput>(
 		&self,
-		Effect:ActionEffect<Arc<TCapability>, TError, TOutput>,
+		Effect:ActionEffect<Arc<Self>, TError, TOutput>,
 	) -> Result<TOutput, TError>
 	where
 		TCapability: ?Sized + Send + Sync,
-		Self::EnvironmentType: Requires<Arc<TCapability>>,
+		Self: Requires<Arc<TCapability>>,
 		TError: Send + Sync + 'static,
 		TOutput: Send + Sync + 'static;
 }

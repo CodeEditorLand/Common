@@ -28,13 +28,12 @@ pub fn AppendToOutputChannel<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn OutputChannelManager>>, {
+	TRunTime: Requires<Arc<dyn OutputChannelManager>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let IdentifierClone = ChannelIdentifier.clone();
 		let ValueClone = Value.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Manager:Arc<dyn OutputChannelManager> = Environment.Require();
+			let Manager:Arc<dyn OutputChannelManager> = RunTime.Require();
 			Manager.Append(IdentifierClone, ValueClone).await
 		})
 	}))

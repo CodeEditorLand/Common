@@ -41,14 +41,13 @@ pub fn SendRequestToSidecar<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn IPCProvider>>, {
+	TRunTime: Requires<Arc<dyn IPCProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
 		let MethodClone = Method.clone();
 		let ParametersClone = Parameters.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn IPCProvider> = Environment.Require();
+			let Provider:Arc<dyn IPCProvider> = RunTime.Require();
 			Provider
 				.SendRequestToSidecar(SidecarIdentifierClone, MethodClone, ParametersClone, TimeoutMilliseconds)
 				.await

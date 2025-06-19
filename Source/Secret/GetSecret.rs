@@ -30,13 +30,12 @@ pub fn GetSecret<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Option<String>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn SecretProvider>>, {
+	TRunTime: Requires<Arc<dyn SecretProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let ExtensionIdentifierClone = ExtensionIdentifier.clone();
 		let KeyClone = Key.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn SecretProvider> = Environment.Require();
+			let Provider:Arc<dyn SecretProvider> = RunTime.Require();
 			Provider.GetSecret(ExtensionIdentifierClone, KeyClone).await
 		})
 	}))

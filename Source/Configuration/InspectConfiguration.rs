@@ -42,13 +42,12 @@ pub fn InspectConfiguration<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Option<InspectResultDataDTO>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn ConfigurationInspector>>, {
+	TRunTime: Requires<Arc<dyn ConfigurationInspector>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let KeyClone = Key.clone();
 		let OverridesValueClone = OverridesValue.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Inspector:Arc<dyn ConfigurationInspector> = Environment.Require();
+			let Inspector:Arc<dyn ConfigurationInspector> = RunTime.Require();
 
 			let OverridesParsed:ConfigurationOverridesDTO =
 				serde_json::from_value(OverridesValueClone).map_err(|e| {

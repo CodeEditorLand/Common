@@ -8,6 +8,7 @@
 pub mod HoverResultDTO;
 pub mod IMarkdownStringDTO;
 pub mod PositionDTO;
+pub mod ProviderType;
 pub mod RangeDTO;
 // ... many more DTOs will be added here
 

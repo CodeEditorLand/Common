@@ -34,12 +34,11 @@ pub fn GetWorkSpaceFolderInfo<TRunTime>(
 ) -> ActionEffect<Arc<TRunTime>, CommonError, Option<(Url, String, usize)>>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn WorkSpaceProvider>>, {
+	TRunTime: Requires<Arc<dyn WorkSpaceProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let URIClone = URIToMatch.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn WorkSpaceProvider> = Environment.Require();
+			let Provider:Arc<dyn WorkSpaceProvider> = RunTime.Require();
 			Provider.GetWorkSpaceFolderInfo(URIClone).await
 		})
 	}))

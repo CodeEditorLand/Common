@@ -30,12 +30,11 @@ use crate::{
 pub fn SaveDocument<TRunTime>(URI:Url) -> ActionEffect<Arc<TRunTime>, CommonError, bool>
 where
 	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime::EnvironmentType: Requires<Arc<dyn DocumentProvider>>, {
+	TRunTime: Requires<Arc<dyn DocumentProvider>>, {
 	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
 		let URIClone = URI.clone();
 		Box::pin(async move {
-			let Environment = RunTime.GetEnvironment();
-			let Provider:Arc<dyn DocumentProvider> = Environment.Require();
+			let Provider:Arc<dyn DocumentProvider> = RunTime.Require();
 			Provider.SaveDocument(URIClone).await
 		})
 	}))
