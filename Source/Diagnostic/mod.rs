@@ -1,0 +1,23 @@
+//! # Diagnostic Service
+//!
+//! This module defines the abstract contract for the Diagnostic service, which
+//! is responsible for managing problems like errors and warnings detected in
+//! the workspace. It includes the `DiagnosticManager` trait and the
+//! `ActionEffect` constructors for all diagnostic operations.
+
+#![allow(non_snake_case, non_camel_case_types)]
+
+// --- Trait Definition ---
+pub mod DiagnosticManager;
+// pub use self::DiagnosticManager::DiagnosticManager;
+
+// --- Effect Constructors ---
+pub mod ClearDiagnostics;
+pub mod GetAllDiagnostics;
+pub mod SetDiagnostics;
+
+// pub use self::{
+// 	ClearDiagnostics::ClearDiagnostics,
+// 	GetAllDiagnostics::GetAllDiagnostics,
+// 	SetDiagnostics::SetDiagnostics,
+// };
