@@ -148,22 +148,22 @@ it.
 
 ```mermaid
 graph LR
-    classDef mountain fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef common fill:#cfc,stroke:#333,stroke-width:1px;
-    classDef consumer fill:#9cf,stroke:#333,stroke-width:2px;
+    classDef Mountain fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef Common fill:#cfc,stroke:#333,stroke-width:1px;
+    classDef Consumer fill:#9cf,stroke:#333,stroke-width:2px;
 
-    subgraph "The `Common` Crate"
+    subgraph "The \`Common\` Crate"
         direction LR
-        Traits["Abstract Traits (e.g., `FileSystemReader`)"]:::common
-        Effects["ActionEffects (e.g., `ReadFile`)"]:::common
-        DTOs["Data Transfer Objects (e.g., `FileTypeDTO`)"]:::common
+        Traits["Abstract Traits (e.g., \`FileSystemReader\`)"]:::Common
+        Effects["ActionEffects (e.g., \`ReadFile\`)"]:::Common
+        DTOs["Data Transfer Objects (e.g., \`FileTypeDTO\`)"]:::Common
 
         Effects -- Depend on --> Traits
     end
 
     subgraph "Consumers"
-        Mountain[**Mountain Application**]:::mountain
-        Tests[Unit & Integration Tests]:::consumer
+        Mountain[**Mountain Application**]:::Mountain
+        Tests[Unit & Integration Tests]:::Consumer
     end
 
     Mountain -- Implements --> Traits
