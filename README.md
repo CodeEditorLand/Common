@@ -31,10 +31,10 @@ implementing the traits and consuming the effects defined in this crate.
     definition of an operation and its execution.
 2.  **Provide a Declarative Effect System:** Introduces the `ActionEffect` type,
     which describes an asynchronous operation as a value, allowing logic to be
-    composed, tested, and executed in a controlled `AppRuntime`.
+    composed, tested, and executed in a controlled `ApplicationRunTime`.
 3.  **Standardize Data Contracts:** Defines all Data Transfer Objects (DTOs) and
     a universal `CommonError` enum, ensuring consistent data structures and
-    error handling across the entire native ecosystem, including the gRPC API.
+    error handling across the entire native ecosystem.
 4.  **Maximize Testability and Reusability:** Because this crate is pure and
     abstract, any component that depends on it can be tested with mock
     implementations of its traits, leading to fast and reliable unit tests.
@@ -50,8 +50,8 @@ implementing the traits and consuming the effects defined in this crate.
   the `Environment` and `Requires` traits, allowing components to declare their
   dependencies without being tied to a specific implementation.
 - **Asynchronous Service Traits:** All core application services (e.g.,
-  `FsReader`, `UiProvider`, `CommandExecutor`) are defined as `async trait`s,
-  providing a fully asynchronous-first architecture.
+  `FileSystemReader`, `UserInterfaceProvider`, `CommandExecutor`) are defined as
+  `async trait`s, providing a fully asynchronous-first architecture.
 - **Comprehensive DTO Library:** Contains definitions for all data structures
   used for IPC communication with `Cocoon` and internal state management in
   `Mountain`. All types are `serde`-compatible.
@@ -66,9 +66,9 @@ implementing the traits and consuming the effects defined in this crate.
 | Principle          | Description                                                                                                                                    | Key Components Involved                    |
 | :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------- |
 | **Abstraction**    | Define every application capability as an abstract `async trait`. Never include concrete implementation logic.                                 | All `*Provider.rs` and `*Manager.rs` files |
-| **Declarativism**  | Represent every operation as an `ActionEffect` value. The crate provides constructor functions for these effects.                              | `effect/*`, all `*Effect.rs` files         |
-| **Composability**  | The `ActionEffect` system and trait-based DI are designed to be composed, allowing complex workflows to be built from simple, reusable pieces. | `environment/*`, `effect/*`                |
-| **Contract-First** | Define all data structures (`dto/*`) and error types (`error/*`) first. These form the stable contract for all other components.               | `dto/`, `error/`                           |
+| **Declarativism**  | Represent every operation as an `ActionEffect` value. The crate provides constructor functions for these effects.                              | `Effect/*`, all effect constructor files   |
+| **Composability**  | The `ActionEffect` system and trait-based DI are designed to be composed, allowing complex workflows to be built from simple, reusable pieces. | `Environment/*`, `Effect/*`                |
+| **Contract-First** | Define all data structures (`DTO/*`) and error types (`Error/*`) first. These form the stable contract for all other components.               | `DTO/`, `Error/`                           |
 | **Purity**         | This crate has minimal dependencies and is completely independent of Tauri, gRPC, or any specific application logic.                           | `Cargo.toml`                               |
 
 ---
@@ -82,7 +82,7 @@ _returns a description of that effect_.
 **Traditional (Imperative) Approach:**
 
 ```rust
-async fn read_my_file(fs: &impl Fs) -> Result<Vec<u8>, Error> {
+async fn read_my_file(fs: &impl FileSystem) -> Result<Vec<u8>, Error> {
     fs.read("/path/to/file").await // The side effect happens here.
 }
 ```
@@ -90,13 +90,16 @@ async fn read_my_file(fs: &impl Fs) -> Result<Vec<u8>, Error> {
 **The `Common` (Declarative) Approach:**
 
 ```rust
-use Common::fs;
+use Common::FileSystem;
+use std::sync::Arc;
 
 // 1. Create a description of the desired effect. No I/O happens here.
-let read_effect = fs::ReadFile(PathBuf::from("/path/to/file"));
+//    The effect's type signature explicitly declares its dependency: `Arc<dyn FileSystemReader>`.
+let read_effect: ActionEffect<Arc<dyn FileSystemReader>, _, _> = FileSystem::ReadFile(PathBuf::from("/path/to/file"));
 
 // 2. Later, in a separate part of the system (the runtime), execute it.
-//    The runtime provides the concrete implementation of the `FsReader` trait.
+//    The runtime will see that the effect needs a FileSystemReader, provide one from its
+//    environment, and run the operation.
 let file_content = runtime.Run(read_effect).await?;
 ```
 
@@ -112,15 +115,17 @@ its trait definitions, DTOs, and effect constructors.
 ```
 Common/
 └── Source/
-    ├── lib.rs                      # Crate root, declares all modules.
-    ├── environment/                # The core DI system (Environment, Requires traits).
-    ├── effect/                     # The ActionEffect system (ActionEffect, AppRuntime traits).
-    ├── error/                      # The universal CommonError enum.
-    └── command/                    # Example service domain:
-        ├── mod.rs                  # Module aggregator.
-        ├── CommandExecutor.rs      # The abstract `trait` definition.
-        └── ExecuteCommand.rs       # The `ActionEffect` constructor function.
-    └── (Other service domains like fs/, ui/, terminal/, etc. follow the same pattern)
+    ├── Library.rs                      # Crate root, declares all modules.
+    ├── Environment/                    # The core DI system (Environment, Requires traits).
+    ├── Effect/                         # The ActionEffect system (ActionEffect, ApplicationRunTime traits).
+    ├── Error/                          # The universal CommonError enum.
+    ├── DTO/                            # Shared Data Transfer Objects.
+    └── Command/                        # Example service domain:
+        ├── mod.rs                      # Module aggregator.
+        ├── CommandExecutor.rs          # The abstract `trait` definition.
+        ├── DTO/                        # (if any service-specific DTOs are needed)
+        └── ExecuteCommand.rs           # The `ActionEffect` constructor function.
+    └── (Other service domains like FileSystem/, UserInterface/, etc. follow the same pattern)
 ```
 
 ---
@@ -149,9 +154,9 @@ graph LR
 
     subgraph "The `Common` Crate"
         direction LR
-        Traits["Abstract Traits (e.g., `FsReader`)"]:::common
+        Traits["Abstract Traits (e.g., `FileSystemReader`)"]:::common
         Effects["ActionEffects (e.g., `ReadFile`)"]:::common
-        DTOs["Data Transfer Objects (e.g., `FileTypeDto`)"]:::common
+        DTOs["Data Transfer Objects (e.g., `FileTypeDTO`)"]:::common
 
         Effects -- Depend on --> Traits
     end
@@ -188,34 +193,33 @@ Common = { path = "../Common" }
 A developer working within the `Mountain` codebase would use `Common` as
 follows:
 
-1.  **Implement a Trait:** In `Mountain/Source/environment/`, provide the
+1.  **Implement a Trait:** In `Mountain/Source/Environment/`, provide the
     concrete implementation for a `Common` trait.
 
     ```rust
-    // In Mountain/Source/environment/FsProvider.rs
-    use Common::fs::{FsReader, FsWriter};
+    // In Mountain/Source/Environment/FileSystemProvider.rs
+    use Common::FileSystem::{FileSystemReader, FileSystemWriter};
 
     #[async_trait]
-    impl FsReader for MountainEnvironment {
+    impl FileSystemReader for MountainEnvironment {
         async fn ReadFile(&self, Path: &PathBuf) -> Result<Vec<u8>, CommonError> {
-            // Delegate to the handler which contains the actual `tokio::fs` call.
-            handlers::fs::ReadFileLogic(&self.AppHandle, Path).await
+            // ... actual `tokio::fs` call ...
         }
         // ...
     }
     ```
 
-2.  **Create and Execute an Effect:** In a command handler or other logic file,
-    create and run an effect.
+2.  **Create and Execute an Effect:** In business logic, create and run an
+    effect.
 
     ```rust
-    // In a Mountain handler
-    use Common::fs;
-    use Common::effect::AppRuntime;
+    // In a Mountain service or command
+    use Common::FileSystem;
+    use Common::Effect::ApplicationRunTime;
 
-    async fn some_logic(runtime: Arc<impl AppRuntime>) {
+    async fn some_logic(runtime: Arc<impl ApplicationRunTime>) {
         let path = PathBuf::from("/my/file.txt");
-        let read_effect = fs::ReadFile(path);
+        let read_effect = FileSystem::ReadFile(path);
 
         match runtime.Run(read_effect).await {
             Ok(content) => info!("File content length: {}", content.len()),
