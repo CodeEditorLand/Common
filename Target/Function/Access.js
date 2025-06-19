@@ -1,1 +1,0 @@
-var n=async(...[r,e,{get:o},i])=>{try{const{Vector:t,Data:s}=await o(e,{type:"json"});return JSON.parse((await import("buffer")).Buffer.from(await(await import("./Decrypt.js")).default(await a(s),r??"",await a(t))).toString())[i]}catch(t){console.log(t)}};const{default:a}=await import("./Uint8ArrayFromObject.js");export{a as Uint8ArrayFromObject,n as default};

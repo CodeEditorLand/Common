@@ -8,11 +8,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::IPCProvider::IPCProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that proxies an RPC call to a specified target sidecar.
 ///
@@ -32,14 +28,11 @@ use crate::{
 ///
 /// An `ActionEffect` that resolves with the JSON `Value` returned by the
 /// target sidecar.
-pub fn ProxyCallToSidecar<TRunTime>(
+pub fn ProxyCallToSidecar(
 	TargetSidecarIdentifier:String,
 	CallData:Value,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn IPCProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn IPCProvider>, CommonError, Value> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn IPCProvider>| {
 		let TargetIdentifierClone = TargetSidecarIdentifier.clone();
 		let CallDataClone = CallData.clone();
 		Box::pin(async move {
@@ -55,8 +48,6 @@ where
 				.to_string();
 
 			let ParametersValue = CallDataClone.get("Parameters").cloned().unwrap_or(Value::Null);
-
-			let Provider:Arc<dyn IPCProvider> = RunTime.Require();
 
 			// Using a default timeout here; a real implementation might make this
 			// configurable by extracting it from the CallData payload.

@@ -5,11 +5,7 @@
 use std::sync::Arc;
 
 use super::{DTO::InputBoxOptionsDTO::InputBoxOptionsDTO, UserInterfaceProvider::UserInterfaceProvider};
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will display an input box to solicit
 /// a string input from the user.
@@ -24,17 +20,11 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with an `Option<String>`, containing the
 /// text entered by the user, or `None` if the input box was cancelled.
-pub fn ShowInputBox<TRunTime>(
+pub fn ShowInputBox(
 	Options:Option<InputBoxOptionsDTO>,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Option<String>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn UserInterfaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn UserInterfaceProvider>, CommonError, Option<String>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn UserInterfaceProvider>| {
 		let OptionsClone = Options.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn UserInterfaceProvider> = RunTime.Require();
-			Provider.ShowInputBox(OptionsClone).await
-		})
+		Box::pin(async move { Provider.ShowInputBox(OptionsClone).await })
 	}))
 }

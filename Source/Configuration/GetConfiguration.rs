@@ -8,11 +8,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::{ConfigurationProvider::ConfigurationProvider, DTO::ConfigurationOverridesDTO::ConfigurationOverridesDTO};
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will retrieve the final, merged
 /// configuration value for a given section, applying any specified overrides.
@@ -32,19 +28,14 @@ use crate::{
 ///
 /// An `ActionEffect` that resolves with a `serde_json::Value` containing the
 /// requested configuration.
-pub fn GetConfiguration<TRunTime>(
+pub fn GetConfiguration(
 	Section:Option<String>,
 	OverridesValue:Value,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn ConfigurationProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn ConfigurationProvider>, CommonError, Value> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn ConfigurationProvider>| {
 		let SectionClone = Section.clone();
 		let OverridesValueClone = OverridesValue.clone();
 		Box::pin(async move {
-			let Provider:Arc<dyn ConfigurationProvider> = RunTime.Require();
-
 			let OverridesParsed:ConfigurationOverridesDTO =
 				serde_json::from_value(OverridesValueClone).map_err(|e| {
 					CommonError::InvalidArgument {

@@ -7,11 +7,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::WorkSpaceProvider::WorkSpaceProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will prompt the user to grant or
 /// deny trust to the current workspace via a UI dialog.
@@ -26,15 +22,9 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with a `bool` indicating whether trust was
 /// granted.
-pub fn RequestWorkSpaceTrust<TRunTime>(Options:Option<Value>) -> ActionEffect<Arc<TRunTime>, CommonError, bool>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn WorkSpaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn RequestWorkSpaceTrust(Options:Option<Value>) -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, bool> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
 		let OptionsClone = Options.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn WorkSpaceProvider> = RunTime.Require();
-			Provider.RequestWorkSpaceTrust(OptionsClone).await
-		})
+		Box::pin(async move { Provider.RequestWorkSpaceTrust(OptionsClone).await })
 	}))
 }

@@ -5,11 +5,7 @@
 use std::{path::PathBuf, sync::Arc};
 
 use super::FileSystemWriter::FileSystemWriter;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will write a vector of bytes to a
 /// file at the specified path.
@@ -25,21 +21,15 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn WriteFileBytes<TRunTime>(
+pub fn WriteFileBytes(
 	Path:PathBuf,
 	Content:Vec<u8>,
 	Create:bool,
 	Overwrite:bool,
-) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn FileSystemWriter>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn FileSystemWriter>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Writer:Arc<dyn FileSystemWriter>| {
 		let PathClone = Path.clone();
 		let ContentClone = Content.clone();
-		Box::pin(async move {
-			let Writer:Arc<dyn FileSystemWriter> = RunTime.Require();
-			Writer.WriteFile(&PathClone, ContentClone, Create, Overwrite).await
-		})
+		Box::pin(async move { Writer.WriteFile(&PathClone, ContentClone, Create, Overwrite).await })
 	}))
 }

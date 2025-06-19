@@ -8,11 +8,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::StorageProvider::StorageProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will retrieve an item from either
 /// global or workspace-scoped Memento storage.
@@ -30,11 +26,8 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with an `Option<Value>`, containing the
 /// retrieved value or `None` if the key does not exist.
-pub fn GetStorageItem<TRunTime>(TargetObject:Value) -> ActionEffect<Arc<TRunTime>, CommonError, Option<Value>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn StorageProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn GetStorageItem(TargetObject:Value) -> ActionEffect<Arc<dyn StorageProvider>, CommonError, Option<Value>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn StorageProvider>| {
 		let TargetObjectClone = TargetObject.clone();
 		Box::pin(async move {
 			let IsGlobal = TargetObjectClone.get("Scope").and_then(Value::as_bool).unwrap_or(false);
@@ -50,7 +43,6 @@ where
 				})?
 				.to_string();
 
-			let Provider:Arc<dyn StorageProvider> = RunTime.Require();
 			Provider.GetStorageValue(IsGlobal, &KeyString).await
 		})
 	}))

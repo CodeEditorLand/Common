@@ -5,11 +5,7 @@
 use std::sync::Arc;
 
 use super::DocumentProvider::DocumentProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will save all documents that have
 /// unsaved changes.
@@ -26,14 +22,8 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with a `Vec<bool>`, where each boolean
 /// corresponds to the success of saving a particular document.
-pub fn SaveAllDocuments<TRunTime>(IncludeUntitled:bool) -> ActionEffect<Arc<TRunTime>, CommonError, Vec<bool>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn DocumentProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
-		Box::pin(async move {
-			let Provider:Arc<dyn DocumentProvider> = RunTime.Require();
-			Provider.SaveAllDocuments(IncludeUntitled).await
-		})
+pub fn SaveAllDocuments(IncludeUntitled:bool) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, Vec<bool>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn DocumentProvider>| {
+		Box::pin(async move { Provider.SaveAllDocuments(IncludeUntitled).await })
 	}))
 }

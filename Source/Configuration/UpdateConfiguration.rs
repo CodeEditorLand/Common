@@ -11,11 +11,7 @@ use super::{
 	ConfigurationProvider::ConfigurationProvider,
 	DTO::{ConfigurationOverridesDTO::ConfigurationOverridesDTO, ConfigurationTarget::ConfigurationTarget},
 };
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will update a configuration value at
 /// a specific key and target scope (e.g., User or WorkSpace settings).
@@ -37,24 +33,19 @@ use crate::{
 /// # Returns
 ///
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn UpdateConfiguration<TRunTime>(
+pub fn UpdateConfiguration(
 	Key:String,
 	ValueToSet:Value,
 	TargetAsU32:u32,
 	OverridesValue:Value,
 	ScopeToLanguage:Option<bool>,
-) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn ConfigurationProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn ConfigurationProvider>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn ConfigurationProvider>| {
 		let KeyClone = Key.clone();
 		let ValueToSetClone = ValueToSet.clone();
 		let OverridesValueClone = OverridesValue.clone();
 		let ScopeToLanguageClone = ScopeToLanguage;
 		Box::pin(async move {
-			let Provider:Arc<dyn ConfigurationProvider> = RunTime.Require();
-
 			// Deserialize the integer target into the enum.
 			let TargetParsed:ConfigurationTarget = serde_json::from_value(Value::from(TargetAsU32)).map_err(|e| {
 				CommonError::InvalidArgument {

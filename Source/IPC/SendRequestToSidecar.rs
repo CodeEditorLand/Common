@@ -8,11 +8,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::IPCProvider::IPCProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will send a request to a specified
 /// sidecar process and await its response.
@@ -33,21 +29,17 @@ use crate::{
 ///
 /// An `ActionEffect` that resolves with the `serde_json::Value` response from
 /// the sidecar.
-pub fn SendRequestToSidecar<TRunTime>(
+pub fn SendRequestToSidecar(
 	SidecarIdentifier:String,
 	Method:String,
 	Parameters:Value,
 	TimeoutMilliseconds:u64,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn IPCProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn IPCProvider>, CommonError, Value> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn IPCProvider>| {
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
 		let MethodClone = Method.clone();
 		let ParametersClone = Parameters.clone();
 		Box::pin(async move {
-			let Provider:Arc<dyn IPCProvider> = RunTime.Require();
 			Provider
 				.SendRequestToSidecar(SidecarIdentifierClone, MethodClone, ParametersClone, TimeoutMilliseconds)
 				.await

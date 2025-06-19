@@ -8,11 +8,7 @@ use serde_json::Value;
 use url::Url;
 
 use super::DocumentProvider::DocumentProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will open an existing document from a
 /// URI or create a new untitled document, potentially with initial content.
@@ -33,21 +29,15 @@ use crate::{
 ///
 /// An `ActionEffect` that resolves with the canonical `Url` of the opened
 /// document.
-pub fn OpenDocument<TRunTime>(
+pub fn OpenDocument(
 	URIComponentsDTO:Value,
 	LanguageIdentifier:Option<String>,
 	Content:Option<String>,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Url>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn DocumentProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, Url> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn DocumentProvider>| {
 		let URIDTOClone = URIComponentsDTO.clone();
 		let LanguageIdentifierClone = LanguageIdentifier.clone();
 		let ContentClone = Content.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn DocumentProvider> = RunTime.Require();
-			Provider.OpenDocument(URIDTOClone, LanguageIdentifierClone, ContentClone).await
-		})
+		Box::pin(async move { Provider.OpenDocument(URIDTOClone, LanguageIdentifierClone, ContentClone).await })
 	}))
 }

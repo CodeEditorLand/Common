@@ -5,11 +5,7 @@
 use std::sync::Arc;
 
 use super::OutputChannelManager::OutputChannelManager;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will dispose of the specified output
 /// channel, removing it and its content permanently from the application.
@@ -21,15 +17,9 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn DisposeOutputChannel<TRunTime>(ChannelIdentifier:String) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn OutputChannelManager>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn DisposeOutputChannel(ChannelIdentifier:String) -> ActionEffect<Arc<dyn OutputChannelManager>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Manager:Arc<dyn OutputChannelManager>| {
 		let IdentifierClone = ChannelIdentifier.clone();
-		Box::pin(async move {
-			let Manager:Arc<dyn OutputChannelManager> = RunTime.Require();
-			Manager.Dispose(IdentifierClone).await
-		})
+		Box::pin(async move { Manager.Dispose(IdentifierClone).await })
 	}))
 }

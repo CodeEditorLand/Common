@@ -11,11 +11,7 @@ use super::{
 	ConfigurationInspector::ConfigurationInspector,
 	DTO::{ConfigurationOverridesDTO::ConfigurationOverridesDTO, InspectResultDataDTO::InspectResultDataDTO},
 };
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will inspect a configuration key to
 /// get its value from all relevant sources (e.g., default, user, workspace).
@@ -36,19 +32,14 @@ use crate::{
 /// An `ActionEffect` that resolves with an `Option<InspectResultDataDTO>`,
 /// containing the detailed breakdown of the configuration value from all
 /// scopes.
-pub fn InspectConfiguration<TRunTime>(
+pub fn InspectConfiguration(
 	Key:String,
 	OverridesValue:Value,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Option<InspectResultDataDTO>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn ConfigurationInspector>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn ConfigurationInspector>, CommonError, Option<InspectResultDataDTO>> {
+	ActionEffect::New(Arc::new(move |Inspector:Arc<dyn ConfigurationInspector>| {
 		let KeyClone = Key.clone();
 		let OverridesValueClone = OverridesValue.clone();
 		Box::pin(async move {
-			let Inspector:Arc<dyn ConfigurationInspector> = RunTime.Require();
-
 			let OverridesParsed:ConfigurationOverridesDTO =
 				serde_json::from_value(OverridesValueClone).map_err(|e| {
 					CommonError::InvalidArgument {

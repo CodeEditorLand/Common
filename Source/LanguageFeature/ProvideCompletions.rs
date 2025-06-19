@@ -12,11 +12,7 @@ use super::{
 	DTO::{PositionDTO::PositionDTO /* , CompletionContextDTO, SuggestResultDTO */}, // DTOs to be added
 	LanguageFeatureProviderRegistry::LanguageFeatureProviderRegistry,
 };
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will request code completion items
 /// for a given position in a document.
@@ -35,21 +31,17 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with an `Option` containing the completion
 /// results (a `SuggestResultDTO` serialized as a `Value`), or `None`.
-pub fn ProvideCompletions<TRunTime>(
+pub fn ProvideCompletions(
 	DocumentURI:Url,
 	PositionDTO:PositionDTO,
 	ContextDTO:Value, // To be replaced with concrete DTO
 	CancellationTokenValue:Option<Value>,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Option<Value /* SuggestResultDTO */>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<Value /* SuggestResultDTO */>> {
+	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let URIClone = DocumentURI.clone();
 		let ContextClone = ContextDTO.clone();
 		let TokenClone = CancellationTokenValue.clone();
 		Box::pin(async move {
-			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = RunTime.Require();
 			Registry
 				.ProvideCompletions(URIClone, PositionDTO, ContextClone, TokenClone)
 				.await

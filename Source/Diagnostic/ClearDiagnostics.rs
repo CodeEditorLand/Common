@@ -6,11 +6,7 @@
 use std::sync::Arc;
 
 use super::DiagnosticManager::DiagnosticManager;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will clear all diagnostics for a
 /// given owner.
@@ -25,15 +21,9 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn ClearDiagnostics<TRunTime>(Owner:String) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn DiagnosticManager>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn ClearDiagnostics(Owner:String) -> ActionEffect<Arc<dyn DiagnosticManager>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Manager:Arc<dyn DiagnosticManager>| {
 		let OwnerClone = Owner.clone();
-		Box::pin(async move {
-			let Manager:Arc<dyn DiagnosticManager> = RunTime.Require();
-			Manager.ClearDiagnostics(OwnerClone).await
-		})
+		Box::pin(async move { Manager.ClearDiagnostics(OwnerClone).await })
 	}))
 }

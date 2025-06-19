@@ -8,8 +8,7 @@ use std::sync::Arc;
 use super::WorkSpaceEditApplier::WorkSpaceEditApplier;
 use crate::{
 	DTO::WorkSpaceEditDTO::WorkSpaceEditDTO,
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
+	Effect::ActionEffect::ActionEffect,
 	Error::CommonError::CommonError,
 };
 
@@ -28,15 +27,9 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with a `bool` indicating whether the entire
 /// edit was applied successfully.
-pub fn ApplyWorkSpaceEdit<TRunTime>(EditDTO:WorkSpaceEditDTO) -> ActionEffect<Arc<TRunTime>, CommonError, bool>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn WorkSpaceEditApplier>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn ApplyWorkSpaceEdit(EditDTO:WorkSpaceEditDTO) -> ActionEffect<Arc<dyn WorkSpaceEditApplier>, CommonError, bool> {
+	ActionEffect::New(Arc::new(move |Applier:Arc<dyn WorkSpaceEditApplier>| {
 		let EditDTOClone = EditDTO.clone();
-		Box::pin(async move {
-			let Applier:Arc<dyn WorkSpaceEditApplier> = RunTime.Require();
-			Applier.ApplyWorkSpaceEdit(EditDTOClone).await
-		})
+		Box::pin(async move { Applier.ApplyWorkSpaceEdit(EditDTOClone).await })
 	}))
 }

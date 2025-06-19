@@ -8,11 +8,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::DiagnosticManager::DiagnosticManager;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will set or update diagnostics for a
 /// given owner. This is the primary way extensions report problems to the host.
@@ -29,16 +25,13 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn SetDiagnostics<TRunTime>(Owner:String, EntriesDTOValue:Value) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn DiagnosticManager>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn SetDiagnostics(
+	Owner:String,
+	EntriesDTOValue:Value,
+) -> ActionEffect<Arc<dyn DiagnosticManager>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Manager:Arc<dyn DiagnosticManager>| {
 		let OwnerClone = Owner.clone();
 		let EntriesClone = EntriesDTOValue.clone();
-		Box::pin(async move {
-			let Manager:Arc<dyn DiagnosticManager> = RunTime.Require();
-			Manager.SetDiagnostics(OwnerClone, EntriesClone).await
-		})
+		Box::pin(async move { Manager.SetDiagnostics(OwnerClone, EntriesClone).await })
 	}))
 }

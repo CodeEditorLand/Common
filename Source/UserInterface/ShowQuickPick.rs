@@ -8,11 +8,7 @@ use super::{
 	DTO::{QuickPickItemDTO::QuickPickItemDTO, QuickPickOptionsDTO::QuickPickOptionsDTO},
 	UserInterfaceProvider::UserInterfaceProvider,
 };
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will display a quick pick list to
 /// the user, allowing them to select one or more items.
@@ -30,19 +26,13 @@ use crate::{
 /// An `ActionEffect` that resolves with an `Option<Vec<String>>`, containing
 /// the labels of the items selected by the user, or `None` if the quick pick
 /// was cancelled.
-pub fn ShowQuickPick<TRunTime>(
+pub fn ShowQuickPick(
 	Items:Vec<QuickPickItemDTO>,
 	Options:Option<QuickPickOptionsDTO>,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Option<Vec<String>>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn UserInterfaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn UserInterfaceProvider>, CommonError, Option<Vec<String>>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn UserInterfaceProvider>| {
 		let ItemsClone = Items.clone();
 		let OptionsClone = Options.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn UserInterfaceProvider> = RunTime.Require();
-			Provider.ShowQuickPick(ItemsClone, OptionsClone).await
-		})
+		Box::pin(async move { Provider.ShowQuickPick(ItemsClone, OptionsClone).await })
 	}))
 }

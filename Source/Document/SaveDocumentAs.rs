@@ -7,11 +7,7 @@ use std::sync::Arc;
 use url::Url;
 
 use super::DocumentProvider::DocumentProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will save a document to a new
 /// location. This is typically used for "Save As..." functionality.
@@ -29,19 +25,13 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with an `Option<Url>`, containing the
 /// final `Url` of the saved file or `None` if the operation was cancelled.
-pub fn SaveDocumentAs<TRunTime>(
+pub fn SaveDocumentAs(
 	OriginalURI:Url,
 	NewTargetURI:Option<Url>,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Option<Url>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn DocumentProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, Option<Url>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn DocumentProvider>| {
 		let OriginalURIClone = OriginalURI.clone();
 		let NewTargetURIClone = NewTargetURI.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn DocumentProvider> = RunTime.Require();
-			Provider.SaveDocumentAs(OriginalURIClone, NewTargetURIClone).await
-		})
+		Box::pin(async move { Provider.SaveDocumentAs(OriginalURIClone, NewTargetURIClone).await })
 	}))
 }

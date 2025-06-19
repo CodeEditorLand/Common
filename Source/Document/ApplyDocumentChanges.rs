@@ -9,11 +9,7 @@ use serde_json::Value;
 use url::Url;
 
 use super::DocumentProvider::DocumentProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will apply a collection of content
 /// changes to the document at the given URI. This is the primary mechanism
@@ -38,22 +34,18 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn ApplyDocumentChanges<TRunTime>(
+pub fn ApplyDocumentChanges(
 	URI:Url,
 	NewVersionIdentifier:i64,
 	ChangesDTOCollection:Value,
 	IsDirtyAfterChange:bool,
 	IsUndoing:bool,
 	IsRedoing:bool,
-) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn DocumentProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn DocumentProvider>| {
 		let URIClone = URI.clone();
 		let ChangesClone = ChangesDTOCollection.clone();
 		Box::pin(async move {
-			let Provider:Arc<dyn DocumentProvider> = RunTime.Require();
 			Provider
 				.ApplyDocumentChanges(
 					URIClone,

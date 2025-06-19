@@ -6,11 +6,7 @@
 use std::sync::Arc;
 
 use super::CommandExecutor::CommandExecutor;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will unregister a command from the
 /// host's command registry.
@@ -27,19 +23,13 @@ use crate::{
 /// # Returns
 ///
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn UnregisterCommand<TRunTime>(
+pub fn UnregisterCommand(
 	SidecarIdentifier:String,
 	CommandIdentifier:String,
-) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn CommandExecutor>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn CommandExecutor>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Executor:Arc<dyn CommandExecutor>| {
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
 		let CommandIdentifierClone = CommandIdentifier.clone();
-		Box::pin(async move {
-			let Executor:Arc<dyn CommandExecutor> = RunTime.Require();
-			Executor.UnregisterCommand(SidecarIdentifierClone, CommandIdentifierClone).await
-		})
+		Box::pin(async move { Executor.UnregisterCommand(SidecarIdentifierClone, CommandIdentifierClone).await })
 	}))
 }

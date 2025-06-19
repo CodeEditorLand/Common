@@ -1,0 +1,2 @@
+Target/debug/libCommon.rlib filter=lfs diff=lfs merge=lfs -text
+Target/release/libCommon.rlib filter=lfs diff=lfs merge=lfs -text

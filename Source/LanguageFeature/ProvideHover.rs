@@ -11,11 +11,7 @@ use super::{
 	DTO::{HoverResultDTO::HoverResultDTO, PositionDTO::PositionDTO},
 	LanguageFeatureProviderRegistry::LanguageFeatureProviderRegistry,
 };
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will request hover information for a
 /// symbol at a given position in a document.
@@ -32,18 +28,12 @@ use crate::{
 /// An `ActionEffect` that resolves with an `Option<HoverResultDTO>`, containing
 /// the hover content if a provider was found and returned a result, or `None`
 /// otherwise.
-pub fn ProvideHover<TRunTime>(
+pub fn ProvideHover(
 	DocumentURI:Url,
 	PositionDTO:PositionDTO,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Option<HoverResultDTO>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<HoverResultDTO>> {
+	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let URIClone = DocumentURI.clone();
-		Box::pin(async move {
-			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = RunTime.Require();
-			Registry.ProvideHover(URIClone, PositionDTO).await
-		})
+		Box::pin(async move { Registry.ProvideHover(URIClone, PositionDTO).await })
 	}))
 }

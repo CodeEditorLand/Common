@@ -5,11 +5,7 @@
 use std::sync::Arc;
 
 use super::LanguageFeatureProviderRegistry::LanguageFeatureProviderRegistry;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will unregister a language feature
 /// provider from the host's central registry using its unique handle.
@@ -23,14 +19,8 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn UnregisterProvider<TRunTime>(Handle:u32) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
-		Box::pin(async move {
-			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = RunTime.Require();
-			Registry.UnregisterProvider(Handle).await
-		})
+pub fn UnregisterProvider(Handle:u32) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
+		Box::pin(async move { Registry.UnregisterProvider(Handle).await })
 	}))
 }

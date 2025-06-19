@@ -8,11 +8,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::StorageProvider::StorageProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will set or update an item in either
 /// global or workspace-scoped Memento storage.
@@ -31,11 +27,8 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn SetStorageItem<TRunTime>(TargetObject:Value, ValueToSet:Value) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn StorageProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn SetStorageItem(TargetObject:Value, ValueToSet:Value) -> ActionEffect<Arc<dyn StorageProvider>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn StorageProvider>| {
 		let TargetObjectClone = TargetObject.clone();
 		let ValueToSetClone = ValueToSet.clone();
 		Box::pin(async move {
@@ -55,7 +48,6 @@ where
 			// A JSON null from the caller signals deletion to the provider.
 			let ValueOption = if ValueToSetClone.is_null() { None } else { Some(ValueToSetClone) };
 
-			let Provider:Arc<dyn StorageProvider> = RunTime.Require();
 			Provider.UpdateStorageValue(IsGlobal, KeyString, ValueOption).await
 		})
 	}))

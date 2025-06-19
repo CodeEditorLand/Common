@@ -5,11 +5,7 @@
 use std::{path::PathBuf, sync::Arc};
 
 use super::FileSystemWriter::FileSystemWriter;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will create a new, empty file at the
 /// specified path.
@@ -23,15 +19,9 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn CreateFile<TRunTime>(Path:PathBuf) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn FileSystemWriter>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn CreateFile(Path:PathBuf) -> ActionEffect<Arc<dyn FileSystemWriter>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Writer:Arc<dyn FileSystemWriter>| {
 		let PathClone = Path.clone();
-		Box::pin(async move {
-			let Writer:Arc<dyn FileSystemWriter> = RunTime.Require();
-			Writer.CreateFile(&PathClone).await
-		})
+		Box::pin(async move { Writer.CreateFile(&PathClone).await })
 	}))
 }

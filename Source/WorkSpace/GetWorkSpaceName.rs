@@ -6,11 +6,7 @@
 use std::sync::Arc;
 
 use super::WorkSpaceProvider::WorkSpaceProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will retrieve the display name of the
 /// current workspace.
@@ -21,14 +17,8 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with an `Option<String>` containing the
 /// workspace name.
-pub fn GetWorkSpaceName<TRunTime>() -> ActionEffect<Arc<TRunTime>, CommonError, Option<String>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn WorkSpaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
-		Box::pin(async move {
-			let Provider:Arc<dyn WorkSpaceProvider> = RunTime.Require();
-			Provider.GetWorkSpaceName().await
-		})
+pub fn GetWorkSpaceName() -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, Option<String>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
+		Box::pin(async move { Provider.GetWorkSpaceName().await })
 	}))
 }

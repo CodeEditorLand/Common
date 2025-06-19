@@ -6,11 +6,7 @@
 use std::{path::PathBuf, sync::Arc};
 
 use super::WorkSpaceProvider::WorkSpaceProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will retrieve the file path of the
 /// current workspace's configuration file (e.g., the `.code-workspace` file).
@@ -20,14 +16,8 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with an `Option<PathBuf>`, containing the
 /// path if a workspace configuration file is open, or `None` otherwise.
-pub fn GetWorkSpaceConfigurationPath<TRunTime>() -> ActionEffect<Arc<TRunTime>, CommonError, Option<PathBuf>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn WorkSpaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
-		Box::pin(async move {
-			let Provider:Arc<dyn WorkSpaceProvider> = RunTime.Require();
-			Provider.GetWorkSpaceConfigurationPath().await
-		})
+pub fn GetWorkSpaceConfigurationPath() -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, Option<PathBuf>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
+		Box::pin(async move { Provider.GetWorkSpaceConfigurationPath().await })
 	}))
 }

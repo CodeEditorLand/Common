@@ -1,1 +1,0 @@
-var f=async(...[e])=>{if(typeof e=="string")return e;const r=new Map;if(typeof e=="object")for(const t in e)Object.prototype.hasOwnProperty.call(e,t)&&(typeof e[t]=="object"&&!Array.isArray(e[t])?r.set(t,await(await import("./Get.js")).default(e[t])):r.set(t,e[t]));return r};export{f as default};

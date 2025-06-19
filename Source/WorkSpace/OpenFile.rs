@@ -6,11 +6,7 @@
 use std::{path::PathBuf, sync::Arc};
 
 use super::WorkSpaceProvider::WorkSpaceProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will request that the host
 /// application open the specified file path in an editor.
@@ -24,15 +20,9 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn OpenFile<TRunTime>(Path:PathBuf) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn WorkSpaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn OpenFile(Path:PathBuf) -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
 		let PathClone = Path.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn WorkSpaceProvider> = RunTime.Require();
-			Provider.OpenFile(PathClone).await
-		})
+		Box::pin(async move { Provider.OpenFile(PathClone).await })
 	}))
 }

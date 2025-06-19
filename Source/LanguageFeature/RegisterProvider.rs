@@ -7,11 +7,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::{DTO::ProviderType::ProviderType, LanguageFeatureProviderRegistry::LanguageFeatureProviderRegistry};
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will register a new language feature
 /// provider with the host's central registry.
@@ -31,23 +27,19 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with a unique `u32` handle for the
 /// registration.
-pub fn RegisterProvider<TRunTime>(
+pub fn RegisterProvider(
 	ProviderType:ProviderType,
 	SelectorDTO:Value,
 	SidecarIdentifier:String,
 	ExtensionIdentifierDTO:Value,
 	OptionsDTO:Option<Value /* ProviderOptionsDTO */>,
-) -> ActionEffect<Arc<TRunTime>, CommonError, u32>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn LanguageFeatureProviderRegistry>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, u32> {
+	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let SelectorClone = SelectorDTO.clone();
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
 		let ExtensionIdentifierClone = ExtensionIdentifierDTO.clone();
 		let OptionsClone = OptionsDTO.clone();
 		Box::pin(async move {
-			let Registry:Arc<dyn LanguageFeatureProviderRegistry> = RunTime.Require();
 			Registry
 				.RegisterProvider(
 					SidecarIdentifierClone,

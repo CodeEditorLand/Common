@@ -7,18 +7,13 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::CommandExecutor::CommandExecutor;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will run a command by its unique
 /// identifier.
 ///
 /// It uses the `CommandExecutor` capability from the environment to dispatch
 /// the command to the appropriate handler, whether that handler is a native
-
 /// Rust function or a proxied function in an external sidecar process.
 ///
 /// # Parameters
@@ -33,19 +28,13 @@ use crate::{
 /// An `ActionEffect` that resolves with the command's return value as a
 /// `serde_json::Value`, or a `CommonError` if the command is not found or fails
 /// during execution.
-pub fn ExecuteCommand<TRunTime>(
+pub fn ExecuteCommand(
 	CommandIdentifier:String,
 	Argument:Value,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn CommandExecutor>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn CommandExecutor>, CommonError, Value> {
+	ActionEffect::New(Arc::new(move |Executor:Arc<dyn CommandExecutor>| {
 		let CommandIdentifierClone = CommandIdentifier.clone();
 		let ArgumentClone = Argument.clone();
-		Box::pin(async move {
-			let Executor:Arc<dyn CommandExecutor> = RunTime.Require();
-			Executor.ExecuteCommand(CommandIdentifierClone, ArgumentClone).await
-		})
+		Box::pin(async move { Executor.ExecuteCommand(CommandIdentifierClone, ArgumentClone).await })
 	}))
 }

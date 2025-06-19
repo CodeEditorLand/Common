@@ -5,11 +5,7 @@
 use std::sync::Arc;
 
 use super::OutputChannelManager::OutputChannelManager;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will reveal (open and focus) the
 /// specified output channel in the user interface.
@@ -23,18 +19,12 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn RevealOutputChannel<TRunTime>(
+pub fn RevealOutputChannel(
 	ChannelIdentifier:String,
 	PreserveFocus:bool,
-) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn OutputChannelManager>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn OutputChannelManager>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Manager:Arc<dyn OutputChannelManager>| {
 		let IdentifierClone = ChannelIdentifier.clone();
-		Box::pin(async move {
-			let Manager:Arc<dyn OutputChannelManager> = RunTime.Require();
-			Manager.Reveal(IdentifierClone, PreserveFocus).await
-		})
+		Box::pin(async move { Manager.Reveal(IdentifierClone, PreserveFocus).await })
 	}))
 }

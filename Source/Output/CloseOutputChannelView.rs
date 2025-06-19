@@ -6,11 +6,7 @@
 use std::sync::Arc;
 
 use super::OutputChannelManager::OutputChannelManager;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will close the view of the specified
 /// output channel in the UI.
@@ -24,15 +20,11 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn CloseOutputChannelView<TRunTime>(ChannelIdentifier:String) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn OutputChannelManager>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn CloseOutputChannelView(
+	ChannelIdentifier:String,
+) -> ActionEffect<Arc<dyn OutputChannelManager>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Manager:Arc<dyn OutputChannelManager>| {
 		let IdentifierClone = ChannelIdentifier.clone();
-		Box::pin(async move {
-			let Manager:Arc<dyn OutputChannelManager> = RunTime.Require();
-			Manager.Close(IdentifierClone).await
-		})
+		Box::pin(async move { Manager.Close(IdentifierClone).await })
 	}))
 }

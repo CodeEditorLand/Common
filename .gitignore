@@ -1,1 +1,15 @@
-/target
+/Target/*
+
+!/Target/debug
+!/Target/release
+!/Target/x86_64-pc-windows-msvc
+
+/Target/debug/*
+/Target/release/*
+/Target/x86_64-pc-windows-msvc/*
+
+!/Target/debug/libCommon.rlib
+
+!/Target/release/libCommon.rlib
+
+!/Target/x86_64-pc-windows-msvc/libCommon.rlib

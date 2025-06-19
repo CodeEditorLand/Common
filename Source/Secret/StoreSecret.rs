@@ -5,11 +5,7 @@
 use std::sync::Arc;
 
 use super::SecretProvider::SecretProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will store a secret in the host's
 /// secure storage (e.g., OS keychain).
@@ -24,21 +20,15 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn StoreSecret<TRunTime>(
+pub fn StoreSecret(
 	ExtensionIdentifier:String,
 	Key:String,
 	Value:String,
-) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn SecretProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn SecretProvider>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn SecretProvider>| {
 		let ExtensionIdentifierClone = ExtensionIdentifier.clone();
 		let KeyClone = Key.clone();
 		let ValueClone = Value.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn SecretProvider> = RunTime.Require();
-			Provider.StoreSecret(ExtensionIdentifierClone, KeyClone, ValueClone).await
-		})
+		Box::pin(async move { Provider.StoreSecret(ExtensionIdentifierClone, KeyClone, ValueClone).await })
 	}))
 }

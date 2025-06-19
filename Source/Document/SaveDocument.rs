@@ -8,11 +8,7 @@ use std::sync::Arc;
 use url::Url;
 
 use super::DocumentProvider::DocumentProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will save the document at the
 /// specified URI.
@@ -27,15 +23,9 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with a `bool` indicating whether the save
 /// operation was successful.
-pub fn SaveDocument<TRunTime>(URI:Url) -> ActionEffect<Arc<TRunTime>, CommonError, bool>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn DocumentProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn SaveDocument(URI:Url) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, bool> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn DocumentProvider>| {
 		let URIClone = URI.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn DocumentProvider> = RunTime.Require();
-			Provider.SaveDocument(URIClone).await
-		})
+		Box::pin(async move { Provider.SaveDocument(URIClone).await })
 	}))
 }

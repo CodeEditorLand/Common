@@ -8,11 +8,7 @@ use std::sync::Arc;
 use url::Url;
 
 use super::WorkSpaceProvider::WorkSpaceProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will find the workspace folder that
 /// contains the given URI.
@@ -29,17 +25,11 @@ use crate::{
 /// An `ActionEffect` that resolves with an `Option` containing a tuple of the
 /// folder's `Url`, name, and index, or `None` if the URI is not within any
 /// open workspace folder.
-pub fn GetWorkSpaceFolderInfo<TRunTime>(
+pub fn GetWorkSpaceFolderInfo(
 	URIToMatch:Url,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Option<(Url, String, usize)>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn WorkSpaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, Option<(Url, String, usize)>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
 		let URIClone = URIToMatch.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn WorkSpaceProvider> = RunTime.Require();
-			Provider.GetWorkSpaceFolderInfo(URIClone).await
-		})
+		Box::pin(async move { Provider.GetWorkSpaceFolderInfo(URIClone).await })
 	}))
 }

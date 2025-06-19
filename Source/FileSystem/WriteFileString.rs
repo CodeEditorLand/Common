@@ -6,8 +6,9 @@ use std::{path::PathBuf, sync::Arc};
 
 use super::WriteFileBytes::WriteFileBytes;
 use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
+	Effect::ActionEffect::ActionEffect,
 	Error::CommonError::CommonError,
+	FileSystem::FileSystemWriter::FileSystemWriter,
 };
 
 /// Creates a convenience effect that writes string content to a file.
@@ -24,14 +25,13 @@ use crate::{
 /// * `Overwrite`: If `true`, an existing file will be overwritten.
 ///
 /// # Returns
-/// An `ActionEffect` that resolves to `()` on success.
-pub fn WriteFileString<TRunTime>(
+/// An `ActionEffect` that resolves to `()` on success and requires the
+/// `FileSystemWriter` capability.
+pub fn WriteFileString(
 	Path:PathBuf,
 	Content:String,
 	Create:bool,
 	Overwrite:bool,
-) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static, {
+) -> ActionEffect<Arc<dyn FileSystemWriter>, CommonError, ()> {
 	WriteFileBytes(Path, Content.into_bytes(), Create, Overwrite)
 }

@@ -6,11 +6,7 @@
 use std::{path::PathBuf, sync::Arc};
 
 use super::{DTO::FileSystemStatDTO::FileSystemStatDTO, FileSystemReader::FileSystemReader};
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will retrieve metadata (such as file
 /// type, size, and modification times) for a given path.
@@ -23,15 +19,9 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves with a `FileSystemStatDTO`.
-pub fn StatFile<TRunTime>(Path:PathBuf) -> ActionEffect<Arc<TRunTime>, CommonError, FileSystemStatDTO>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn FileSystemReader>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn StatFile(Path:PathBuf) -> ActionEffect<Arc<dyn FileSystemReader>, CommonError, FileSystemStatDTO> {
+	ActionEffect::New(Arc::new(move |Reader:Arc<dyn FileSystemReader>| {
 		let PathClone = Path.clone();
-		Box::pin(async move {
-			let Reader:Arc<dyn FileSystemReader> = RunTime.Require();
-			Reader.StatFile(&PathClone).await
-		})
+		Box::pin(async move { Reader.StatFile(&PathClone).await })
 	}))
 }

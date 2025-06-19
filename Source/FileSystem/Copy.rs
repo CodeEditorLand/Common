@@ -5,11 +5,7 @@
 use std::{path::PathBuf, sync::Arc};
 
 use super::FileSystemWriter::FileSystemWriter;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will copy a file or directory from a
 /// source path to a target path.
@@ -25,16 +21,14 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn Copy<TRunTime>(Source:PathBuf, Target:PathBuf, Overwrite:bool) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn FileSystemWriter>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn Copy(
+	Source:PathBuf,
+	Target:PathBuf,
+	Overwrite:bool,
+) -> ActionEffect<Arc<dyn FileSystemWriter>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Writer:Arc<dyn FileSystemWriter>| {
 		let SourceClone = Source.clone();
 		let TargetClone = Target.clone();
-		Box::pin(async move {
-			let Writer:Arc<dyn FileSystemWriter> = RunTime.Require();
-			Writer.Copy(&SourceClone, &TargetClone, Overwrite).await
-		})
+		Box::pin(async move { Writer.Copy(&SourceClone, &TargetClone, Overwrite).await })
 	}))
 }

@@ -5,11 +5,7 @@
 use std::sync::Arc;
 
 use super::OutputChannelManager::OutputChannelManager;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will append a string to the
 /// specified output channel's buffer.
@@ -22,19 +18,13 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn AppendToOutputChannel<TRunTime>(
+pub fn AppendToOutputChannel(
 	ChannelIdentifier:String,
 	Value:String,
-) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn OutputChannelManager>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn OutputChannelManager>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Manager:Arc<dyn OutputChannelManager>| {
 		let IdentifierClone = ChannelIdentifier.clone();
 		let ValueClone = Value.clone();
-		Box::pin(async move {
-			let Manager:Arc<dyn OutputChannelManager> = RunTime.Require();
-			Manager.Append(IdentifierClone, ValueClone).await
-		})
+		Box::pin(async move { Manager.Append(IdentifierClone, ValueClone).await })
 	}))
 }

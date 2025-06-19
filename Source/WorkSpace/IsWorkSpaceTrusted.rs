@@ -5,11 +5,7 @@
 use std::sync::Arc;
 
 use super::WorkSpaceProvider::WorkSpaceProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will check if the current workspace
 /// is considered trusted by the user.
@@ -21,14 +17,8 @@ use crate::{
 ///
 /// # Returns
 /// An `ActionEffect` that resolves with a `bool` indicating the trust state.
-pub fn IsWorkSpaceTrusted<TRunTime>() -> ActionEffect<Arc<TRunTime>, CommonError, bool>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn WorkSpaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
-		Box::pin(async move {
-			let Provider:Arc<dyn WorkSpaceProvider> = RunTime.Require();
-			Provider.IsWorkSpaceTrusted().await
-		})
+pub fn IsWorkSpaceTrusted() -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, bool> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
+		Box::pin(async move { Provider.IsWorkSpaceTrusted().await })
 	}))
 }

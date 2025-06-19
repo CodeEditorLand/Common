@@ -5,11 +5,7 @@
 use std::sync::Arc;
 
 use super::OutputChannelManager::OutputChannelManager;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will register a new output channel
 /// with the host application.
@@ -23,19 +19,13 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with a unique `String` identifier for the
 /// newly created channel.
-pub fn RegisterOutputChannel<TRunTime>(
+pub fn RegisterOutputChannel(
 	Name:String,
 	LanguageIdentifier:Option<String>,
-) -> ActionEffect<Arc<TRunTime>, CommonError, String>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn OutputChannelManager>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn OutputChannelManager>, CommonError, String> {
+	ActionEffect::New(Arc::new(move |Manager:Arc<dyn OutputChannelManager>| {
 		let NameClone = Name.clone();
 		let LanguageIdentifierClone = LanguageIdentifier.clone();
-		Box::pin(async move {
-			let Manager:Arc<dyn OutputChannelManager> = RunTime.Require();
-			Manager.RegisterChannel(NameClone, LanguageIdentifierClone).await
-		})
+		Box::pin(async move { Manager.RegisterChannel(NameClone, LanguageIdentifierClone).await })
 	}))
 }

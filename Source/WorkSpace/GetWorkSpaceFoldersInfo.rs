@@ -8,11 +8,7 @@ use std::sync::Arc;
 use url::Url;
 
 use super::WorkSpaceProvider::WorkSpaceProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will retrieve information about all
 /// currently open workspace folders.
@@ -24,14 +20,8 @@ use crate::{
 /// An `ActionEffect` that resolves with a `Vec` of tuples, where each tuple
 /// contains the folder's `Url`, its name as a `String`, and its zero-based
 /// index.
-pub fn GetWorkSpaceFoldersInfo<TRunTime>() -> ActionEffect<Arc<TRunTime>, CommonError, Vec<(Url, String, usize)>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn WorkSpaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
-		Box::pin(async move {
-			let Provider:Arc<dyn WorkSpaceProvider> = RunTime.Require();
-			Provider.GetWorkSpaceFoldersInfo().await
-		})
+pub fn GetWorkSpaceFoldersInfo() -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, Vec<(Url, String, usize)>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
+		Box::pin(async move { Provider.GetWorkSpaceFoldersInfo().await })
 	}))
 }

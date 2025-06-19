@@ -6,11 +6,7 @@
 use std::sync::Arc;
 
 use super::CommandExecutor::CommandExecutor;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will retrieve a list of all currently
 /// registered command identifiers.
@@ -22,15 +18,10 @@ use crate::{
 /// # Returns
 ///
 /// An `ActionEffect` that resolves with a `Vec<String>` of command
-/// identifiers.
-pub fn GetAllCommands<TRunTime>() -> ActionEffect<Arc<TRunTime>, CommonError, Vec<String>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn CommandExecutor>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
-		Box::pin(async move {
-			let Executor:Arc<dyn CommandExecutor> = RunTime.Require();
-			Executor.GetAllCommands().await
-		})
+/// identifiers. The capability required to run this effect is an
+/// `Arc<dyn CommandExecutor>`.
+pub fn GetAllCommands() -> ActionEffect<Arc<dyn CommandExecutor>, CommonError, Vec<String>> {
+	ActionEffect::New(Arc::new(move |Executor:Arc<dyn CommandExecutor>| {
+		Box::pin(async move { Executor.GetAllCommands().await })
 	}))
 }

@@ -5,11 +5,7 @@
 use std::{path::PathBuf, sync::Arc};
 
 use super::{DTO::OpenDialogOptionsDTO::OpenDialogOptionsDTO, UserInterfaceProvider::UserInterfaceProvider};
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will display a native dialog for
 /// opening files or folders.
@@ -27,17 +23,11 @@ use crate::{
 /// An `ActionEffect` that resolves with an `Option<Vec<PathBuf>>`, containing
 /// the list of paths selected by the user, or `None` if the dialog was
 /// cancelled.
-pub fn ShowOpenDialog<TRunTime>(
+pub fn ShowOpenDialog(
 	Options:Option<OpenDialogOptionsDTO>,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Option<Vec<PathBuf>>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn UserInterfaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn UserInterfaceProvider>, CommonError, Option<Vec<PathBuf>>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn UserInterfaceProvider>| {
 		let OptionsClone = Options.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn UserInterfaceProvider> = RunTime.Require();
-			Provider.ShowOpenDialog(OptionsClone).await
-		})
+		Box::pin(async move { Provider.ShowOpenDialog(OptionsClone).await })
 	}))
 }

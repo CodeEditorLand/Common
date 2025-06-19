@@ -6,11 +6,7 @@
 use std::sync::Arc;
 
 use super::CommandExecutor::CommandExecutor;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will register a command that is
 /// implemented in a sidecar process like Cocoon.
@@ -30,19 +26,13 @@ use crate::{
 /// # Returns
 ///
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn RegisterCommand<TRunTime>(
+pub fn RegisterCommand(
 	SidecarIdentifier:String,
 	CommandIdentifier:String,
-) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn CommandExecutor>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn CommandExecutor>, CommonError, ()> {
+	ActionEffect::New(Arc::new(move |Executor:Arc<dyn CommandExecutor>| {
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
 		let CommandIdentifierClone = CommandIdentifier.clone();
-		Box::pin(async move {
-			let Executor:Arc<dyn CommandExecutor> = RunTime.Require();
-			Executor.RegisterCommand(SidecarIdentifierClone, CommandIdentifierClone).await
-		})
+		Box::pin(async move { Executor.RegisterCommand(SidecarIdentifierClone, CommandIdentifierClone).await })
 	}))
 }

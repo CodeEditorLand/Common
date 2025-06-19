@@ -7,11 +7,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::TerminalProvider::TerminalProvider;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will create a new terminal instance
 /// based on the provided options.
@@ -28,15 +24,9 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with a JSON `Value` containing details of
 /// the newly created terminal, such as its ID and process ID (PID).
-pub fn CreateTerminal<TRunTime>(OptionsValue:Value) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn TerminalProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+pub fn CreateTerminal(OptionsValue:Value) -> ActionEffect<Arc<dyn TerminalProvider>, CommonError, Value> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn TerminalProvider>| {
 		let OptionsClone = OptionsValue.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn TerminalProvider> = RunTime.Require();
-			Provider.CreateTerminal(OptionsClone).await
-		})
+		Box::pin(async move { Provider.CreateTerminal(OptionsClone).await })
 	}))
 }

@@ -7,11 +7,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::{DTO::MessageSeverity::MessageSeverity, UserInterfaceProvider::UserInterfaceProvider};
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will display a message to the user
 /// with a given severity and a set of optional action buttons.
@@ -31,20 +27,14 @@ use crate::{
 /// An `ActionEffect` that resolves with an `Option<String>`, containing the
 /// string title of the action button the user clicked, or `None` if the
 /// message was dismissed without an action.
-pub fn ShowMessage<TRunTime>(
+pub fn ShowMessage(
 	Severity:MessageSeverity,
 	Message:String,
 	OptionsValue:Value,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Option<String>>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn UserInterfaceProvider>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn UserInterfaceProvider>, CommonError, Option<String>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn UserInterfaceProvider>| {
 		let MessageClone = Message.clone();
 		let OptionsClone = OptionsValue.clone();
-		Box::pin(async move {
-			let Provider:Arc<dyn UserInterfaceProvider> = RunTime.Require();
-			Provider.ShowMessage(Severity, MessageClone, Some(OptionsClone)).await
-		})
+		Box::pin(async move { Provider.ShowMessage(Severity, MessageClone, Some(OptionsClone)).await })
 	}))
 }

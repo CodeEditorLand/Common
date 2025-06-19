@@ -8,10 +8,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::SendNotificationToSidecar::SendNotificationToSidecar;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError, IPC::IPCProvider::IPCProvider};
 
 /// Creates a convenience effect that can be used to perform an initial
 /// handshake or ping a sidecar process to confirm connectivity.
@@ -26,10 +23,9 @@ use crate::{
 ///
 /// # Returns
 ///
-/// An `ActionEffect` that resolves to `()` on success.
-pub fn EstablishHostConnection<TRunTime>(SidecarIdentifier:String) -> ActionEffect<Arc<TRunTime>, CommonError, ()>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static, {
+/// An `ActionEffect` that resolves to `()` on success and requires the
+/// `IPCProvider` capability to be executed.
+pub fn EstablishHostConnection(SidecarIdentifier:String) -> ActionEffect<Arc<dyn IPCProvider>, CommonError, ()> {
 	SendNotificationToSidecar(
 		SidecarIdentifier,
 		"$InitialHandshake".to_string(), // Use the conventional '$' prefix

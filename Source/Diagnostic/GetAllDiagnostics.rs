@@ -7,11 +7,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::DiagnosticManager::DiagnosticManager;
-use crate::{
-	Effect::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime},
-	Environment::Requires::Requires,
-	Error::CommonError::CommonError,
-};
+use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will retrieve all diagnostics
 /// currently managed by the host, with an option to filter for a specific
@@ -28,17 +24,11 @@ use crate::{
 /// # Returns
 /// An `ActionEffect` that resolves with a `serde_json::Value` representing an
 /// array of `[UriComponents, MarkerDataDTO[]]` tuples.
-pub fn GetAllDiagnostics<TRunTime>(
+pub fn GetAllDiagnostics(
 	ResourceURIFilterOption:Option<Value>,
-) -> ActionEffect<Arc<TRunTime>, CommonError, Value>
-where
-	TRunTime: ApplicationRunTime + Send + Sync + 'static,
-	TRunTime: Requires<Arc<dyn DiagnosticManager>>, {
-	ActionEffect::New(Arc::new(move |RunTime:Arc<TRunTime>| {
+) -> ActionEffect<Arc<dyn DiagnosticManager>, CommonError, Value> {
+	ActionEffect::New(Arc::new(move |Manager:Arc<dyn DiagnosticManager>| {
 		let FilterClone = ResourceURIFilterOption.clone();
-		Box::pin(async move {
-			let Manager:Arc<dyn DiagnosticManager> = RunTime.Require();
-			Manager.GetAllDiagnostics(FilterClone).await
-		})
+		Box::pin(async move { Manager.GetAllDiagnostics(FilterClone).await })
 	}))
 }
