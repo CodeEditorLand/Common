@@ -10,10 +10,6 @@ use thiserror::Error;
 /// A common error enum for the application, encompassing all major categories
 /// of failures that can occur during the execution of effects or other
 /// operations.
-///
-/// Using a single, comprehensive error enum allows for precise and exhaustive
-/// pattern matching in error handling logic, promoting robust and predictable
-/// failure modes.
 #[derive(Error, Debug, Clone)]
 pub enum CommonError {
 	// --- FileSystem Errors ---
@@ -105,10 +101,6 @@ impl CommonError {
 }
 
 /// Converts a `serde_json::Error` into a `CommonError::SerializationError`.
-///
-/// This implementation allows for the ergonomic use of the `?` operator on
-/// `serde_json` results within functions that are expected to return a
-/// `Result<_, CommonError>`.
 impl From<serde_json::Error> for CommonError {
 	fn from(SerdeError:serde_json::Error) -> Self {
 		CommonError::SerializationError { Description:SerdeError.to_string() }
