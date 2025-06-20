@@ -17,7 +17,7 @@ use super::Environment::Environment;
 /// to perform its operation.
 ///
 /// The `Capability` is typically a trait object, such as
-/// `Arc<dyn FileSystemReader>`.
+/// `dyn FileSystemReader`.
 pub trait Requires<Capability:?Sized>: Environment {
 	/// Returns the required capability from the environment, wrapped in an
 	/// `Arc` for safe, shared ownership.

@@ -1,38 +1,49 @@
 //! # ApplicationRunTime Trait
 //!
-//! Defines the `ApplicationRunTime` trait, which specifies the contract for any
-//! "engine" responsible for executing `ActionEffect`s.
+//! Defines the core `ApplicationRunTimeTrait`, which is the contract for any
+//! "engine" capable of executing `ActionEffect`s.
 
 use std::sync::Arc;
 
 use async_trait::async_trait;
 
 use super::ActionEffect::ActionEffect;
-use crate::Environment::{HasEnvironment::HasEnvironment, Requires::Requires};
+use crate::{
+	Environment::{HasEnvironment::HasEnvironment, Requires::Requires},
+	Error::CommonError::CommonError,
+};
 
-/// A trait that defines the core contract for an application's runtime engine.
-///
-/// An `ApplicationRunTime` is the component that bridges the declarative world
-/// of `ActionEffect`s with the concrete world of execution. It is responsible
-/// for taking an effect, providing it with the necessary capabilities from its
-/// `Environment`, and running the resulting asynchronous operation to
-/// completion.
+/// The core trait for any runtime capable of executing `ActionEffect`s.
 #[async_trait]
 pub trait ApplicationRunTime: HasEnvironment + Send + Sync + 'static {
-	/// Executes an `ActionEffect` that requires a specific capability from the
-	/// environment.
+	/// Executes an effect using the environment provided by the runtime.
 	///
-	/// This method is the heart of the effect execution system. It dynamically
-	/// resolves the required capability (e.g., a trait object like
-	/// `Arc<dyn FileSystemReader>`) from its managed environment and provides
-	/// it to the effect's encapsulated function, which is then awaited.
-	async fn Run<TCapability, TError, TOutput>(
+	/// The runtime is responsible for acquiring the necessary capability from
+	/// its environment and passing it to the effect's execution logic.
+	async fn Run<TCapabilityProvider, TError, TOutput>(
 		&self,
-		Effect:ActionEffect<Arc<TCapability>, TError, TOutput>,
+		Effect:ActionEffect<Arc<TCapabilityProvider>, TError, TOutput>,
 	) -> Result<TOutput, TError>
 	where
-		TCapability: ?Sized + Send + Sync,
-		Self::EnvironmentType: Requires<Arc<TCapability>>,
-		TError: Send + Sync + 'static,
+		TCapabilityProvider: ?Sized + Send + Sync + 'static,
+		Self::EnvironmentType: Requires<TCapabilityProvider>,
+		TError: From<CommonError> + Send + Sync + 'static,
 		TOutput: Send + Sync + 'static;
+}
+
+/// A blanket implementation that allows a shared `Arc` of a runtime to also be
+/// used as a runtime.
+#[async_trait]
+impl<TRunTime:ApplicationRunTime> ApplicationRunTime for Arc<TRunTime> {
+	async fn Run<TCapabilityProvider, TError, TOutput>(
+		&self,
+		Effect:ActionEffect<Arc<TCapabilityProvider>, TError, TOutput>,
+	) -> Result<TOutput, TError>
+	where
+		TCapabilityProvider: ?Sized + Send + Sync + 'static,
+		Self::EnvironmentType: Requires<TCapabilityProvider>,
+		TError: From<CommonError> + Send + Sync + 'static,
+		TOutput: Send + Sync + 'static, {
+		(**self).Run(Effect).await
+	}
 }

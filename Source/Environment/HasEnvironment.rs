@@ -20,3 +20,13 @@ pub trait HasEnvironment {
 	/// Gets a shared, reference-counted pointer to the environment.
 	fn GetEnvironment(&self) -> Arc<Self::EnvironmentType>;
 }
+
+/// A blanket implementation for `Arc<T>`. This allows code to treat
+/// an `Arc<TRunTime>` as if it were `TRunTime` for the purpose of getting the
+/// environment. This is required by the blanket `impl ApplicationRunTime for
+/// Arc<TRunTime>` which has a `where Self: HasEnvironment` bound.
+impl<T:HasEnvironment> HasEnvironment for Arc<T> {
+	type EnvironmentType = T::EnvironmentType;
+
+	fn GetEnvironment(&self) -> Arc<Self::EnvironmentType> { (**self).GetEnvironment() }
+}

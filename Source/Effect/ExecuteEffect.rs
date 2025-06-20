@@ -6,7 +6,7 @@
 use std::sync::Arc;
 
 use super::{ActionEffect::ActionEffect, ApplicationRunTime::ApplicationRunTime};
-use crate::Environment::Requires::Requires;
+use crate::{Environment::Requires::Requires, Error::CommonError::CommonError};
 
 /// A generic effect execution helper that takes a runtime and an effect, and
 /// executes the effect using that runtime.
@@ -24,15 +24,15 @@ use crate::Environment::Requires::Requires;
 ///     ExecuteEffect(RunTime, ReadEffect).await
 /// }
 /// ```
-pub async fn ExecuteEffect<TRunTime, TCapability, TError, TOutput>(
+pub async fn ExecuteEffect<TRunTime, TCapabilityProvider, TError, TOutput>(
 	RunTime:Arc<TRunTime>,
-	Effect:ActionEffect<Arc<TCapability>, TError, TOutput>,
+	Effect:ActionEffect<Arc<TCapabilityProvider>, TError, TOutput>,
 ) -> Result<TOutput, TError>
 where
 	TRunTime: ApplicationRunTime,
-	TCapability: ?Sized + Send + Sync,
-	TRunTime::EnvironmentType: Requires<Arc<TCapability>>,
-	TError: Send + Sync + 'static,
+	TCapabilityProvider: ?Sized + Send + Sync + 'static,
+	TRunTime::EnvironmentType: Requires<TCapabilityProvider>,
+	TError: From<CommonError> + Send + Sync + 'static,
 	TOutput: Send + Sync + 'static, {
 	// The RunTime::Run method expects an effect whose closure takes the capability.
 	// This now matches perfectly.
