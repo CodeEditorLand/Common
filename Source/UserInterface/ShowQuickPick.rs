@@ -1,3 +1,10 @@
+// File: Common/Source/UserInterface/ShowQuickPick.rs
+// Role: Defines the `ShowQuickPick` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for showing a quick pick list to the user.
+//   - This effect abstracts the "what" (show a quick pick) from the "how" (the
+//     UserInterfaceProvider implementation).
+
 //! # ShowQuickPick Effect
 //!
 //! Defines the `ActionEffect` for showing a quick pick list to the user.

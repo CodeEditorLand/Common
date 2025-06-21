@@ -1,7 +1,10 @@
-//! # GetConfiguration Effect
-//!
-//! Defines the `ActionEffect` for retrieving a configuration value or an entire
-//! configuration section.
+// File: Common/Source/Configuration/GetConfiguration.rs
+// Role: Defines the `GetConfiguration` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for retrieving a merged configuration value
+//     or section.
+//   - This effect abstracts the "what" (get a configuration) from the "how"
+//     (the ConfigurationProvider implementation).
 
 use std::sync::Arc;
 

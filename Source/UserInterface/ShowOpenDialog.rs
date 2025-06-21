@@ -1,3 +1,11 @@
+// File: Common/Source/UserInterface/ShowOpenDialog.rs
+// Role: Defines the `ShowOpenDialog` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for showing a native file or folder open
+//     dialog.
+//   - This effect abstracts the "what" (show an open dialog) from the "how"
+//     (the UserInterfaceProvider implementation).
+
 //! # ShowOpenDialog Effect
 //!
 //! Defines the `ActionEffect` for showing a native file or folder open dialog.

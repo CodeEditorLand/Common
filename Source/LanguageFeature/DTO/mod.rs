@@ -10,7 +10,11 @@ pub mod IMarkdownStringDTO;
 pub mod PositionDTO;
 pub mod ProviderType;
 pub mod RangeDTO;
-// ... many more DTOs will be added here
+pub mod CompletionContextDTO;
+pub mod CompletionItemDTO;
+pub mod CompletionListDTO;
+pub mod LocationDTO;
+pub mod TextEditDTO;
 
 // pub use self::{
 // 	HoverResultDTO::HoverResultDTO,

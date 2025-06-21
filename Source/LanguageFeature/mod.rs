@@ -1,3 +1,9 @@
+// File: Common/Source/LanguageFeature/mod.rs
+// Role: Public module interface for the Language Feature service contract.
+// Responsibilities:
+//   - Expose all necessary traits, DTOs, and effect constructors related to
+//     language features.
+
 //! # LanguageFeature Service
 //!
 //! This module defines the abstract contract for all language intelligence
@@ -21,11 +27,31 @@ pub mod DTO;
 pub mod RegisterProvider;
 pub mod UnregisterProvider;
 
-// pub use self::{RegisterProvider::RegisterProvider, UnregisterProvider::UnregisterProvider};
-
-// Feature Invocation (Placeholders for the many provider effects)
+// Feature Invocation
+// pub mod PrepareRename;
+// pub mod ProvideCodeActions;
+// pub mod ProvideCodeLenses;
 pub mod ProvideCompletions;
+// pub mod ProvideDefinition;
+// pub mod ProvideDocumentFormattingEdits;
+// pub mod ProvideDocumentHighlights;
+// pub mod ProvideDocumentLinks;
+// pub mod ProvideDocumentRangeFormattingEdits;
 pub mod ProvideHover;
-// ... more to come in subsequent batches
+// pub mod ProvideReferences;
 
-// pub use self::{ProvideCompletions::ProvideCompletions, ProvideHover::ProvideHover};
+// pub use self::{
+// 	PrepareRename::PrepareRename,
+// 	ProvideCodeActions::ProvideCodeActions,
+// 	ProvideCodeLenses::ProvideCodeLenses,
+// 	ProvideCompletions::ProvideCompletions,
+// 	ProvideDefinition::ProvideDefinition,
+// 	ProvideDocumentFormattingEdits::ProvideDocumentFormattingEdits,
+// 	ProvideDocumentHighlights::ProvideDocumentHighlights,
+// 	ProvideDocumentLinks::ProvideDocumentLinks,
+// 	ProvideDocumentRangeFormattingEdits::ProvideDocumentRangeFormattingEdits,
+// 	ProvideHover::ProvideHover,
+// 	ProvideReferences::ProvideReferences,
+// 	RegisterProvider::RegisterProvider,
+// 	UnregisterProvider::UnregisterProvider,
+// };

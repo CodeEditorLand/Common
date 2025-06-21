@@ -1,3 +1,10 @@
+// File: Common/Source/StatusBar/DTO/StatusBarEntryDTO.rs
+// Role: Defines the Data Transfer Object for a single status bar item.
+// Responsibilities:
+//   - Provide a serializable representation of a `vscode.StatusBarItem`.
+//   - Act as the contract for status bar updates between `Cocoon` and
+//     `Mountain`.
+
 //! # StatusBarEntryDTO
 //!
 //! Defines the Data Transfer Object for a single status bar item.
@@ -24,7 +31,8 @@ pub struct StatusBarEntryDTO {
 	pub ExtensionIdentifier:String,
 
 	/// An optional name for the status bar item, used for identification.
-	pub Name:String,
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub Name:Option<String>,
 
 	/// The text to be displayed for this item (can include icons like
 	/// `$(icon)`).

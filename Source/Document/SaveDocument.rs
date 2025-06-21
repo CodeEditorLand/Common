@@ -1,3 +1,10 @@
+// File: Common/Source/Document/SaveDocument.rs
+// Role: Defines the `SaveDocument` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for saving a single text document.
+//   - This effect abstracts the "what" (save a document) from the "how" (the
+//     DocumentProvider implementation).
+
 //! # SaveDocument Effect
 //!
 //! Defines the `ActionEffect` for saving a single document to its persisted
@@ -18,14 +25,14 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// the in-memory store and writing it to disk.
 ///
 /// # Parameters
-/// * `URI`: The `Url` of the document to save.
+/// * `Uri`: The `Url` of the document to save.
 ///
 /// # Returns
 /// An `ActionEffect` that resolves with a `bool` indicating whether the save
 /// operation was successful.
-pub fn SaveDocument(URI:Url) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, bool> {
+pub fn SaveDocument(Uri:Url) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, bool> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn DocumentProvider>| {
-		let URIClone = URI.clone();
-		Box::pin(async move { Provider.SaveDocument(URIClone).await })
+		let UriClone = Uri.clone();
+		Box::pin(async move { Provider.SaveDocument(UriClone).await })
 	}))
 }

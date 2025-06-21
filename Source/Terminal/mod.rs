@@ -1,3 +1,9 @@
+// File: Common/Source/Terminal/mod.rs
+// Role: Public module interface for the Terminal service contract.
+// Responsibilities:
+//   - Expose all necessary traits and effect constructors related to the
+//     integrated terminal.
+
 //! # Terminal Service
 //!
 //! This module defines the abstract contract for the integrated Terminal
@@ -12,6 +18,17 @@ pub mod TerminalProvider;
 
 // --- Effect Constructors ---
 pub mod CreateTerminal;
-// Additional effects like SendTextToTerminal, DisposeTerminal would go here.
+// pub mod DisposeTerminal;
+// pub mod GetTerminalProcessId;
+// pub mod HideTerminal;
+// pub mod SendTextToTerminal;
+// pub mod ShowTerminal;
 
-// pub use self::CreateTerminal::CreateTerminal;
+// pub use self::{
+// 	CreateTerminal::CreateTerminal,
+// 	DisposeTerminal::DisposeTerminal,
+// 	GetTerminalProcessId::GetTerminalProcessId,
+// 	HideTerminal::HideTerminal,
+// 	SendTextToTerminal::SendTextToTerminal,
+// 	ShowTerminal::ShowTerminal,
+// };

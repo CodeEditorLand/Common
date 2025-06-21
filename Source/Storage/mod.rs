@@ -1,3 +1,10 @@
+// File: Common/Source/Storage/mod.rs
+// Role: Public module interface for the Storage service contract.
+// Responsibilities:
+//   - Expose all necessary traits and effect constructors related to storage.
+//   - This contract includes both a high-performance batch-oriented API
+//     (`GetAllStorage`, `SetAllStorage`) and a legacy per-key API.
+
 //! # Storage Service
 //!
 //! This module defines the abstract contract for the Storage service, which
@@ -12,7 +19,18 @@ pub mod StorageProvider;
 // pub use self::StorageProvider::StorageProvider;
 
 // --- Effect Constructors ---
+
+// High-performance, batch-oriented effects
+// pub mod GetAllStorage;
+// pub mod SetAllStorage;
+
+// Legacy per-key effects
 pub mod GetStorageItem;
 pub mod SetStorageItem;
 
-// pub use self::{GetStorageItem::GetStorageItem, SetStorageItem::SetStorageItem};
+// pub use self::{
+// 	GetAllStorage::GetAllStorage,
+// 	GetStorageItem::GetStorageItem,
+// 	SetAllStorage::SetAllStorage,
+// 	SetStorageItem::SetStorageItem,
+// };

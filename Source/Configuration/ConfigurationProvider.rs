@@ -1,7 +1,9 @@
-//! # ConfigurationProvider Trait
-//!
-//! Defines the abstract service trait for providing and updating configuration
-//! values.
+// File: Common/Source/Configuration/ConfigurationProvider.rs
+// Role: Defines the abstract service trait for configuration management.
+// Responsibilities:
+//   - Provide a contract for retrieving merged configuration values.
+//   - Provide a contract for updating configuration values at specific targets
+//     (e.g., User, Workspace).
 
 use async_trait::async_trait;
 use serde_json::Value;

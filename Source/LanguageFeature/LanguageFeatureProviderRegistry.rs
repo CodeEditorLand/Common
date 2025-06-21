@@ -1,3 +1,12 @@
+// File: Common/Source/LanguageFeature/LanguageFeatureProviderRegistry.rs
+// Role: Defines the abstract service trait for managing and invoking all
+// language       feature providers. This serves as the central contract for all
+// language       intelligence capabilities.
+// Responsibilities:
+//   - Provide a contract for registering and unregistering providers.
+//   - Define the invocation signature for every language feature (e.g., hover,
+//     completion).
+
 //! # LanguageFeatureProviderRegistry Trait
 //!
 //! Defines the abstract service trait for managing and invoking all language
@@ -8,7 +17,15 @@ use async_trait::async_trait;
 use serde_json::Value;
 use url::Url;
 
-use super::DTO::{HoverResultDTO::HoverResultDTO, PositionDTO::PositionDTO, ProviderType::ProviderType};
+use super::DTO::{
+	CompletionContextDTO::CompletionContextDTO,
+	CompletionListDTO::CompletionListDTO,
+	HoverResultDTO::HoverResultDTO,
+	LocationDTO::LocationDTO,
+	PositionDTO::PositionDTO,
+	ProviderType::ProviderType,
+	TextEditDTO::TextEditDTO,
+};
 use crate::{Environment::Environment::Environment, Error::CommonError::CommonError};
 
 /// An abstract service contract for an environment component that can register,
@@ -50,83 +67,50 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 	async fn UnregisterProvider(&self, Handle:u32) -> Result<(), CommonError>;
 
 	// --- Invocation Methods (sorted alphabetically) ---
-	// Note: Most are placeholders with `Value` types for now. They will be
-	// fleshed out with concrete DTOs in subsequent batches.
-
-	async fn PrepareCallHierarchy(
-		&self,
-		DocumentURI:Url,
-		PositionDTO:PositionDTO,
-		CancellationTokenValue:Option<Value>,
-	) -> Result<Option<Value /* Vec<HierarchyItemDTO> */>, CommonError>;
-
-	async fn PrepareRename(
-		&self,
-		DocumentURI:Url,
-		PositionDTO:PositionDTO,
-		CancellationTokenValue:Option<Value>,
-	) -> Result<Option<Value>, CommonError>;
-
-	async fn PrepareTypeHierarchy(
-		&self,
-		DocumentURI:Url,
-		PositionDTO:PositionDTO,
-		CancellationTokenValue:Option<Value>,
-	) -> Result<Option<Value /* Vec<HierarchyItemDTO> */>, CommonError>;
-
-	async fn ProvideCallHierarchyIncomingCalls(
-		&self,
-		ItemDTO:Value, // HierarchyItemDTO
-		CancellationTokenValue:Option<Value>,
-	) -> Result<Option<Value /* Vec<IncomingCallDTO> */>, CommonError>;
-
-	async fn ProvideCallHierarchyOutgoingCalls(
-		&self,
-		ItemDTO:Value, // HierarchyItemDTO
-		CancellationTokenValue:Option<Value>,
-	) -> Result<Option<Value /* Vec<OutgoingCallDTO> */>, CommonError>;
 
 	async fn ProvideCodeActions(
 		&self,
 		DocumentURI:Url,
-		RangeOrSelectionDTO:Value,
-		ContextDTO:Value, // CodeActionContextDTO
-		CancellationTokenValue:Option<Value>,
+		RangeOrSelectionDTO:Value, // Range DTO
+		ContextDTO:Value,          // CodeActionContextDTO
 	) -> Result<Option<Value /* CodeActionListDTO */>, CommonError>;
 
-	async fn ProvideCodeLenses(
-		&self,
-		DocumentURI:Url,
-		CancellationTokenValue:Option<Value>,
-	) -> Result<Option<Value /* CodeLensListDTO */>, CommonError>;
+	async fn ProvideCodeLenses(&self, DocumentURI:Url) -> Result<Option<Value /* CodeLensListDTO */>, CommonError>;
 
 	async fn ProvideCompletions(
 		&self,
 		DocumentURI:Url,
 		PositionDTO:PositionDTO,
-		ContextDTO:Value, // CompletionContextDTO
+		ContextDTO:CompletionContextDTO,
 		CancellationTokenValue:Option<Value>,
-	) -> Result<Option<Value /* SuggestResultDTO */>, CommonError>;
+	) -> Result<Option<CompletionListDTO>, CommonError>;
+
+	async fn ProvideDefinition(
+		&self,
+		DocumentURI:Url,
+		PositionDTO:PositionDTO,
+	) -> Result<Option<Vec<LocationDTO>>, CommonError>;
 
 	async fn ProvideDocumentFormattingEdits(
 		&self,
 		DocumentURI:Url,
-		OptionsDTO:Value, // FormattingOptionsDTO
-		CancellationTokenValue:Option<Value>,
-	) -> Result<Option<Value /* Vec<TextEditDTO> */>, CommonError>;
+		OptionsDTO:Value, // FormattingOptions DTO
+	) -> Result<Option<Vec<TextEditDTO>>, CommonError>;
 
 	async fn ProvideDocumentHighlights(
 		&self,
 		DocumentURI:Url,
 		PositionDTO:PositionDTO,
-		CancellationTokenValue:Option<Value>,
 	) -> Result<Option<Value /* Vec<DocumentHighlightDTO> */>, CommonError>;
 
-	async fn ProvideDocumentLinks(
+	async fn ProvideDocumentLinks(&self, DocumentURI:Url) -> Result<Option<Value /* LinksListDTO */>, CommonError>;
+
+	async fn ProvideDocumentRangeFormattingEdits(
 		&self,
 		DocumentURI:Url,
-		CancellationTokenValue:Option<Value>,
-	) -> Result<Option<Value /* LinksListDTO */>, CommonError>;
+		RangeDTO:Value,   // Range DTO
+		OptionsDTO:Value, // FormattingOptions DTO
+	) -> Result<Option<Vec<TextEditDTO>>, CommonError>;
 
 	async fn ProvideHover(
 		&self,
@@ -134,5 +118,14 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 		PositionDTO:PositionDTO,
 	) -> Result<Option<HoverResultDTO>, CommonError>;
 
-	// ... other 20+ provider methods will be added here.
+	async fn ProvideReferences(
+		&self,
+		DocumentURI:Url,
+		PositionDTO:PositionDTO,
+		ContextDTO:Value, // ReferenceContext DTO
+	) -> Result<Option<Vec<LocationDTO>>, CommonError>;
+
+	async fn PrepareRename(&self, DocumentURI:Url, PositionDTO:PositionDTO) -> Result<Option<Value>, CommonError>;
+
+	// ... other provider methods will be added here.
 }

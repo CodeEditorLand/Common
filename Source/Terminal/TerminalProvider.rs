@@ -1,3 +1,11 @@
+// File: Common/Source/Terminal/TerminalProvider.rs
+// Role: Defines the abstract service trait for creating and managing integrated
+// terminal instances. Responsibilities:
+//   - Provide a contract for creating, showing, hiding, and disposing of
+//     terminals.
+//   - Provide a contract for sending input to terminals and querying their
+//     state.
+
 //! # TerminalProvider Trait
 //!
 //! Defines the abstract service trait for creating and managing integrated
@@ -42,4 +50,27 @@ pub trait TerminalProvider: Environment + Send + Sync {
 	/// # Parameters
 	/// * `TerminalId`: The unique identifier of the terminal to dispose of.
 	async fn DisposeTerminal(&self, TerminalId:u64) -> Result<(), CommonError>;
+
+	/// Shows a terminal in the UI, optionally giving it focus.
+	///
+	/// # Parameters
+	/// * `TerminalId`: The unique identifier of the terminal to show.
+	/// * `PreserveFocus`: If `true`, the terminal panel is revealed but focus
+	///   is not given to it.
+	async fn ShowTerminal(&self, TerminalId:u64, PreserveFocus:bool) -> Result<(), CommonError>;
+
+	/// Hides the terminal panel if the specified terminal is active.
+	///
+	/// # Parameters
+	/// * `TerminalId`: The unique identifier of the terminal to hide.
+	async fn HideTerminal(&self, TerminalId:u64) -> Result<(), CommonError>;
+
+	/// Gets the process ID (PID) of the underlying shell process for a
+	/// terminal.
+	///
+	/// # Parameters
+	/// * `TerminalId`: The unique identifier of the terminal to query.
+	/// # Returns
+	/// An `Option<u32>` with the PID if the process is running, or `None`.
+	async fn GetTerminalProcessId(&self, TerminalId:u64) -> Result<Option<u32>, CommonError>;
 }

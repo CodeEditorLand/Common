@@ -1,3 +1,10 @@
+// File: Common/Source/Document/OpenDocument.rs
+// Role: Defines the `OpenDocument` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for opening or creating a new text document.
+//   - This effect abstracts the "what" (open a document) from the "how" (the
+//     DocumentProvider implementation).
+
 //! # OpenDocument Effect
 //!
 //! Defines the `ActionEffect` for opening or creating a new text document.

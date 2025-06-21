@@ -1,3 +1,11 @@
+// File: Common/Source/Diagnostic/DiagnosticManager.rs
+// Role: Defines the abstract service trait for managing diagnostic collections.
+// Responsibilities:
+//   - Provide a contract for setting, clearing, and retrieving diagnostics.
+//   - This trait is the central point of interaction for any component that
+//     needs to manage problem markers (errors, warnings, etc.) in the
+//     workspace.
+
 //! # DiagnosticManager Trait
 //!
 //! Defines the abstract service trait for managing diagnostic collections,
@@ -20,11 +28,12 @@ pub trait DiagnosticManager: Environment + Send + Sync {
 	/// owner.
 	///
 	/// # Parameters
-	/// * `Owner`: A string identifying the source of the diagnostics.
-	/// * `EntriesDTOValue`: A `serde_json::Value` representing an array of
-	///   entries. Each entry is a tuple: `[UriComponentsValue,
-	///   Option<Vec<MarkerDataDTOAsValue>>]`. To clear diagnostics for a
-	///   resource, provide `None` or an empty array for its entry.
+	/// * `Owner`: A string identifying the source of the diagnostics (e.g.,
+	///   "cocoon-diag-0-typescript").
+	/// * `EntriesDTOValue`: A `serde_json::Value` that deserializes into an
+	///   array of tuples. Each tuple has the shape `[UriComponentsDTO,
+	///   Option<Vec<MarkerDataDTO>>]`. To clear diagnostics for a resource,
+	///   provide `None` or an empty vector for its entry.
 	async fn SetDiagnostics(&self, Owner:String, EntriesDTOValue:Value) -> Result<(), CommonError>;
 
 	/// Clears all diagnostics that were previously reported by a specific
@@ -40,10 +49,11 @@ pub trait DiagnosticManager: Environment + Send + Sync {
 	/// # Parameters
 	/// * `ResourceURIFilterOption`: An optional `serde_json::Value`
 	///   representing a `UriComponents` DTO. If `Some`, only diagnostics for
-	///   that URI are returned.
+	///   that specific URI are returned. If `None`, all diagnostics are
+	///   returned.
 	///
 	/// # Returns
 	/// A `serde_json::Value` representing an array of tuples:
-	/// `[[UriComponentsValue, Vec<MarkerDataDtoAsValue>]]`.
+	/// `Vec<[UriComponentsDTO, Vec<MarkerDataDTO>]>`.
 	async fn GetAllDiagnostics(&self, ResourceURIFilterOption:Option<Value>) -> Result<Value, CommonError>;
 }

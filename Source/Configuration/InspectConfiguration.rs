@@ -1,7 +1,10 @@
-//! # InspectConfiguration Effect
-//!
-//! Defines the `ActionEffect` for inspecting a configuration value across all
-//! its potential sources.
+// File: Common/Source/Configuration/InspectConfiguration.rs
+// Role: Defines the `InspectConfiguration` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for inspecting a configuration's value
+//     across all its sources.
+//   - This effect abstracts the "what" (inspect a configuration) from the "how"
+//     (the ConfigurationInspector implementation).
 
 use std::sync::Arc;
 

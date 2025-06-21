@@ -1,3 +1,11 @@
+// File: Common/Source/Terminal/CreateTerminal.rs
+// Role: Defines the `CreateTerminal` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for creating a new integrated terminal
+//     instance.
+//   - This effect abstracts the "what" (create a terminal) from the "how" (the
+//     TerminalProvider implementation).
+
 //! # CreateTerminal Effect
 //!
 //! Defines the `ActionEffect` for creating a new integrated terminal instance.

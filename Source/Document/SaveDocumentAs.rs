@@ -1,3 +1,11 @@
+// File: Common/Source/Document/SaveDocumentAs.rs
+// Role: Defines the `SaveDocumentAs` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for saving a text document to a new
+//     location.
+//   - This effect abstracts the "what" (save a document as) from the "how" (the
+//     DocumentProvider implementation).
+
 //! # SaveDocumentAs Effect
 //!
 //! Defines the `ActionEffect` for saving a document to a new location.

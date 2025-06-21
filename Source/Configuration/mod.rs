@@ -1,3 +1,9 @@
+// File: Common/Source/Configuration/mod.rs
+// Role: Public module interface for the Configuration service contract.
+// Responsibilities:
+//   - Expose all necessary traits, DTOs, and effect constructors related to
+//     configuration.
+
 //! # Configuration Service
 //!
 //! This module defines the abstract contract for the Configuration service.
@@ -11,7 +17,8 @@
 pub mod ConfigurationInspector;
 pub mod ConfigurationProvider;
 
-// pub use self::{ConfigurationInspector::ConfigurationInspector, ConfigurationProvider::ConfigurationProvider};
+// pub use self::{ConfigurationInspector::ConfigurationInspector,
+// ConfigurationProvider::ConfigurationProvider};
 
 // --- Data Transfer Objects ---
 pub mod DTO;

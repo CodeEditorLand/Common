@@ -1,3 +1,11 @@
+// File: Common/Source/WebView/WebViewProvider.rs
+// Role: Defines the abstract service trait for creating and managing WebViews.
+// Responsibilities:
+//   - Provide a contract for creating, disposing, and revealing WebView panels.
+//   - Define methods for setting a WebView's content (HTML) and options (title,
+//     icon).
+//   - Define a method for posting messages to a WebView's content script.
+
 //! # WebViewProvider Trait
 //!
 //! Defines the abstract service trait for creating and managing WebViews.
@@ -17,42 +25,71 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 pub trait WebViewProvider: Environment + Send + Sync {
 	/// Creates a new WebView panel.
 	///
+	/// # Parameters
+	/// * `ExtensionDataValue`: DTO containing information about the extension
+	///   creating the panel.
+	/// * `ViewType`: A unique string identifying the type of the WebView.
+	/// * `Title`: The initial title for the WebView panel.
+	/// * `ShowOptionsValue`: DTO specifying the view column to show the panel
+	///   in.
+	/// * `PanelOptionsValue`: DTO specifying behavior options for the panel
+	///   (e.g., enable scripts).
+	/// * `ContentOptionsValue`: DTO specifying content options (e.g., local
+	///   resource roots).
+	///
 	/// # Returns
 	/// A `Result` containing a unique handle (string) for the new WebView, or
 	/// a `CommonError` on failure.
 	async fn CreateWebViewPanel(
 		&self,
-		ExtensionData:Value, // WebViewExtensionDescriptionDTO
+		ExtensionDataValue:Value, // DTO: WebViewExtensionDescriptionDTO
 		ViewType:String,
 		Title:String,
-		ShowOptions:Value,    // WebViewShowOptionsDTO
-		PanelOptions:Value,   // WebViewPanelOptionsDTO
-		ContentOptions:Value, // WebViewContentOptionsDTO
+		ShowOptionsValue:Value,    // DTO: WebViewShowOptionsDTO
+		PanelOptionsValue:Value,   // DTO: WebViewPanelOptionsDTO
+		ContentOptionsValue:Value, // DTO: WebViewContentOptionsDTO
 	) -> Result<String, CommonError>;
 
 	/// Disposes of a WebView panel, removing it from the UI.
-	async fn DisposeWebView(&self, Handle:String) -> Result<(), CommonError>;
+	///
+	/// # Parameters
+	/// * `Handle`: The unique handle of the WebView panel to dispose.
+	async fn DisposeWebViewPanel(&self, Handle:String) -> Result<(), CommonError>;
 
 	/// Reveals an existing WebView panel, bringing it to the front.
+	///
+	/// # Parameters
+	/// * `Handle`: The unique handle of the WebView panel to reveal.
+	/// * `ShowOptionsValue`: DTO specifying the view column to show the panel
+	///   in.
 	async fn RevealWebViewPanel(
 		&self,
 		Handle:String,
-		ShowOptions:Value, // WebViewShowOptionsDTO
+		ShowOptionsValue:Value, // DTO: WebViewShowOptionsDTO
 	) -> Result<(), CommonError>;
 
-	/// Sets the title of a WebView panel.
-	async fn SetWebViewTitle(&self, Handle:String, Title:String) -> Result<(), CommonError>;
-
-	/// Sets the icon for a WebView panel.
+	/// Sets various options for a WebView panel, such as its title and icon
+	/// path.
 	///
 	/// # Parameters
-	/// * `IconPath`: A DTO representing either a single `URI` or a `{ light,
-	///   dark }` pair.
-	async fn SetWebViewIconPath(&self, Handle:String, IconPath:Option<Value>) -> Result<(), CommonError>;
+	/// * `Handle`: The unique handle of the WebView panel to update.
+	/// * `OptionsValue`: A DTO (`WebviewPanelOptionsUpdateDTO`) containing the
+	///   options to set.
+	async fn SetWebViewOptions(&self, Handle:String, OptionsValue:Value) -> Result<(), CommonError>;
 
 	/// Sets the HTML content of a WebView panel.
+	// # Parameters
+	/// * `Handle`: The unique handle of the WebView panel.
+	/// * `HTML`: The HTML string to set as the content.
 	async fn SetWebViewHTML(&self, Handle:String, HTML:String) -> Result<(), CommonError>;
 
 	/// Posts a message from the extension host to the WebView content script.
+	///
+	/// # Parameters
+	/// * `Handle`: The unique handle of the target WebView panel.
+	/// * `Message`: The JSON-serializable message to post.
+	///
+	/// # Returns
+	/// `Ok(true)` if the message was posted successfully.
 	async fn PostMessageToWebView(&self, Handle:String, Message:Value) -> Result<bool, CommonError>;
 }

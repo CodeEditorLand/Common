@@ -1,3 +1,10 @@
+// File: Common/Source/UserInterface/ShowMessage.rs
+// Role: Defines the `ShowMessage` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for displaying a modal message to the user.
+//   - This effect abstracts the "what" (show a message) from the "how" (the
+//     UserInterfaceProvider implementation).
+
 //! # ShowMessage Effect
 //!
 //! Defines the `ActionEffect` for displaying a modal message to the user.

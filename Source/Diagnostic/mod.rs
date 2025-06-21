@@ -1,3 +1,9 @@
+// File: Common/Source/Diagnostic/mod.rs
+// Role: Public module interface for the Diagnostic service contract.
+// Responsibilities:
+//   - Expose all necessary traits and effect constructors related to
+//     diagnostics.
+
 //! # Diagnostic Service
 //!
 //! This module defines the abstract contract for the Diagnostic service, which

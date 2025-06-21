@@ -1,3 +1,11 @@
+// File: Common/Source/Configuration/UpdateConfiguration.rs
+// Role: Defines the `UpdateConfiguration` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for updating a configuration value in a
+//     specific target scope.
+//   - This effect abstracts the "what" (update a configuration) from the "how"
+//     (the ConfigurationProvider implementation).
+
 //! # UpdateConfiguration Effect
 //!
 //! Defines the `ActionEffect` for updating a configuration value in a specific
@@ -47,19 +55,20 @@ pub fn UpdateConfiguration(
 		let ScopeToLanguageClone = ScopeToLanguage;
 		Box::pin(async move {
 			// Deserialize the integer target into the enum.
-			let TargetParsed:ConfigurationTarget = serde_json::from_value(Value::from(TargetAsU32)).map_err(|e| {
-				CommonError::InvalidArgument {
-					ArgumentName:"Target".to_string(),
-					Reason:format!("Failed to parse ConfigurationTarget from u32 {}: {}", TargetAsU32, e),
-				}
-			})?;
+			let TargetParsed:ConfigurationTarget =
+				serde_json::from_value(Value::from(TargetAsU32)).map_err(|Error| {
+					CommonError::InvalidArgument {
+						ArgumentName:"Target".to_string(),
+						Reason:format!("Failed to parse ConfigurationTarget from u32 {}: {}", TargetAsU32, Error),
+					}
+				})?;
 
 			// Deserialize the overrides DTO.
 			let OverridesParsed:ConfigurationOverridesDTO =
-				serde_json::from_value(OverridesValueClone).map_err(|e| {
+				serde_json::from_value(OverridesValueClone).map_err(|Error| {
 					CommonError::InvalidArgument {
 						ArgumentName:"OverridesValue".to_string(),
-						Reason:format!("Failed to parse ConfigurationOverridesDTO: {}", e),
+						Reason:format!("Failed to parse ConfigurationOverridesDTO: {}", Error),
 					}
 				})?;
 

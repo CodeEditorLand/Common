@@ -1,7 +1,10 @@
-//! # GetAllCommands Effect
-//!
-//! Defines the `ActionEffect` for retrieving all registered command
-//! identifiers.
+// File: Common/Source/Command/GetAllCommands.rs
+// Role: Defines the `GetAllCommands` ActionEffect.
+// Responsibilities:
+//   - Provide a declarative effect for retrieving a list of all registered
+//     command identifiers.
+//   - This effect abstracts the "what" (get all commands) from the "how" (the
+//     CommandExecutor implementation).
 
 use std::sync::Arc;
 

@@ -16,6 +16,7 @@
 pub mod Effect;
 pub mod Environment;
 pub mod Error;
+pub mod Utility;
 
 // --- Service Contracts (alphabetical) ---
 pub mod Command;
