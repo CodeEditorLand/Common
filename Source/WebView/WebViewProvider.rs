@@ -42,12 +42,16 @@ pub trait WebViewProvider: Environment + Send + Sync {
 	/// a `CommonError` on failure.
 	async fn CreateWebViewPanel(
 		&self,
-		ExtensionDataValue:Value, // DTO: WebViewExtensionDescriptionDTO
+		// DTO: WebViewExtensionDescriptionDTO
+		ExtensionDataValue:Value,
 		ViewType:String,
 		Title:String,
-		ShowOptionsValue:Value,    // DTO: WebViewShowOptionsDTO
-		PanelOptionsValue:Value,   // DTO: WebViewPanelOptionsDTO
-		ContentOptionsValue:Value, // DTO: WebViewContentOptionsDTO
+		// DTO: WebViewShowOptionsDTO
+		ShowOptionsValue:Value,
+		// DTO: WebViewPanelOptionsDTO
+		PanelOptionsValue:Value,
+		// DTO: WebViewContentOptionsDTO
+		ContentOptionsValue:Value,
 	) -> Result<String, CommonError>;
 
 	/// Disposes of a WebView panel, removing it from the UI.
@@ -65,7 +69,8 @@ pub trait WebViewProvider: Environment + Send + Sync {
 	async fn RevealWebViewPanel(
 		&self,
 		Handle:String,
-		ShowOptionsValue:Value, // DTO: WebViewShowOptionsDTO
+		// DTO: WebViewShowOptionsDTO
+		ShowOptionsValue:Value,
 	) -> Result<(), CommonError>;
 
 	/// Sets various options for a WebView panel, such as its title and icon

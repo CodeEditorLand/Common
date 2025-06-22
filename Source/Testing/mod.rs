@@ -8,11 +8,3 @@
 
 // --- Trait Definition ---
 pub mod TestController;
-// pub use self::TestController::TestController;
-
-// --- Data Transfer Objects ---
-// pub mod DTO; // Placeholder for future DTOs
-
-// --- Effect Constructors ---
-// mod RegisterTestController; // Placeholder for future effects
-// mod RunTests;

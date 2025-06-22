@@ -71,8 +71,10 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 	async fn ProvideCodeActions(
 		&self,
 		DocumentURI:Url,
-		RangeOrSelectionDTO:Value, // Range DTO
-		ContextDTO:Value,          // CodeActionContextDTO
+		// Range DTO
+		RangeOrSelectionDTO:Value,
+		// CodeActionContextDTO
+		ContextDTO:Value,
 	) -> Result<Option<Value /* CodeActionListDTO */>, CommonError>;
 
 	async fn ProvideCodeLenses(&self, DocumentURI:Url) -> Result<Option<Value /* CodeLensListDTO */>, CommonError>;
@@ -94,7 +96,8 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 	async fn ProvideDocumentFormattingEdits(
 		&self,
 		DocumentURI:Url,
-		OptionsDTO:Value, // FormattingOptions DTO
+		// FormattingOptions DTO
+		OptionsDTO:Value,
 	) -> Result<Option<Vec<TextEditDTO>>, CommonError>;
 
 	async fn ProvideDocumentHighlights(
@@ -108,8 +111,10 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 	async fn ProvideDocumentRangeFormattingEdits(
 		&self,
 		DocumentURI:Url,
-		RangeDTO:Value,   // Range DTO
-		OptionsDTO:Value, // FormattingOptions DTO
+		// Range DTO
+		RangeDTO:Value,
+		// FormattingOptions DTO
+		OptionsDTO:Value,
 	) -> Result<Option<Vec<TextEditDTO>>, CommonError>;
 
 	async fn ProvideHover(
@@ -122,7 +127,8 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 		&self,
 		DocumentURI:Url,
 		PositionDTO:PositionDTO,
-		ContextDTO:Value, // ReferenceContext DTO
+		// ReferenceContext DTO
+		ContextDTO:Value,
 	) -> Result<Option<Vec<LocationDTO>>, CommonError>;
 
 	async fn PrepareRename(&self, DocumentURI:Url, PositionDTO:PositionDTO) -> Result<Option<Value>, CommonError>;

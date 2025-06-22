@@ -39,7 +39,8 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	async fn RegisterTreeDataProvider(
 		&self,
 		ViewIdentifier:String,
-		OptionsValue:Value, // DTO: TreeViewOptionsDTO
+		// DTO: TreeViewOptionsDTO
+		OptionsValue:Value,
 	) -> Result<(), CommonError>;
 
 	/// Informs the host that a tree data provider has been disposed of.
@@ -57,7 +58,8 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 		&self,
 		ViewIdentifier:String,
 		ItemHandle:String,
-		OptionsValue:Value, // DTO: RevealOptionsDTO
+		// DTO: RevealOptionsDTO
+		OptionsValue:Value,
 	) -> Result<(), CommonError>;
 
 	/// Notifies the host that some or all of the data in a tree view has
@@ -70,7 +72,8 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	async fn RefreshTreeView(
 		&self,
 		ViewIdentifier:String,
-		ItemsToRefreshValue:Option<Value>, // DTO: Option<TreeItemDTO> or Vec<TreeItemDTO>
+		// DTO: Option<TreeItemDTO> or Vec<TreeItemDTO>
+		ItemsToRefreshValue:Option<Value>,
 	) -> Result<(), CommonError>;
 
 	/// Sets a message to be displayed in the tree view's empty state.
@@ -99,7 +102,8 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	async fn SetTreeViewBadge(
 		&self,
 		ViewIdentifier:String,
-		BadgeValue:Option<Value>, // DTO: TreeViewBadgeDTO
+		// DTO: TreeViewBadgeDTO
+		BadgeValue:Option<Value>,
 	) -> Result<(), CommonError>;
 
 	// --- Methods called BY the host (PULL) ---

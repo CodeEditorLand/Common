@@ -24,7 +24,8 @@ pub fn ProvideCompletions(
 ) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<CompletionListDTO>> {
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let URIClone = DocumentURI.clone();
-		let PositionClone = PositionDTO; // PositionDTO is Copy
+		// PositionDTO is Copy
+		let PositionClone = PositionDTO;
 		let ContextClone = ContextDTO.clone();
 		let TokenClone = CancellationTokenValue.clone();
 		Box::pin(async move {

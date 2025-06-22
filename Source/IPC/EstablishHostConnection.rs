@@ -26,9 +26,5 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError,
 /// An `ActionEffect` that resolves to `()` on success and requires the
 /// `IPCProvider` capability to be executed.
 pub fn EstablishHostConnection(SidecarIdentifier:String) -> ActionEffect<Arc<dyn IPCProvider>, CommonError, ()> {
-	SendNotificationToSidecar(
-		SidecarIdentifier,
-		"$InitialHandshake".to_string(), // Use the conventional '$' prefix
-		Value::Null,
-	)
+	SendNotificationToSidecar(SidecarIdentifier, "$InitialHandshake".to_string(), Value::Null)
 }

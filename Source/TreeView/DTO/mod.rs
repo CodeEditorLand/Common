@@ -7,6 +7,3 @@
 
 pub mod TreeItemDTO;
 pub mod TreeViewOptionsDTO;
-
-// mod RevealOptionsDTO; // Placeholder for future DTOs
-// mod TreeViewBadgeDTO;

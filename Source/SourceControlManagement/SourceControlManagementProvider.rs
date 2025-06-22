@@ -29,7 +29,8 @@ pub trait SourceControlManagementProvider: Environment + Send + Sync {
 	/// A `Result` containing a unique handle (`u32`) for the new provider.
 	async fn CreateSourceControl(
 		&self,
-		ProviderData:Value, // DTO: SourceControlCreateDTO
+		// DTO: SourceControlCreateDTO
+		ProviderData:Value,
 	) -> Result<u32, CommonError>;
 
 	/// Disposes of an SCM provider, removing it and its groups from the UI.
@@ -49,7 +50,8 @@ pub trait SourceControlManagementProvider: Environment + Send + Sync {
 	async fn UpdateSourceControl(
 		&self,
 		ProviderHandle:u32,
-		UpdateData:Value, // DTO: SourceControlUpdateDTO
+		// DTO: SourceControlUpdateDTO
+		UpdateData:Value,
 	) -> Result<(), CommonError>;
 
 	/// Updates the properties of an SCM resource group (e.g., "Changes").
@@ -63,7 +65,8 @@ pub trait SourceControlManagementProvider: Environment + Send + Sync {
 	async fn UpdateSourceControlGroup(
 		&self,
 		ProviderHandle:u32,
-		GroupData:Value, // DTO: SourceControlGroupUpdateDTO
+		// DTO: SourceControlGroupUpdateDTO
+		GroupData:Value,
 	) -> Result<(), CommonError>;
 
 	/// Registers or updates the SCM input box for a provider.
@@ -75,6 +78,7 @@ pub trait SourceControlManagementProvider: Environment + Send + Sync {
 	async fn RegisterInputBox(
 		&self,
 		ProviderHandle:u32,
-		InputBoxData:Value, // DTO: SourceControlInputBoxDTO
+		// DTO: SourceControlInputBoxDTO
+		InputBoxData:Value,
 	) -> Result<(), CommonError>;
 }
