@@ -13,6 +13,7 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 ///
 /// This trait is implemented by `MountainEnvironment` and is responsible for
 /// reading from and writing to the appropriate JSON storage files on disk,
+
 /// separating global state from workspace-specific state.
 #[async_trait]
 pub trait StorageProvider: Environment + Send + Sync {
@@ -20,6 +21,7 @@ pub trait StorageProvider: Environment + Send + Sync {
 	///
 	/// # Parameters
 	/// * `IsGlobalScope`: If `true`, retrieves from global storage; otherwise,
+
 	///   retrieves from the current workspace's storage.
 	/// * `Key`: The key of the value to retrieve.
 	///
@@ -33,14 +35,18 @@ pub trait StorageProvider: Environment + Send + Sync {
 	///
 	/// # Parameters
 	/// * `IsGlobalScope`: If `true`, updates global storage; otherwise,
+
 	///   workspace storage.
 	/// * `Key`: The key of the value to update.
 	/// * `ValueToSet`: The `serde_json::Value` to store. If this is `None`, the
 	///   key should be deleted from storage.
 	async fn UpdateStorageValue(
 		&self,
+
 		IsGlobalScope:bool,
+
 		Key:String,
+
 		ValueToSet:Option<Value>,
 	) -> Result<(), CommonError>;
 

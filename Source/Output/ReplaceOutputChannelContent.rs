@@ -21,11 +21,14 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// An `ActionEffect` that resolves to `()` on success.
 pub fn ReplaceOutputChannelContent(
 	ChannelIdentifier:String,
+
 	Value:String,
 ) -> ActionEffect<Arc<dyn OutputChannelManager>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Manager:Arc<dyn OutputChannelManager>| {
 		let IdentifierClone = ChannelIdentifier.clone();
+
 		let ValueClone = Value.clone();
+
 		Box::pin(async move { Manager.Replace(IdentifierClone, ValueClone).await })
 	}))
 }

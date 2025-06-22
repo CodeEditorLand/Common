@@ -38,7 +38,9 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	/// * `OptionsValue`: DTO containing options like `CanSelectMany`.
 	async fn RegisterTreeDataProvider(
 		&self,
+
 		ViewIdentifier:String,
+
 		// DTO: TreeViewOptionsDTO
 		OptionsValue:Value,
 	) -> Result<(), CommonError>;
@@ -56,8 +58,11 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	///   `focus`.
 	async fn RevealTreeItem(
 		&self,
+
 		ViewIdentifier:String,
+
 		ItemHandle:String,
+
 		// DTO: RevealOptionsDTO
 		OptionsValue:Value,
 	) -> Result<(), CommonError>;
@@ -71,7 +76,9 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	///   have changed, allowing for targeted updates.
 	async fn RefreshTreeView(
 		&self,
+
 		ViewIdentifier:String,
+
 		// DTO: Option<TreeItemDTO> or Vec<TreeItemDTO>
 		ItemsToRefreshValue:Option<Value>,
 	) -> Result<(), CommonError>;
@@ -90,8 +97,11 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	/// * `Description`: An optional description or sub-title. `None` clears it.
 	async fn SetTreeViewTitle(
 		&self,
+
 		ViewIdentifier:String,
+
 		Title:Option<String>,
+
 		Description:Option<String>,
 	) -> Result<(), CommonError>;
 
@@ -101,7 +111,9 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	/// * `BadgeValue`: A DTO for the badge, or `None` to clear it.
 	async fn SetTreeViewBadge(
 		&self,
+
 		ViewIdentifier:String,
+
 		// DTO: TreeViewBadgeDTO
 		BadgeValue:Option<Value>,
 	) -> Result<(), CommonError>;
@@ -112,6 +124,7 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	/// # Parameters
 	/// * `ViewIdentifier`: The ID of the target tree view.
 	/// * `ElementHandle`: An optional handle for the parent element. If `None`,
+
 	///   the root-level items should be returned.
 	/// # Returns
 	/// A vector of `TreeItemDTO`s representing the children.

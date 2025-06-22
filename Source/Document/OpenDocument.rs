@@ -38,13 +38,18 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// document.
 pub fn OpenDocument(
 	URIComponentsDTO:Value,
+
 	LanguageIdentifier:Option<String>,
+
 	Content:Option<String>,
 ) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, Url> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn DocumentProvider>| {
 		let URIDTOClone = URIComponentsDTO.clone();
+
 		let LanguageIdentifierClone = LanguageIdentifier.clone();
+
 		let ContentClone = Content.clone();
+
 		Box::pin(async move { Provider.OpenDocument(URIDTOClone, LanguageIdentifierClone, ContentClone).await })
 	}))
 }

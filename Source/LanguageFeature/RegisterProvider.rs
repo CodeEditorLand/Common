@@ -29,16 +29,24 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// registration.
 pub fn RegisterProvider(
 	ProviderType:ProviderType,
+
 	SelectorDTO:Value,
+
 	SidecarIdentifier:String,
+
 	ExtensionIdentifierDTO:Value,
+
 	OptionsDTO:Option<Value /* ProviderOptionsDTO */>,
 ) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, u32> {
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let SelectorClone = SelectorDTO.clone();
+
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
+
 		let ExtensionIdentifierClone = ExtensionIdentifierDTO.clone();
+
 		let OptionsClone = OptionsDTO.clone();
+
 		Box::pin(async move {
 			Registry
 				.RegisterProvider(

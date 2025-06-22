@@ -22,7 +22,9 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn DeleteSecret(ExtensionIdentifier:String, Key:String) -> ActionEffect<Arc<dyn SecretProvider>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn SecretProvider>| {
 		let ExtensionIdentifierClone = ExtensionIdentifier.clone();
+
 		let KeyClone = Key.clone();
+
 		Box::pin(async move { Provider.DeleteSecret(ExtensionIdentifierClone, KeyClone).await })
 	}))
 }

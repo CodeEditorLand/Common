@@ -33,16 +33,20 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// requested configuration.
 pub fn GetConfiguration(
 	Section:Option<String>,
+
 	OverridesValue:Value,
 ) -> ActionEffect<Arc<dyn ConfigurationProvider>, CommonError, Value> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn ConfigurationProvider>| {
 		let SectionClone = Section.clone();
+
 		let OverridesValueClone = OverridesValue.clone();
+
 		Box::pin(async move {
 			let OverridesParsed:ConfigurationOverridesDTO =
 				serde_json::from_value(OverridesValueClone).map_err(|e| {
 					CommonError::InvalidArgument {
 						ArgumentName:"OverridesValue".to_string(),
+
 						Reason:format!("Failed to parse ConfigurationOverridesDTO: {}", e),
 					}
 				})?;

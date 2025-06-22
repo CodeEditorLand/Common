@@ -12,7 +12,9 @@ use serde::{Deserialize, Serialize};
 pub struct FileFilterDTO {
 	/// The human-readable name of the filter (e.g., "Image Files").
 	pub Name:String,
+
 	/// A list of file extensions associated with this filter (e.g., `["jpg",
+
 	/// "png"]`).
 	pub ExtensionList:Vec<String>,
 }

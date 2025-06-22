@@ -24,6 +24,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn ClearDiagnostics(Owner:String) -> ActionEffect<Arc<dyn DiagnosticManager>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Manager:Arc<dyn DiagnosticManager>| {
 		let OwnerClone = Owner.clone();
+
 		Box::pin(async move { Manager.ClearDiagnostics(OwnerClone).await })
 	}))
 }

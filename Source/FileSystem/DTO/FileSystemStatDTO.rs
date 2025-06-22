@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// This DTO is returned by the `StatFile` effect and is analogous to VS Code's
 /// `FileStat` interface, providing essential information like file type, size,
+
 /// and modification times.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]

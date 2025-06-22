@@ -7,6 +7,7 @@
 //     StorageProvider implementation).
 //
 // NOTE: This effect is part of a legacy, per-key storage model. The newer,
+
 // high-performance storage model in Cocoon uses a batch-oriented approach
 // (`GetAllStorage`, `SetAllStorage`), making this effect obsolete for that
 // use case. It is kept for potential other uses or until fully deprecated.
@@ -42,6 +43,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn GetStorageItem(TargetObjectValue:Value) -> ActionEffect<Arc<dyn StorageProvider>, CommonError, Option<Value>> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn StorageProvider>| {
 		let TargetObjectClone = TargetObjectValue.clone();
+
 		Box::pin(async move {
 			let IsGlobal = TargetObjectClone.get("Scope").and_then(Value::as_bool).unwrap_or(false);
 
@@ -51,6 +53,7 @@ pub fn GetStorageItem(TargetObjectValue:Value) -> ActionEffect<Arc<dyn StoragePr
 				.ok_or_else(|| {
 					CommonError::InvalidArgument {
 						ArgumentName:"TargetObject.Key".to_string(),
+
 						Reason:"Expected a 'Key' string field in TargetObject.".to_string(),
 					}
 				})?

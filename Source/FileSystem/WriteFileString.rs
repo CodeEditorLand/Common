@@ -29,8 +29,11 @@ use crate::{
 /// `FileSystemWriter` capability.
 pub fn WriteFileString(
 	Path:PathBuf,
+
 	Content:String,
+
 	Create:bool,
+
 	Overwrite:bool,
 ) -> ActionEffect<Arc<dyn FileSystemWriter>, CommonError, ()> {
 	WriteFileBytes(Path, Content.into_bytes(), Create, Overwrite)

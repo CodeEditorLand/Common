@@ -25,6 +25,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn Delete(Path:PathBuf, Recursive:bool, UseTrash:bool) -> ActionEffect<Arc<dyn FileSystemWriter>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Writer:Arc<dyn FileSystemWriter>| {
 		let PathClone = Path.clone();
+
 		Box::pin(async move { Writer.Delete(&PathClone, Recursive, UseTrash).await })
 	}))
 }

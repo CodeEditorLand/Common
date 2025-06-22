@@ -22,6 +22,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn ReadDirectory(Path:PathBuf) -> ActionEffect<Arc<dyn FileSystemReader>, CommonError, Vec<(String, FileTypeDTO)>> {
 	ActionEffect::New(Arc::new(move |Reader:Arc<dyn FileSystemReader>| {
 		let PathClone = Path.clone();
+
 		Box::pin(async move { Reader.ReadDirectory(&PathClone).await })
 	}))
 }

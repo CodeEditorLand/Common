@@ -31,8 +31,11 @@ pub trait DocumentProvider: Environment + Send + Sync {
 	/// A `Result` containing the canonical `Url` of the opened document.
 	async fn OpenDocument(
 		&self,
+
 		URIComponentsDTO:Value,
+
 		LanguageIdentifier:Option<String>,
+
 		Content:Option<String>,
 	) -> Result<Url, CommonError>;
 
@@ -69,11 +72,17 @@ pub trait DocumentProvider: Environment + Send + Sync {
 	///   operation.
 	async fn ApplyDocumentChanges(
 		&self,
+
 		URI:Url,
+
 		NewVersionIdentifier:i64,
+
 		ChangesDTOCollection:Value,
+
 		IsDirtyAfterChange:bool,
+
 		IsUndoing:bool,
+
 		IsRedoing:bool,
 	) -> Result<(), CommonError>;
 }

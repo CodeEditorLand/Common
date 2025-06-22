@@ -30,11 +30,15 @@ pub trait DebugService: Environment + Send + Sync {
 	/// * `ProviderHandle`: A unique handle assigned by the extension host for
 	///   this provider.
 	/// * `SidecarIdentifier`: The identifier of the sidecar (e.g.,
+
 	///   "cocoon-main") hosting the provider.
 	async fn RegisterDebugConfigurationProvider(
 		&self,
+
 		DebugType:String,
+
 		ProviderHandle:u32,
+
 		SidecarIdentifier:String,
 	) -> Result<(), CommonError>;
 
@@ -49,8 +53,11 @@ pub trait DebugService: Environment + Send + Sync {
 	///   factory.
 	async fn RegisterDebugAdapterDescriptorFactory(
 		&self,
+
 		DebugType:String,
+
 		FactoryHandle:u32,
+
 		SidecarIdentifier:String,
 	) -> Result<(), CommonError>;
 

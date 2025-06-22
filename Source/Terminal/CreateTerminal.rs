@@ -35,6 +35,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn CreateTerminal(OptionsValue:Value) -> ActionEffect<Arc<dyn TerminalProvider>, CommonError, Value> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn TerminalProvider>| {
 		let OptionsClone = OptionsValue.clone();
+
 		Box::pin(async move { Provider.CreateTerminal(OptionsClone).await })
 	}))
 }

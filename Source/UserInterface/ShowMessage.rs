@@ -36,12 +36,16 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// message was dismissed without an action.
 pub fn ShowMessage(
 	Severity:MessageSeverity,
+
 	Message:String,
+
 	OptionsValue:Value,
 ) -> ActionEffect<Arc<dyn UserInterfaceProvider>, CommonError, Option<String>> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn UserInterfaceProvider>| {
 		let MessageClone = Message.clone();
+
 		let OptionsClone = OptionsValue.clone();
+
 		Box::pin(async move { Provider.ShowMessage(Severity, MessageClone, Some(OptionsClone)).await })
 	}))
 }

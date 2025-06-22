@@ -30,13 +30,18 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// An `ActionEffect` that resolves to `()` on success.
 pub fn SendNotificationToSidecar(
 	SidecarIdentifier:String,
+
 	Method:String,
+
 	Parameters:Value,
 ) -> ActionEffect<Arc<dyn IPCProvider>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn IPCProvider>| {
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
+
 		let MethodClone = Method.clone();
+
 		let ParametersClone = Parameters.clone();
+
 		Box::pin(async move {
 			Provider
 				.SendNotificationToSidecar(SidecarIdentifierClone, MethodClone, ParametersClone)

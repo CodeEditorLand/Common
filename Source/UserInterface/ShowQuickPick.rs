@@ -35,11 +35,14 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// was cancelled.
 pub fn ShowQuickPick(
 	Items:Vec<QuickPickItemDTO>,
+
 	Options:Option<QuickPickOptionsDTO>,
 ) -> ActionEffect<Arc<dyn UserInterfaceProvider>, CommonError, Option<Vec<String>>> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn UserInterfaceProvider>| {
 		let ItemsClone = Items.clone();
+
 		let OptionsClone = Options.clone();
+
 		Box::pin(async move { Provider.ShowQuickPick(ItemsClone, OptionsClone).await })
 	}))
 }

@@ -3,6 +3,7 @@
 // Responsibilities:
 //   - Provide a contract for creating, disposing, and revealing WebView panels.
 //   - Define methods for setting a WebView's content (HTML) and options (title,
+
 //     icon).
 //   - Define a method for posting messages to a WebView's content script.
 
@@ -42,14 +43,20 @@ pub trait WebViewProvider: Environment + Send + Sync {
 	/// a `CommonError` on failure.
 	async fn CreateWebViewPanel(
 		&self,
+
 		// DTO: WebViewExtensionDescriptionDTO
 		ExtensionDataValue:Value,
+
 		ViewType:String,
+
 		Title:String,
+
 		// DTO: WebViewShowOptionsDTO
 		ShowOptionsValue:Value,
+
 		// DTO: WebViewPanelOptionsDTO
 		PanelOptionsValue:Value,
+
 		// DTO: WebViewContentOptionsDTO
 		ContentOptionsValue:Value,
 	) -> Result<String, CommonError>;
@@ -68,7 +75,9 @@ pub trait WebViewProvider: Environment + Send + Sync {
 	///   in.
 	async fn RevealWebViewPanel(
 		&self,
+
 		Handle:String,
+
 		// DTO: WebViewShowOptionsDTO
 		ShowOptionsValue:Value,
 	) -> Result<(), CommonError>;

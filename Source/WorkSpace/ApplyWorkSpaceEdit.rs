@@ -30,6 +30,7 @@ use crate::{
 pub fn ApplyWorkSpaceEdit(EditDTO:WorkSpaceEditDTO) -> ActionEffect<Arc<dyn WorkSpaceEditApplier>, CommonError, bool> {
 	ActionEffect::New(Arc::new(move |Applier:Arc<dyn WorkSpaceEditApplier>| {
 		let EditDTOClone = EditDTO.clone();
+
 		Box::pin(async move { Applier.ApplyWorkSpaceEdit(EditDTOClone).await })
 	}))
 }

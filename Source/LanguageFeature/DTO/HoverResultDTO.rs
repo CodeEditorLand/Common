@@ -13,6 +13,7 @@ use super::{IMarkdownStringDTO::IMarkdownStringDTO, RangeDTO::RangeDTO};
 pub struct HoverResultDTO {
 	/// The contents of the hover, which can be one or more markdown strings.
 	pub Contents:Vec<IMarkdownStringDTO>,
+
 	/// An optional range to which this hover applies. When not specified, the
 	/// range of the word at the request position is used.
 	#[serde(skip_serializing_if = "Option::is_none")]

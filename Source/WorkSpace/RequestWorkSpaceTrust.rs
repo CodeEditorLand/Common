@@ -25,6 +25,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn RequestWorkSpaceTrust(Options:Option<Value>) -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, bool> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
 		let OptionsClone = Options.clone();
+
 		Box::pin(async move { Provider.RequestWorkSpaceTrust(OptionsClone).await })
 	}))
 }

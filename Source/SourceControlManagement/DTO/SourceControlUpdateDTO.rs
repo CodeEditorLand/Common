@@ -1,6 +1,7 @@
 //! # SourceControlUpdateDTO
 //!
-//! Defines a generic DTO for updating properties of an SourceControlManagement provider.
+//! Defines a generic DTO for updating properties of an SourceControlManagement
+//! provider.
 
 use serde::{Deserialize, Serialize};
 
@@ -12,9 +13,11 @@ use serde::{Deserialize, Serialize};
 pub struct SourceControlUpdateDTO {
 	/// The handle of the provider to update.
 	pub ProviderHandle:u32,
+
 	/// The new value for the commit message input box.
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub InputBoxValue:Option<String>,
+
 	/// The new count to display as a badge on the SourceControlManagement icon.
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub Count:Option<u32>,

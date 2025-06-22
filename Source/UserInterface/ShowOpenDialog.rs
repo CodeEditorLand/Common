@@ -36,6 +36,7 @@ pub fn ShowOpenDialog(
 ) -> ActionEffect<Arc<dyn UserInterfaceProvider>, CommonError, Option<Vec<PathBuf>>> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn UserInterfaceProvider>| {
 		let OptionsClone = Options.clone();
+
 		Box::pin(async move { Provider.ShowOpenDialog(OptionsClone).await })
 	}))
 }

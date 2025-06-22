@@ -18,16 +18,23 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// for a given position in a document.
 pub fn ProvideCompletions(
 	DocumentURI:Url,
+
 	PositionDTO:PositionDTO,
+
 	ContextDTO:CompletionContextDTO,
+
 	CancellationTokenValue:Option<Value>,
 ) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<CompletionListDTO>> {
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let URIClone = DocumentURI.clone();
+
 		// PositionDTO is Copy
 		let PositionClone = PositionDTO;
+
 		let ContextClone = ContextDTO.clone();
+
 		let TokenClone = CancellationTokenValue.clone();
+
 		Box::pin(async move {
 			Registry
 				.ProvideCompletions(URIClone, PositionClone, ContextClone, TokenClone)

@@ -10,10 +10,12 @@ use std::sync::Arc;
 /// An `Environment` is a container that holds all the concrete service
 /// implementations and application state necessary for executing
 /// `ActionEffect`s. By requiring that all environments implement this trait,
+
 /// the system can be generic over any valid environment context.
 ///
 /// The `Send + Sync + 'static` bounds are critical, ensuring that the
 /// environment can be safely shared across asynchronous tasks and threads,
+
 /// which is essential for a concurrent application.
 pub trait Environment: Send + Sync + 'static {}
 

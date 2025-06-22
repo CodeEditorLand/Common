@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 pub enum CompletionTriggerKindDTO {
 	/// Completion was triggered by typing a trigger character.
 	TriggerCharacter = 1,
+
 	/// Completion was triggered explicitly by a command.
 	Invoke = 2,
 }

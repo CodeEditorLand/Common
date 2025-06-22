@@ -33,6 +33,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn SaveDocument(Uri:Url) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, bool> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn DocumentProvider>| {
 		let UriClone = Uri.clone();
+
 		Box::pin(async move { Provider.SaveDocument(UriClone).await })
 	}))
 }

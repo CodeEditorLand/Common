@@ -14,6 +14,7 @@ use serde_json::Value;
 use crate::{Environment::Environment::Environment, Error::CommonError::CommonError};
 
 /// An abstract service contract for an environment component that can discover,
+
 /// parse, and provide information about installed extensions.
 #[async_trait]
 pub trait ExtensionManagementService: Environment + Send + Sync {

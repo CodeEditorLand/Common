@@ -1,6 +1,7 @@
 //! # SourceControlInputBoxDTO
 //!
-//! Defines the DTO for the SourceControlManagement input box (commit message box).
+//! Defines the DTO for the SourceControlManagement input box (commit message
+//! box).
 
 use serde::{Deserialize, Serialize};
 
@@ -11,9 +12,11 @@ use serde::{Deserialize, Serialize};
 pub struct SourceControlInputBoxDTO {
 	/// The current text content of the input box.
 	pub Value:String,
+
 	/// Placeholder text to show when the input box is empty.
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub Placeholder:Option<String>,
+
 	/// Whether the input box is currently visible.
 	#[serde(default)]
 	pub Visible:bool,

@@ -23,13 +23,18 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// An `ActionEffect` that resolves to `()` on success.
 pub fn WriteFileBytes(
 	Path:PathBuf,
+
 	Content:Vec<u8>,
+
 	Create:bool,
+
 	Overwrite:bool,
 ) -> ActionEffect<Arc<dyn FileSystemWriter>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Writer:Arc<dyn FileSystemWriter>| {
 		let PathClone = Path.clone();
+
 		let ContentClone = Content.clone();
+
 		Box::pin(async move { Writer.WriteFile(&PathClone, ContentClone, Create, Overwrite).await })
 	}))
 }

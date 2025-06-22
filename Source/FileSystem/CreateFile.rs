@@ -22,6 +22,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn CreateFile(Path:PathBuf) -> ActionEffect<Arc<dyn FileSystemWriter>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Writer:Arc<dyn FileSystemWriter>| {
 		let PathClone = Path.clone();
+
 		Box::pin(async move { Writer.CreateFile(&PathClone).await })
 	}))
 }

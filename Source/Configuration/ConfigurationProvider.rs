@@ -37,7 +37,9 @@ pub trait ConfigurationProvider: Environment + Send + Sync {
 	/// `serde_json::Value`.
 	async fn GetConfigurationValue(
 		&self,
+
 		Section:Option<String>,
+
 		Overrides:ConfigurationOverridesDTO,
 	) -> Result<Value, CommonError>;
 
@@ -54,10 +56,15 @@ pub trait ConfigurationProvider: Environment + Send + Sync {
 	///   settings.
 	async fn UpdateConfigurationValue(
 		&self,
+
 		Key:String,
+
 		ValueToSet:Value,
+
 		Target:ConfigurationTarget,
+
 		Overrides:ConfigurationOverridesDTO,
+
 		ScopeToLanguage:Option<bool>,
 	) -> Result<(), CommonError>;
 }

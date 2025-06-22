@@ -18,14 +18,20 @@ use crate::{Environment::Requires::Requires, Error::CommonError::CommonError};
 /// # Example
 ///
 /// ```ignore
-/// // A function that reads a file using an effect.
-/// async fn ReadMyFile(RunTime: Arc<impl ApplicationRunTime>) -> Result<Vec<u8>, CommonError> {
-///     let ReadEffect = FileSystem::ReadFile(PathBuf::from("/path/to/file.txt"));
+// A function that reads a file using an effect.
+/// async fn ReadMyFile(RunTime: Arc<impl ApplicationRunTime>) ->
+/// Result<Vec<u8>, CommonError> {
+
+///     let ReadEffect =
+/// FileSystem::ReadFile(PathBuf::from("/path/to/file.txt"));
+
 ///     ExecuteEffect(RunTime, ReadEffect).await
 /// }
+
 /// ```
 pub async fn ExecuteEffect<TRunTime, TCapabilityProvider, TError, TOutput>(
 	RunTime:Arc<TRunTime>,
+
 	Effect:ActionEffect<Arc<TCapabilityProvider>, TError, TOutput>,
 ) -> Result<TOutput, TError>
 where

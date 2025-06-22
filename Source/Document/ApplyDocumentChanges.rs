@@ -36,15 +36,22 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// An `ActionEffect` that resolves to `()` on success.
 pub fn ApplyDocumentChanges(
 	URI:Url,
+
 	NewVersionIdentifier:i64,
+
 	ChangesDTOCollection:Value,
+
 	IsDirtyAfterChange:bool,
+
 	IsUndoing:bool,
+
 	IsRedoing:bool,
 ) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn DocumentProvider>| {
 		let URIClone = URI.clone();
+
 		let ChangesClone = ChangesDTOCollection.clone();
+
 		Box::pin(async move {
 			Provider
 				.ApplyDocumentChanges(

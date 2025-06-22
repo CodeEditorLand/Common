@@ -22,6 +22,7 @@ pub trait ApplicationRunTime: HasEnvironment + Send + Sync + 'static {
 	/// its environment and passing it to the effect's execution logic.
 	async fn Run<TCapabilityProvider, TError, TOutput>(
 		&self,
+
 		Effect:ActionEffect<Arc<TCapabilityProvider>, TError, TOutput>,
 	) -> Result<TOutput, TError>
 	where
@@ -37,6 +38,7 @@ pub trait ApplicationRunTime: HasEnvironment + Send + Sync + 'static {
 impl<TRunTime:ApplicationRunTime> ApplicationRunTime for Arc<TRunTime> {
 	async fn Run<TCapabilityProvider, TError, TOutput>(
 		&self,
+
 		Effect:ActionEffect<Arc<TCapabilityProvider>, TError, TOutput>,
 	) -> Result<TOutput, TError>
 	where

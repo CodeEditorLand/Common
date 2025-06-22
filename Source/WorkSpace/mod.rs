@@ -8,15 +8,24 @@
 
 // --- Trait Definitions ---
 pub mod WorkSpaceEditApplier;
+
 pub mod WorkSpaceProvider;
 
 // --- Effect Constructors ---
 pub mod ApplyWorkSpaceEdit;
+
 pub mod FindFilesInWorkSpace;
+
 pub mod GetWorkSpaceConfigurationPath;
+
 pub mod GetWorkSpaceFolderInfo;
+
 pub mod GetWorkSpaceFoldersInfo;
+
 pub mod GetWorkSpaceName;
+
 pub mod IsWorkSpaceTrusted;
+
 pub mod OpenFile;
+
 pub mod RequestWorkSpaceTrust;

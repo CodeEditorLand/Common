@@ -21,10 +21,12 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// An `ActionEffect` that resolves to `()` on success.
 pub fn RevealOutputChannel(
 	ChannelIdentifier:String,
+
 	PreserveFocus:bool,
 ) -> ActionEffect<Arc<dyn OutputChannelManager>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Manager:Arc<dyn OutputChannelManager>| {
 		let IdentifierClone = ChannelIdentifier.clone();
+
 		Box::pin(async move { Manager.Reveal(IdentifierClone, PreserveFocus).await })
 	}))
 }

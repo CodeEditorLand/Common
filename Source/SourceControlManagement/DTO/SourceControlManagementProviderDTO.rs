@@ -13,17 +13,23 @@ use crate::SourceControlManagement::DTO::SourceControlInputBoxDTO::SourceControl
 #[serde(rename_all = "PascalCase")]
 pub struct SourceControlManagementProviderDTO {
 	pub Handle:u32,
+
 	pub Label:String,
+
 	/// The root URI of the repository this provider is managing. Serialized
 	/// `UriComponents`.
 	pub RootURI:Option<Value>,
+
 	/// An optional count of changed resources, often displayed as a badge.
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub Count:Option<u32>,
+
 	/// The template for the commit message input box.
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub CommitTemplate:Option<String>,
-	/// The state of the SourceControlManagement input box (commit message area).
+
+	/// The state of the SourceControlManagement input box (commit message
+	/// area).
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub InputBox:Option<SourceControlInputBoxDTO>,
 }

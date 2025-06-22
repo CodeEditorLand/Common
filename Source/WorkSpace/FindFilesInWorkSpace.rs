@@ -30,14 +30,20 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// An `ActionEffect` that resolves with a `Vec<Url>` of the matching file URIs.
 pub fn FindFilesInWorkSpace(
 	IncludePatternDTO:Value,
+
 	ExcludePatternDTO:Option<Value>,
+
 	MaxResults:Option<usize>,
+
 	UseIgnoreFiles:bool,
+
 	FollowSymlinks:bool,
 ) -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, Vec<Url>> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
 		let IncludeClone = IncludePatternDTO.clone();
+
 		let ExcludeClone = ExcludePatternDTO.clone();
+
 		Box::pin(async move {
 			Provider
 				.FindFilesInWorkSpace(IncludeClone, ExcludeClone, MaxResults, UseIgnoreFiles, FollowSymlinks)

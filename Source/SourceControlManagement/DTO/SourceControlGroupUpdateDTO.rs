@@ -1,6 +1,7 @@
 //! # SourceControlGroupUpdateDTO
 //!
-//! Defines the DTO for updating the properties of an SourceControlManagement resource group.
+//! Defines the DTO for updating the properties of an SourceControlManagement
+//! resource group.
 
 use serde::{Deserialize, Serialize};
 
@@ -12,8 +13,10 @@ use serde::{Deserialize, Serialize};
 pub struct SourceControlGroupUpdateDTO {
 	/// The handle of the provider that owns the group.
 	pub ProviderHandle:u32,
+
 	/// The unique identifier for the group within its provider.
 	pub GroupID:String,
+
 	/// The new human-readable label for the group.
 	pub Label:String,
 	// Other properties like `HideWhenEmpty` could be added here.

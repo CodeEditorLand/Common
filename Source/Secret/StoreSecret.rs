@@ -22,13 +22,18 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// An `ActionEffect` that resolves to `()` on success.
 pub fn StoreSecret(
 	ExtensionIdentifier:String,
+
 	Key:String,
+
 	Value:String,
 ) -> ActionEffect<Arc<dyn SecretProvider>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn SecretProvider>| {
 		let ExtensionIdentifierClone = ExtensionIdentifier.clone();
+
 		let KeyClone = Key.clone();
+
 		let ValueClone = Value.clone();
+
 		Box::pin(async move { Provider.StoreSecret(ExtensionIdentifierClone, KeyClone, ValueClone).await })
 	}))
 }

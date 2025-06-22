@@ -30,10 +30,12 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// otherwise.
 pub fn ProvideHover(
 	DocumentURI:Url,
+
 	PositionDTO:PositionDTO,
 ) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<HoverResultDTO>> {
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let URIClone = DocumentURI.clone();
+
 		Box::pin(async move { Registry.ProvideHover(URIClone, PositionDTO).await })
 	}))
 }

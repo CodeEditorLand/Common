@@ -15,6 +15,7 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// information about the current workspace.
 ///
 /// This trait is the primary interface for interacting with workspace folders,
+
 /// configuration paths, trust settings, and for performing workspace-wide
 /// operations like finding files.
 #[async_trait]
@@ -59,10 +60,15 @@ pub trait WorkSpaceProvider: Environment + Send + Sync {
 	/// * `FollowSymlinks`: Whether to follow symbolic links during the search.
 	async fn FindFilesInWorkSpace(
 		&self,
+
 		IncludePatternDTO:Value,
+
 		ExcludePatternDTO:Option<Value>,
+
 		MaxResults:Option<usize>,
+
 		UseIgnoreFiles:bool,
+
 		FollowSymlinks:bool,
 	) -> Result<Vec<Url>, CommonError>;
 

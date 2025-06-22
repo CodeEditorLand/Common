@@ -11,9 +11,15 @@ pub mod OutputChannelManager;
 
 // --- Effect Constructors ---
 pub mod AppendToOutputChannel;
+
 pub mod ClearOutputChannel;
+
 pub mod CloseOutputChannelView;
+
 pub mod DisposeOutputChannel;
+
 pub mod RegisterOutputChannel;
+
 pub mod ReplaceOutputChannelContent;
+
 pub mod RevealOutputChannel;

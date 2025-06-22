@@ -10,6 +10,7 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// output channels.
 ///
 /// Output channels are a common feature in IDEs, used for displaying logs,
+
 /// build outputs, or other textual information from extensions or system
 /// processes.
 #[async_trait]

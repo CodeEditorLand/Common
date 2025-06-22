@@ -16,10 +16,13 @@ use serde::{Deserialize, Serialize};
 pub enum FileTypeDTO {
 	/// The file type is unknown.
 	Unknown = 0,
+
 	/// A regular file.
 	File = 1,
+
 	/// A directory.
 	Directory = 2,
+
 	/// A symbolic link.
 	SymbolicLink = 64,
 }

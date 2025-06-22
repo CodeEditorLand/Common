@@ -31,14 +31,20 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// the sidecar.
 pub fn SendRequestToSidecar(
 	SidecarIdentifier:String,
+
 	Method:String,
+
 	Parameters:Value,
+
 	TimeoutMilliseconds:u64,
 ) -> ActionEffect<Arc<dyn IPCProvider>, CommonError, Value> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn IPCProvider>| {
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
+
 		let MethodClone = Method.clone();
+
 		let ParametersClone = Parameters.clone();
+
 		Box::pin(async move {
 			Provider
 				.SendRequestToSidecar(SidecarIdentifierClone, MethodClone, ParametersClone, TimeoutMilliseconds)

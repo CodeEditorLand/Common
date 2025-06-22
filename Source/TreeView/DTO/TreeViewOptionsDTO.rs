@@ -13,8 +13,10 @@ use serde::{Deserialize, Serialize};
 pub struct TreeViewOptionsDTO {
 	#[serde(default)]
 	pub CanSelectMany:bool,
+
 	#[serde(default)]
 	pub HasHandleDrag:bool,
+
 	#[serde(default)]
 	pub HasHandleDrop:bool,
 }

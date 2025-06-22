@@ -23,6 +23,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn OpenFile(Path:PathBuf) -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
 		let PathClone = Path.clone();
+
 		Box::pin(async move { Provider.OpenFile(PathClone).await })
 	}))
 }

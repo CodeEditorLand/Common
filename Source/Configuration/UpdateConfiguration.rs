@@ -43,22 +43,31 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// An `ActionEffect` that resolves to `()` on success.
 pub fn UpdateConfiguration(
 	Key:String,
+
 	ValueToSet:Value,
+
 	TargetAsU32:u32,
+
 	OverridesValue:Value,
+
 	ScopeToLanguage:Option<bool>,
 ) -> ActionEffect<Arc<dyn ConfigurationProvider>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn ConfigurationProvider>| {
 		let KeyClone = Key.clone();
+
 		let ValueToSetClone = ValueToSet.clone();
+
 		let OverridesValueClone = OverridesValue.clone();
+
 		let ScopeToLanguageClone = ScopeToLanguage;
+
 		Box::pin(async move {
 			// Deserialize the integer target into the enum.
 			let TargetParsed:ConfigurationTarget =
 				serde_json::from_value(Value::from(TargetAsU32)).map_err(|Error| {
 					CommonError::InvalidArgument {
 						ArgumentName:"Target".to_string(),
+
 						Reason:format!("Failed to parse ConfigurationTarget from u32 {}: {}", TargetAsU32, Error),
 					}
 				})?;
@@ -68,6 +77,7 @@ pub fn UpdateConfiguration(
 				serde_json::from_value(OverridesValueClone).map_err(|Error| {
 					CommonError::InvalidArgument {
 						ArgumentName:"OverridesValue".to_string(),
+
 						Reason:format!("Failed to parse ConfigurationOverridesDTO: {}", Error),
 					}
 				})?;

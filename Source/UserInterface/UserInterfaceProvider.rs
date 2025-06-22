@@ -20,6 +20,7 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can perform
 /// UI interactions that require user input, such as showing dialogs, messages,
+
 /// and quick pick menus.
 ///
 /// This trait is implemented by `MountainEnvironment`, and the methods are
@@ -35,8 +36,11 @@ pub trait UserInterfaceProvider: Environment + Send + Sync {
 	/// action button, or `None` if the message was dismissed.
 	async fn ShowMessage(
 		&self,
+
 		Severity:MessageSeverity,
+
 		Message:String,
+
 		Options:Option<Value>,
 	) -> Result<Option<String>, CommonError>;
 
@@ -61,7 +65,9 @@ pub trait UserInterfaceProvider: Environment + Send + Sync {
 	/// selected items, or `None` if the quick pick was cancelled.
 	async fn ShowQuickPick(
 		&self,
+
 		Items:Vec<QuickPickItemDTO>,
+
 		Options:Option<QuickPickOptionsDTO>,
 	) -> Result<Option<Vec<String>>, CommonError>;
 

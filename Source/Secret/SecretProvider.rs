@@ -1,6 +1,7 @@
 //! # SecretProvider Trait
 //!
 //! Defines the abstract service trait for secure storage capabilities,
+
 //! abstracting interactions with an OS-level keychain or credential store.
 
 use async_trait::async_trait;

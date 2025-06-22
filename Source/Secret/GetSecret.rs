@@ -22,11 +22,14 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// secret's value or `None` if the secret does not exist.
 pub fn GetSecret(
 	ExtensionIdentifier:String,
+
 	Key:String,
 ) -> ActionEffect<Arc<dyn SecretProvider>, CommonError, Option<String>> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn SecretProvider>| {
 		let ExtensionIdentifierClone = ExtensionIdentifier.clone();
+
 		let KeyClone = Key.clone();
+
 		Box::pin(async move { Provider.GetSecret(ExtensionIdentifierClone, KeyClone).await })
 	}))
 }

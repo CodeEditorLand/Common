@@ -14,6 +14,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError,
 /// handshake or ping a sidecar process to confirm connectivity.
 ///
 /// This function is a specialized wrapper around `SendNotificationToSidecar`,
+
 /// pre-filling the method name and parameters for a standard handshake
 /// notification.
 ///

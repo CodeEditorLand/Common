@@ -12,7 +12,11 @@ pub mod DocumentProvider;
 
 // --- Effect Constructors ---
 pub mod ApplyDocumentChanges;
+
 pub mod OpenDocument;
+
 pub mod SaveAllDocuments;
+
 pub mod SaveDocument;
+
 pub mod SaveDocumentAs;

@@ -29,6 +29,7 @@ pub trait TerminalProvider: Environment + Send + Sync {
 	/// # Parameters
 	/// * `OptionsValue`: A `serde_json::Value` DTO representing
 	///   `TerminalOptions`, which can specify the name, shell path, arguments,
+
 	///   etc.
 	///
 	/// # Returns

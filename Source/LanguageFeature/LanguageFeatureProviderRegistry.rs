@@ -5,6 +5,7 @@
 // Responsibilities:
 //   - Provide a contract for registering and unregistering providers.
 //   - Define the invocation signature for every language feature (e.g., hover,
+
 //     completion).
 
 //! # LanguageFeatureProviderRegistry Trait
@@ -29,6 +30,7 @@ use super::DTO::{
 use crate::{Environment::Environment::Environment, Error::CommonError::CommonError};
 
 /// An abstract service contract for an environment component that can register,
+
 /// unregister, and invoke all types of language feature providers (e.g., for
 /// completions, hovers, definitions).
 ///
@@ -53,10 +55,15 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 	/// A `Result` containing a unique handle (u32) for the new registration.
 	async fn RegisterProvider(
 		&self,
+
 		SidecarIdentifier:String,
+
 		ProviderType:ProviderType,
+
 		SelectorDTO:Value,
+
 		ExtensionIdentifierDTO:Value,
+
 		OptionsDTO:Option<Value /* ProviderOptionsDTO */>,
 	) -> Result<u32, CommonError>;
 
@@ -70,9 +77,12 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 
 	async fn ProvideCodeActions(
 		&self,
+
 		DocumentURI:Url,
+
 		// Range DTO
 		RangeOrSelectionDTO:Value,
+
 		// CodeActionContextDTO
 		ContextDTO:Value,
 	) -> Result<Option<Value /* CodeActionListDTO */>, CommonError>;
@@ -81,28 +91,38 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 
 	async fn ProvideCompletions(
 		&self,
+
 		DocumentURI:Url,
+
 		PositionDTO:PositionDTO,
+
 		ContextDTO:CompletionContextDTO,
+
 		CancellationTokenValue:Option<Value>,
 	) -> Result<Option<CompletionListDTO>, CommonError>;
 
 	async fn ProvideDefinition(
 		&self,
+
 		DocumentURI:Url,
+
 		PositionDTO:PositionDTO,
 	) -> Result<Option<Vec<LocationDTO>>, CommonError>;
 
 	async fn ProvideDocumentFormattingEdits(
 		&self,
+
 		DocumentURI:Url,
+
 		// FormattingOptions DTO
 		OptionsDTO:Value,
 	) -> Result<Option<Vec<TextEditDTO>>, CommonError>;
 
 	async fn ProvideDocumentHighlights(
 		&self,
+
 		DocumentURI:Url,
+
 		PositionDTO:PositionDTO,
 	) -> Result<Option<Value /* Vec<DocumentHighlightDTO> */>, CommonError>;
 
@@ -110,23 +130,31 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 
 	async fn ProvideDocumentRangeFormattingEdits(
 		&self,
+
 		DocumentURI:Url,
+
 		// Range DTO
 		RangeDTO:Value,
+
 		// FormattingOptions DTO
 		OptionsDTO:Value,
 	) -> Result<Option<Vec<TextEditDTO>>, CommonError>;
 
 	async fn ProvideHover(
 		&self,
+
 		DocumentURI:Url,
+
 		PositionDTO:PositionDTO,
 	) -> Result<Option<HoverResultDTO>, CommonError>;
 
 	async fn ProvideReferences(
 		&self,
+
 		DocumentURI:Url,
+
 		PositionDTO:PositionDTO,
+
 		// ReferenceContext DTO
 		ContextDTO:Value,
 	) -> Result<Option<Vec<LocationDTO>>, CommonError>;

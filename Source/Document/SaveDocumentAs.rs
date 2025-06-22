@@ -35,11 +35,14 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// final `Url` of the saved file or `None` if the operation was cancelled.
 pub fn SaveDocumentAs(
 	OriginalURI:Url,
+
 	NewTargetURI:Option<Url>,
 ) -> ActionEffect<Arc<dyn DocumentProvider>, CommonError, Option<Url>> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn DocumentProvider>| {
 		let OriginalURIClone = OriginalURI.clone();
+
 		let NewTargetURIClone = NewTargetURI.clone();
+
 		Box::pin(async move { Provider.SaveDocumentAs(OriginalURIClone, NewTargetURIClone).await })
 	}))
 }

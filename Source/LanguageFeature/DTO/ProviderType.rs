@@ -12,30 +12,55 @@ use serde::{Deserialize, Serialize};
 #[repr(u8)]
 pub enum ProviderType {
 	Completion = 0,
+
 	Hover = 1,
+
 	SignatureHelp = 2,
+
 	Definition = 3,
+
 	TypeDefinition = 4,
+
 	Implementation = 5,
+
 	References = 6,
+
 	DocumentHighlight = 7,
+
 	DocumentSymbol = 8,
+
 	WorkSpaceSymbol = 9,
+
 	CodeAction = 10,
+
 	CodeLens = 11,
+
 	DocumentFormatting = 12,
+
 	DocumentRangeFormatting = 13,
+
 	OnTypeFormatting = 14,
+
 	Rename = 15,
+
 	DocumentLink = 16,
+
 	Color = 17,
+
 	FoldingRange = 18,
+
 	Declaration = 19,
+
 	SelectionRange = 20,
+
 	InlayHint = 21,
+
 	CallHierarchy = 22,
+
 	SemanticTokens = 23,
+
 	LinkedEditingRange = 24,
+
 	TypeHierarchy = 25,
 }
 

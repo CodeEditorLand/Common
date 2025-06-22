@@ -25,11 +25,14 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// An `ActionEffect` that resolves to `()` on success.
 pub fn UnregisterCommand(
 	SidecarIdentifier:String,
+
 	CommandIdentifier:String,
 ) -> ActionEffect<Arc<dyn CommandExecutor>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Executor:Arc<dyn CommandExecutor>| {
 		let SidecarIdentifierClone = SidecarIdentifier.clone();
+
 		let CommandIdentifierClone = CommandIdentifier.clone();
+
 		Box::pin(async move { Executor.UnregisterCommand(SidecarIdentifierClone, CommandIdentifierClone).await })
 	}))
 }

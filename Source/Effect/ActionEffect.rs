@@ -54,8 +54,10 @@ impl<TCapability, TError, TOutput> ActionEffect<TCapability, TError, TOutput> {
 		F: Fn(TOutput) -> TNewOutput + Send + Sync + 'static + Copy, {
 		ActionEffect::New(Arc::new(move |Capability| {
 			let Function = self.Function.clone();
+
 			Box::pin(async move {
 				let Result = (Function)(Capability).await?;
+
 				Ok(_Function(Result))
 			})
 		}))

@@ -7,6 +7,7 @@
 //! # CustomEditor Service
 //!
 //! This module defines the abstract contract for the Custom Editor service,
+
 //! which allows extensions to provide custom, WebView-based editors for
 //! specific file types.
 

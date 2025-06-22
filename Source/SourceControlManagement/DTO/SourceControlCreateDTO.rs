@@ -14,8 +14,10 @@ use crate::Utility::Serialization::URLSerializationHelper;
 pub struct SourceControlCreateDTO {
 	/// The unique identifier for this source control provider.
 	pub ID:String,
+
 	/// The human-readable label for this provider (e.g., "Git").
 	pub Label:String,
+
 	/// The root URI of the repository this provider is managing.
 	#[serde(with = "URLSerializationHelper")]
 	pub RootUri:Url,

@@ -26,6 +26,7 @@ pub fn ShowSaveDialog(
 ) -> ActionEffect<Arc<dyn UserInterfaceProvider>, CommonError, Option<PathBuf>> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn UserInterfaceProvider>| {
 		let OptionsClone = Options.clone();
+
 		Box::pin(async move { Provider.ShowSaveDialog(OptionsClone).await })
 	}))
 }

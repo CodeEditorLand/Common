@@ -25,6 +25,7 @@ pub fn CloseOutputChannelView(
 ) -> ActionEffect<Arc<dyn OutputChannelManager>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Manager:Arc<dyn OutputChannelManager>| {
 		let IdentifierClone = ChannelIdentifier.clone();
+
 		Box::pin(async move { Manager.Close(IdentifierClone).await })
 	}))
 }

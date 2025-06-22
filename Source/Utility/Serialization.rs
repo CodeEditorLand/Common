@@ -8,6 +8,7 @@
 /// A helper module for serializing and deserializing `url::Url` with `serde`.
 /// This is used in DTOs where a `Url` field needs to be serialized to a string.
 pub mod URLSerializationHelper {
+
 	use serde::{self, Deserialize, Deserializer, Serializer};
 	use url::Url;
 
@@ -21,6 +22,7 @@ pub mod URLSerializationHelper {
 	where
 		D: Deserializer<'de>, {
 		let StringValue = String::deserialize(DeserializerInstance)?;
+
 		Url::parse(&StringValue).map_err(serde::de::Error::custom)
 	}
 }

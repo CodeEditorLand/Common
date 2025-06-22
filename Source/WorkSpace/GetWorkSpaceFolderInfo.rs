@@ -30,6 +30,7 @@ pub fn GetWorkSpaceFolderInfo(
 ) -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, Option<(Url, String, usize)>> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
 		let URIClone = URIToMatch.clone();
+
 		Box::pin(async move { Provider.GetWorkSpaceFolderInfo(URIClone).await })
 	}))
 }

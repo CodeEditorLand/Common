@@ -14,62 +14,111 @@
 pub enum ProxyTarget {
 	// --- For ExtHost -> MainThread calls (Cocoon -> Mountain) ---
 	MainThreadCommands,
+
 	MainThreadConfiguration,
+
 	MainThreadDiagnostics,
+
 	MainThreadDocuments,
+
 	MainThreadExtensionEnablement,
+
 	MainThreadFileSystem,
+
 	MainThreadLanguageFeatures,
+
 	MainThreadLanguages,
+
 	MainThreadOutputService,
+
 	MainThreadSecrets,
+
 	MainThreadStorage,
+
 	MainThreadTerminalService,
+
 	MainThreadWindow,
+
 	MainThreadWebViews,
+
 	MainThreadTelemetry,
+
 	MainThreadWorkSpace,
+
 	MainThreadStatusBar,
+
 	MainThreadSourceControlManagement,
+
 	MainThreadTesting,
+
 	MainThreadDebugService,
+
 	MainThreadTaskService,
+
 	MainThreadCustomEditors,
+
 	MainThreadTreeView,
 
 	// --- For MainThread -> ExtHost calls (Mountain -> Cocoon) ---
 	ExtHostCommands,
+
 	ExtHostConfiguration,
+
 	ExtHostDiagnostics,
+
 	ExtHostDocuments,
+
 	ExtHostExtensionService,
+
 	ExtHostFileSystemInfo,
+
 	ExtHostLanguageFeatures,
+
 	ExtHostLanguages,
+
 	ExtHostOutputService,
+
 	ExtHostStorage,
+
 	ExtHostTerminalService,
+
 	ExtHostEnvironment,
+
 	ExtHostWebViews,
+
 	ExtHostTelemetry,
+
 	ExtHostChatProvider,
+
 	ExtHostExtensionEnablement,
+
 	ExtHostCustomEditors,
+
 	ExtHostQuickInput,
+
 	ExtHostMessageService,
+
 	ExtHostDialogs,
+
 	ExtHostAuthentication,
+
 	ExtHostDebugService,
+
 	ExtHostTaskService,
+
 	ExtHostManagedSockets,
+
 	ExtHostTreeView,
+
 	ExtHostSourceControlManagement,
+
 	ExtHostTesting,
 }
 
 impl ProxyTarget {
 	/// Returns a string prefix representing the target, used in constructing
 	/// fully qualified RPC method names (e.g.,
+
 	/// `MainThreadCommands$ExecuteCommand`).
 	pub fn GetTargetPrefix(&self) -> String { format!("{:?}", self) }
 }

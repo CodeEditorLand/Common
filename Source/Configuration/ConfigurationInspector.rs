@@ -32,7 +32,9 @@ pub trait ConfigurationInspector: Environment + Send + Sync {
 	/// `None` if the key is not found in any configuration source.
 	async fn InspectConfigurationValue(
 		&self,
+
 		Key:String,
+
 		Overrides:ConfigurationOverridesDTO,
 	) -> Result<Option<InspectResultDataDTO>, CommonError>;
 }

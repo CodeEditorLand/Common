@@ -54,12 +54,14 @@ pub enum CommonError {
 	// --- Command System Errors ---
 	#[error("Command '{CommandIdentifier}' execution failed: {Reason}")]
 	CommandExecution { CommandIdentifier:String, Reason:String },
+
 	#[error("Command '{Identifier}' not found")]
 	CommandNotFound { Identifier:String },
 
 	// --- Language Feature Provider Errors ---
 	#[error("Language provider registration failed for '{ProviderType}': {Reason}")]
 	ProviderRegistration { ProviderType:String, Reason:String },
+
 	#[error("Language provider '{ProviderIdentifier}' invocation failed: {Reason}")]
 	ProviderInvocation { ProviderIdentifier:String, Reason:String },
 
@@ -87,15 +89,20 @@ impl CommonError {
 	/// contextualization.
 	pub fn FromStandardIOError(IOError:std::io::Error, Path:PathBuf, OperationContext:&str) -> Self {
 		let Description = IOError.to_string();
+
 		match IOError.kind() {
 			std::io::ErrorKind::NotFound => CommonError::FileSystemNotFound(Path),
+
 			std::io::ErrorKind::PermissionDenied => {
 				CommonError::FileSystemPermissionDenied { Path, Reason:Description }
 			},
+
 			std::io::ErrorKind::AlreadyExists => CommonError::FileSystemFileExists(Path),
+
 			_ => {
 				CommonError::FileSystemIO {
 					Path,
+
 					Description:format!("Operation '{}' failed: {}", OperationContext, Description),
 				}
 			},

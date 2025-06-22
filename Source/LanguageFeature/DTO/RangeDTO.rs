@@ -13,10 +13,13 @@ use serde::{Deserialize, Serialize};
 pub struct RangeDTO {
 	/// The starting line number of the range (zero-based).
 	pub StartLineNumber:u32,
+
 	/// The starting column of the range (zero-based).
 	pub StartColumn:u32,
+
 	/// The ending line number of the range (zero-based).
 	pub EndLineNumber:u32,
+
 	/// The ending column of the range (zero-based).
 	pub EndColumn:u32,
 }

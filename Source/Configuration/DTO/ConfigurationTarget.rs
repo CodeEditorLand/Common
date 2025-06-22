@@ -15,16 +15,22 @@ use serde::{Deserialize, Serialize};
 pub enum ConfigurationTarget {
 	/// Target the user settings file for the local machine.
 	UserLocal = 1,
+
 	/// Target the user settings, potentially synced across machines.
 	User = 2,
+
 	/// Target the workspace settings file (e.g., `.vscode/settings.json`).
 	WorkSpace = 3,
+
 	/// Target a specific folder's settings in a multi-root workspace.
 	WorkSpaceFolder = 4,
+
 	/// Target the default values (typically a read-only operation).
 	Default = 5,
+
 	/// Target the in-memory configuration for the current session only.
 	Memory = 6,
+
 	/// Target the policy-enforced configuration (read-only).
 	Policy = 7,
 }

@@ -14,34 +14,60 @@
 
 // --- Core Architecture ---
 pub mod Effect;
+
 pub mod Environment;
+
 pub mod Error;
+
 pub mod Utility;
 
 // --- Service Contracts (alphabetical) ---
 pub mod Command;
+
 pub mod Configuration;
+
 pub mod CustomEditor;
+
 pub mod Debug;
+
 pub mod Diagnostic;
+
 pub mod Document;
+
 pub mod ExtensionManagement;
+
 pub mod FileSystem;
+
 pub mod IPC;
+
 pub mod Keybinding;
+
 pub mod LanguageFeature;
+
 pub mod Output;
+
 pub mod Search;
+
 pub mod Secret;
+
 pub mod SourceControlManagement;
+
 pub mod StatusBar;
+
 pub mod Storage;
+
 pub mod Synchronization;
+
 pub mod Terminal;
+
 pub mod Testing;
+
 pub mod TreeView;
+
 pub mod UserInterface;
+
 pub mod WebView;
+
 pub mod WorkSpace;
 
 // --- Global DTO Module ---

@@ -83,7 +83,8 @@ _returns a description of that effect_.
 
 ```rust
 async fn read_my_file(fs: &impl FileSystem) -> Result<Vec<u8>, Error> {
-    fs.read("/path/to/file").await // The side effect happens here.
+// The side effect happens here.
+    fs.read("/path/to/file").await
 }
 ```
 
@@ -197,15 +198,18 @@ follows:
     concrete implementation for a `Common` trait.
 
     ```rust
-    // In Mountain/Source/Environment/FileSystemProvider.rs
+// In Mountain/Source/Environment/FileSystemProvider.rs
+   
     use Common::FileSystem::{FileSystemReader, FileSystemWriter};
 
     #[async_trait]
     impl FileSystemReader for MountainEnvironment {
         async fn ReadFile(&self, Path: &PathBuf) -> Result<Vec<u8>, CommonError> {
-            // ... actual `tokio::fs` call ...
+// ... actual `tokio::fs` call ...
+           
         }
-        // ...
+// ...
+       
     }
     ```
 
@@ -213,7 +217,8 @@ follows:
     effect.
 
     ```rust
-    // In a Mountain service or command
+// In a Mountain service or command
+   
     use Common::FileSystem;
     use Common::Effect::ApplicationRunTime;
 

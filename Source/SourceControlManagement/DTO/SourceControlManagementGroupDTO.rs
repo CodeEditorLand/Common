@@ -1,7 +1,7 @@
 //! # SourceControlManagementGroupDTO
 //!
-//! Defines the DTO for an SourceControlManagement resource group (e.g., "Changes", "Staged
-//! Changes").
+//! Defines the DTO for an SourceControlManagement resource group (e.g.,
+//! "Changes", "Staged Changes").
 
 use serde::{Deserialize, Serialize};
 
@@ -10,7 +10,9 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "PascalCase")]
 pub struct SourceControlManagementGroupDTO {
 	pub ProviderHandle:u32,
+
 	pub Identifier:String,
+
 	pub Label:String,
 	// Add other properties like `HideWhenEmpty`, etc.
 }

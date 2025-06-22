@@ -29,6 +29,7 @@ pub fn GetAllDiagnostics(
 ) -> ActionEffect<Arc<dyn DiagnosticManager>, CommonError, Value> {
 	ActionEffect::New(Arc::new(move |Manager:Arc<dyn DiagnosticManager>| {
 		let FilterClone = ResourceURIFilterOption.clone();
+
 		Box::pin(async move { Manager.GetAllDiagnostics(FilterClone).await })
 	}))
 }

@@ -20,6 +20,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 pub fn ClearOutputChannel(ChannelIdentifier:String) -> ActionEffect<Arc<dyn OutputChannelManager>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Manager:Arc<dyn OutputChannelManager>| {
 		let IdentifierClone = ChannelIdentifier.clone();
+
 		Box::pin(async move { Manager.Clear(IdentifierClone).await })
 	}))
 }

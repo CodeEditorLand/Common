@@ -52,8 +52,11 @@ pub trait CustomEditorProvider: Environment + Send + Sync {
 	///   the editor.
 	async fn ResolveCustomEditor(
 		&self,
+
 		ViewType:String,
+
 		ResourceURI:Url,
+
 		WebViewPanelHandle:String,
 	) -> Result<(), CommonError>;
 }

@@ -8,6 +8,7 @@ use serde_json::Value;
 
 /// A serializable struct representing a workspace edit, which is a batch of
 /// changes that can include text edits and file operations (create, delete,
+
 /// rename). This is analogous to `vscode.WorkspaceEdit`.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 #[serde(rename_all = "PascalCase")]

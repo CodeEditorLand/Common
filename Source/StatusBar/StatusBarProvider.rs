@@ -62,6 +62,7 @@ pub trait StatusBarProvider: Environment + Send + Sync {
 	///
 	/// # Returns
 	/// A `Result` containing an optional DTO for the tooltip (e.g.,
+
 	/// `IMarkdownStringDTO`).
 	async fn ProvideTooltip(&self, EntryIdentifier:String) -> Result<Option<Value>, CommonError>;
 }

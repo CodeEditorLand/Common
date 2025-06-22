@@ -21,11 +21,14 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// newly created channel.
 pub fn RegisterOutputChannel(
 	Name:String,
+
 	LanguageIdentifier:Option<String>,
 ) -> ActionEffect<Arc<dyn OutputChannelManager>, CommonError, String> {
 	ActionEffect::New(Arc::new(move |Manager:Arc<dyn OutputChannelManager>| {
 		let NameClone = Name.clone();
+
 		let LanguageIdentifierClone = LanguageIdentifier.clone();
+
 		Box::pin(async move { Manager.RegisterChannel(NameClone, LanguageIdentifierClone).await })
 	}))
 }

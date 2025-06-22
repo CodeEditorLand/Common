@@ -26,8 +26,11 @@ pub trait IPCProvider: Environment + Send + Sync {
 	///   notification.
 	async fn SendNotificationToSidecar(
 		&self,
+
 		SidecarIdentifier:String,
+
 		Method:String,
+
 		Parameters:Value,
 	) -> Result<(), CommonError>;
 
@@ -46,9 +49,13 @@ pub trait IPCProvider: Environment + Send + Sync {
 	/// sidecar.
 	async fn SendRequestToSidecar(
 		&self,
+
 		SidecarIdentifier:String,
+
 		Method:String,
+
 		Parameters:Value,
+
 		TimeoutMilliseconds:u64,
 	) -> Result<Value, CommonError>;
 }
