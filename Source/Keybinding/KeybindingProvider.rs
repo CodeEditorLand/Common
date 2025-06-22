@@ -27,5 +27,5 @@ pub trait KeybindingProvider: Environment + Send + Sync {
 	/// # Returns
 	/// A `Result` containing a `Value` that is a JSON array of
 	/// `KeybindingRuleDTO`s.
-	async fn GetResolvedKeybindings(&self) -> Result<Value, CommonError>;
+	async fn GetResolvedKeybinding(&self) -> Result<Value, CommonError>;
 }
