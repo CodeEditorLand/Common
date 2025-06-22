@@ -10,9 +10,6 @@
 pub mod WorkSpaceEditApplier;
 pub mod WorkSpaceProvider;
 
-// pub use self::{WorkSpaceEditApplier::WorkSpaceEditApplier,
-// WorkSpaceProvider::WorkSpaceProvider};
-
 // --- Effect Constructors ---
 pub mod ApplyWorkSpaceEdit;
 pub mod FindFilesInWorkSpace;
@@ -23,15 +20,3 @@ pub mod GetWorkSpaceName;
 pub mod IsWorkSpaceTrusted;
 pub mod OpenFile;
 pub mod RequestWorkSpaceTrust;
-
-// pub use self::{
-// 	ApplyWorkSpaceEdit::ApplyWorkSpaceEdit,
-// 	FindFilesInWorkSpace::FindFilesInWorkSpace,
-// 	GetWorkSpaceConfigurationPath::GetWorkSpaceConfigurationPath,
-// 	GetWorkSpaceFolderInfo::GetWorkSpaceFolderInfo,
-// 	GetWorkSpaceFoldersInfo::GetWorkSpaceFoldersInfo,
-// 	GetWorkSpaceName::GetWorkSpaceName,
-// 	IsWorkSpaceTrusted::IsWorkSpaceTrusted,
-// 	OpenFile::OpenFile,
-// 	RequestWorkSpaceTrust::RequestWorkSpaceTrust,
-// };

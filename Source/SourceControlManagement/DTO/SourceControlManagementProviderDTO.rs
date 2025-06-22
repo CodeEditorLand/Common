@@ -1,6 +1,6 @@
 //! # SourceControlManagementProviderDTO
 //!
-//! Defines the DTO for an SCM provider itself.
+//! Defines the DTO for an SourceControlManagement provider itself.
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -23,7 +23,7 @@ pub struct SourceControlManagementProviderDTO {
 	/// The template for the commit message input box.
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub CommitTemplate:Option<String>,
-	/// The state of the SCM input box (commit message area).
+	/// The state of the SourceControlManagement input box (commit message area).
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub InputBox:Option<SourceControlInputBoxDTO>,
 }

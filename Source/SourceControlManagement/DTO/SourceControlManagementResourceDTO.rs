@@ -6,7 +6,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// A serializable struct representing a single item within an SCM group, such
+/// A serializable struct representing a single item within an SourceControlManagement group, such
 /// as a file that has been modified, added, or deleted.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]

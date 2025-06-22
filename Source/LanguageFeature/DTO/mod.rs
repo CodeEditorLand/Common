@@ -15,10 +15,3 @@ pub mod PositionDTO;
 pub mod ProviderType;
 pub mod RangeDTO;
 pub mod TextEditDTO;
-
-// pub use self::{
-// 	HoverResultDTO::HoverResultDTO,
-// 	IMarkdownStringDTO::IMarkdownStringDTO,
-// 	PositionDTO::PositionDTO,
-// 	RangeDTO::RangeDTO,
-// };

@@ -8,7 +8,6 @@
 
 // --- Trait Definition ---
 pub mod OutputChannelManager;
-// pub use self::OutputChannelManager::OutputChannelManager;
 
 // --- Effect Constructors ---
 pub mod AppendToOutputChannel;
@@ -18,13 +17,3 @@ pub mod DisposeOutputChannel;
 pub mod RegisterOutputChannel;
 pub mod ReplaceOutputChannelContent;
 pub mod RevealOutputChannel;
-
-// pub use self::{
-// 	AppendToOutputChannel::AppendToOutputChannel,
-// 	ClearOutputChannel::ClearOutputChannel,
-// 	CloseOutputChannelView::CloseOutputChannelView,
-// 	DisposeOutputChannel::DisposeOutputChannel,
-// 	RegisterOutputChannel::RegisterOutputChannel,
-// 	ReplaceOutputChannelContent::ReplaceOutputChannelContent,
-// 	RevealOutputChannel::RevealOutputChannel,
-// };

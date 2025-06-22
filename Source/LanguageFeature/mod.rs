@@ -16,7 +16,6 @@
 
 // --- Trait Definition ---
 pub mod LanguageFeatureProviderRegistry;
-// pub use self::LanguageFeatureProviderRegistry::LanguageFeatureProviderRegistry;
 
 // --- Data Transfer Objects ---
 pub mod DTO;
@@ -28,30 +27,5 @@ pub mod RegisterProvider;
 pub mod UnregisterProvider;
 
 // Feature Invocation
-// pub mod PrepareRename;
-// pub mod ProvideCodeActions;
-// pub mod ProvideCodeLenses;
 pub mod ProvideCompletions;
-// pub mod ProvideDefinition;
-// pub mod ProvideDocumentFormattingEdits;
-// pub mod ProvideDocumentHighlights;
-// pub mod ProvideDocumentLinks;
-// pub mod ProvideDocumentRangeFormattingEdits;
 pub mod ProvideHover;
-// pub mod ProvideReferences;
-
-// pub use self::{
-// 	PrepareRename::PrepareRename,
-// 	ProvideCodeActions::ProvideCodeActions,
-// 	ProvideCodeLenses::ProvideCodeLenses,
-// 	ProvideCompletions::ProvideCompletions,
-// 	ProvideDefinition::ProvideDefinition,
-// 	ProvideDocumentFormattingEdits::ProvideDocumentFormattingEdits,
-// 	ProvideDocumentHighlights::ProvideDocumentHighlights,
-// 	ProvideDocumentLinks::ProvideDocumentLinks,
-// 	ProvideDocumentRangeFormattingEdits::ProvideDocumentRangeFormattingEdits,
-// 	ProvideHover::ProvideHover,
-// 	ProvideReferences::ProvideReferences,
-// 	RegisterProvider::RegisterProvider,
-// 	UnregisterProvider::UnregisterProvider,
-// };

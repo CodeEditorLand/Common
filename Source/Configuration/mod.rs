@@ -17,9 +17,6 @@
 pub mod ConfigurationInspector;
 pub mod ConfigurationProvider;
 
-// pub use self::{ConfigurationInspector::ConfigurationInspector,
-// ConfigurationProvider::ConfigurationProvider};
-
 // --- Data Transfer Objects ---
 pub mod DTO;
 
@@ -27,9 +24,3 @@ pub mod DTO;
 pub mod GetConfiguration;
 pub mod InspectConfiguration;
 pub mod UpdateConfiguration;
-
-// pub use self::{
-// 	GetConfiguration::GetConfiguration,
-// 	InspectConfiguration::InspectConfiguration,
-// 	UpdateConfiguration::UpdateConfiguration,
-// };

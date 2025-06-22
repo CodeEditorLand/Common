@@ -14,20 +14,6 @@
 
 // --- Trait Definition ---
 pub mod StatusBarProvider;
-// pub use self::StatusBarProvider::StatusBarProvider;
 
 // --- Data Transfer Objects ---
 pub mod DTO;
-
-// --- Effect Constructors ---
-// pub mod DisposeStatusBarEntry;
-// pub mod DisposeStatusBarMessage;
-// pub mod SetStatusBarEntry;
-// pub mod SetStatusBarMessage;
-
-// pub use self::{
-// 	DisposeStatusBarEntry::DisposeStatusBarEntry,
-// 	DisposeStatusBarMessage::DisposeStatusBarMessage,
-// 	SetStatusBarEntry::SetStatusBarEntry,
-// 	SetStatusBarMessage::SetStatusBarMessage,
-// };

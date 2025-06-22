@@ -1,6 +1,6 @@
 //! # SourceControlGroupUpdateDTO
 //!
-//! Defines the DTO for updating the properties of an SCM resource group.
+//! Defines the DTO for updating the properties of an SourceControlManagement resource group.
 
 use serde::{Deserialize, Serialize};
 

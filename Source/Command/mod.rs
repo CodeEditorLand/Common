@@ -9,15 +9,9 @@
 
 // --- Trait Definition ---
 pub mod CommandExecutor;
-// pub use self::CommandExecutor::CommandExecutor;
 
 // --- Effect Constructors ---
 pub mod ExecuteCommand;
 pub mod GetAllCommands;
 pub mod RegisterCommand;
 pub mod UnregisterCommand;
-
-// pub use self::ExecuteCommand::ExecuteCommand;
-// pub use self::GetAllCommands::GetAllCommands;
-// pub use self::RegisterCommand::RegisterCommand;
-// pub use self::UnregisterCommand::UnregisterCommand;

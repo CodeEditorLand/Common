@@ -14,24 +14,6 @@
 
 // --- Trait Definition ---
 pub mod WebViewProvider;
-// pub use self::WebViewProvider::WebViewProvider;
 
 // --- Data Transfer Objects ---
 pub mod DTO;
-
-// --- Effect Constructors ---
-// pub mod CreateWebViewPanel;
-// pub mod DisposeWebViewPanel;
-// pub mod PostMessageToWebView;
-// pub mod RevealWebViewPanel;
-// pub mod SetWebViewHTML;
-// pub mod SetWebViewOptions;
-
-// pub use self::{
-// 	CreateWebViewPanel::CreateWebViewPanel,
-// 	DisposeWebViewPanel::DisposeWebViewPanel,
-// 	PostMessageToWebView::PostMessageToWebView,
-// 	RevealWebViewPanel::RevealWebViewPanel,
-// 	SetWebViewHTML::SetWebViewHTML,
-// 	SetWebViewOptions::SetWebViewOptions,
-// };

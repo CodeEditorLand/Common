@@ -9,7 +9,6 @@
 
 // --- Trait Definition ---
 pub mod UserInterfaceProvider;
-// pub use self::UserInterfaceProvider::UserInterfaceProvider;
 
 // --- Data Transfer Objects ---
 pub mod DTO;
@@ -20,11 +19,3 @@ pub mod ShowMessage;
 pub mod ShowOpenDialog;
 pub mod ShowQuickPick;
 pub mod ShowSaveDialog;
-
-// pub use self::{
-// 	ShowInputBox::ShowInputBox,
-// 	ShowMessage::ShowMessage,
-// 	ShowOpenDialog::ShowOpenDialog,
-// 	ShowQuickPick::ShowQuickPick,
-// 	ShowSaveDialog::ShowSaveDialog,
-// };

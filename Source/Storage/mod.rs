@@ -16,21 +16,8 @@
 
 // --- Trait Definition ---
 pub mod StorageProvider;
-// pub use self::StorageProvider::StorageProvider;
 
 // --- Effect Constructors ---
-
-// High-performance, batch-oriented effects
-// pub mod GetAllStorage;
-// pub mod SetAllStorage;
-
 // Legacy per-key effects
 pub mod GetStorageItem;
 pub mod SetStorageItem;
-
-// pub use self::{
-// 	GetAllStorage::GetAllStorage,
-// 	GetStorageItem::GetStorageItem,
-// 	SetAllStorage::SetAllStorage,
-// 	SetStorageItem::SetStorageItem,
-// };

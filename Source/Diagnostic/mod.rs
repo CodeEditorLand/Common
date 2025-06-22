@@ -15,15 +15,8 @@
 
 // --- Trait Definition ---
 pub mod DiagnosticManager;
-// pub use self::DiagnosticManager::DiagnosticManager;
 
 // --- Effect Constructors ---
 pub mod ClearDiagnostics;
 pub mod GetAllDiagnostics;
 pub mod SetDiagnostics;
-
-// pub use self::{
-// 	ClearDiagnostics::ClearDiagnostics,
-// 	GetAllDiagnostics::GetAllDiagnostics,
-// 	SetDiagnostics::SetDiagnostics,
-// };

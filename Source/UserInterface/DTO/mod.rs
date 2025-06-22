@@ -14,15 +14,3 @@ pub mod OpenDialogOptionsDTO;
 pub mod QuickPickItemDTO;
 pub mod QuickPickOptionsDTO;
 pub mod SaveDialogOptionsDTO;
-
-// pub use self::{
-// 	DialogOptionsDTO::DialogOptionsDTO,
-// 	FileFilterDTO::FileFilterDTO,
-// 	InputBoxOptionsDTO::InputBoxOptionsDTO,
-// 	MessageOptionsDTO::MessageOptionsDTO,
-// 	MessageSeverity::MessageSeverity,
-// 	OpenDialogOptionsDTO::OpenDialogOptionsDTO,
-// 	QuickPickItemDTO::QuickPickItemDTO,
-// 	QuickPickOptionsDTO::QuickPickOptionsDTO,
-// 	SaveDialogOptionsDTO::SaveDialogOptionsDTO,
-// };

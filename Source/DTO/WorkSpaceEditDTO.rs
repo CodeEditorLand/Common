@@ -15,6 +15,4 @@ pub struct WorkSpaceEditDTO {
 	/// A list of text edits to apply, grouped by resource URI.
 	/// The structure is `[ [uri_dto, [text_edit_dto, ...]], ... ]`
 	pub Edits:Vec<(Value, Vec<Value>)>,
-	// Future fields for file operations would go here:
-	// pub file_operations: Vec<FileOperationDTO>,
 }

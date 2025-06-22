@@ -9,11 +9,6 @@
 
 // --- Trait Definition ---
 pub mod TreeViewProvider;
-// pub use self::TreeViewProvider::TreeViewProvider;
 
 // --- Data Transfer Objects ---
 pub mod DTO;
-
-// --- Effect Constructors ---
-// Placeholders for future effects: RegisterTreeDataProvider, RevealTreeItem,
-// etc.

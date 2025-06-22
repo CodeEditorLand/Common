@@ -14,20 +14,3 @@
 
 // --- Trait Definition ---
 pub mod CustomEditorProvider;
-// pub use self::CustomEditorProvider::CustomEditorProvider;
-
-// --- Data Transfer Objects ---
-// pub mod DTO;
-
-// --- Effect Constructors ---
-// pub mod OnSaveCustomDocument;
-// pub mod RegisterCustomEditor;
-// pub mod ResolveCustomEditor;
-// pub mod UnregisterCustomEditor;
-
-// pub use self::{
-// 	OnSaveCustomDocument::OnSaveCustomDocument,
-// 	RegisterCustomEditor::RegisterCustomEditor,
-// 	ResolveCustomEditor::ResolveCustomEditor,
-// 	UnregisterCustomEditor::UnregisterCustomEditor,
-// };

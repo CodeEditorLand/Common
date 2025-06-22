@@ -14,21 +14,6 @@
 
 // --- Trait Definition ---
 pub mod TerminalProvider;
-// pub use self::TerminalProvider::TerminalProvider;
 
 // --- Effect Constructors ---
 pub mod CreateTerminal;
-// pub mod DisposeTerminal;
-// pub mod GetTerminalProcessId;
-// pub mod HideTerminal;
-// pub mod SendTextToTerminal;
-// pub mod ShowTerminal;
-
-// pub use self::{
-// 	CreateTerminal::CreateTerminal,
-// 	DisposeTerminal::DisposeTerminal,
-// 	GetTerminalProcessId::GetTerminalProcessId,
-// 	HideTerminal::HideTerminal,
-// 	SendTextToTerminal::SendTextToTerminal,
-// 	ShowTerminal::ShowTerminal,
-// };

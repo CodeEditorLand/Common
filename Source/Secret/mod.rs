@@ -10,12 +10,8 @@
 
 // --- Trait Definition ---
 pub mod SecretProvider;
-// pub use self::SecretProvider::SecretProvider;
 
 // --- Effect Constructors ---
 pub mod DeleteSecret;
 pub mod GetSecret;
 pub mod StoreSecret;
-
-// pub use self::{DeleteSecret::DeleteSecret, GetSecret::GetSecret,
-// StoreSecret::StoreSecret};

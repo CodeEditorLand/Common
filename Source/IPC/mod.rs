@@ -10,7 +10,6 @@
 
 // --- Trait Definition ---
 pub mod IPCProvider;
-// pub use self::IPCProvider::IPCProvider;
 
 // --- Data Transfer Objects ---
 pub mod DTO;
@@ -20,10 +19,3 @@ pub mod EstablishHostConnection;
 pub mod ProxyCallToSidecar;
 pub mod SendNotificationToSidecar;
 pub mod SendRequestToSidecar;
-
-// pub use self::{
-// 	EstablishHostConnection::EstablishHostConnection,
-// 	ProxyCallToSidecar::ProxyCallToSidecar,
-// 	SendNotificationToSidecar::SendNotificationToSidecar,
-// 	SendRequestToSidecar::SendRequestToSidecar,
-// };

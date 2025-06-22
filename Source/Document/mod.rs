@@ -9,7 +9,6 @@
 
 // --- Trait Definition ---
 pub mod DocumentProvider;
-// pub use self::DocumentProvider::DocumentProvider;
 
 // --- Effect Constructors ---
 pub mod ApplyDocumentChanges;
@@ -17,11 +16,3 @@ pub mod OpenDocument;
 pub mod SaveAllDocuments;
 pub mod SaveDocument;
 pub mod SaveDocumentAs;
-
-// pub use self::{
-// 	ApplyDocumentChanges::ApplyDocumentChanges,
-// 	OpenDocument::OpenDocument,
-// 	SaveAllDocuments::SaveAllDocuments,
-// 	SaveDocument::SaveDocument,
-// 	SaveDocumentAs::SaveDocumentAs,
-// };

@@ -1,6 +1,6 @@
 //! # SourceControlInputBoxDTO
 //!
-//! Defines the DTO for the SCM input box (commit message box).
+//! Defines the DTO for the SourceControlManagement input box (commit message box).
 
 use serde::{Deserialize, Serialize};
 

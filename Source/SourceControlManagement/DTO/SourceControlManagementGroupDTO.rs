@@ -1,6 +1,6 @@
 //! # SourceControlManagementGroupDTO
 //!
-//! Defines the DTO for an SCM resource group (e.g., "Changes", "Staged
+//! Defines the DTO for an SourceControlManagement resource group (e.g., "Changes", "Staged
 //! Changes").
 
 use serde::{Deserialize, Serialize};
