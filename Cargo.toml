@@ -3,6 +3,14 @@ serde = { workspace = true }
 toml = { workspace = true }
 
 [dependencies]
+tauri = { workspace = true, features = [
+	"wry",
+	"tray-icon",
+	"devtools",
+	"rustls-tls",
+	"compression",
+], default-features = false }
+
 async-trait = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
