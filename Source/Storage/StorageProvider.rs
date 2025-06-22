@@ -43,4 +43,10 @@ pub trait StorageProvider: Environment + Send + Sync {
 		Key:String,
 		ValueToSet:Option<Value>,
 	) -> Result<(), CommonError>;
+
+	/// Retrieves the entire storage state for a given scope.
+	async fn GetAllStorage(&self, IsGlobalScope:bool) -> Result<Value, CommonError>;
+
+	/// Overwrites the entire storage state for a given scope with a new state.
+	async fn SetAllStorage(&self, IsGlobalScope:bool, FullState:Value) -> Result<(), CommonError>;
 }
