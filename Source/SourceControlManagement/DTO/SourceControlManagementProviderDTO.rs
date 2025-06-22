@@ -5,6 +5,8 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use crate::SourceControlManagement::DTO::SourceControlInputBoxDTO::SourceControlInputBoxDTO;
+
 /// A serializable struct representing the metadata for a source control
 /// provider.
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -16,7 +18,12 @@ pub struct SourceControlManagementProviderDTO {
 	/// `UriComponents`.
 	pub RootURI:Option<Value>,
 	/// An optional count of changed resources, often displayed as a badge.
+	#[serde(skip_serializing_if = "Option::is_none")]
 	pub Count:Option<u32>,
 	/// The template for the commit message input box.
+	#[serde(skip_serializing_if = "Option::is_none")]
 	pub CommitTemplate:Option<String>,
+	/// The state of the SCM input box (commit message area).
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub InputBox:Option<SourceControlInputBoxDTO>,
 }
