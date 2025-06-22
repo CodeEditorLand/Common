@@ -64,6 +64,9 @@ pub enum CommonError {
 	ProviderInvocation { ProviderIdentifier:String, Reason:String },
 
 	// --- Other Specific Errors ---
+	#[error("External service '{ServiceName}' failed: {Description}")]
+	ExternalServiceError { ServiceName:String, Description:String },
+
 	#[error("Secret access for key '{Key}' failed: {Reason}")]
 	SecretsAccess { Key:String, Reason:String },
 
@@ -104,5 +107,15 @@ impl CommonError {
 impl From<serde_json::Error> for CommonError {
 	fn from(SerdeError:serde_json::Error) -> Self {
 		CommonError::SerializationError { Description:SerdeError.to_string() }
+	}
+}
+
+/// Converts a `tauri::Error` into a `CommonError`. This is useful for
+/// handling errors from Tauri's APIs within our effect system.
+impl From<tauri::Error> for CommonError {
+	fn from(TauriError:tauri::Error) -> Self {
+		// We can categorize some Tauri errors, but for now, a general
+		// UserInterfaceInteraction or IPC error is sufficient.
+		CommonError::UserInterfaceInteraction { Reason:TauriError.to_string() }
 	}
 }
