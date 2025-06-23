@@ -18,7 +18,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 ///
 /// # Parameters
 ///
-/// * `SidecarIdentifier`: The unique ID of the sidecar where the command logic
+/// * `SideCarIdentifier`: The unique ID of the sidecar where the command logic
 ///   resides.
 /// * `CommandIdentifier`: The unique ID of the command itself (e.g.,
 
@@ -28,15 +28,15 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 ///
 /// An `ActionEffect` that resolves to `()` on success.
 pub fn RegisterCommand(
-	SidecarIdentifier:String,
+	SideCarIdentifier:String,
 
 	CommandIdentifier:String,
 ) -> ActionEffect<Arc<dyn CommandExecutor>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Executor:Arc<dyn CommandExecutor>| {
-		let SidecarIdentifierClone = SidecarIdentifier.clone();
+		let SideCarIdentifierClone = SideCarIdentifier.clone();
 
 		let CommandIdentifierClone = CommandIdentifier.clone();
 
-		Box::pin(async move { Executor.RegisterCommand(SidecarIdentifierClone, CommandIdentifierClone).await })
+		Box::pin(async move { Executor.RegisterCommand(SideCarIdentifierClone, CommandIdentifierClone).await })
 	}))
 }

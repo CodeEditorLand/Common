@@ -35,13 +35,13 @@ pub trait CommandExecutor: Environment + Send + Sync {
 	///
 	/// # Parameters
 	///
-	/// * `SidecarIdentifier`: The unique ID of the sidecar where the command
+	/// * `SideCarIdentifier`: The unique ID of the sidecar where the command
 	///   logic resides.
 	/// * `CommandIdentifier`: The unique ID of the command being registered.
-	async fn RegisterCommand(&self, SidecarIdentifier:String, CommandIdentifier:String) -> Result<(), CommonError>;
+	async fn RegisterCommand(&self, SideCarIdentifier:String, CommandIdentifier:String) -> Result<(), CommonError>;
 
 	/// Unregisters a previously registered command.
-	async fn UnregisterCommand(&self, SidecarIdentifier:String, CommandIdentifier:String) -> Result<(), CommonError>;
+	async fn UnregisterCommand(&self, SideCarIdentifier:String, CommandIdentifier:String) -> Result<(), CommonError>;
 
 	/// Retrieves a list of all currently registered command identifiers.
 	async fn GetAllCommands(&self) -> Result<Vec<String>, CommonError>;

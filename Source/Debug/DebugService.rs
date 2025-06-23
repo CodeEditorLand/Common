@@ -29,7 +29,7 @@ pub trait DebugService: Environment + Send + Sync {
 	/// * `DebugType`: The type of debugger this provider is for (e.g., "node").
 	/// * `ProviderHandle`: A unique handle assigned by the extension host for
 	///   this provider.
-	/// * `SidecarIdentifier`: The identifier of the sidecar (e.g.,
+	/// * `SideCarIdentifier`: The identifier of the sidecar (e.g.,
 
 	///   "cocoon-main") hosting the provider.
 	async fn RegisterDebugConfigurationProvider(
@@ -39,7 +39,7 @@ pub trait DebugService: Environment + Send + Sync {
 
 		ProviderHandle:u32,
 
-		SidecarIdentifier:String,
+		SideCarIdentifier:String,
 	) -> Result<(), CommonError>;
 
 	/// Registers a factory for creating debug adapter descriptors from an
@@ -49,7 +49,7 @@ pub trait DebugService: Environment + Send + Sync {
 	/// * `DebugType`: The type of debugger this factory is for.
 	/// * `FactoryHandle`: A unique handle assigned by the extension host for
 	///   this factory.
-	/// * `SidecarIdentifier`: The identifier of the sidecar hosting the
+	/// * `SideCarIdentifier`: The identifier of the sidecar hosting the
 	///   factory.
 	async fn RegisterDebugAdapterDescriptorFactory(
 		&self,
@@ -58,7 +58,7 @@ pub trait DebugService: Environment + Send + Sync {
 
 		FactoryHandle:u32,
 
-		SidecarIdentifier:String,
+		SideCarIdentifier:String,
 	) -> Result<(), CommonError>;
 
 	/// Starts a new debugging session based on a launch configuration.

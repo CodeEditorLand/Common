@@ -1,4 +1,4 @@
-//! # SendNotificationToSidecar Effect
+//! # SendNotificationToSideCar Effect
 //!
 //! Defines the `ActionEffect` for sending a fire-and-forget notification to a
 //! sidecar process.
@@ -14,12 +14,12 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// notification to a specified sidecar process.
 ///
 /// It uses the `IPCProvider` capability from the environment to perform the
-/// actual IPC send operation. Unlike `SendRequestToSidecar`, this effect does
+/// actual IPC send operation. Unlike `SendRequestToSideCar`, this effect does
 /// not wait for or expect a response.
 ///
 /// # Parameters
 ///
-/// * `SidecarIdentifier`: The unique ID of the target sidecar process.
+/// * `SideCarIdentifier`: The unique ID of the target sidecar process.
 /// * `Method`: The name of the notification method to be invoked on the
 ///   sidecar.
 /// * `Parameters`: A `serde_json::Value` containing the parameters for the
@@ -28,15 +28,15 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// # Returns
 ///
 /// An `ActionEffect` that resolves to `()` on success.
-pub fn SendNotificationToSidecar(
-	SidecarIdentifier:String,
+pub fn SendNotificationToSideCar(
+	SideCarIdentifier:String,
 
 	Method:String,
 
 	Parameters:Value,
 ) -> ActionEffect<Arc<dyn IPCProvider>, CommonError, ()> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn IPCProvider>| {
-		let SidecarIdentifierClone = SidecarIdentifier.clone();
+		let SideCarIdentifierClone = SideCarIdentifier.clone();
 
 		let MethodClone = Method.clone();
 
@@ -44,7 +44,7 @@ pub fn SendNotificationToSidecar(
 
 		Box::pin(async move {
 			Provider
-				.SendNotificationToSidecar(SidecarIdentifierClone, MethodClone, ParametersClone)
+				.SendNotificationToSideCar(SideCarIdentifierClone, MethodClone, ParametersClone)
 				.await
 		})
 	}))

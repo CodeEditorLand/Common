@@ -19,15 +19,15 @@ pub trait IPCProvider: Environment + Send + Sync {
 	/// sidecar. This method does not wait for a response.
 	///
 	/// # Parameters
-	/// * `SidecarIdentifier`: The unique ID of the target sidecar process.
+	/// * `SideCarIdentifier`: The unique ID of the target sidecar process.
 	/// * `Method`: The name of the notification method to be invoked on the
 	///   sidecar.
 	/// * `Parameters`: A `serde_json::Value` containing the parameters for the
 	///   notification.
-	async fn SendNotificationToSidecar(
+	async fn SendNotificationToSideCar(
 		&self,
 
-		SidecarIdentifier:String,
+		SideCarIdentifier:String,
 
 		Method:String,
 
@@ -37,7 +37,7 @@ pub trait IPCProvider: Environment + Send + Sync {
 	/// Sends a request to a specified sidecar and awaits a response.
 	///
 	/// # Parameters
-	/// * `SidecarIdentifier`: The unique ID of the target sidecar process.
+	/// * `SideCarIdentifier`: The unique ID of the target sidecar process.
 	/// * `Method`: The name of the RPC method to be invoked on the sidecar.
 	/// * `Parameters`: A `serde_json::Value` containing the parameters for the
 	///   request.
@@ -47,10 +47,10 @@ pub trait IPCProvider: Environment + Send + Sync {
 	/// # Returns
 	/// A `Result` containing the `serde_json::Value` response from the
 	/// sidecar.
-	async fn SendRequestToSidecar(
+	async fn SendRequestToSideCar(
 		&self,
 
-		SidecarIdentifier:String,
+		SideCarIdentifier:String,
 
 		Method:String,
 

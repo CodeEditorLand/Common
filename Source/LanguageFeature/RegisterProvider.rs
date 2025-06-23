@@ -19,7 +19,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// * `ProviderType`: The enum variant identifying the feature type.
 /// * `SelectorDTO`: The document selector that determines when this provider is
 ///   active.
-/// * `SidecarIdentifier`: The ID of the sidecar hosting the provider logic.
+/// * `SideCarIdentifier`: The ID of the sidecar hosting the provider logic.
 /// * `ExtensionIdentifierDTO`: The ID of the extension contributing the
 ///   provider.
 /// * `OptionsDTO`: Optional, feature-specific options.
@@ -32,7 +32,7 @@ pub fn RegisterProvider(
 
 	SelectorDTO:Value,
 
-	SidecarIdentifier:String,
+	SideCarIdentifier:String,
 
 	ExtensionIdentifierDTO:Value,
 
@@ -41,7 +41,7 @@ pub fn RegisterProvider(
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let SelectorClone = SelectorDTO.clone();
 
-		let SidecarIdentifierClone = SidecarIdentifier.clone();
+		let SideCarIdentifierClone = SideCarIdentifier.clone();
 
 		let ExtensionIdentifierClone = ExtensionIdentifierDTO.clone();
 
@@ -50,7 +50,7 @@ pub fn RegisterProvider(
 		Box::pin(async move {
 			Registry
 				.RegisterProvider(
-					SidecarIdentifierClone,
+					SideCarIdentifierClone,
 					ProviderType,
 					SelectorClone,
 					ExtensionIdentifierClone,

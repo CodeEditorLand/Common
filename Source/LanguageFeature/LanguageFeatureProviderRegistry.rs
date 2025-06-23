@@ -43,7 +43,7 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 	/// Registers a new language feature provider.
 	///
 	/// # Parameters
-	/// * `SidecarIdentifier`: The ID of the sidecar hosting the provider.
+	/// * `SideCarIdentifier`: The ID of the sidecar hosting the provider.
 	/// * `ProviderType`: The type of feature this provider implements.
 	/// * `SelectorDTO`: The document selector that determines which documents
 	///   this provider applies to.
@@ -56,7 +56,7 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 	async fn RegisterProvider(
 		&self,
 
-		SidecarIdentifier:String,
+		SideCarIdentifier:String,
 
 		ProviderType:ProviderType,
 

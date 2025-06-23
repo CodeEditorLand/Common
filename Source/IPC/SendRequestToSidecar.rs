@@ -1,4 +1,4 @@
-//! # SendRequestToSidecar Effect
+//! # SendRequestToSideCar Effect
 //!
 //! Defines the `ActionEffect` for sending a request-response RPC call to a
 //! sidecar process.
@@ -18,7 +18,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 ///
 /// # Parameters
 ///
-/// * `SidecarIdentifier`: The unique ID of the target sidecar process.
+/// * `SideCarIdentifier`: The unique ID of the target sidecar process.
 /// * `Method`: The name of the RPC method to be invoked on the sidecar.
 /// * `Parameters`: A `serde_json::Value` containing the parameters for the
 ///   request.
@@ -29,8 +29,8 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 ///
 /// An `ActionEffect` that resolves with the `serde_json::Value` response from
 /// the sidecar.
-pub fn SendRequestToSidecar(
-	SidecarIdentifier:String,
+pub fn SendRequestToSideCar(
+	SideCarIdentifier:String,
 
 	Method:String,
 
@@ -39,7 +39,7 @@ pub fn SendRequestToSidecar(
 	TimeoutMilliseconds:u64,
 ) -> ActionEffect<Arc<dyn IPCProvider>, CommonError, Value> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn IPCProvider>| {
-		let SidecarIdentifierClone = SidecarIdentifier.clone();
+		let SideCarIdentifierClone = SideCarIdentifier.clone();
 
 		let MethodClone = Method.clone();
 
@@ -47,7 +47,7 @@ pub fn SendRequestToSidecar(
 
 		Box::pin(async move {
 			Provider
-				.SendRequestToSidecar(SidecarIdentifierClone, MethodClone, ParametersClone, TimeoutMilliseconds)
+				.SendRequestToSideCar(SideCarIdentifierClone, MethodClone, ParametersClone, TimeoutMilliseconds)
 				.await
 		})
 	}))

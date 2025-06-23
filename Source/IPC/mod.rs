@@ -17,8 +17,8 @@ pub mod DTO;
 // --- Effect Constructors ---
 pub mod EstablishHostConnection;
 
-pub mod ProxyCallToSidecar;
+pub mod ProxyCallToSideCar;
 
-pub mod SendNotificationToSidecar;
+pub mod SendNotificationToSideCar;
 
-pub mod SendRequestToSidecar;
+pub mod SendRequestToSideCar;

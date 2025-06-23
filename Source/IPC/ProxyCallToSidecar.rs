@@ -1,4 +1,4 @@
-//! # ProxyCallToSidecar Effect
+//! # ProxyCallToSideCar Effect
 //!
 //! Defines the `ActionEffect` for proxying a generic RPC call to a sidecar
 //! process.
@@ -19,7 +19,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 ///
 /// # Parameters
 ///
-/// * `TargetSidecarIdentifier`: The unique ID of the sidecar to which the call
+/// * `TargetSideCarIdentifier`: The unique ID of the sidecar to which the call
 ///   should be proxied.
 /// * `CallData`: A JSON `Value` expected to be an object containing `{"Method":
 ///   "...", "Parameters": ...}`.
@@ -28,13 +28,13 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 ///
 /// An `ActionEffect` that resolves with the JSON `Value` returned by the
 /// target sidecar.
-pub fn ProxyCallToSidecar(
-	TargetSidecarIdentifier:String,
+pub fn ProxyCallToSideCar(
+	TargetSideCarIdentifier:String,
 
 	CallData:Value,
 ) -> ActionEffect<Arc<dyn IPCProvider>, CommonError, Value> {
 	ActionEffect::New(Arc::new(move |Provider:Arc<dyn IPCProvider>| {
-		let TargetIdentifierClone = TargetSidecarIdentifier.clone();
+		let TargetIdentifierClone = TargetSideCarIdentifier.clone();
 
 		let CallDataClone = CallData.clone();
 
@@ -58,7 +58,7 @@ pub fn ProxyCallToSidecar(
 			let DefaultTimeoutMilliseconds = 30000;
 
 			Provider
-				.SendRequestToSidecar(TargetIdentifierClone, MethodString, ParametersValue, DefaultTimeoutMilliseconds)
+				.SendRequestToSideCar(TargetIdentifierClone, MethodString, ParametersValue, DefaultTimeoutMilliseconds)
 				.await
 		})
 	}))
