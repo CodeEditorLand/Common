@@ -5,12 +5,13 @@
 
 use std::path::PathBuf;
 
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 /// A common error enum for the application, encompassing all major categories
 /// of failures that can occur during the execution of effects or other
-/// operations.
-#[derive(Error, Debug, Clone)]
+// operations.
+#[derive(Error, Debug, Clone, Serialize, Deserialize)]
 pub enum CommonError {
 	// --- FileSystem Errors ---
 	#[error("FileSystem I/O error for '{Path}': {Description}")]
@@ -64,6 +65,10 @@ pub enum CommonError {
 
 	#[error("Language provider '{ProviderIdentifier}' invocation failed: {Reason}")]
 	ProviderInvocation { ProviderIdentifier:String, Reason:String },
+
+	// --- TreeView Errors (New) ---
+	#[error("TreeView provider not found for view ID '{ViewIdentifier}'")]
+	TreeViewProviderNotFound { ViewIdentifier:String },
 
 	// --- Other Specific Errors ---
 	#[error("External service '{ServiceName}' failed: {Description}")]
@@ -120,9 +125,5 @@ impl From<serde_json::Error> for CommonError {
 /// Converts a `tauri::Error` into a `CommonError`. This is useful for
 /// handling errors from Tauri's APIs within our effect system.
 impl From<tauri::Error> for CommonError {
-	fn from(TauriError:tauri::Error) -> Self {
-		// We can categorize some Tauri errors, but for now, a general
-		// UserInterfaceInteraction or IPC error is sufficient.
-		CommonError::UserInterfaceInteraction { Reason:TauriError.to_string() }
-	}
+	fn from(TauriError:tauri::Error) -> Self { CommonError::UserInterfaceInteraction { Reason:TauriError.to_string() } }
 }
