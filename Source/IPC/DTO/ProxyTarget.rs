@@ -115,11 +115,13 @@ pub enum ProxyTarget {
 	ExtHostSourceControlManagement,
 
 	ExtHostTesting,
+
+	ExtHostDebug,
 }
 
 impl ProxyTarget {
 	/// Returns a string prefix representing the target, used in constructing
-	/// fully qualified RPC method names (e.g.,
+	/// fully qualified RPC method names (e.g.
 	/// `MainThreadCommands$ExecuteCommand`).
 	pub fn GetTargetPrefix(&self) -> String { format!("{:?}", self) }
 }
