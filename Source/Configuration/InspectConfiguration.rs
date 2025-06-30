@@ -25,7 +25,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// # Parameters
 ///
 /// * `Key`: The dot-separated configuration key to inspect (e.g.,
-
 ///   "Editor.FontSize").
 /// * `OverridesValue`: A `serde_json::Value` representing the
 ///   `ConfigurationOverridesDTO`, which can specify a resource or language
@@ -34,7 +33,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// # Returns
 ///
 /// An `ActionEffect` that resolves with an `Option<InspectResultDataDTO>`,
-
 /// containing the detailed breakdown of the configuration value from all
 /// scopes.
 pub fn InspectConfiguration(
@@ -49,11 +47,11 @@ pub fn InspectConfiguration(
 
 		Box::pin(async move {
 			let OverridesParsed:ConfigurationOverridesDTO =
-				serde_json::from_value(OverridesValueClone).map_err(|e| {
+				serde_json::from_value(OverridesValueClone).map_err(|Error| {
 					CommonError::InvalidArgument {
 						ArgumentName:"OverridesValue".to_string(),
 
-						Reason:format!("Failed to parse ConfigurationOverridesDTO: {}", e),
+						Reason:format!("Failed to parse ConfigurationOverridesDTO: {}", Error),
 					}
 				})?;
 

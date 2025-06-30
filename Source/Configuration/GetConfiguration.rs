@@ -43,11 +43,11 @@ pub fn GetConfiguration(
 
 		Box::pin(async move {
 			let OverridesParsed:ConfigurationOverridesDTO =
-				serde_json::from_value(OverridesValueClone).map_err(|e| {
+				serde_json::from_value(OverridesValueClone).map_err(|Error| {
 					CommonError::InvalidArgument {
 						ArgumentName:"OverridesValue".to_string(),
 
-						Reason:format!("Failed to parse ConfigurationOverridesDTO: {}", e),
+						Reason:format!("Failed to parse ConfigurationOverridesDTO: {}", Error),
 					}
 				})?;
 
