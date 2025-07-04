@@ -197,45 +197,40 @@ follows:
 1.  **Implement a Trait:** In `Mountain/Source/Environment/`, provide the
     concrete implementation for a `Common` trait.
 
-        ```rust
+```rust
+// In Mountain/Source/Environment/FileSystemProvider.rs
 
-    // In Mountain/Source/Environment/FileSystemProvider.rs
+use Common::FileSystem::{FileSystemReader, FileSystemWriter};
 
-        use Common::FileSystem::{FileSystemReader, FileSystemWriter};
+#[async_trait]
+impl FileSystemReader for MountainEnvironment {
+	async fn ReadFile(&self, Path: &PathBuf) -> Result<Vec<u8>, CommonError> {
+		// ... actual `tokio::fs` call ...
+	}
 
-        #[async_trait]
-        impl FileSystemReader for MountainEnvironment {
-            async fn ReadFile(&self, Path: &PathBuf) -> Result<Vec<u8>, CommonError> {
-
-    // ... actual `tokio::fs` call ...
-
-            }
-
-    // ...
-
-        }
-        ```
+	// ...
+}
+```
 
 2.  **Create and Execute an Effect:** In business logic, create and run an
     effect.
 
-        ```rust
+```rust
+// In a Mountain service or command
 
-    // In a Mountain service or command
+use Common::FileSystem;
+use Common::Effect::ApplicationRunTime;
 
-        use Common::FileSystem;
-        use Common::Effect::ApplicationRunTime;
+async fn some_logic(runtime: Arc<impl ApplicationRunTime>) {
+	let path = PathBuf::from("/my/file.txt");
+	let read_effect = FileSystem::ReadFile(path);
 
-        async fn some_logic(runtime: Arc<impl ApplicationRunTime>) {
-            let path = PathBuf::from("/my/file.txt");
-            let read_effect = FileSystem::ReadFile(path);
-
-            match runtime.Run(read_effect).await {
-                Ok(content) => info!("File content length: {}", content.len()),
-                Err(e) => error!("Failed to read file: {:?}", e),
-            }
-        }
-        ```
+	match runtime.Run(read_effect).await {
+		Ok(content) => info!("File content length: {}", content.len()),
+		Err(e) => error!("Failed to read file: {:?}", e),
+	}
+}
+```
 
 ---
 
