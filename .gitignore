@@ -13,3 +13,9 @@
 !/Target/release/libCommon.rlib
 
 !/Target/x86_64-pc-windows-msvc/libCommon.rlib
+
+Documentation/Rust/debug
+Documentation/Rust/release
+Documentation/Rust/.rustc_info.json
+Documentation/Rust/.rustdoc_fingerprint.json
+Documentation/Rust/CACHEDIR.TAG

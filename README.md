@@ -135,7 +135,7 @@ Common/
 
 To understand the core philosophy behind this crate and how its components work
 together, please refer to the detailed technical breakdown in
-[`docs/Deep Dive.md`](docs/Deep%20Dive.md). This document explains the
+[`Documentation/GitHub/Deep Dive.md`](Documentation/GitHub/Deep%20Dive.md). This document explains the
 `ActionEffect` system, the trait-based dependency injection model, and provides
 a guide for adding new services to the architecture.
 
