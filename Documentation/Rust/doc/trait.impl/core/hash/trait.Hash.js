@@ -1,9 +1,0 @@
-(function() {
-    const implementors = Object.fromEntries([["Common",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html\" title=\"trait core::hash::Hash\">Hash</a> for <a class=\"enum\" href=\"Common/Configuration/DTO/ConfigurationScope/enum.ConfigurationScope.html\" title=\"enum Common::Configuration::DTO::ConfigurationScope::ConfigurationScope\">ConfigurationScope</a>",0],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html\" title=\"trait core::hash::Hash\">Hash</a> for <a class=\"enum\" href=\"Common/Configuration/DTO/ConfigurationTarget/enum.ConfigurationTarget.html\" title=\"enum Common::Configuration::DTO::ConfigurationTarget::ConfigurationTarget\">ConfigurationTarget</a>",0],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html\" title=\"trait core::hash::Hash\">Hash</a> for <a class=\"enum\" href=\"Common/IPC/DTO/ProxyTarget/enum.ProxyTarget.html\" title=\"enum Common::IPC::DTO::ProxyTarget::ProxyTarget\">ProxyTarget</a>",0],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html\" title=\"trait core::hash::Hash\">Hash</a> for <a class=\"enum\" href=\"Common/LanguageFeature/DTO/ProviderType/enum.ProviderType.html\" title=\"enum Common::LanguageFeature::DTO::ProviderType::ProviderType\">ProviderType</a>",0],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html\" title=\"trait core::hash::Hash\">Hash</a> for <a class=\"enum\" href=\"Common/UserInterface/DTO/MessageSeverity/enum.MessageSeverity.html\" title=\"enum Common::UserInterface::DTO::MessageSeverity::MessageSeverity\">MessageSeverity</a>",0]]]]);
-    if (window.register_implementors) {
-        window.register_implementors(implementors);
-    } else {
-        window.pending_implementors = implementors;
-    }
-})()
-//{"start":59,"fragment_lengths":[1671]}
