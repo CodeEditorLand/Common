@@ -19,11 +19,10 @@
 
 # **Common** 👨🏻‍🏭 Deep Dive & Architecture
 
-This document provides a detailed technical overview of the **Common** crate for
-developers. It explores the effect system architecture, trait-based dependency
-injection, and the foundational patterns that enable the Land Code Editor to
-achieve type safety, testability, and architectural purity while lifting VSCode
-services into the Tauri ecosystem.
+This document provides the technical foundation for lifting VSCode services into
+the Land ecosystem. **Common** defines the abstract architectural patterns,
+service contracts, and data structures that enable type-safe, testable service
+implementations across Rust and TypeScript boundaries.
 
 ---
 
@@ -42,32 +41,30 @@ services into the Tauri ecosystem.
 
 ## Deep Dive into `Common`'s Components
 
-### 1. The `ActionEffect` System: Practical Implementation
+### 1. The `ActionEffect` System: Concrete Implementation
 
-The `ActionEffect` system represents a declarative programming pattern where
-operations are described as values rather than executed immediately. This
-enables clean separation of concerns and comprehensive testing.
+The `ActionEffect` system implements declarative programming patterns where
+operations are described as values rather than executed immediately.
 
-#### **Practical Effect Definition**
+#### **Concrete Effect Definition**
 
 An `ActionEffect<C, E, T>` describes:
 
-- **C**: The capability type required for execution (must implement specific
-  traits)
+- **C**: The capability type required for execution
 - **E**: The error type that may result from execution
 - **T**: The successful result type
 
 **Type Signature:**
 
 ```rust
-pub struct ActionEffect<C, E, T> {
-    effect: Box<dyn FnOnce(Arc<C>) -> BoxFuture<'static, Result<T, E>> + Send + Sync>,
+pub struct ActionEffect<TCapability, TError, TOutput> {
+    pub Function: Arc<dyn Fn(TCapability) -> Pin<Box<dyn Future<Output = Result<TOutput, TError>> + Send>> + Send + Sync>,
 }
 ```
 
-#### **Practical Effect Composition**
+#### **Concrete Effect Composition**
 
-Effects can be composed using practical operations:
+Effects can be composed using standard operations:
 
 ```rust
 // Sequential composition: effect1 then effect2
@@ -80,7 +77,7 @@ let parallel_effect = effect1.zip(effect2);
 let resilient_effect = effect.fallback(backup_effect);
 ```
 
-### 2. Practical Environment System Architecture
+### 2. Concrete Environment System Architecture
 
 The `Environment` trait system implements capability-based architecture for
 clean dependency management:
@@ -100,7 +97,7 @@ graph TB
     end
 ```
 
-#### **Practical Capability Resolution**
+#### **Concrete Capability Resolution**
 
 For any `ActionEffect<C, E, T>`, the runtime provides `C` through these steps:
 
@@ -110,14 +107,14 @@ For any `ActionEffect<C, E, T>`, the runtime provides `C` through these steps:
 3. **Runtime Resolution:** ApplicationRunTime resolves and provides capabilities
 4. **Execution:** Effect executes with provided capability
 
-### 3. Practical DTO System Design
+### 3. Concrete DTO System Design
 
 The Data Transfer Object system provides type-safe serialization for IPC
 communication:
 
 ```mermaid
 graph LR
-    subgraph "DTO Practical Architecture"
+    subgraph "DTO Architecture"
         DomainModel["Domain Model"]
         DTODefinition["DTO Definition"]
         Serialization["Serialization Logic"]
@@ -138,7 +135,7 @@ graph LR
     end
 ```
 
-#### **Practical DTO Implementation**
+#### **Concrete DTO Implementation**
 
 DTOs ensure consistent data structures across the Land ecosystem:
 
@@ -147,7 +144,7 @@ DTOs ensure consistent data structures across the Land ecosystem:
 - **Type Safety:** Compile-time validation of data structures
 - **Performance:** Efficient serialization for high-frequency operations
 
-### 4. Practical Error System Architecture
+### 4. Concrete Error System Architecture
 
 The `CommonError` enum provides comprehensive error handling:
 
@@ -165,7 +162,7 @@ graph TB
     end
 ```
 
-#### **Practical Error Recovery Patterns**
+#### **Concrete Error Recovery Patterns**
 
 - **Automatic Retry:** Retry operations with exponential backoff
 - **Graceful Fallback:** Provide alternative implementations on failure
@@ -174,13 +171,13 @@ graph TB
 
 ---
 
-## Practical Technical Architecture
+## Concrete Technical Architecture
 
 ### Core Architectural Components
 
-#### 1. Practical Effect Composition Architecture
+#### 1. Concrete Effect Composition Architecture
 
-Common enables sophisticated effect composition through practical patterns:
+Common enables sophisticated effect composition through concrete patterns:
 
 ```mermaid
 graph LR
@@ -194,14 +191,14 @@ graph LR
     end
 ```
 
-**Practical Effect Operations:**
+**Concrete Effect Operations:**
 
 - **Mapping:** Transform effect results without executing
 - **Sequential Composition:** Chain effects in order
 - **Parallel Composition:** Execute effects concurrently
 - **Error Handling:** Recover from failures gracefully
 
-#### 2. Practical Dependency Injection Architecture
+#### 2. Concrete Dependency Injection Architecture
 
 Common implements clean dependency injection through trait bounds:
 
@@ -220,9 +217,9 @@ pub fn read_file_effect(path: PathBuf) -> ActionEffect<Arc<dyn FileSystemReader>
 }
 ```
 
-### Practical Technical Implementation
+### Concrete Technical Implementation
 
-#### Performance Analysis: Effect Execution Overhead
+#### Performance Characteristics: Effect Execution Overhead
 
 **Measured Overhead:**
 
@@ -231,14 +228,14 @@ pub fn read_file_effect(path: PathBuf) -> ActionEffect<Arc<dyn FileSystemReader>
 - **Execution Wrapper:** ~2ns (future boxing)
 - **Total Overhead:** ~17ns per effect
 
-**Practical Benefits:**
+**Concrete Benefits:**
 
 - **Type Safety:** Full Rust type checking
 - **Testability:** Mockable effects for unit testing
 - **Maintainability:** Clear separation of concerns
 - **Composability:** Reusable effect building blocks
 
-#### Practical Type Safety Implementation
+#### Concrete Type Safety Implementation
 
 The type system prevents runtime capability errors through:
 
@@ -279,7 +276,7 @@ graph TD
     end
 ```
 
-### Practical Integration Patterns
+### Concrete Integration Patterns
 
 #### Effect-Based Testing Architecture
 
@@ -295,7 +292,7 @@ graph TB
     end
 ```
 
-**Practical Testing Strategies:**
+**Concrete Testing Strategies:**
 
 - **Unit Tests:** Isolated service testing with mocked dependencies
 - **Integration Tests:** Full system testing with real implementations
@@ -318,7 +315,7 @@ sequenceDiagram
 
 ---
 
-## Practical VSCode Service Lifting Patterns
+## Concrete VSCode Service Lifting Patterns
 
 ### Service Migration Strategy
 
@@ -358,7 +355,7 @@ pub struct WorkspaceFolderDTO {
 }
 ```
 
-### Practical Service Integration Examples
+### Concrete Service Integration Examples
 
 #### File System Service Lifting
 
