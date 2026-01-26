@@ -394,6 +394,74 @@ pub fn get_configuration_effect(section: Option<String>) -> ActionEffect<Arc<dyn
 }
 ```
 
+### Concrete VSCode Service Lifting Architecture
+
+```mermaid
+graph TD
+    subgraph "VSCode Service Mapping"
+        VSCodeServices["VSCode Services<br/>vs/platform/"]
+        CommonTraits["Common Traits"]
+        MountainImpl["Mountain Implementation"]
+        EffectTS["Effect-TS Layer"]
+
+        VSCodeServices --> CommonTraits
+        CommonTraits --> MountainImpl
+        CommonTraits --> EffectTS
+        MountainImpl --> EffectTS
+    end
+
+    subgraph "Communication Protocols"
+        gRPC["gRPC Protocol"]
+        Tauri["Tauri Events"]
+
+        MountainImpl --> gRPC
+        MountainImpl --> Tauri
+        EffectTS --> gRPC
+        EffectTS --> Tauri
+    end
+```
+
+#### Service Migration Table
+
+| VSCode Service          | Common Trait           | Mountain Implementation | Effect-TS Layer        |
+| :---------------------- | :--------------------- | :---------------------- | :--------------------- |
+| `IFileService`          | `FileSystemService`    | `MountainFileSystem`    | `FileService`          |
+| `IWorkspaceService`     | `WorkspaceService`     | `MountainWorkspace`     | `WorkspaceService`     |
+| `IConfigurationService` | `ConfigurationService` | `MountainConfiguration` | `ConfigurationService` |
+| `ICommandService`       | `CommandService`       | `MountainCommand`       | `CommandService`       |
+| `IDocumentService`      | `DocumentProvider`     | `MountainDocument`      | `DocumentService`      |
+
+### Component Block Map
+
+```mermaid
+graph TB
+    subgraph "Common Architecture Blocks"
+        Traits["Traits<br/>Service Contracts"]
+        Effects["Effects<br/>Operation Descriptions"]
+        DTOs["DTOs<br/>Data Structures"]
+        Errors["Errors<br/>Failure Handling"]
+    end
+
+    subgraph "Consumer Implementations"
+        Mountain["Mountain<br/>Rust Implementation"]
+        Wind["Wind<br/>Effect-TS Services"]
+        Cocoon["Cocoon<br/>Extension Host"]
+    end
+
+    Traits --> Mountain
+    Traits --> Wind
+    Traits --> Cocoon
+    Effects --> Mountain
+    Effects --> Wind
+    Effects --> Cocoon
+    DTOs --> Mountain
+    DTOs --> Wind
+    DTOs --> Cocoon
+    Errors --> Mountain
+    Errors --> Wind
+    Errors --> Cocoon
+```
+
 ## Performance Optimization Strategies
 
 ### 1. Zero-Cost Abstractions
@@ -419,7 +487,7 @@ pub fn get_configuration_effect(section: Option<String>) -> ActionEffect<Arc<dyn
 
 ### Adding New Services
 
-When adding new services to Common, follow these practical patterns:
+When adding new services to Common, follow these concrete patterns:
 
 1. **Define Service Interface:** Create Rust trait matching VSCode service
    interface
@@ -428,7 +496,7 @@ When adding new services to Common, follow these practical patterns:
 3. **Define DTOs:** Create serializable DTOs for cross-language communication
 4. **Define Errors:** Add appropriate error variants to CommonError
 
-### Practical Usage Patterns
+### Concrete Usage Patterns
 
 #### Custom Effect Creation
 
