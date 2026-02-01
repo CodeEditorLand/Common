@@ -66,6 +66,10 @@ pub enum CommonError {
 	#[error("Language provider '{ProviderIdentifier}' invocation failed: {Reason}")]
 	ProviderInvocation { ProviderIdentifier:String, Reason:String },
 
+	// --- Test Framework Errors ---
+	#[error("Test run '{RunIdentifier}' not found")]
+	TestRunNotFound { RunIdentifier:String },
+
 	// --- TreeView Errors (New) ---
 	#[error("TreeView provider not found for view ID '{ViewIdentifier}'")]
 	TreeViewProviderNotFound { ViewIdentifier:String },

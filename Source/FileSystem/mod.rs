@@ -5,8 +5,6 @@
 //! Data Transfer Objects (DTOs), and the `ActionEffect` constructors for every
 //! filesystem operation.
 
-#![allow(non_snake_case, non_camel_case_types)]
-
 // --- Trait Definitions ---
 pub mod FileSystemReader;
 

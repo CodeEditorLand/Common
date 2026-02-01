@@ -10,8 +10,6 @@
 //! (SourceControlManagement) service, which is responsible for integrating with
 //! version control systems like Git.
 
-#![allow(non_snake_case, non_camel_case_types)]
-
 // --- Trait Definition ---
 pub mod SourceControlManagementProvider;
 

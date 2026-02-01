@@ -91,7 +91,7 @@ async fn read_my_file(fs: &impl FileSystem) -> Result<Vec<u8>, Error> {
 **The `Common` (Declarative) Approach:**
 
 ```rust
-use Common::FileSystem;
+use CommonLibrary::FileSystem;
 use std::sync::Arc;
 
 // 1. Create a description of the desired effect. No I/O happens here.
@@ -200,7 +200,7 @@ follows:
 ```rust
 // In Mountain/Source/Environment/FileSystemProvider.rs
 
-use Common::FileSystem::{FileSystemReader, FileSystemWriter};
+use CommonLibrary::FileSystem::{FileSystemReader, FileSystemWriter};
 
 #[async_trait]
 impl FileSystemReader for MountainEnvironment {
@@ -218,8 +218,8 @@ impl FileSystemReader for MountainEnvironment {
 ```rust
 // In a Mountain service or command
 
-use Common::FileSystem;
-use Common::Effect::ApplicationRunTime;
+use CommonLibrary::FileSystem;
+use CommonLibrary::Effect::ApplicationRunTime;
 
 async fn some_logic(runtime: Arc<impl ApplicationRunTime>) {
 	let path = PathBuf::from("/my/file.txt");

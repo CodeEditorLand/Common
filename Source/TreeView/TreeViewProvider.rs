@@ -139,4 +139,37 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	/// # Returns
 	/// A `TreeItemDTO` as a JSON value.
 	async fn GetTreeItem(&self, ViewIdentifier:String, ElementHandle:String) -> Result<Value, CommonError>;
+
+	// --- State Management Methods ---
+
+	/// Handles tree node expansion/collapse events.
+	/// Called when a user expands or collapses a node in the tree view.
+	/// # Parameters
+	/// * `ViewIdentifier`: The ID of the target tree view.
+	/// * `ElementHandle`: The handle of the element being expanded/collapsed.
+	/// * `IsExpanded`: Whether the node is being expanded (true) or collapsed (false).
+	async fn OnTreeNodeExpanded(&self, ViewIdentifier:String, ElementHandle:String, IsExpanded:bool)
+		-> Result<(), CommonError>;
+
+	/// Handles tree selection changes.
+	/// Called when the user selects or deselects items in the tree view.
+	/// # Parameters
+	/// * `ViewIdentifier`: The ID of the target tree view.
+	/// * `SelectedHandles`: Vector of handles currently selected.
+	async fn OnTreeSelectionChanged(&self, ViewIdentifier:String, SelectedHandles:Vec<String>)
+		-> Result<(), CommonError>;
+
+	/// Persists the current state of a tree view.
+	/// Saves the expansion and selection state for later restoration.
+	/// # Parameters
+	/// * `ViewIdentifier`: The ID of the tree view to persist.
+	/// # Returns
+	/// JSON value representing the persisted state.
+	async fn PersistTreeViewState(&self, ViewIdentifier:String) -> Result<Value, CommonError>;
+
+	/// Restores a previously persisted tree view state.
+	/// # Parameters
+	/// * `ViewIdentifier`: The ID of the tree view to restore.
+	/// * `StateValue`: The previously persisted state as JSON value.
+	async fn RestoreTreeViewState(&self, ViewIdentifier:String, StateValue:Value) -> Result<(), CommonError>;
 }

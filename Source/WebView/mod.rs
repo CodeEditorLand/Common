@@ -10,8 +10,6 @@
 //! includes the `WebViewProvider` trait, all related Data Transfer Objects
 //! (DTOs), and `ActionEffect` constructors for every WebView operation.
 
-#![allow(non_snake_case, non_camel_case_types)]
-
 // --- Trait Definition ---
 pub mod WebViewProvider;
 

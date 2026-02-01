@@ -12,8 +12,6 @@
 //! for every language feature operation. This is the largest and most complex
 //! service contract in the application.
 
-#![allow(non_snake_case, non_camel_case_types)]
-
 // --- Trait Definition ---
 pub mod LanguageFeatureProviderRegistry;
 

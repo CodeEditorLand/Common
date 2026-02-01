@@ -4,8 +4,6 @@
 //! It includes the `OutputChannelManager` trait and the `ActionEffect`
 //! constructors for every output channel operation.
 
-#![allow(non_snake_case, non_camel_case_types)]
-
 // --- Trait Definition ---
 pub mod OutputChannelManager;
 

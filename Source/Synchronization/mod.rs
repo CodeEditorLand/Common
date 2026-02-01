@@ -5,7 +5,5 @@
 
 //! UI state, and other user data across different instances of the application.
 
-#![allow(non_snake_case, non_camel_case_types)]
-
 // --- Trait Definition ---
 pub mod SynchronizationProvider;

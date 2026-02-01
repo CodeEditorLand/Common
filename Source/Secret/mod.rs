@@ -6,8 +6,6 @@
 //! includes the `SecretProvider` trait and the `ActionEffect` constructors for
 //! all secret management operations.
 
-#![allow(non_snake_case, non_camel_case_types)]
-
 // --- Trait Definition ---
 pub mod SecretProvider;
 

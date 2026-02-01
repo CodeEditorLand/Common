@@ -22,7 +22,7 @@ default = []
 
 [lib]
 crate-type = ["rlib"]
-name = "Common"
+name = "CommonLibrary"
 path = "Source/Library.rs"
 
 [package]

@@ -5,8 +5,6 @@
 //! includes the `DocumentProvider` trait and the `ActionEffect` constructors
 //! for all document operations.
 
-#![allow(non_snake_case, non_camel_case_types)]
-
 // --- Trait Definition ---
 pub mod DocumentProvider;
 

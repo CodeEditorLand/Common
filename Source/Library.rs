@@ -1,3 +1,6 @@
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+#![allow(non_snake_case, non_camel_case_types, non_upper_case_globals)]
+
 //! # Common Crate
 //!
 //! Defines the abstract architectural core for the entire application
@@ -9,8 +12,6 @@
 //! from "how" it is implemented (the concrete implementation in the `Mountain`
 //! crate). This declarative, effects-based architecture ensures that
 //! application logic is composable, testable, and maintainable.
-
-#![allow(non_snake_case, non_camel_case_types)]
 
 // --- Core Architecture ---
 pub mod Effect;

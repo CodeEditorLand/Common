@@ -6,8 +6,6 @@
 //! enable the entire effects-based system to function in a decoupled and
 //! testable manner.
 
-#![allow(non_snake_case, non_camel_case_types)]
-
 // --- Core Trait Definitions ---
 pub mod Environment;
 

@@ -5,8 +5,6 @@
 //! Objects (DTOs), and the `ActionEffect` constructors for every
 //! UI-related operation.
 
-#![allow(non_snake_case, non_camel_case_types)]
-
 // --- Trait Definition ---
 pub mod UserInterfaceProvider;
 
