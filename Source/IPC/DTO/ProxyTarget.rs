@@ -43,7 +43,7 @@ pub enum ProxyTarget {
 
 	MainThreadTelemetry,
 
-	MainThreadWorkSpace,
+	MainThreadWorkspace,
 
 	MainThreadStatusBar,
 

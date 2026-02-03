@@ -1,4 +1,4 @@
-//! # FindFilesInWorkSpace Effect
+//! # FindFilesInWorkspace Effect
 //!
 //! Defines the `ActionEffect` for finding files within the workspace that
 //! match given glob patterns.
@@ -8,13 +8,13 @@ use std::sync::Arc;
 use serde_json::Value;
 use url::Url;
 
-use super::WorkSpaceProvider::WorkSpaceProvider;
+use super::WorkspaceProvider::WorkspaceProvider;
 use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will find files within the workspace
 /// based on include and exclude glob patterns.
 ///
-/// It uses the `WorkSpaceProvider` capability from the environment to perform
+/// It uses the `WorkspaceProvider` capability from the environment to perform
 /// the search.
 ///
 /// # Parameters
@@ -28,7 +28,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 ///
 /// # Returns
 /// An `ActionEffect` that resolves with a `Vec<Url>` of the matching file URIs.
-pub fn FindFilesInWorkSpace(
+pub fn FindFilesInWorkspace(
 	IncludePatternDTO:Value,
 
 	ExcludePatternDTO:Option<Value>,
@@ -38,15 +38,15 @@ pub fn FindFilesInWorkSpace(
 	UseIgnoreFiles:bool,
 
 	FollowSymlinks:bool,
-) -> ActionEffect<Arc<dyn WorkSpaceProvider>, CommonError, Vec<Url>> {
-	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkSpaceProvider>| {
+) -> ActionEffect<Arc<dyn WorkspaceProvider>, CommonError, Vec<Url>> {
+	ActionEffect::New(Arc::new(move |Provider:Arc<dyn WorkspaceProvider>| {
 		let IncludeClone = IncludePatternDTO.clone();
 
 		let ExcludeClone = ExcludePatternDTO.clone();
 
 		Box::pin(async move {
 			Provider
-				.FindFilesInWorkSpace(IncludeClone, ExcludeClone, MaxResults, UseIgnoreFiles, FollowSymlinks)
+				.FindFilesInWorkspace(IncludeClone, ExcludeClone, MaxResults, UseIgnoreFiles, FollowSymlinks)
 				.await
 		})
 	}))

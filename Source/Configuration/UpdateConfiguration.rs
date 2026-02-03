@@ -22,7 +22,7 @@ use super::{
 use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that, when executed, will update a configuration value at
-/// a specific key and target scope (e.g., User or WorkSpace settings).
+/// a specific key and target scope (e.g., User or Workspace settings).
 ///
 /// It uses the `ConfigurationProvider` capability from the environment to
 /// perform the operation, which will typically involve modifying a

@@ -1,4 +1,4 @@
-//! # WorkSpaceEditDTO
+//! # WorkspaceEditDTO
 //!
 //! Defines the Data Transfer Object for a workspace edit, which is a collection
 //! of changes to be applied across multiple files in the workspace.
@@ -12,7 +12,7 @@ use serde_json::Value;
 /// rename). This is analogous to `vscode.WorkspaceEdit`.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 #[serde(rename_all = "PascalCase")]
-pub struct WorkSpaceEditDTO {
+pub struct WorkspaceEditDTO {
 	/// A list of text edits to apply, grouped by resource URI.
 	/// The structure is `[ [uri_dto, [text_edit_dto, ...]], ... ]`
 	pub Edits:Vec<(Value, Vec<Value>)>,

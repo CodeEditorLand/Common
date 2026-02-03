@@ -28,10 +28,10 @@ pub struct InspectResultDataDTO {
 	pub UserRemoteValue:Option<Value>,
 
 	/// The value from the workspace settings.
-	pub WorkSpaceValue:Option<Value>,
+	pub WorkspaceValue:Option<Value>,
 
 	/// The value from a specific workspace folder's settings.
-	pub WorkSpaceFolderValue:Option<Value>,
+	pub WorkspaceFolderValue:Option<Value>,
 
 	/// The value from the in-memory configuration.
 	pub MemoryValue:Option<Value>,
@@ -51,9 +51,9 @@ pub struct InspectResultDataDTO {
 
 	pub UserRemoteLanguageValue:Option<Value>,
 
-	pub WorkSpaceLanguageValue:Option<Value>,
+	pub WorkspaceLanguageValue:Option<Value>,
 
-	pub WorkSpaceFolderLanguageValue:Option<Value>,
+	pub WorkspaceFolderLanguageValue:Option<Value>,
 
 	pub MemoryLanguageValue:Option<Value>,
 

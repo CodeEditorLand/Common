@@ -20,10 +20,10 @@ pub enum ConfigurationTarget {
 	User = 2,
 
 	/// Target the workspace settings file (e.g., `.vscode/settings.json`).
-	WorkSpace = 3,
+	Workspace = 3,
 
 	/// Target a specific folder's settings in a multi-root workspace.
-	WorkSpaceFolder = 4,
+	WorkspaceFolder = 4,
 
 	/// Target the default values (typically a read-only operation).
 	Default = 5,

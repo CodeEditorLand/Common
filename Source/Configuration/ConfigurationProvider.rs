@@ -50,7 +50,7 @@ pub trait ConfigurationProvider: Environment + Send + Sync {
 	/// * `Key`: The dot-separated configuration key to update.
 	/// * `ValueToSet`: The new `serde_json::Value` to set for the key.
 	/// * `Target`: The `ConfigurationTarget` enum specifying which scope to
-	///   write to (e.g., User, WorkSpace).
+	///   write to (e.g., User, Workspace).
 	/// * `Overrides`: A DTO for scope overrides.
 	/// * `ScopeToLanguage`: An optional flag related to language-specific
 	///   settings.

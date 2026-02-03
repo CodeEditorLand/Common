@@ -69,7 +69,7 @@ pub mod UserInterface;
 
 pub mod WebView;
 
-pub mod WorkSpace;
+pub mod Workspace;
 
 // --- Global DTO Module ---
 //

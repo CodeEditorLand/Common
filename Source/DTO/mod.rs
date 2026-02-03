@@ -4,4 +4,4 @@
 //! various service modules for convenient access across the application.
 //! It also contains DTOs that are shared across multiple services.
 
-pub mod WorkSpaceEditDTO;
+pub mod WorkspaceEditDTO;

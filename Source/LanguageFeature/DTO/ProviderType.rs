@@ -29,7 +29,7 @@ pub enum ProviderType {
 
 	DocumentSymbol = 8,
 
-	WorkSpaceSymbol = 9,
+	WorkspaceSymbol = 9,
 
 	CodeAction = 10,
 

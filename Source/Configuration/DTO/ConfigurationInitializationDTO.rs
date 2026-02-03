@@ -27,9 +27,9 @@ pub struct ConfigurationInitializationDTO {
 	/// User-level settings, typically from a global `settings.json` file.
 	pub User:Value,
 
-	/// WorkSpace-level settings, from a `.code-workspace` file or a folder's
+	/// Workspace-level settings, from a `.code-workspace` file or a folder's
 	/// `.vscode/settings.json`.
-	pub WorkSpace:Value,
+	pub Workspace:Value,
 
 	/// Settings specific to individual folders in a multi-root workspace.
 	pub Folders:Value,

@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 /// defined in an extension's `package.json` manifest.
 ///
 /// This determines where the setting can be configured by a user (e.g., in
-/// User settings, WorkSpace settings, or both). The integer values are chosen
+/// User settings, Workspace settings, or both). The integer values are chosen
 /// for direct compatibility with VS Code's internal API.
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ConfigurationScope {

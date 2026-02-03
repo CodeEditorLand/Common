@@ -59,6 +59,9 @@ pub enum CommonError {
 	#[error("Command '{Identifier}' not found")]
 	CommandNotFound { Identifier:String },
 
+	#[error("Feature '{FeatureName}' is not available")]
+	FeatureNotAvailable { FeatureName:String },
+
 	// --- Language Feature Provider Errors ---
 	#[error("Language provider registration failed for '{ProviderType}': {Reason}")]
 	ProviderRegistration { ProviderType:String, Reason:String },
@@ -70,9 +73,15 @@ pub enum CommonError {
 	#[error("Test run '{RunIdentifier}' not found")]
 	TestRunNotFound { RunIdentifier:String },
 
+	#[error("Test controller '{ControllerIdentifier}' not found")]
+	TestControllerNotFound { ControllerIdentifier:String },
+
 	// --- TreeView Errors (New) ---
 	#[error("TreeView provider not found for view ID '{ViewIdentifier}'")]
 	TreeViewProviderNotFound { ViewIdentifier:String },
+
+	#[error("WebView '{Handle}' not found")]
+	WebViewNotFound { Handle:String },
 
 	// --- Other Specific Errors ---
 	#[error("External service '{ServiceName}' failed: {Description}")]
