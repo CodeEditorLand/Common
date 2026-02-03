@@ -8,7 +8,7 @@
 //!
 //! This module defines the abstract contract for the Custom Editor service,
 
-//! which allows extensions to provide custom, WebView-based editors for
+//! which allows extensions to provide custom, Webview-based editors for
 //! specific file types.
 
 // --- Trait Definition ---

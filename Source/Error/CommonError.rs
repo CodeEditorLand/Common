@@ -80,8 +80,8 @@ pub enum CommonError {
 	#[error("TreeView provider not found for view ID '{ViewIdentifier}'")]
 	TreeViewProviderNotFound { ViewIdentifier:String },
 
-	#[error("WebView '{Handle}' not found")]
-	WebViewNotFound { Handle:String },
+	#[error("Webview '{Handle}' not found")]
+	WebviewNotFound { Handle:String },
 
 	// --- Other Specific Errors ---
 	#[error("External service '{ServiceName}' failed: {Description}")]

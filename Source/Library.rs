@@ -67,7 +67,7 @@ pub mod TreeView;
 
 pub mod UserInterface;
 
-pub mod WebView;
+pub mod Webview;
 
 pub mod Workspace;
 

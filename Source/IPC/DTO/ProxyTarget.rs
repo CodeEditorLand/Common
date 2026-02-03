@@ -39,7 +39,7 @@ pub enum ProxyTarget {
 
 	MainThreadWindow,
 
-	MainThreadWebViews,
+	MainThreadWebviews,
 
 	MainThreadTelemetry,
 
@@ -84,7 +84,7 @@ pub enum ProxyTarget {
 
 	ExtHostEnvironment,
 
-	ExtHostWebViews,
+	ExtHostWebviews,
 
 	ExtHostTelemetry,
 

@@ -17,7 +17,7 @@ use url::Url;
 use crate::{Environment::Environment::Environment, Error::CommonError::CommonError};
 
 /// An abstract service contract for an environment component that can manage
-/// the registration and resolution of custom, WebView-based editors.
+/// the registration and resolution of custom, Webview-based editors.
 #[async_trait]
 pub trait CustomEditorProvider: Environment + Send + Sync {
 	/// Registers a new custom editor provider from an extension.
@@ -48,7 +48,7 @@ pub trait CustomEditorProvider: Environment + Send + Sync {
 	/// # Parameters
 	/// * `ViewType`: The identifier of the custom editor.
 	/// * `ResourceURI`: The URI of the document to resolve.
-	/// * `WebViewPanelHandle`: The unique handle for the webview panel hosting
+	/// * `WebviewPanelHandle`: The unique handle for the webview panel hosting
 	///   the editor.
 	async fn ResolveCustomEditor(
 		&self,
@@ -57,6 +57,6 @@ pub trait CustomEditorProvider: Environment + Send + Sync {
 
 		ResourceURI:Url,
 
-		WebViewPanelHandle:String,
+		WebviewPanelHandle:String,
 	) -> Result<(), CommonError>;
 }
