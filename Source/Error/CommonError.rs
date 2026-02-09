@@ -52,6 +52,9 @@ pub enum CommonError {
 	#[error("Inter-process communication error: {Description}")]
 	IPCError { Description:String },
 
+	#[error("Access denied: {Reason}")]
+	AccessDenied { Reason:String },
+
 	// --- Command System Errors ---
 	#[error("Command '{CommandIdentifier}' execution failed: {Reason}")]
 	CommandExecution { CommandIdentifier:String, Reason:String },
