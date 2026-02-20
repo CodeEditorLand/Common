@@ -12,7 +12,7 @@
 # **Common** 👨🏻‍🏭 The Architectural Core of Land
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Common/tree/Current/LICENSE)
-[![Rust Version](https://img.shields.io/badge/Rust-1.77+-blue.svg)](https://www.rust-lang.org/)
+[![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
 [![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
 
 Welcome to **Common**! This crate is the architectural heart of the Land Code
@@ -116,17 +116,43 @@ its trait definitions, DTOs, and effect constructors.
 ```
 Common/
 └── Source/
-    ├── Library.rs                      # Crate root, declares all modules.
-    ├── Environment/                    # The core DI system (Environment, Requires traits).
-    ├── Effect/                         # The ActionEffect system (ActionEffect, ApplicationRunTime traits).
-    ├── Error/                          # The universal CommonError enum.
-    ├── DTO/                            # Shared Data Transfer Objects.
-    └── Command/                        # Example service domain:
-        ├── mod.rs                      # Module aggregator.
-        ├── CommandExecutor.rs          # The abstract `trait` definition.
-        ├── DTO/                        # (if any service-specific DTOs are needed)
-        └── ExecuteCommand.rs           # The `ActionEffect` constructor function.
-    └── (Other service domains like FileSystem/, UserInterface/, etc. follow the same pattern)
+    ├── Library.rs                     # Crate root, declares all modules.
+    ├── Environment/                   # The core DI system (Environment, Requires, HasEnvironment traits).
+    ├── Effect/                        # The ActionEffect system (ActionEffect, ApplicationRunTime traits).
+    ├── Error/                         # The universal CommonError enum.
+    ├── DTO/                           # Shared Data Transfer Objects (re-exports from service modules).
+    ├── Utility/                       # Utility functions (e.g., Serialization).
+    ├── Command/                       # Command management service.
+    ├── Configuration/                 # Configuration provider service.
+    ├── CustomEditor/                  # Custom editor provider service.
+    ├── Debug/                         # Debug service.
+    ├── Diagnostic/                    # Diagnostic manager service.
+    ├── Document/                      # Document provider service.
+    ├── ExtensionManagement/           # Extension management service.
+    ├── FileSystem/                    # FileSystem read/write service.
+    │   └── DTO/                       # FileSystem-specific DTOs (FileTypeDTO, FileSystemStatDTO).
+    ├── IPC/                           # Inter-process communication service.
+    ├── Keybinding/                    # Keybinding provider service.
+    ├── LanguageFeature/               # Language feature provider registry.
+    │   └── DTO/                       # Language feature DTOs (CompletionListDTO, HoverResultDTO, etc.).
+    ├── Output/                        # Output channel manager service.
+    ├── Search/                        # Search provider service.
+    ├── Secret/                        # Secret storage provider service.
+    ├── SourceControlManagement/       # Source control management service.
+    │   └── DTO/                       # SCM DTOs (SourceControlManagementProviderDTO, etc.).
+    ├── StatusBar/                     # Status bar provider service.
+    │   └── DTO/                       # StatusBar DTOs (StatusBarEntryDTO).
+    ├── Storage/                       # Storage provider service.
+    ├── Synchronization/               # Synchronization provider service.
+    ├── Terminal/                      # Terminal provider service.
+    ├── Testing/                       # Test controller service.
+    ├── TreeView/                      # Tree view provider service.
+    │   └── DTO/                       # TreeView DTOs (TreeItemDTO, TreeViewOptionsDTO).
+    ├── UserInterface/                 # User interface provider service.
+    │   └── DTO/                       # UI DTOs (MessageOptionsDTO, QuickPickOptionsDTO, etc.).
+    ├── Webview/                       # Webview provider service.
+    │   └── DTO/                       # Webview DTOs (WebviewContentOptionsDTO).
+    └── Workspace/                     # Workspace provider service.
 ```
 
 ---
@@ -135,9 +161,10 @@ Common/
 
 To understand the core philosophy behind this crate and how its components work
 together, please refer to the detailed technical breakdown in
-[`Documentation/GitHub/DeepDive.md`](https://github.com/CodeEditorLand/Common/tree/Current/Documentation/GitHub/DeepDive.md). This document explains the
-`ActionEffect` system, the trait-based dependency injection model, and provides
-a guide for adding new services to the architecture.
+[`Documentation/GitHub/DeepDive.md`](https://github.com/CodeEditorLand/Common/tree/Current/Documentation/GitHub/DeepDive.md).
+This document explains the `ActionEffect` system, the trait-based dependency
+injection model, and provides a guide for adding new services to the
+architecture.
 
 ---
 
@@ -239,14 +266,16 @@ async fn some_logic(runtime: Arc<impl ApplicationRunTime>) {
 This project is released into the public domain under the **Creative Commons CC0
 Universal** license. You are free to use, modify, distribute, and build upon
 this work for any purpose, without any restrictions. For the full legal text,
-see the [`LICENSE`](https://github.com/CodeEditorLand/Common/tree/Current/) file.
+see the [`LICENSE`](https://github.com/CodeEditorLand/Common/tree/Current/)
+file.
 
 ---
 
 ## Changelog 📜
 
-Stay updated with our progress! See [`CHANGELOG.md`](https://github.com/CodeEditorLand/Common/tree/Current/) for a history
-of changes specific to **Common**.
+Stay updated with our progress! See
+[`CHANGELOG.md`](https://github.com/CodeEditorLand/Common/tree/Current/) for a
+history of changes specific to **Common**.
 
 ---
 
