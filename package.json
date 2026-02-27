@@ -23,7 +23,7 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
-		"@cloudflare/workers-types": "4.20260304.0",
+		"@cloudflare/workers-types": "4.20260305.0",
 		"@playform/build": "0.3.0"
 	},
 	"publishConfig": {
