@@ -4,18 +4,24 @@ toml = { workspace = true }
 
 [dependencies]
 tauri = { workspace = true, features = [
-	"wry",
-	"tray-icon",
-	"devtools",
-	"rustls-tls",
-	"compression",
-], default-features = false }
+ 	"wry",
+ 	"tray-icon",
+ 	"devtools",
+ 	"rustls-tls",
+ 	"compression",
+ ], default-features = false }
 
 async-trait = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
 url = { workspace = true }
+
+# Transport-specific dependencies
+uuid = { workspace = true }
+futures = { workspace = true }
+anyhow = { workspace = true }
+prometheus = { workspace = true }
 
 [features]
 default = []
