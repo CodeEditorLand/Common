@@ -20,13 +20,13 @@
 # **Common** 👨🏻‍🏭 Deep Dive & Architecture
 
 This document provides the technical foundation for lifting VSCode services into
-the Land ecosystem. **Common** defines the abstract architectural patterns,
+the Land ecosystem. `Common` 👨🏻‍🏭 defines the abstract architectural patterns,
 service contracts, and data structures that enable type-safe, testable service
 implementations across Rust and TypeScript boundaries.
 
 ---
 
-## Core Architecture Principles
+## Core Architecture Principles 🏛️
 
 | Principle                    | Description                                                                                                                                          | Key Components Involved                    |
 | :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------- |
@@ -39,9 +39,9 @@ implementations across Rust and TypeScript boundaries.
 
 ---
 
-## Deep Dive into `Common`'s Components
+## Deep Dive into `Common`'s Components 🔬
 
-### 1. The `ActionEffect` System: Concrete Implementation
+### 1. The `ActionEffect` System: Concrete Implementation ⚙️
 
 The `ActionEffect` system implements declarative programming patterns where
 operations are described as values rather than executed immediately.
@@ -77,7 +77,7 @@ let parallel_effect = effect1.zip(effect2);
 let resilient_effect = effect.fallback(backup_effect);
 ```
 
-### 2. Concrete Environment System Architecture
+### 2. Concrete Environment System Architecture 🌐
 
 The `Environment` trait system implements capability-based architecture for
 clean dependency management:
@@ -107,7 +107,7 @@ For any `ActionEffect<C, E, T>`, the runtime provides `C` through these steps:
 3. **Runtime Resolution:** ApplicationRunTime resolves and provides capabilities
 4. **Execution:** Effect executes with provided capability
 
-### 3. Concrete DTO System Design
+### 3. Concrete DTO System Design 📦
 
 The Data Transfer Object system provides type-safe serialization for IPC
 communication:
@@ -144,7 +144,7 @@ DTOs ensure consistent data structures across the Land ecosystem:
 - **Type Safety:** Compile-time validation of data structures
 - **Performance:** Efficient serialization for high-frequency operations
 
-### 4. Concrete Error System Architecture
+### 4. Concrete Error System Architecture 🚨
 
 The `CommonError` enum provides comprehensive error handling:
 
@@ -171,13 +171,13 @@ graph TB
 
 ---
 
-## Concrete Technical Architecture
+## Concrete Technical Architecture 🏗️
 
-### Core Architectural Components
+### Core Architectural Components 🧱
 
 #### 1. Concrete Effect Composition Architecture
 
-Common enables sophisticated effect composition through concrete patterns:
+`Common` enables sophisticated effect composition through concrete patterns:
 
 ```mermaid
 graph LR
@@ -200,7 +200,7 @@ graph LR
 
 #### 2. Concrete Dependency Injection Architecture
 
-Common implements clean dependency injection through trait bounds:
+`Common` implements clean dependency injection through trait bounds:
 
 ```rust
 // Service trait definition
@@ -217,7 +217,7 @@ pub fn read_file_effect(path: PathBuf) -> ActionEffect<Arc<dyn FileSystemReader>
 }
 ```
 
-### Concrete Technical Implementation
+### Concrete Technical Implementation 🔩
 
 #### Performance Characteristics: Effect Execution Overhead
 
@@ -244,7 +244,7 @@ The type system prevents runtime capability errors through:
 3. **Compile-Time Verification:** Invalid compositions fail to compile
 4. **Runtime Safety:** Successful compilation guarantees capability availability
 
-### Ecosystem Integration Mapping
+### Ecosystem Integration Mapping 🗺️
 
 ```mermaid
 graph TD
@@ -274,9 +274,14 @@ graph TD
         DTOs --> Serialization
         Errors --> IPC
     end
+
+    classDef mountain fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef common fill:#cfc,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
+    class Mountain mountain;
+    class Traits,Effects,DTOs,Errors common;
 ```
 
-### Concrete Integration Patterns
+### Concrete Integration Patterns 🔗
 
 #### Effect-Based Testing Architecture
 
@@ -315,11 +320,11 @@ sequenceDiagram
 
 ---
 
-## Concrete VSCode Service Lifting Patterns
+## Concrete VSCode Service Lifting Patterns 🔧
 
-### Service Migration Strategy
+### Service Migration Strategy 🔄
 
-Common provides the foundation for lifting VSCode services through:
+`Common` provides the foundation for lifting VSCode services through:
 
 #### 1. Service Interface Definition
 
@@ -355,7 +360,7 @@ pub struct WorkspaceFolderDTO {
 }
 ```
 
-### Concrete Service Integration Examples
+### Concrete Service Integration Examples 📋
 
 #### File System Service Lifting
 
@@ -394,7 +399,7 @@ pub fn get_configuration_effect(section: Option<String>) -> ActionEffect<Arc<dyn
 }
 ```
 
-### Concrete VSCode Service Lifting Architecture
+### Concrete VSCode Service Lifting Architecture 🏗️
 
 ```mermaid
 graph TD
@@ -419,6 +424,13 @@ graph TD
         EffectTS --> gRPC
         EffectTS --> Tauri
     end
+
+    classDef mountain fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef wind fill:#9cf,stroke:#333,stroke-width:2px;
+    classDef common fill:#cfc,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
+    class MountainImpl mountain;
+    class EffectTS wind;
+    class CommonTraits common;
 ```
 
 #### Service Migration Table
@@ -431,7 +443,7 @@ graph TD
 | `ICommandService`       | `CommandService`       | `MountainCommand`       | `CommandService`       |
 | `IDocumentService`      | `DocumentProvider`     | `MountainDocument`      | `DocumentService`      |
 
-### Component Block Map
+### Component Block Map 🧩
 
 ```mermaid
 graph TB
@@ -460,34 +472,43 @@ graph TB
     Errors --> Mountain
     Errors --> Wind
     Errors --> Cocoon
+
+    classDef mountain fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef cocoon fill:#ccf,stroke:#333,stroke-width:2px;
+    classDef wind fill:#9cf,stroke:#333,stroke-width:2px;
+    classDef common fill:#cfc,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
+    class Mountain mountain;
+    class Cocoon cocoon;
+    class Wind wind;
+    class Traits,Effects,DTOs,Errors common;
 ```
 
-## Performance Optimization Strategies
+## Performance Optimization Strategies ⚡
 
-### 1. Zero-Cost Abstractions
+### 1. Zero-Cost Abstractions 🔮
 
 - **Inline Optimization:** Effect constructors marked `#[inline]` for direct
   embedding
 - **Generic Specialization:** Monomorphization creates specialized versions
 - **Stack Allocation:** Small effects avoid heap allocation
 
-### 2. Memory Management Optimization
+### 2. Memory Management Optimization 🧠
 
 - **Arena Allocation:** Related effects use arena allocation for locality
 - **Object Pooling:** Frequently used effect types are pooled
 - **Cache-Friendly Layout:** Data structures optimized for CPU cache
 
-### 3. Concurrency Optimization
+### 3. Concurrency Optimization 🔄
 
 - **Send + Sync Bounds:** Effects designed for seamless cross-thread usage
 - **Atomic Reference Counting:** Efficient `Arc` usage with minimal overhead
 - **Lock-Free Patterns:** Internal data structures use lock-free algorithms
 
-## Development Guidelines
+## Development Guidelines 📖
 
-### Adding New Services
+### Adding New Services ➕
 
-When adding new services to Common, follow these concrete patterns:
+When adding new services to `Common`, follow these concrete patterns:
 
 1. **Define Service Interface:** Create Rust trait matching VSCode service
    interface
@@ -496,7 +517,7 @@ When adding new services to Common, follow these concrete patterns:
 3. **Define DTOs:** Create serializable DTOs for cross-language communication
 4. **Define Errors:** Add appropriate error variants to CommonError
 
-### Concrete Usage Patterns
+### Concrete Usage Patterns 💡
 
 #### Custom Effect Creation
 
@@ -534,7 +555,7 @@ let metrics = {
 };
 ```
 
-Common represents the foundational layer for lifting VSCode services into the
+`Common` represents the foundational layer for lifting VSCode services into the
 Land ecosystem, providing the abstract contracts and patterns that enable
 type-safe, testable, and maintainable service implementations across Rust and
 TypeScript boundaries.

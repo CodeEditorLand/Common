@@ -206,7 +206,7 @@ graph LR
 
 ## Getting Started 🚀
 
-### Installation
+### Installation 📥
 
 `Common` is intended to be used as a local path dependency within the `Land`
 workspace. In `Mountain`'s `Cargo.toml`:
@@ -216,7 +216,7 @@ workspace. In `Mountain`'s `Cargo.toml`:
 Common = { path = "../Common" }
 ```
 
-### Usage
+### Usage 🚀
 
 A developer working within the `Mountain` codebase would use `Common` as
 follows:
