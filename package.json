@@ -21,9 +21,8 @@
 	"scripts": {
 		"prepublishOnly": "Build 'Source/**/*.ts'"
 	},
-	"dependencies": {},
 	"devDependencies": {
-		"@cloudflare/workers-types": "4.20260304.0",
+		"@cloudflare/workers-types": "4.20260317.1",
 		"@playform/build": "0.3.0"
 	},
 	"publishConfig": {
