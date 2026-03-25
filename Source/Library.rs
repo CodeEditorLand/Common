@@ -71,6 +71,10 @@ pub mod Webview;
 
 pub mod Workspace;
 
+// --- Transport Layer ---
+// Provides transport-agnostic communication abstractions (gRPC, IPC, WASM)
+pub mod Transport;
+
 // --- Global DTO Module ---
 //
 // A top-level module that re-exports all Data Transfer Objects (DTOs) from the

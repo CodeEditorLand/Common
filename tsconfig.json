@@ -2,8 +2,6 @@
 	"compilerOptions": {
 		"baseUrl": "./",
 
-		"composite": true,
-
 		"declarationMap": true,
 
 		"emitDeclarationOnly": true,
@@ -19,5 +17,5 @@
 
 	"extends": "@playform/build/tsconfig",
 
-	"include": ["Source"]
+	"include": ["TypeScript"]
 }
