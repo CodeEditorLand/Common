@@ -9,7 +9,7 @@
 
 ---
 
-# **Common** 👨🏻‍🏭
+# **Common** 👨🏻‍🏭
 
 The Architectural Core of Land
 
@@ -43,7 +43,7 @@ implementing the traits and consuming the effects defined in this crate.
 
 ---
 
-## Key Features & Concepts 🔐
+## Key Features & Concepts 🔐
 
 - **Declarative `ActionEffect` System:** Operations are not executed immediately
   — they are described as `ActionEffect` data structures and then passed to a
@@ -110,7 +110,7 @@ This separation makes the architecture flexible and testable.
 
 ---
 
-## Project Structure Overview 🗺️
+## Project Structure Overview 🗺️
 
 The `Common` crate is organized by service domain, with each domain containing
 its trait definitions, DTOs, and effect constructors.
@@ -159,7 +159,7 @@ Common/
 
 ---
 
-## Deep Dive & Architectural Patterns 🔬
+## Deep Dive & Architectural Patterns 🔬
 
 To understand the core philosophy behind this crate and how its components work
 together, please refer to the detailed technical breakdown in
@@ -171,7 +171,7 @@ architecture.
 
 ---
 
-## How `Common` Fits into the `Land` Ecosystem 👨🏻‍🏭 + 🏞️
+## How `Common` Fits into the `Land` Ecosystem 👨🏻‍🏭 + 🏞️
 
 `Common` is the foundational layer upon which the entire native backend is
 built. It has no knowledge of its consumers, but they are entirely dependent on
@@ -207,9 +207,9 @@ graph LR
 
 ---
 
-## Getting Started 🚀
+## Getting Started 🚀
 
-### Installation 📥
+### Installation 📥
 
 `Common` is intended to be used as a local path dependency within the `Land`
 workspace. In `Mountain`'s `Cargo.toml`:
@@ -219,7 +219,7 @@ workspace. In `Mountain`'s `Cargo.toml`:
 Common = { path = "../Common" }
 ```
 
-### Usage 🚀
+### Usage 🚀
 
 A developer working within the `Mountain` codebase would use `Common` as
 follows:
