@@ -26,26 +26,26 @@ implementing the traits and consuming the effects defined in this crate.
 
 **`Common`** is engineered to:
 
-1.  **Enforce Architectural Boundaries:** By defining all application
-    capabilities as abstract `trait`s, it ensures a clean separation between the
-    definition of an operation and its execution.
-2.  **Provide a Declarative Effect System:** Introduces the `ActionEffect` type,
-    which describes an asynchronous operation as a value, allowing logic to be
-    composed, tested, and executed in a controlled `ApplicationRunTime`.
-3.  **Standardize Data Contracts:** Defines all Data Transfer Objects (DTOs) and
-    a universal `CommonError` enum, ensuring consistent data structures and
-    error handling across the entire native ecosystem.
-4.  **Maximize Testability and Reusability:** Because this crate is pure and
-    abstract, any component that depends on it can be tested with mock
-    implementations of its traits, leading to fast and reliable unit tests.
+1. **Enforce Architectural Boundaries:** By defining all application
+   capabilities as abstract `trait`s, it ensures a clean separation between the
+   definition of an operation and its execution.
+2. **Provide a Declarative Effect System:** Introduces the `ActionEffect` type,
+   which describes an asynchronous operation as a value, allowing logic to be
+   composed, tested, and executed in a controlled `ApplicationRunTime`.
+3. **Standardize Data Contracts:** Defines all Data Transfer Objects (DTOs) and
+   a universal `CommonError` enum, ensuring consistent data structures and error
+   handling across the entire native ecosystem.
+4. **Maximize Testability and Reusability:** Because this crate is pure and
+   abstract, any component that depends on it can be tested with mock
+   implementations of its traits, leading to fast and reliable unit tests.
 
 ---
 
 ## Key Features & Concepts 🔐
 
-- **Declarative `ActionEffect` System:** A powerful pattern where operations are
-  not executed immediately, but are instead described as `ActionEffect` data
-  structures. These effects are then passed to a runtime for execution.
+- **Declarative `ActionEffect` System:** Operations are not executed immediately
+  — they are described as `ActionEffect` data structures and then passed to a
+  runtime for execution.
 - **Trait-Based Dependency Injection:** A clean, compile-time DI system using
   the `Environment` and `Requires` traits, allowing components to declare their
   dependencies without being tied to a specific implementation.
@@ -104,7 +104,7 @@ let read_effect: ActionEffect<Arc<dyn FileSystemReader>, _, _> = FileSystem::Rea
 let file_content = runtime.Run(read_effect).await?;
 ```
 
-This separation is what makes the architecture so flexible and testable.
+This separation makes the architecture flexible and testable.
 
 ---
 
@@ -221,8 +221,8 @@ Common = { path = "../Common" }
 A developer working within the `Mountain` codebase would use `Common` as
 follows:
 
-1.  **Implement a Trait:** In `Mountain/Source/Environment/`, provide the
-    concrete implementation for a `Common` trait.
+1. **Implement a Trait:** In `Mountain/Source/Environment/`, provide the
+   concrete implementation for a `Common` trait.
 
 ```rust
 // In Mountain/Source/Environment/FileSystemProvider.rs
@@ -239,8 +239,8 @@ impl FileSystemReader for MountainEnvironment {
 }
 ```
 
-2.  **Create and Execute an Effect:** In business logic, create and run an
-    effect.
+2. **Create and Execute an Effect:** In business logic, create and run an
+   effect.
 
 ```rust
 // In a Mountain service or command
