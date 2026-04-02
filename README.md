@@ -3,13 +3,15 @@
 <source media="(prefers-color-scheme: dark)" srcset="https://PlayForm.Cloud/Dark/Image/GitHub/Land.svg">
 <source media="(prefers-color-scheme: light)" srcset="https://PlayForm.Cloud/Image/GitHub/Land.svg">
 <img width="28" alt="Land Logo" src="https://PlayForm.Cloud/Image/GitHub/Land.svg">
-</picture> </h3> </td> <td colspan="3" valign="top"> <h3 align="center"> Common 👨🏻‍🏭
+</picture> </h3> </td> <td colspan="3" valign="top"> <h3 align="center"> Common 👨🏻‍🏭
 </h3> </td>
 </tr></table>
 
 ---
 
-# **Common** 👨🏻‍🏭 The Architectural Core of Land
+# **Common** 👨🏻‍🏭
+
+The Architectural Core of Land
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Common/tree/Current/LICENSE)
 [![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
@@ -41,7 +43,7 @@ implementing the traits and consuming the effects defined in this crate.
 
 ---
 
-## Key Features & Concepts 🔐
+## Key Features & Concepts 🔐
 
 - **Declarative `ActionEffect` System:** Operations are not executed immediately
   — they are described as `ActionEffect` data structures and then passed to a
@@ -108,7 +110,7 @@ This separation makes the architecture flexible and testable.
 
 ---
 
-## Project Structure Overview 🗺️
+## Project Structure Overview 🗺️
 
 The `Common` crate is organized by service domain, with each domain containing
 its trait definitions, DTOs, and effect constructors.
@@ -157,18 +159,19 @@ Common/
 
 ---
 
-## Deep Dive & Architectural Patterns 🔬
+## Deep Dive & Architectural Patterns 🔬
 
 To understand the core philosophy behind this crate and how its components work
 together, please refer to the detailed technical breakdown in
 [`Documentation/GitHub/DeepDive.md`](https://github.com/CodeEditorLand/Common/tree/Current/Documentation/GitHub/DeepDive.md).
+
 This document explains the `ActionEffect` system, the trait-based dependency
 injection model, and provides a guide for adding new services to the
 architecture.
 
 ---
 
-## How `Common` Fits into the `Land` Ecosystem 👨🏻‍🏭 + 🏞️
+## How `Common` Fits into the `Land` Ecosystem 👨🏻‍🏭 + 🏞️
 
 `Common` is the foundational layer upon which the entire native backend is
 built. It has no knowledge of its consumers, but they are entirely dependent on
@@ -204,9 +207,9 @@ graph LR
 
 ---
 
-## Getting Started 🚀
+## Getting Started 🚀
 
-### Installation 📥
+### Installation 📥
 
 `Common` is intended to be used as a local path dependency within the `Land`
 workspace. In `Mountain`'s `Cargo.toml`:
@@ -216,7 +219,7 @@ workspace. In `Mountain`'s `Cargo.toml`:
 Common = { path = "../Common" }
 ```
 
-### Usage 🚀
+### Usage 🚀
 
 A developer working within the `Mountain` codebase would use `Common` as
 follows:
@@ -264,10 +267,11 @@ async fn some_logic(runtime: Arc<impl ApplicationRunTime>) {
 ## License ⚖️
 
 This project is released into the public domain under the **Creative Commons CC0
-Universal** license. You are free to use, modify, distribute, and build upon
-this work for any purpose, without any restrictions. For the full legal text,
-see the [`LICENSE`](https://github.com/CodeEditorLand/Common/tree/Current/)
-file.
+Universal** license.
+
+You are free to use, modify, distribute, and build upon this work for any
+purpose, without any restrictions. For the full legal text, see the
+[`LICENSE`](https://github.com/CodeEditorLand/Common/tree/Current/) file.
 
 ---
 
@@ -286,6 +290,11 @@ through [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
 [NLnet](https://NLnet.NL) with financial support from the European Commission's
 [Next Generation Internet](https://ngi.eu) program. Learn more at the
 [NLnet project page](https://NLnet.NL/project/Land).
+
+The project is operated by PlayForm, based in Sofia, Bulgaria.
+
+PlayForm acts as the open-source steward for Code Editor Land under the NGI0
+Commons Fund grant.
 
 <table>
 	<thead>
