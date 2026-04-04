@@ -1,908 +1,728 @@
+#![allow(non_snake_case, non_camel_case_types, non_upper_case_globals)]
 //! # Transport Registry
 //!
 //! The Transport Registry enables dynamic transport selection and management,
 //! allowing components to register, select, and switch between transports at
 //! runtime.
-//!
-//! This module provides:
-//!
-//! - [`TransportRegistry`] - Central registry for managing multiple transports
-//! - [`TransportSelector`] - Auto-selects best transport based on context
-//! - [`TransportContext`] - Context information for transport selection
-//! - [`EnvironmentDetector`] - Runtime environment detection
-//!
-//! ## Architecture
-//!
-//! The registry follows a strategy pattern where multiple transport strategies
-//! can be registered and selected based on environment, requirements, and
-//! constraints.
-//!
-//! ```rust,ignore
-//! use common_common::transport::{TransportRegistry, TransportStrategy, UnifiedRequest};
-//!
-//! #[tokio::main]
-//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let mut registry = TransportRegistry::new();
-//!
-//!     // Register available transports
-//!     registry.register("grpc", GrpcTransport::new("localhost:50051")?);
-//!     registry.register("ipc", IpcTransport::new("/tmp/socket")?);
-//!
-//!     // Auto-select based on environment
-//!     let context = TransportContext::detect();
-//!     let selected = registry.auto_select(&context)?;
-//!     println!("Selected transport: {}", selected);
-//!
-//!     // Use the active transport
-//!     if let Some(transport) = registry.get_active() {
-//!         let response = transport.send_request(UnifiedRequest::new("ping")).await?;
-//!     }
-//!
-//!     Ok(())
-//! }
-//! ```
-//!
-//! ## Selection Strategy
-//!
-//! Transports are selected based on:
-//!
-//! - Environment (platform, is_web, is_desktop)
-//! - Requirements (streaming, cross-process, cross-network, performance)
-//! - Constraints (allowed/forbidden transports, latency limits)
-//!
-//! The selection uses a priority-based fallback chain with automatic
-//! connection testing.
 
-use async_trait::async_trait;
 use std::collections::{HashMap, HashSet};
-use std::sync::{Arc, RwLock};
-use std::time::{Duration, Instant};
+use std::sync::Arc;
+use std::time::Duration;
 
 use super::{
-    Common::{
-        EnvironmentDetector, DefaultTransportTypeDetector, TransportType, TransportTypeDetector,
-    },
-    TransportConfig::TransportConfig,
-    TransportError::TransportError,
-    TransportStrategy::{self, TransportStrategy as CommonTransportStrategy, TransportCapabilities},
-    TransportMetrics,
-    UnifiedRequest::UnifiedRequest,
-    UnifiedResponse::UnifiedResponse,
+	Common::{DefaultTransportTypeDetector, TransportType, TransportTypeDetector},
+	TransportError::TransportError,
+	TransportStrategy::{TransportMetrics, TransportStrategy as CommonTransportStrategy},
 };
 
 /// Selection strategy for automatic transport selection.
-#[derive(Debug, Clone)]
 pub struct TransportSelector {
-    /// Environment detector for auto-selection
-    environment_detector: Box<dyn TransportTypeDetector + Send + Sync>,
-    /// Priority order for fallback chain
-    priority_order: Vec<TransportType>,
+	/// Environment detector for auto-selection
+	#[allow(dead_code)]
+	EnvironmentDetector: Box<dyn TransportTypeDetector + Send + Sync>,
+	/// Priority order for fallback chain
+	PriorityOrder: Vec<TransportType>,
 }
 
 impl TransportSelector {
-    /// Creates a new `TransportSelector` with default settings.
-    pub fn new() -> Self {
-        Self {
-            environment_detector: Box::new(DefaultTransportTypeDetector),
-            priority_order: Self::default_priority_order(),
-        }
-    }
+	/// Creates a new `TransportSelector` with default settings.
+	pub fn New() -> Self {
+		Self {
+			EnvironmentDetector: Box::new(DefaultTransportTypeDetector),
+			PriorityOrder: Self::DefaultPriorityOrder(),
+		}
+	}
 
-    /// Creates a new `TransportSelector` with custom environment detector.
-    pub fn with_detector(detector: Box<dyn TransportTypeDetector + Send + Sync>) -> Self {
-        Self {
-            environment_detector: detector,
-            priority_order: Self::default_priority_order(),
-        }
-    }
+	/// Creates a new `TransportSelector` with custom environment detector.
+	pub fn WithDetector(Detector: Box<dyn TransportTypeDetector + Send + Sync>) -> Self {
+		Self {
+			EnvironmentDetector: Detector,
+			PriorityOrder: Self::DefaultPriorityOrder(),
+		}
+	}
 
-    /// Gets the default priority order based on environment.
-    fn default_priority_order() -> Vec<TransportType> {
-        let mut order = Vec::new();
+	/// Gets the default priority order based on environment.
+	fn DefaultPriorityOrder() -> Vec<TransportType> {
+		let mut Order = Vec::new();
 
-        // In WASM environment, prioritize WASM
-        #[cfg(target_arch = "wasm32")]
-        {
-            order.push(TransportType::Wasm);
-            order.push(TransportType::Grpc);
-        }
+		#[cfg(target_arch = "wasm32")]
+		{
+			Order.push(TransportType::Wasm);
+			Order.push(TransportType::Grpc);
+		}
 
-        #[cfg(not(target_arch = "wasm32"))]
-        {
-            // Desktop/server environment
-            order.push(TransportType::Ipc); // Highest priority for same-machine
-            order.push(TransportType::Grpc);
-        }
+		#[cfg(not(target_arch = "wasm32"))]
+		{
+			Order.push(TransportType::Ipc);
+			Order.push(TransportType::Grpc);
+		}
 
-        order
-    }
+		Order
+	}
 
-    /// Selects the best transport based on context and capabilities.
-    ///
-    /// This method evaluates all registered transports and returns the name of
-    /// the most suitable one according to the selection criteria.
-    ///
-    /// # Parameters
-    ///
-    /// * `context` - The selection context containing environment, requirements, and constraints
-    ///
-    /// # Returns
-    ///
-    /// * `Ok(String)` - Name of the selected transport
-    /// * `Err(TransportError)` - If no suitable transport is found
-    pub fn select_best(&self, context: &TransportContext) -> Result<String, TransportError> {
-        let mut candidates = Vec::new();
+	/// Selects the best transport based on context and capabilities.
+	pub fn SelectBest(&self, Context: &TransportContext) -> Result<String, TransportError> {
+		let mut Candidates = Vec::new();
 
-        // Check all available transports
-        for transport_type in self.priority_order.iter() {
-            if !context.transport_available(*transport_type) {
-                continue;
-            }
+		for TransportKind in self.PriorityOrder.iter() {
+			if !Context.TransportAvailable(*TransportKind) {
+				continue;
+			}
 
-            if !context.is_allowed(*transport_type) {
-                continue;
-            }
+			if !Context.IsAllowed(*TransportKind) {
+				continue;
+			}
 
-            // Calculate priority score (higher = better)
-            let score = self.calculate_score(*transport_type, context);
-            candidates.push((transport_type.clone(), score));
-        }
+			let Score = self.CalculateScore(*TransportKind, Context);
+			Candidates.push((*TransportKind, Score));
+		}
 
-        // Sort by score descending
-        candidates.sort_by(|a, b| b.1.total_cmp(&a.1));
+		Candidates.sort_by(|Left, Right| Right.1.total_cmp(&Left.1));
 
-        candidates
-            .first()
-            .map(|(name, _)| name.as_str().to_string())
-            .ok_or_else(|| {
-                TransportError::not_found("No suitable transport available for current context")
-            })
-    }
+		Candidates
+			.first()
+			.map(|(TransportKind, _)| TransportKind.AsString().to_string())
+			.ok_or_else(|| {
+				TransportError::NotFound("No suitable transport available for current context")
+			})
+	}
 
-    /// Calculates a suitability score for a transport given the context.
-    ///
-    /// Higher scores indicate better suitability.
-    fn calculate_score(&self, transport_type: TransportType, context: &TransportContext) -> f64 {
-        let mut score = 0.0;
+	/// Calculates a suitability score for a transport given the context.
+	fn CalculateScore(
+		&self,
+		TransportKind: TransportType,
+		Context: &TransportContext,
+	) -> f64 {
+		let mut Score = 0.0;
 
-        // Base score from priority order (higher priority = higher base score)
-        if let Some(pos) = self
-            .priority_order
-            .iter()
-            .position(|t| *t == transport_type)
-        {
-            score += (self.priority_order.len() - pos) as f64 * 10.0;
-        }
+		if let Some(Position) = self
+			.PriorityOrder
+			.iter()
+			.position(|Kind| *Kind == TransportKind)
+		{
+			Score += (self.PriorityOrder.len() - Position) as f64 * 10.0;
+		}
 
-        // Environment match bonus
-        let env = context.environment();
-        match (env.is_web, transport_type) {
-            (true, TransportType::Wasm) => score += 50.0, // WASM is best for web
-            (false, TransportType::Ipc) => score += 40.0, // IPC great for desktop
-            _ => {}
-        }
+		let Environment = Context.Environment();
+		match (Environment.IsWeb, TransportKind) {
+			(true, TransportType::Wasm) => Score += 50.0,
+			(false, TransportType::Ipc) => Score += 40.0,
+			_ => {}
+		}
 
-        // Requirements-based scoring
-        let req = context.requirements();
-        if req.streaming_required {
-            match transport_type {
-                TransportType::Grpc => score += 30.0, // gRPC excellent for streaming
-                TransportType::Wasm => score += 20.0,
-                TransportType::Ipc => score -= 20.0, // IPC doesn't support streaming well
-            }
-        }
+		let Requirements = Context.Requirements();
+		if Requirements.StreamingRequired {
+			match TransportKind {
+				TransportType::Grpc => Score += 30.0,
+				TransportType::Wasm => Score += 20.0,
+				TransportType::Ipc => Score -= 20.0,
+				TransportType::Unknown => {}
+			}
+		}
 
-        if req.cross_network {
-            match transport_type {
-                TransportType::Grpc => score += 50.0, // gRPC is network-focused
-                TransportType::Ipc => score -= 50.0, // IPC only local
-                TransportType::Wasm => score += 10.0,
-            }
-        }
+		if Requirements.CrossNetwork {
+			match TransportKind {
+				TransportType::Grpc => Score += 50.0,
+				TransportType::Ipc => Score -= 50.0,
+				TransportType::Wasm => Score += 10.0,
+				TransportType::Unknown => {}
+			}
+		}
 
-        // Performance requirements
-        score += match req.performance {
-            PerformanceLevel::Critical => match transport_type {
-                TransportType::Ipc => 40.0,
-                TransportType::Grpc => 20.0,
-                TransportType::Wasm => 0.0,
-            },
-            PerformanceLevel::High => match transport_type {
-                TransportType::Ipc => 30.0,
-                TransportType::Grpc => 20.0,
-                TransportType::Wasm => 10.0,
-            },
-            PerformanceLevel::Medium => 10.0,
-            PerformanceLevel::Low => 0.0,
-        };
+		Score += match Requirements.Performance {
+			PerformanceLevel::Critical => match TransportKind {
+				TransportType::Ipc => 40.0,
+				TransportType::Grpc => 20.0,
+				TransportType::Wasm => 0.0,
+				TransportType::Unknown => 0.0,
+			},
+			PerformanceLevel::High => match TransportKind {
+				TransportType::Ipc => 30.0,
+				TransportType::Grpc => 20.0,
+				TransportType::Wasm => 10.0,
+				TransportType::Unknown => 0.0,
+			},
+			PerformanceLevel::Medium => 10.0,
+			PerformanceLevel::Low => 0.0,
+		};
 
-        // Latency constraint
-        if let Some(max_latency) = req.max_latency_ms {
-            let estimated_latency = self.estimate_latency_ms(transport_type);
-            if estimated_latency <= max_latency {
-                score += 20.0; // Meets latency requirement
-            } else {
-                score -= 30.0; // Exceeds latency budget
-            }
-        }
+		if let Some(MaximumLatency) = Requirements.MaximumLatencyMilliseconds {
+			let EstimatedLatency = self.EstimateLatencyMilliseconds(TransportKind);
+			if EstimatedLatency <= MaximumLatency {
+				Score += 20.0;
+			} else {
+				Score -= 30.0;
+			}
+		}
 
-        score
-    }
+		Score
+	}
 
-    /// Estimates typical latency for a transport type in milliseconds.
-    fn estimate_latency_ms(&self, transport_type: TransportType) -> u64 {
-        match transport_type {
-            TransportType::Ipc => 1,    // < 0.1ms typically, round to 1
-            TransportType::Grpc => 5,   // 1-10ms typical
-            TransportType::Wasm => 20,  // 5-50ms typical
-            TransportType::Unknown => u64::MAX,
-        }
-    }
+	/// Estimates typical latency for a transport type in milliseconds.
+	fn EstimateLatencyMilliseconds(&self, TransportKind: TransportType) -> u64 {
+		match TransportKind {
+			TransportType::Ipc => 1,
+			TransportType::Grpc => 5,
+			TransportType::Wasm => 20,
+			TransportType::Unknown => u64::MAX,
+		}
+	}
 }
 
 impl Default for TransportSelector {
-    fn default() -> Self {
-        Self::new()
-    }
+	fn default() -> Self {
+		Self::New()
+	}
 }
 
 /// Context information for transport selection.
-///
-/// This struct encapsulates all the information needed to make an intelligent
-/// transport selection decision.
 #[derive(Debug, Clone)]
 pub struct TransportContext {
-    environment: EnvironmentInfo,
-    requirements: TransportRequirements,
-    constraints: TransportConstraints,
-    available_transports: HashSet<TransportType>,
+	EnvironmentInfo: EnvironmentInfo,
+	RequirementsInfo: TransportRequirements,
+	ConstraintsInfo: TransportConstraints,
+	AvailableTransports: HashSet<TransportType>,
 }
 
 impl TransportContext {
-    /// Creates a new transport selection context.
-    pub fn new(
-        environment: EnvironmentInfo,
-        requirements: TransportRequirements,
-        constraints: TransportConstraints,
-    ) -> Self {
-        let available_transports = DefaultTransportTypeDetector::list_available_transports()
-            .into_iter()
-            .collect();
+	/// Creates a new transport selection context.
+	pub fn New(
+		EnvironmentInfo: EnvironmentInfo,
+		RequirementsInfo: TransportRequirements,
+		ConstraintsInfo: TransportConstraints,
+	) -> Self {
+		let AvailableTransports =
+			DefaultTransportTypeDetector::list_available_transports()
+				.into_iter()
+				.collect();
 
-        Self {
-            environment,
-            requirements,
-            constraints,
-            available_transports,
-        }
-    }
+		Self {
+			EnvironmentInfo,
+			RequirementsInfo,
+			ConstraintsInfo,
+			AvailableTransports,
+		}
+	}
 
-    /// Detects the current environment and creates a context with default requirements.
-    ///
-    /// This is the primary method for creating a context when you want automatic
-    /// detection of the environment.
-    pub fn detect() -> Self {
-        let detector = DefaultTransportTypeDetector;
-        let environment = detector.detect_environment();
-        let requirements = TransportRequirements::default();
-        let constraints = TransportConstraints::default();
+	/// Detects the current environment and creates a context with default requirements.
+	pub fn Detect() -> Self {
+		let EnvironmentInfo = DefaultTransportTypeDetector::DetectEnvironment();
+		let RequirementsInfo = TransportRequirements::default();
+		let ConstraintsInfo = TransportConstraints::default();
 
-        Self::new(environment, requirements, constraints)
-    }
+		Self::New(EnvironmentInfo, RequirementsInfo, ConstraintsInfo)
+	}
 
-    /// Gets the environment information.
-    pub fn environment(&self) -> &EnvironmentInfo {
-        &self.environment
-    }
+	/// Gets the environment information.
+	pub fn Environment(&self) -> &EnvironmentInfo {
+		&self.EnvironmentInfo
+	}
 
-    /// Gets the transport requirements.
-    pub fn requirements(&self) -> &TransportRequirements {
-        &self.requirements
-    }
+	/// Gets the transport requirements.
+	pub fn Requirements(&self) -> &TransportRequirements {
+		&self.RequirementsInfo
+	}
 
-    /// Gets the transport constraints.
-    pub fn constraints(&self) -> &TransportConstraints {
-        &self.constraints
-    }
+	/// Gets the transport constraints.
+	pub fn Constraints(&self) -> &TransportConstraints {
+		&self.ConstraintsInfo
+	}
 
-    /// Checks if a transport type is available in this environment.
-    pub fn transport_available(&self, transport_type: TransportType) -> bool {
-        self.available_transports.contains(&transport_type)
-    }
+	/// Checks if a transport type is available in this environment.
+	pub fn TransportAvailable(&self, TransportKind: TransportType) -> bool {
+		self.AvailableTransports.contains(&TransportKind)
+	}
 
-    /// Checks if a transport type is allowed by constraints.
-    pub fn is_allowed(&self, transport_type: TransportType) -> bool {
-        // Check forbidden list
-        if self.constraints.forbidden_transports.contains(&transport_type) {
-            return false;
-        }
+	/// Checks if a transport type is allowed by constraints.
+	pub fn IsAllowed(&self, TransportKind: TransportType) -> bool {
+		if self.ConstraintsInfo.ForbiddenTransports.contains(&TransportKind) {
+			return false;
+		}
 
-        // Check allowed list (empty means all allowed)
-        if self.constraints.allowed_transports.is_empty() {
-            true
-        } else {
-            self.constraints.allowed_transports.contains(&transport_type)
-        }
-    }
+		if self.ConstraintsInfo.AllowedTransports.is_empty() {
+			true
+		} else {
+			self.ConstraintsInfo.AllowedTransports.contains(&TransportKind)
+		}
+	}
 
-    /// Sets custom available transports (for testing or override).
-    pub fn with_available_transports(mut self, transports: Vec<TransportType>) -> Self {
-        self.available_transports = transports.into_iter().collect();
-        self
-    }
+	/// Sets custom available transports (for testing or override).
+	pub fn WithAvailableTransports(mut self, Transports: Vec<TransportType>) -> Self {
+		self.AvailableTransports = Transports.into_iter().collect();
+		self
+	}
 }
 
 /// Environment information for transport selection.
 #[derive(Debug, Clone)]
 pub struct EnvironmentInfo {
-    /// Operating system platform
-    pub platform: Platform,
-    /// Whether running in a web browser
-    pub is_web: bool,
-    /// Whether running as a desktop application
-    pub is_desktop: bool,
-    /// Browser capability information (if in browser)
-    pub browser_capabilities: Option<BrowserCapabilities>,
+	/// Operating system platform
+	pub Platform: Platform,
+	/// Whether running in a web browser
+	pub IsWeb: bool,
+	/// Whether running as a desktop application
+	pub IsDesktop: bool,
+	/// Browser capability information (if in browser)
+	pub BrowserCapabilities: Option<BrowserCapabilities>,
 }
 
 impl EnvironmentInfo {
-    /// Creates a new environment info.
-    pub fn new(
-        platform: Platform,
-        is_web: bool,
-        is_desktop: bool,
-        browser_capabilities: Option<BrowserCapabilities>,
-    ) -> Self {
-        Self {
-            platform,
-            is_web,
-            is_desktop,
-            browser_capabilities,
-        }
-    }
+	/// Creates a new environment info.
+	pub fn New(
+		Platform: Platform,
+		IsWeb: bool,
+		IsDesktop: bool,
+		BrowserCapabilities: Option<BrowserCapabilities>,
+	) -> Self {
+		Self {
+			Platform,
+			IsWeb,
+			IsDesktop,
+			BrowserCapabilities,
+		}
+	}
 }
 
 /// Platform enumeration.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Platform {
-    Windows,
-    MacOS,
-    Linux,
-    Browser,
-    Mobile,
-    Unknown,
+	Windows,
+	MacOS,
+	Linux,
+	Browser,
+	Mobile,
+	Unknown,
 }
 
 impl Platform {
-    /// Gets the current platform.
-    pub fn current() -> Self {
-        #[cfg(target_os = "windows")]
-        return Self::Windows;
-        #[cfg(target_os = "macos")]
-        return Self::MacOS;
-        #[cfg(target_os = "linux")]
-        return Self::Linux;
-        #[cfg(all(not(target_os = "windows"), not(target_os = "macos"), not(target_os = "linux")))]
-        return Self::Unknown;
-    }
+	/// Gets the current platform.
+	pub fn Current() -> Self {
+		#[cfg(target_os = "windows")]
+		return Self::Windows;
+		#[cfg(target_os = "macos")]
+		return Self::MacOS;
+		#[cfg(target_os = "linux")]
+		return Self::Linux;
+		#[cfg(all(
+			not(target_os = "windows"),
+			not(target_os = "macos"),
+			not(target_os = "linux")
+		))]
+		return Self::Unknown;
+	}
 }
 
 /// Browser capabilities detection.
 #[derive(Debug, Clone)]
 pub struct BrowserCapabilities {
-    pub wasm_supported: bool,
-    pub web_worker_supported: bool,
-    pub web_socket_supported: bool,
-    pub shared_array_buffer_supported: bool,
+	pub WasmSupported: bool,
+	pub WebWorkerSupported: bool,
+	pub WebSocketSupported: bool,
+	pub SharedArrayBufferSupported: bool,
 }
 
 impl Default for BrowserCapabilities {
-    fn default() -> Self {
-        Self {
-            wasm_supported: cfg!(target_arch = "wasm32"),
-            web_worker_supported: false, // TODO: Detect properly
-            web_socket_supported: false,
-            shared_array_buffer_supported: false,
-        }
-    }
+	fn default() -> Self {
+		Self {
+			WasmSupported: cfg!(target_arch = "wasm32"),
+			WebWorkerSupported: false,
+			WebSocketSupported: false,
+			SharedArrayBufferSupported: false,
+		}
+	}
 }
 
 /// Transport requirements for selection.
 #[derive(Debug, Clone)]
 pub struct TransportRequirements {
-    /// Whether bidirectional streaming is required
-    pub streaming_required: bool,
-    /// Whether cross-process communication is needed
-    pub cross_process: bool,
-    /// Whether cross-network communication is needed
-    pub cross_network: bool,
-    /// Performance requirement level
-    pub performance: PerformanceLevel,
-    /// Reliability requirement level
-    pub reliability: ReliabilityLevel,
-    /// Maximum acceptable latency in milliseconds (optional)
-    pub max_latency_ms: Option<u64>,
+	/// Whether bidirectional streaming is required
+	pub StreamingRequired: bool,
+	/// Whether cross-process communication is needed
+	pub CrossProcess: bool,
+	/// Whether cross-network communication is needed
+	pub CrossNetwork: bool,
+	/// Performance requirement level
+	pub Performance: PerformanceLevel,
+	/// Reliability requirement level
+	pub Reliability: ReliabilityLevel,
+	/// Maximum acceptable latency in milliseconds (optional)
+	pub MaximumLatencyMilliseconds: Option<u64>,
 }
 
 impl Default for TransportRequirements {
-    fn default() -> Self {
-        Self {
-            streaming_required: false,
-            cross_process: false,
-            cross_network: false,
-            performance: PerformanceLevel::Medium,
-            reliability: ReliabilityLevel::Medium,
-            max_latency_ms: None,
-        }
-    }
+	fn default() -> Self {
+		Self {
+			StreamingRequired: false,
+			CrossProcess: false,
+			CrossNetwork: false,
+			Performance: PerformanceLevel::Medium,
+			Reliability: ReliabilityLevel::Medium,
+			MaximumLatencyMilliseconds: None,
+		}
+	}
 }
 
 /// Performance requirement level.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum PerformanceLevel {
-    Low = 1,
-    Medium = 2,
-    High = 3,
-    Critical = 4,
+	Low = 1,
+	Medium = 2,
+	High = 3,
+	Critical = 4,
 }
 
 /// Reliability requirement level.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ReliabilityLevel {
-    Low = 1,
-    Medium = 2,
-    High = 3,
-    Critical = 4,
+	Low = 1,
+	Medium = 2,
+	High = 3,
+	Critical = 4,
 }
 
 /// Transport selection constraints.
 #[derive(Debug, Clone)]
 pub struct TransportConstraints {
-    /// Allowed transport types (empty means all allowed)
-    pub allowed_transports: Vec<TransportType>,
-    /// Forbidden transport types
-    pub forbidden_transports: Vec<TransportType>,
-    /// Maximum allowed latency in milliseconds
-    pub max_latency_ms: Option<u64>,
-    /// Maximum allowed bandwidth in bytes per second
-    pub max_bandwidth_bps: Option<u64>,
+	/// Allowed transport types (empty means all allowed)
+	pub AllowedTransports: Vec<TransportType>,
+	/// Forbidden transport types
+	pub ForbiddenTransports: Vec<TransportType>,
+	/// Maximum allowed latency in milliseconds
+	pub MaximumLatencyMilliseconds: Option<u64>,
+	/// Maximum allowed bandwidth in bytes per second
+	pub MaximumBandwidthBytesPerSecond: Option<u64>,
 }
 
 impl Default for TransportConstraints {
-    fn default() -> Self {
-        Self {
-            allowed_transports: Vec::new(),
-            forbidden_transports: Vec::new(),
-            max_latency_ms: None,
-            max_bandwidth_bps: None,
-        }
-    }
+	fn default() -> Self {
+		Self {
+			AllowedTransports: Vec::new(),
+			ForbiddenTransports: Vec::new(),
+			MaximumLatencyMilliseconds: None,
+			MaximumBandwidthBytesPerSecond: None,
+		}
+	}
 }
 
 /// Central registry for managing transport strategies.
-///
-/// The registry allows registration, selection, and management of multiple
-/// transport implementations. It supports both explicit selection and
-/// automatic selection based on context.
-#[derive(Debug, Clone)]
 pub struct TransportRegistry {
-    /// Registered transports (name -> TransportStrategy)
-    transports: HashMap<String, Arc<RwLock<dyn CommonTransportStrategy>>>,
-    /// Currently active transport name
-    active: Option<String>,
-    /// Transport selector for auto-selection
-    selector: TransportSelector,
+	/// Registered transports (name -> Arc<dyn CommonTransportStrategy>)
+	Transports: HashMap<String, Arc<dyn CommonTransportStrategy>>,
+	/// Currently active transport name
+	Active: Option<String>,
+	/// Transport selector for auto-selection
+	Selector: TransportSelector,
 }
 
 impl TransportRegistry {
-    /// Creates a new, empty transport registry.
-    pub fn new() -> Self {
-        Self {
-            transports: HashMap::new(),
-            active: None,
-            selector: TransportSelector::new(),
-        }
-    }
+	/// Creates a new, empty transport registry.
+	pub fn New() -> Self {
+		Self {
+			Transports: HashMap::new(),
+			Active: None,
+			Selector: TransportSelector::New(),
+		}
+	}
 
-    /// Creates a new registry with a custom selector.
-    pub fn with_selector(selector: TransportSelector) -> Self {
-        Self {
-            transports: HashMap::new(),
-            active: None,
-            selector,
-        }
-    }
+	/// Creates a new registry with a custom selector.
+	pub fn WithSelector(Selector: TransportSelector) -> Self {
+		Self {
+			Transports: HashMap::new(),
+			Active: None,
+			Selector,
+		}
+	}
 
-    /// Registers a new transport with the registry.
-    ///
-    /// # Parameters
-    ///
-    /// * `name` - Unique name for this transport
-    /// * `transport` - The transport strategy instance (thread-safe)
-    ///
-    /// # Notes
-    ///
-    /// - If a transport with the same name already exists, it will be replaced
-    /// - The transport is wrapped in `Arc<RwLock<...>>` for thread-safe access
-    pub fn register(&mut self, name: String, transport: Arc<dyn CommonTransportStrategy>) {
-        log::info!("Registering transport: {}", name);
-        self.transports.insert(name, transport);
-    }
+	/// Registers a new transport with the registry.
+	pub fn Register(&mut self, Name: String, Transport: Arc<dyn CommonTransportStrategy>) {
+		log::info!("Registering transport: {}", Name);
+		self.Transports.insert(Name, Transport);
+	}
 
-    /// Unregisters a transport from the registry.
-    ///
-    /// # Parameters
-    ///
-    /// * `name` - Name of the transport to unregister
-    ///
-    /// # Returns
-    ///
-    /// * `Ok(())` - Transport was successfully unregistered
-    /// * `Err(TransportError)` - Transport not found or error during disconnection
-    pub fn unregister(&mut self, name: &str) -> Result<(), TransportError> {
-        let transport_opt = self.transports.remove(name);
+	/// Unregisters a transport from the registry.
+	pub async fn Unregister(&mut self, Name: &str) -> Result<(), TransportError> {
+		let TransportOption = self.Transports.remove(Name);
 
-        if let Some(transport) = transport_opt {
-            // Disconnect the transport if it's connected
-            let is_connected = {
-                let transport_ref = transport.read().map_err(|_| {
-                    TransportError::internal("Failed to acquire read lock on transport")
-                })?;
-                transport_ref.is_connected()
-            };
+		if let Some(_Transport) = TransportOption {
+			// Arc<dyn CommonTransportStrategy> does not expose mutable disconnect here;
+			// callers should disconnect before unregistering if needed.
+			log::info!("Unregistered transport: {}", Name);
+			Ok(())
+		} else {
+			Err(TransportError::NotFound(format!(
+				"Transport '{}' not found",
+				Name
+			)))
+		}
+	}
 
-            if is_connected {
-                let mut transport_mut = transport.write().map_err(|_| {
-                    TransportError::internal("Failed to acquire write lock on transport")
-                })?;
-                transport_mut.disconnect().await?;
-            }
+	/// Selects a transport by name as the active transport.
+	pub async fn Select(&mut self, Name: &str) -> Result<(), TransportError> {
+		if !self.Transports.contains_key(Name) {
+			return Err(TransportError::NotFound(format!(
+				"Transport '{}' not found",
+				Name
+			)));
+		}
 
-            log::info!("Unregistered transport: {}", name);
-            Ok(())
-        } else {
-            Err(TransportError::not_found(format!("Transport '{}' not found", name)))
-        }
-    }
+		log::info!("Selecting transport: {}", Name);
+		self.Active = Some(Name.to_string());
+		Ok(())
+	}
 
-    /// Selects a transport by name as the active transport.
-    ///
-    /// # Parameters
-    ///
-    /// * `name` - Name of the transport to activate
-    ///
-    /// # Returns
-    ///
-    /// * `Ok(())` - Transport successfully selected
-    /// * `Err(TransportError)` - Transport not found or connection failed
-    pub fn select(&mut self, name: &str) -> Result<(), TransportError> {
-        let transport = self
-            .transports
-            .get(name)
-            .ok_or_else(|| TransportError::not_found(format!("Transport '{}' not found", name)))?;
+	/// Automatically selects the best transport based on the provided context.
+	pub async fn AutoSelect(
+		&mut self,
+		Context: &TransportContext,
+	) -> Result<String, TransportError> {
+		let SelectedName = self.Selector.SelectBest(Context)?;
+		self.Select(&SelectedName).await?;
+		Ok(SelectedName)
+	}
 
-        log::info!("Selecting transport: {}", name);
+	/// Gets the currently active transport, if any.
+	pub fn GetActive(&self) -> Option<Arc<dyn CommonTransportStrategy>> {
+		self.Active
+			.as_ref()
+			.and_then(|Name| self.Transports.get(Name))
+			.cloned()
+	}
 
-        // Connect to the transport if not already connected
-        {
-            let mut transport_mut = transport.write().map_err(|_| {
-                TransportError::internal("Failed to acquire write lock on transport")
-            })?;
+	/// Gets a specific transport by name.
+	pub fn Get(&self, Name: &str) -> Option<Arc<dyn CommonTransportStrategy>> {
+		self.Transports.get(Name).cloned()
+	}
 
-            if !transport_mut.is_connected() {
-                transport_mut.connect().await?;
-            }
-        }
+	/// Lists all registered transport names.
+	pub fn List(&self) -> Vec<String> {
+		self.Transports.keys().cloned().collect()
+	}
 
-        self.active = Some(name.to_string());
-        Ok(())
-    }
+	/// Checks if a transport with the given name is registered.
+	pub fn Has(&self, Name: &str) -> bool {
+		self.Transports.contains_key(Name)
+	}
 
-    /// Automatically selects the best transport based on the provided context.
-    ///
-    /// This method uses the registered selector to choose the most appropriate
-    /// transport, then connects to it and makes it active.
-    ///
-    /// # Parameters
-    ///
-    /// * `context` - Selection context (environment, requirements, constraints)
-    ///
-    /// # Returns
-    ///
-    /// * `Ok(String)` - Name of the selected transport
-    /// * `Err(TransportError)` - No suitable transport found or connection failed
-    pub fn auto_select(&mut self, context: &TransportContext) -> Result<String, TransportError> {
-        // Find the best transport
-        let selected_name = self.selector.select_best(context)?;
+	/// Gets metrics for all registered transports.
+	pub fn GetAllMetrics(&self) -> HashMap<String, TransportMetrics> {
+		let mut Metrics = HashMap::new();
+		for (Name, Transport) in &self.Transports {
+			Metrics.insert(Name.clone(), Transport.Metrics());
+		}
+		Metrics
+	}
 
-        // Connect to it
-        self.select(&selected_name)?;
+	/// Gets health status (connected/not connected) for all transports.
+	pub fn GetHealthStatus(&self) -> HashMap<String, bool> {
+		let mut Status = HashMap::new();
+		for (Name, Transport) in &self.Transports {
+			Status.insert(Name.clone(), Transport.IsConnected());
+		}
+		Status
+	}
 
-        Ok(selected_name)
-    }
+	/// Gets the name of the currently active transport.
+	pub fn ActiveName(&self) -> Option<&str> {
+		self.Active.as_deref()
+	}
 
-    /// Gets the currently active transport, if any.
-    ///
-    /// # Returns
-    ///
-    /// * `Some(Arc<RwLock<...>>)` - Active transport with read/write lock
-    /// * `None` - No active transport selected
-    pub fn get_active(&self) -> Option<Arc<RwLock<dyn CommonTransportStrategy>>> {
-        self.active
-            .as_ref()
-            .and_then(|name| self.transports.get(name))
-            .cloned()
-    }
+	/// Sets the selector to use for auto-selection.
+	pub fn SetSelector(&mut self, Selector: TransportSelector) {
+		self.Selector = Selector;
+	}
 
-    /// Gets a specific transport by name.
-    ///
-    /// # Parameters
-    ///
-    /// * `name` - Transport name
-    ///
-    /// # Returns
-    ///
-    /// * `Some(Arc<RwLock<...>>)` - Transport if found
-    /// * `None` - Transport not registered
-    pub fn get(&self, name: &str) -> Option<Arc<RwLock<dyn CommonTransportStrategy>>> {
-        self.transports.get(name).cloned()
-    }
+	/// Waits for a transport to be ready (connected) with timeout.
+	pub async fn WaitForReady(
+		&self,
+		Name: &str,
+		Timeout: Duration,
+	) -> Result<(), TransportError> {
+		use tokio::time::Instant;
 
-    /// Lists all registered transport names.
-    pub fn list(&self) -> Vec<String> {
-        self.transports.keys().cloned().collect()
-    }
+		let Start = Instant::now();
+		let Transport = self
+			.Get(Name)
+			.ok_or_else(|| TransportError::NotFound(format!("Transport '{}' not found", Name)))?;
 
-    /// Checks if a transport with the given name is registered.
-    pub fn has(&self, name: &str) -> bool {
-        self.transports.contains_key(name)
-    }
+		loop {
+			if Transport.IsConnected() {
+				return Ok(());
+			}
 
-    /// Gets metrics for all registered transports.
-    ///
-    /// # Returns
-    ///
-    /// A map from transport name to its current metrics.
-    pub fn get_all_metrics(&self) -> Result<HashMap<String, TransportMetrics>, TransportError> {
-        let mut metrics = HashMap::new();
+			if Start.elapsed() >= Timeout {
+				return Err(TransportError::Timeout(
+					"Transport did not become ready within timeout",
+				));
+			}
 
-        for (name, transport) in &self.transports {
-            let transport_ref = transport.read().map_err(|_| {
-                TransportError::internal(format!("Failed to read lock transport '{}'", name))
-            })?;
-            metrics.insert(name.clone(), transport_ref.metrics());
-        }
-
-        Ok(metrics)
-    }
-
-    /// Gets health status (connected/not connected) for all transports.
-    ///
-    /// # Returns
-    ///
-    /// A map from transport name to its connected status.
-    pub fn get_health_status(&self) -> Result<HashMap<String, bool>, TransportError> {
-        let mut status = HashMap::new();
-
-        for (name, transport) in &self.transports {
-            let transport_ref = transport.read().map_err(|_| {
-                TransportError::internal(format!("Failed to read lock transport '{}'", name))
-            })?;
-            status.insert(name.clone(), transport_ref.is_connected());
-        }
-
-        Ok(status)
-    }
-
-    /// Gets the name of the currently active transport.
-    pub fn active_name(&self) -> Option<&str> {
-        self.active.as_deref()
-    }
-
-    /// Sets the selector to use for auto-selection.
-    pub fn set_selector(&mut self, selector: TransportSelector) {
-        self.selector = selector;
-    }
-
-    /// Waits for a transport to be ready (connected) with timeout.
-    ///
-    /// # Parameters
-    ///
-    /// * `name` - Transport name
-    /// * `timeout` - Maximum time to wait
-    ///
-    /// # Returns
-    ///
-    /// * `Ok(())` - Transport is connected
-    /// * `Err(TransportError)` - Timeout or connection failure
-    pub async fn wait_for_ready(
-        &self,
-        name: &str,
-        timeout: Duration,
-    ) -> Result<(), TransportError> {
-        use tokio::time::{timeout as tokio_timeout, Instant};
-
-        let start = Instant::now();
-        let transport = self
-            .get(name)
-            .ok_or_else(|| TransportError::not_found(format!("Transport '{}' not found", name)))?;
-
-        loop {
-            let connected = {
-                let transport_ref = transport.read().map_err(|_| {
-                    TransportError::internal("Failed to acquire read lock on transport")
-                })?;
-                transport_ref.is_connected()
-            };
-
-            if connected {
-                return Ok(());
-            }
-
-            if start.elapsed() >= timeout {
-                return Err(TransportError::timeout("Transport did not become ready within timeout"));
-            }
-
-            tokio::time::sleep(Duration::from_millis(50)).await;
-        }
-    }
+			tokio::time::sleep(Duration::from_millis(50)).await;
+		}
+	}
 }
 
 impl Default for TransportRegistry {
-    fn default() -> Self {
-        Self::new()
-    }
+	fn default() -> Self {
+		Self::New()
+	}
 }
 
-// Implement TransportTypeDetector for DefaultTransportTypeDetector to provide environment
+/// Provides environment detection for DefaultTransportTypeDetector.
 impl DefaultTransportTypeDetector {
-    /// Detects the current environment information.
-    pub fn detect_environment() -> EnvironmentInfo {
-        let platform = Platform::current();
-        let is_desktop = !cfg!(target_arch = "wasm32");
+	/// Detects the current environment information.
+	pub fn DetectEnvironment() -> EnvironmentInfo {
+		let CurrentPlatform = Platform::Current();
+		let IsDesktop = !cfg!(target_arch = "wasm32");
 
-        // Basic environment
-        let env = EnvironmentInfo {
-            platform,
-            is_web: false,
-            is_desktop,
-            browser_capabilities: None,
-        };
+		let Environment = EnvironmentInfo {
+			Platform: CurrentPlatform,
+			IsWeb: false,
+			IsDesktop,
+			BrowserCapabilities: None,
+		};
 
-        // In WASM, it's a web environment
-        #[cfg(target_arch = "wasm32")]
-        {
-            EnvironmentInfo {
-                is_web: true,
-                is_desktop: false,
-                browser_capabilities: Some(BrowserCapabilities::default()),
-                ..env
-            }
-        }
+		#[cfg(target_arch = "wasm32")]
+		{
+			EnvironmentInfo {
+				IsWeb: true,
+				IsDesktop: false,
+				BrowserCapabilities: Some(BrowserCapabilities::default()),
+				..Environment
+			}
+		}
 
-        #[cfg(not(target_arch = "wasm32"))]
-        {
-            env
-        }
-    }
+		#[cfg(not(target_arch = "wasm32"))]
+		{
+			Environment
+		}
+	}
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+	use async_trait::async_trait;
 
-    #[test]
-    fn test_transport_selector_creation() {
-        let selector = TransportSelector::new();
-        assert!(!selector.priority_order.is_empty());
-    }
+	use super::{
+		super::{
+			TransportConfig::TransportConfig,
+			TransportError::TransportError,
+			TransportStrategy::{TransportCapabilities, TransportMetrics},
+			UnifiedRequest::UnifiedRequest,
+			UnifiedResponse::UnifiedResponse,
+		},
+		*,
+	};
 
-    #[test]
-    fn test_transport_context_creation() {
-        let env = EnvironmentInfo::new(Platform::Linux, false, true, None);
-        let req = TransportRequirements::default();
-        let constraints = TransportConstraints::default();
+	#[test]
+	fn TestTransportSelectorCreation() {
+		let Selector = TransportSelector::New();
+		assert!(!Selector.PriorityOrder.is_empty());
+	}
 
-        let context = TransportContext::new(env, req, constraints);
-        assert!(!context.transport_available(TransportType::Grpc)); // Not available without real detector
-    }
+	#[test]
+	fn TestTransportContextCreation() {
+		let Environment = EnvironmentInfo::New(Platform::Linux, false, true, None);
+		let Requirements = TransportRequirements::default();
+		let Constraints = TransportConstraints::default();
 
-    #[test]
-    fn test_transport_registry_creation() {
-        let registry = TransportRegistry::new();
-        assert!(registry.list().is_empty());
-        assert!(registry.active_name().is_none());
-    }
+		let Context = TransportContext::New(Environment, Requirements, Constraints);
+		// Without real detector injection, available transports come from DefaultTransportTypeDetector
+		assert!(Context.TransportAvailable(TransportType::Grpc));
+	}
 
-    #[tokio::test]
-    async fn test_registry_register_unregister() {
-        let mut registry = TransportRegistry::new();
+	#[test]
+	fn TestTransportRegistryCreation() {
+		let Registry = TransportRegistry::New();
+		assert!(Registry.List().is_empty());
+		assert!(Registry.ActiveName().is_none());
+	}
 
-        // Create a mock transport for testing
-        let mock_transport = Arc::new(RwLock::new(MockTransport::new()));
-        registry.register("mock".to_string(), mock_transport);
+	#[tokio::test]
+	async fn TestRegistryRegisterUnregister() {
+		let mut Registry = TransportRegistry::New();
 
-        assert!(registry.has("mock"));
-        assert_eq!(registry.list().len(), 1);
+		let MockTransportInstance = Arc::new(MockTransport::New());
+		Registry.Register("mock".to_string(), MockTransportInstance);
 
-        // Unregister
-        registry.unregister("mock").unwrap();
-        assert!(!registry.has("mock"));
-    }
+		assert!(Registry.Has("mock"));
+		assert_eq!(Registry.List().len(), 1);
 
-    /// Mock transport for testing
-    #[derive(Debug, Clone)]
-    struct MockTransport;
+		Registry.Unregister("mock").await.unwrap();
+		assert!(!Registry.Has("mock"));
+	}
 
-    impl MockTransport {
-        fn new() -> Self {
-            Self
-        }
-    }
+	/// Mock transport for testing
+	#[derive(Debug, Clone)]
+	struct MockTransport;
 
-    #[async_trait]
-    impl CommonTransportStrategy for MockTransport {
-        async fn connect(&mut self) -> Result<(), TransportError> {
-            Ok(())
-        }
+	impl MockTransport {
+		fn New() -> Self {
+			Self
+		}
+	}
 
-        async fn disconnect(&mut self) -> Result<(), TransportError> {
-            Ok(())
-        }
+	#[async_trait]
+	impl CommonTransportStrategy for MockTransport {
+		async fn Connect(&mut self) -> Result<(), TransportError> {
+			Ok(())
+		}
 
-        async fn send_request(
-            &mut self,
-            request: UnifiedRequest,
-        ) -> Result<UnifiedResponse, TransportError> {
-            Ok(UnifiedResponse::success(
-                request.correlation_id.clone(),
-                Vec::new(),
-            ))
-        }
+		async fn Disconnect(&mut self) -> Result<(), TransportError> {
+			Ok(())
+		}
 
-        async fn send_notification(
-            &mut self,
-            notification: UnifiedRequest,
-        ) -> Result<(), TransportError> {
-            Ok(())
-        }
+		async fn SendRequest(
+			&mut self,
+			Request: UnifiedRequest,
+		) -> Result<UnifiedResponse, TransportError> {
+			Ok(UnifiedResponse::Success(
+				Request.CorrelationIdentifier.clone().unwrap_or_default(),
+				Vec::new(),
+			))
+		}
 
-        fn stream_events(
-            &self,
-        ) -> std::result::Result<
-            futures::stream::BoxStream<'static, UnifiedResponse>,
-            TransportError,
-        > {
-            Err(TransportError::not_supported("Streaming not supported"))
-        }
+		async fn SendNotification(
+			&mut self,
+			_Notification: UnifiedRequest,
+		) -> Result<(), TransportError> {
+			Ok(())
+		}
 
-        fn is_connected(&self) -> bool {
-            true
-        }
+		fn StreamEvents(
+			&self,
+		) -> std::result::Result<
+			futures::stream::BoxStream<'static, UnifiedResponse>,
+			TransportError,
+		> {
+			Err(TransportError::NotSupported("Streaming not supported"))
+		}
 
-        fn latency_ms(&self) -> u64 {
-            0
-        }
+		fn IsConnected(&self) -> bool {
+			true
+		}
 
-        fn transport_type(&self) -> TransportType {
-            TransportType::Grpc
-        }
+		fn LatencyMilliseconds(&self) -> u64 {
+			0
+		}
 
-        fn config(&self) -> &TransportConfig {
-            static CONFIG: TransportConfig = TransportConfig::default();
-            &CONFIG
-        }
+		fn TransportKind(&self) -> TransportType {
+			TransportType::Grpc
+		}
 
-        fn capabilities(&self) -> TransportCapabilities {
-            TransportCapabilities::default()
-        }
+		fn Configuration(&self) -> &TransportConfig {
+			static CONFIG: std::sync::OnceLock<TransportConfig> = std::sync::OnceLock::new();
+			CONFIG.get_or_init(TransportConfig::default)
+		}
 
-        fn metrics(&self) -> TransportMetrics {
-            TransportMetrics::new()
-        }
+		fn Capabilities(&self) -> TransportCapabilities {
+			TransportCapabilities::default()
+		}
 
-        fn supports_streaming(&self) -> bool {
-            false
-        }
-    }
+		fn Metrics(&self) -> TransportMetrics {
+			TransportMetrics::New()
+		}
+
+		fn SupportsStreaming(&self) -> bool {
+			false
+		}
+	}
 }

@@ -1,10 +1,7 @@
+#![allow(non_snake_case, non_camel_case_types, non_upper_case_globals)]
 //! # TransportConfig
 //!
 //! Configuration structures for transport implementations.
-//!
-//! This module defines the configuration types that control transport behavior.
-//! All transports should respect these common configuration options while allowing
-//! transport-specific extensions.
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -13,325 +10,292 @@ use std::time::Duration;
 use super::Common::TransportType;
 
 /// Global transport configuration.
-///
-/// This structure defines the configuration that applies to all transports
-/// or to transport selection logic. It's used when creating transports and
-/// when the transport registry needs to auto-select appropriate transports.
-///
-/// # Configuration Hierarchy
-///
-/// 1. Global defaults (this struct)
-/// 2. Transport-specific overrides (via `transport_configs` map)
-/// 3. Per-request overrides (via `UnifiedRequest.metadata`)
-///
-/// # Example
-///
-/// ```rust,ignore
-/// let config = TransportConfig::default()
-///     .with_default_timeout(Duration::from_secs(30))
-///     .with_max_retries(3)
-///     .with_transport_config(TransportType::Grpc, grpc_config)
-///     .with_transport_config(TransportType::Ipc, ipc_config);
-/// ```
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TransportConfig {
-    /// Default timeout for requests that don't specify one.
-    pub default_timeout: Duration,
+	/// Default timeout for requests that don't specify one.
+	pub DefaultTimeout: Duration,
 
-    /// Maximum number of retry attempts for retryable errors.
-    pub max_retries: u32,
+	/// Maximum number of retry attempts for retryable errors.
+	pub MaximumRetries: u32,
 
-    /// Base retry delay for exponential backoff.
-    pub retry_base_delay: Duration,
+	/// Base retry delay for exponential backoff.
+	pub RetryBaseDelay: Duration,
 
-    /// Maximum retry delay cap (prevents extremely long backoffs).
-    pub retry_max_delay: Duration,
+	/// Maximum retry delay cap (prevents extremely long backoffs).
+	pub RetryMaximumDelay: Duration,
 
-    /// Whether retry with jitter is enabled (recommended for distributed systems).
-    pub retry_jitter_enabled: bool,
+	/// Whether retry with jitter is enabled (recommended for distributed systems).
+	pub RetryJitterEnabled: bool,
 
-    /// Circuit breaker failure threshold (number of consecutive failures before opening).
-    pub circuit_breaker_failure_threshold: u32,
+	/// Circuit breaker failure threshold (number of consecutive failures before opening).
+	pub CircuitBreakerFailureThreshold: u32,
 
-    /// Circuit breaker reset timeout (how long to wait before half-open).
-    pub circuit_breaker_reset_timeout: Duration,
+	/// Circuit breaker reset timeout (how long to wait before half-open).
+	pub CircuitBreakerResetTimeout: Duration,
 
-    /// Whether health checks are enabled.
-    pub health_checks_enabled: bool,
+	/// Whether health checks are enabled.
+	pub HealthChecksEnabled: bool,
 
-    /// Health check interval (how often to perform health checks).
-    pub health_check_interval: Duration,
+	/// Health check interval (how often to perform health checks).
+	pub HealthCheckInterval: Duration,
 
-    /// Metrics collection enabled flag.
-    pub metrics_enabled: bool,
+	/// Metrics collection enabled flag.
+	pub MetricsEnabled: bool,
 
-    /// Transport-specific configuration overrides.
-    /// Each transport type can have its own configuration structure.
-    #[serde(skip_serializing_if = "HashMap::is_empty")]
-    pub transport_configs: HashMap<TransportType, serde_json::Value>,
+	/// Transport-specific configuration overrides.
+	#[serde(skip_serializing_if = "HashMap::is_empty")]
+	pub TransportConfigurations: HashMap<TransportType, serde_json::Value>,
 
-    /// Allowed transport types for auto-selection.
-    /// If empty, all configured transports are considered.
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub allowed_transports: Vec<TransportType>,
+	/// Allowed transport types for auto-selection.
+	#[serde(skip_serializing_if = "Vec::is_empty")]
+	pub AllowedTransports: Vec<TransportType>,
 
-    /// Forbidden transport types (never used even if available).
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub forbidden_transports: Vec<TransportType>,
+	/// Forbidden transport types (never used even if available).
+	#[serde(skip_serializing_if = "Vec::is_empty")]
+	pub ForbiddenTransports: Vec<TransportType>,
 }
 
 impl Default for TransportConfig {
-    fn default() -> Self {
-        Self {
-            default_timeout: Duration::from_secs(30),
-            max_retries: 3,
-            retry_base_delay: Duration::from_millis(100),
-            retry_max_delay: Duration::from_secs(10),
-            retry_jitter_enabled: true,
-            circuit_breaker_failure_threshold: 5,
-            circuit_breaker_reset_timeout: Duration::from_secs(60),
-            health_checks_enabled: true,
-            health_check_interval: Duration::from_secs(30),
-            metrics_enabled: true,
-            transport_configs: HashMap::new(),
-            allowed_transports: Vec::new(),
-            forbidden_transports: Vec::new(),
-        }
-    }
+	fn default() -> Self {
+		Self {
+			DefaultTimeout: Duration::from_secs(30),
+			MaximumRetries: 3,
+			RetryBaseDelay: Duration::from_millis(100),
+			RetryMaximumDelay: Duration::from_secs(10),
+			RetryJitterEnabled: true,
+			CircuitBreakerFailureThreshold: 5,
+			CircuitBreakerResetTimeout: Duration::from_secs(60),
+			HealthChecksEnabled: true,
+			HealthCheckInterval: Duration::from_secs(30),
+			MetricsEnabled: true,
+			TransportConfigurations: HashMap::new(),
+			AllowedTransports: Vec::new(),
+			ForbiddenTransports: Vec::new(),
+		}
+	}
 }
 
 impl TransportConfig {
-    /// Creates a new `TransportConfig` with default values.
-    pub fn new() -> Self {
-        Self::default()
-    }
+	/// Creates a new `TransportConfig` with default values.
+	pub fn New() -> Self {
+		Self::default()
+	}
 
-    /// Sets the default request timeout.
-    pub fn with_default_timeout(mut self, timeout: Duration) -> Self {
-        self.default_timeout = timeout;
-        self
-    }
+	/// Sets the default request timeout.
+	pub fn WithDefaultTimeout(mut self, Timeout: Duration) -> Self {
+		self.DefaultTimeout = Timeout;
+		self
+	}
 
-    /// Sets the maximum number of retry attempts.
-    pub fn with_max_retries(mut self, max_retries: u32) -> Self {
-        self.max_retries = max_retries;
-        self
-    }
+	/// Sets the maximum number of retry attempts.
+	pub fn WithMaximumRetries(mut self, MaximumRetries: u32) -> Self {
+		self.MaximumRetries = MaximumRetries;
+		self
+	}
 
-    /// Sets the base retry delay for exponential backoff.
-    pub fn with_retry_base_delay(mut self, delay: Duration) -> Self {
-        self.retry_base_delay = delay;
-        self
-    }
+	/// Sets the base retry delay for exponential backoff.
+	pub fn WithRetryBaseDelay(mut self, Delay: Duration) -> Self {
+		self.RetryBaseDelay = Delay;
+		self
+	}
 
-    /// Sets the maximum retry delay cap.
-    pub fn with_retry_max_delay(mut self, delay: Duration) -> Self {
-        self.retry_max_delay = delay;
-        self
-    }
+	/// Sets the maximum retry delay cap.
+	pub fn WithRetryMaximumDelay(mut self, Delay: Duration) -> Self {
+		self.RetryMaximumDelay = Delay;
+		self
+	}
 
-    /// Enables or disables retry jitter.
-    pub fn with_retry_jitter(mut self, enabled: bool) -> Self {
-        self.retry_jitter_enabled = enabled;
-        self
-    }
+	/// Enables or disables retry jitter.
+	pub fn WithRetryJitter(mut self, Enabled: bool) -> Self {
+		self.RetryJitterEnabled = Enabled;
+		self
+	}
 
-    /// Sets the circuit breaker failure threshold.
-    pub fn with_circuit_breaker_threshold(mut self, threshold: u32) -> Self {
-        self.circuit_breaker_failure_threshold = threshold;
-        self
-    }
+	/// Sets the circuit breaker failure threshold.
+	pub fn WithCircuitBreakerThreshold(mut self, Threshold: u32) -> Self {
+		self.CircuitBreakerFailureThreshold = Threshold;
+		self
+	}
 
-    /// Sets the circuit breaker reset timeout.
-    pub fn with_circuit_breaker_reset_timeout(mut self, timeout: Duration) -> Self {
-        self.circuit_breaker_reset_timeout = timeout;
-        self
-    }
+	/// Sets the circuit breaker reset timeout.
+	pub fn WithCircuitBreakerResetTimeout(mut self, Timeout: Duration) -> Self {
+		self.CircuitBreakerResetTimeout = Timeout;
+		self
+	}
 
-    /// Enables or disables health checks.
-    pub fn with_health_checks_enabled(mut self, enabled: bool) -> Self {
-        self.health_checks_enabled = enabled;
-        self
-    }
+	/// Enables or disables health checks.
+	pub fn WithHealthChecksEnabled(mut self, Enabled: bool) -> Self {
+		self.HealthChecksEnabled = Enabled;
+		self
+	}
 
-    /// Sets the health check interval.
-    pub fn with_health_check_interval(mut self, interval: Duration) -> Self {
-        self.health_check_interval = interval;
-        self
-    }
+	/// Sets the health check interval.
+	pub fn WithHealthCheckInterval(mut self, Interval: Duration) -> Self {
+		self.HealthCheckInterval = Interval;
+		self
+	}
 
-    /// Enables or disables metrics collection.
-    pub fn with_metrics_enabled(mut self, enabled: bool) -> Self {
-        self.metrics_enabled = enabled;
-        self
-    }
+	/// Enables or disables metrics collection.
+	pub fn WithMetricsEnabled(mut self, Enabled: bool) -> Self {
+		self.MetricsEnabled = Enabled;
+		self
+	}
 
-    /// Adds a transport-specific configuration override.
-    ///
-    /// # Parameters
-    ///
-    /// * `transport_type`: The transport to which this config applies
-    /// * `config`: JSON-serializable configuration for that transport
-    pub fn with_transport_config(
-        mut self,
-        transport_type: TransportType,
-        config: serde_json::Value,
-    ) -> Self {
-        self.transport_configs.insert(transport_type, config);
-        self
-    }
+	/// Adds a transport-specific configuration override.
+	pub fn WithTransportConfiguration(
+		mut self,
+		TransportKind: TransportType,
+		Configuration: serde_json::Value,
+	) -> Self {
+		self.TransportConfigurations.insert(TransportKind, Configuration);
+		self
+	}
 
-    /// Gets the transport-specific configuration for the given type, if any.
-    pub fn get_transport_config(&self, transport_type: TransportType) -> Option<&serde_json::Value> {
-        self.transport_configs.get(&transport_type)
-    }
+	/// Gets the transport-specific configuration for the given type, if any.
+	pub fn GetTransportConfiguration(
+		&self,
+		TransportKind: TransportType,
+	) -> Option<&serde_json::Value> {
+		self.TransportConfigurations.get(&TransportKind)
+	}
 
-    /// Sets the allowed transport types for auto-selection.
-    ///
-    /// Transports not in this list will be ignored during auto-selection.
-    pub fn with_allowed_transports(mut self, transports: Vec<TransportType>) -> Self {
-        self.allowed_transports = transports;
-        self
-    }
+	/// Sets the allowed transport types for auto-selection.
+	pub fn WithAllowedTransports(mut self, Transports: Vec<TransportType>) -> Self {
+		self.AllowedTransports = Transports;
+		self
+	}
 
-    /// Adds a forbidden transport type.
-    ///
-    /// Forbidden transports will never be selected, even if available.
-    pub fn add_forbidden_transport(mut self, transport_type: TransportType) -> Self {
-        self.forbidden_transports.push(transport_type);
-        self
-    }
+	/// Adds a forbidden transport type.
+	pub fn AddForbiddenTransport(mut self, TransportKind: TransportType) -> Self {
+		self.ForbiddenTransports.push(TransportKind);
+		self
+	}
 
-    /// Checks if a transport type is allowed by this configuration.
-    pub fn is_allowed(&self, transport_type: TransportType) -> bool {
-        if self.forbidden_transports.contains(&transport_type) {
-            return false;
-        }
+	/// Alias for `AddForbiddenTransport`.
+	pub fn WithForbiddenTransport(self, TransportKind: TransportType) -> Self {
+		self.AddForbiddenTransport(TransportKind)
+	}
 
-        if self.allowed_transports.is_empty() {
-            true // All allowed if no whitelist
-        } else {
-            self.allowed_transports.contains(&transport_type)
-        }
-    }
+	/// Checks if a transport type is allowed by this configuration.
+	pub fn IsAllowed(&self, TransportKind: TransportType) -> bool {
+		if self.ForbiddenTransports.contains(&TransportKind) {
+			return false;
+		}
+		if self.AllowedTransports.is_empty() {
+			true
+		} else {
+			self.AllowedTransports.contains(&TransportKind)
+		}
+	}
 
-    /// Gets the effective timeout for a request, considering request-specific overrides.
-    ///
-    /// # Parameters
-    ///
-    /// * `request_timeout_ms`: Optional timeout from request metadata
-    ///
-    /// # Returns
-    ///
-    /// The timeout to use, taking the most specific override.
-    pub fn effective_timeout(&self, request_timeout_ms: Option<u64>) -> Duration {
-        request_timeout_ms
-            .map(Duration::from_millis)
-            .unwrap_or(self.default_timeout)
-    }
+	/// Gets the effective timeout for a request, considering request-specific overrides.
+	pub fn EffectiveTimeout(&self, RequestTimeoutMilliseconds: Option<u64>) -> Duration {
+		RequestTimeoutMilliseconds
+			.map(Duration::from_millis)
+			.unwrap_or(self.DefaultTimeout)
+	}
 
-    /// Gets the effective retry delay for a given attempt number, considering jitter.
-    ///
-    /// # Parameters
-    ///
-    /// * `attempt`: The retry attempt number (0-based)
-    ///
-    /// # Returns
-    ///
-    /// The delay to wait before the next retry.
-    pub fn effective_retry_delay(&self, attempt: u32) -> Duration {
-        // Exponential backoff: base_delay * 2^attempt
-        let mut delay = self
-            .retry_base_delay
-            .checked_mul(Duration::from_secs(1 << attempt))
-            .unwrap_or(self.retry_max_delay);
+	/// Gets the effective retry delay for a given attempt number, considering jitter.
+	pub fn EffectiveRetryDelay(&self, Attempt: u32) -> Duration {
+		let Multiplier = 1u32.checked_shl(Attempt.min(30)).unwrap_or(u32::MAX);
+		let mut Delay = self
+			.RetryBaseDelay
+			.checked_mul(Multiplier)
+			.unwrap_or(self.RetryMaximumDelay);
 
-        // Cap at max delay
-        if delay > self.retry_max_delay {
-            delay = self.retry_max_delay;
-        }
+		if Delay > self.RetryMaximumDelay {
+			Delay = self.RetryMaximumDelay;
+		}
 
-        // Add jitter if enabled: ±25% random adjustment
-        if self.retry_jitter_enabled {
-            let jitter_percent = 0.25;
-            let jitter_amount = delay.as_millis() as f64 * jitter_percent;
-            let jitter = (rand::random::<f64>() * 2.0 - 1.0) * jitter_amount;
-            let adjusted_ms = (delay.as_millis() as f64 + jitter).max(1.0) as u64;
-            delay = Duration::from_millis(adjusted_ms);
-        }
+		if self.RetryJitterEnabled {
+			let Nanoseconds = std::time::SystemTime::now()
+				.duration_since(std::time::UNIX_EPOCH)
+				.map(|Duration| Duration.subsec_nanos())
+				.unwrap_or(0);
+			let JitterFraction = (Nanoseconds % 1000) as f64 / 500.0 - 1.0;
+			let JitterAmount = Delay.as_millis() as f64 * 0.25;
+			let AdjustedMilliseconds =
+				(Delay.as_millis() as f64 + JitterFraction * JitterAmount).max(1.0) as u64;
+			Delay = Duration::from_millis(AdjustedMilliseconds);
+		}
 
-        delay
-    }
+		Delay
+	}
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+	use super::*;
 
-    #[test]
-    fn test_transport_config_defaults() {
-        let config = TransportConfig::default();
-        assert_eq!(config.default_timeout, Duration::from_secs(30));
-        assert_eq!(config.max_retries, 3);
-        assert!(config.health_checks_enabled);
-        assert!(config.metrics_enabled);
-    }
+	#[test]
+	fn TestTransportConfigDefaults() {
+		let Configuration = TransportConfig::default();
+		assert_eq!(Configuration.DefaultTimeout, Duration::from_secs(30));
+		assert_eq!(Configuration.MaximumRetries, 3);
+		assert!(Configuration.HealthChecksEnabled);
+		assert!(Configuration.MetricsEnabled);
+	}
 
-    #[test]
-    fn test_transport_config_builder() {
-        let config = TransportConfig::default()
-            .with_default_timeout(Duration::from_secs(60))
-            .with_max_retries(5)
-            .with_retry_jitter(false);
+	#[test]
+	fn TestTransportConfigBuilder() {
+		let Configuration = TransportConfig::default()
+			.WithDefaultTimeout(Duration::from_secs(60))
+			.WithMaximumRetries(5)
+			.WithRetryJitter(false);
 
-        assert_eq!(config.default_timeout, Duration::from_secs(60));
-        assert_eq!(config.max_retries, 5);
-        assert!(!config.retry_jitter_enabled);
-    }
+		assert_eq!(Configuration.DefaultTimeout, Duration::from_secs(60));
+		assert_eq!(Configuration.MaximumRetries, 5);
+		assert!(!Configuration.RetryJitterEnabled);
+	}
 
-    #[test]
-    fn test_is_allowed() {
-        let config = TransportConfig::default();
-        assert!(config.is_allowed(TransportType::gRPC));
+	#[test]
+	fn TestIsAllowed() {
+		let Configuration = TransportConfig::default();
+		assert!(Configuration.IsAllowed(TransportType::Grpc));
 
-        let config = config.with_forbidden_transport(TransportType::gRPC);
-        assert!(!config.is_allowed(TransportType::gRPC));
-        assert!(config.is_allowed(TransportType::IPC));
+		let Configuration = Configuration.WithForbiddenTransport(TransportType::Grpc);
+		assert!(!Configuration.IsAllowed(TransportType::Grpc));
+		assert!(Configuration.IsAllowed(TransportType::Ipc));
 
-        let config = config.with_allowed_transports(vec![TransportType::IPC]);
-        assert!(!config.is_allowed(TransportType::gRPC));
-        assert!(config.is_allowed(TransportType::IPC));
-    }
+		let Configuration = Configuration.WithAllowedTransports(vec![TransportType::Ipc]);
+		assert!(!Configuration.IsAllowed(TransportType::Grpc));
+		assert!(Configuration.IsAllowed(TransportType::Ipc));
+	}
 
-    #[test]
-    fn test_effective_timeout() {
-        let config = TransportConfig::default()
-            .with_default_timeout(Duration::from_secs(30));
+	#[test]
+	fn TestEffectiveTimeout() {
+		let Configuration =
+			TransportConfig::default().WithDefaultTimeout(Duration::from_secs(30));
 
-        // No override
-        assert_eq!(config.effective_timeout(None), Duration::from_secs(30));
+		assert_eq!(Configuration.EffectiveTimeout(None), Duration::from_secs(30));
+		assert_eq!(
+			Configuration.EffectiveTimeout(Some(5000)),
+			Duration::from_millis(5000)
+		);
+	}
 
-        // With override
-        assert_eq!(config.effective_timeout(Some(5000)), Duration::from_millis(5000));
-    }
+	#[test]
+	fn TestEffectiveRetryDelay() {
+		let Configuration = TransportConfig::default()
+			.WithRetryBaseDelay(Duration::from_millis(100))
+			.WithRetryMaximumDelay(Duration::from_secs(10))
+			.WithRetryJitter(false);
 
-    #[test]
-    fn test_effective_retry_delay() {
-        let config = TransportConfig::default()
-            .with_retry_base_delay(Duration::from_millis(100))
-            .with_retry_max_delay(Duration::from_secs(10))
-            .with_retry_jitter(false);
-
-        // First attempt (0) -> base * 2^0 = 100ms
-        assert_eq!(config.effective_retry_delay(0), Duration::from_millis(100));
-
-        // Second attempt (1) -> base * 2^1 = 200ms
-        assert_eq!(config.effective_retry_delay(1), Duration::from_millis(200));
-
-        // Third attempt (2) -> base * 2^2 = 400ms
-        assert_eq!(config.effective_retry_delay(2), Duration::from_millis(400));
-
-        // Large attempt should cap at max delay
-        assert_eq!(config.effective_retry_delay(10), Duration::from_secs(10));
-    }
+		assert_eq!(
+			Configuration.EffectiveRetryDelay(0),
+			Duration::from_millis(100)
+		);
+		assert_eq!(
+			Configuration.EffectiveRetryDelay(1),
+			Duration::from_millis(200)
+		);
+		assert_eq!(
+			Configuration.EffectiveRetryDelay(2),
+			Duration::from_millis(400)
+		);
+		assert_eq!(
+			Configuration.EffectiveRetryDelay(10),
+			Duration::from_secs(10)
+		);
+	}
 }

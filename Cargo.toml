@@ -18,10 +18,13 @@ thiserror = { workspace = true }
 url = { workspace = true }
 
 # Transport-specific dependencies
-uuid = { workspace = true }
+uuid = { workspace = true, features = ["v4"] }
 futures = { workspace = true }
 anyhow = { workspace = true }
 prometheus = { workspace = true }
+log = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+rand = { workspace = true }
 
 [features]
 default = []

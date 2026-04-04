@@ -1,3 +1,4 @@
+#![allow(non_snake_case, non_camel_case_types, non_upper_case_globals)]
 //! # Transport Layer
 //!
 //! This module defines the transport-layer abstraction that enables
@@ -60,12 +61,3 @@ pub mod Common;
 // --- Data Transfer Objects ---
 pub mod DTO;
 
-// Re-exports for convenience
-pub use TransportStrategy::{TransportStrategy, TransportCapabilities};
-pub use TransportError::TransportError;
-pub use UnifiedRequest::UnifiedRequest;
-pub use UnifiedResponse::UnifiedResponse;
-pub use Registry::TransportRegistry;
-pub use Metrics::{TransportMetrics, MetricsCollector};
-pub use Retry::{RetryConfig, RetryStrategy};
-pub use CircuitBreaker::{CircuitBreakerConfig, CircuitBreakerState, CircuitBreaker};

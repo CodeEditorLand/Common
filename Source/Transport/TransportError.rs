@@ -1,322 +1,303 @@
-//! # TransportError Enum
+#![allow(non_snake_case, non_camel_case_types, non_upper_case_globals)]
+//! # TransportError
 //!
 //! Defines the unified error type for all transport operations.
-//!
-//! The transport layer uses a structured error model that provides:
-//!
-//! - Transport-agnostic error codes
-//! - Contextual information (method, correlation ID, etc.)
-//! - Error classification (retryable vs. non-retryable)
-//! - Diagnostic information for debugging
 
 use std::fmt;
 
-use super::TransportErrorCode::TransportErrorCode;
+use super::TransportStrategy::TransportErrorCode;
 
 /// Unified transport error.
-///
-/// This error type captures all failure modes that can occur during
-/// transport operations. It provides structured data for diagnostics,
-/// metrics, and error handling logic (retries, circuit breaker, etc.).
-///
-/// # Error Classification
-///
-/// Errors are classified by `code` and can be tested for retryability:
-///
-/// - **Retryable**: Connection failures, timeouts, rate limits, transient remote errors
-/// - **Non-retryable**: Invalid arguments, not found, unauthorized, configuration errors
-///
-/// # Context
-///
-/// Each error can carry rich context including:
-///
-/// - `method`: The RPC method being invoked (if applicable)
-/// - `correlation_id`: The request ID for tracing
-/// - `transport_type`: Which transport failed
-/// - `retry_attempt`: How many retries preceded this failure
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug)]
 pub struct TransportError {
-    /// Error code indicating the type of failure.
-    pub code: TransportErrorCode,
+	/// Error code indicating the type of failure.
+	pub Code: TransportErrorCode,
 
-    /// Human-readable error message.
-    pub message: String,
+	/// Human-readable error message.
+	pub Message: String,
 
-    /// Optional underlying/boxed error (`Box<dyn std::error::Error>`).
-    pub source: Option<Box<dyn std::error::Error + Send + Sync>>,
+	/// Optional underlying/boxed error.
+	pub Source: Option<Box<dyn std::error::Error + Send + Sync>>,
 
-    /// The transport type that generated this error.
-    pub transport_type: String,
+	/// The transport type that generated this error.
+	pub TransportKind: String,
 
-    /// The method being invoked when the error occurred (if applicable).
-    pub method: Option<String>,
+	/// The method being invoked when the error occurred (if applicable).
+	pub Method: Option<String>,
 
-    /// The correlation/request ID for tracing.
-    pub correlation_id: Option<String>,
+	/// The correlation/request ID for tracing.
+	pub CorrelationIdentifier: Option<String>,
 
-    /// Number of retry attempts before this failure (for cumulative failures).
-    pub retry_attempt: u32,
+	/// Number of retry attempts before this failure.
+	pub RetryAttempt: u32,
 
-    /// Additional error context as key-value pairs.
-    pub context: std::collections::HashMap<String, String>,
+	/// Additional error context as key-value pairs.
+	pub Context: std::collections::HashMap<String, String>,
 }
 
 impl TransportError {
-    /// Creates a new `TransportError` with the given code and message.
-    ///
-    /// # Parameters
-    ///
-    /// * `code`: The error code from `TransportErrorCode`
-    /// * `message`: Human-readable error description
-    ///
-    /// # Returns
-    ///
-    /// A new `TransportError` with default values for optional fields.
-    pub fn new(code: TransportErrorCode, message: impl Into<String>) -> Self {
-        Self {
-            code,
-            message: message.into(),
-            source: None,
-            transport_type: String::new(),
-            method: None,
-            correlation_id: None,
-            retry_attempt: 0,
-            context: std::collections::HashMap::new(),
-        }
-    }
+	/// Creates a new `TransportError` with the given code and message.
+	pub fn New(Code: TransportErrorCode, Message: impl Into<String>) -> Self {
+		Self {
+			Code,
+			Message: Message.into(),
+			Source: None,
+			TransportKind: String::new(),
+			Method: None,
+			CorrelationIdentifier: None,
+			RetryAttempt: 0,
+			Context: std::collections::HashMap::new(),
+		}
+	}
 
-    /// Sets the transport type on this error.
-    ///
-    /// This is typically set by the transport implementation itself.
-    pub fn with_transport_type(mut self, transport_type: &str) -> Self {
-        self.transport_type = transport_type.to_string();
-        self
-    }
+	/// Sets the transport type on this error.
+	pub fn WithTransportKind(mut self, TransportKind: &str) -> Self {
+		self.TransportKind = TransportKind.to_string();
+		self
+	}
 
-    /// Sets the method name on this error.
-    ///
-    /// Useful for indicating which RPC method failed.
-    pub fn with_method(mut self, method: &str) -> Self {
-        self.method = Some(method.to_string());
-        self
-    }
+	/// Sets the method name on this error.
+	pub fn WithMethod(mut self, Method: &str) -> Self {
+		self.Method = Some(Method.to_string());
+		self
+	}
 
-    /// Sets the correlation/request ID on this error.
-    ///
-    /// This enables request tracing through logs and metrics.
-    pub fn with_correlation_id(mut self, correlation_id: &str) -> Self {
-        self.correlation_id = Some(correlation_id.to_string());
-        self
-    }
+	/// Sets the correlation/request ID on this error.
+	pub fn WithCorrelationIdentifier(mut self, CorrelationIdentifier: &str) -> Self {
+		self.CorrelationIdentifier = Some(CorrelationIdentifier.to_string());
+		self
+	}
 
-    /// Sets the retry attempt count.
-    ///
-    /// Indicates how many retries preceded this error.
-    pub fn with_retry_attempt(mut self, retry_attempt: u32) -> Self {
-        self.retry_attempt = retry_attempt;
-        self
-    }
+	/// Sets the retry attempt count.
+	pub fn WithRetryAttempt(mut self, RetryAttempt: u32) -> Self {
+		self.RetryAttempt = RetryAttempt;
+		self
+	}
 
-    /// Adds a context key-value pair to this error.
-    ///
-    /// Context provides additional diagnostic information without
-    /// cluttering the main error message.
-    ///
-    /// # Parameters
-    ///
-    /// * `key`: The context key (should be lowercase, alphanumeric)
-    /// * `value`: The context value
-    pub fn with_context(mut self, key: &str, value: &str) -> Self {
-        self.context.insert(key.to_string(), value.to_string());
-        self
-    }
+	/// Adds a context key-value pair to this error.
+	pub fn WithContext(mut self, Key: &str, Value: &str) -> Self {
+		self.Context.insert(Key.to_string(), Value.to_string());
+		self
+	}
 
-    /// Sets the underlying source error.
-    ///
-    /// This allows chaining of errors while preserving the original
-    /// error type for programmatic handling.
-    pub fn with_source(mut self, source: impl std::error::Error + Send + Sync + 'static) -> Self {
-        self.source = Some(Box::new(source));
-        self
-    }
+	/// Sets the underlying source error.
+	pub fn WithSource(
+		mut self,
+		SourceError: impl std::error::Error + Send + Sync + 'static,
+	) -> Self {
+		self.Source = Some(Box::new(SourceError));
+		self
+	}
 
-    /// Returns `true` if this error is retryable.
-    ///
-    /// Retryable errors are typically transient and may succeed if
-    /// attempted again after a delay. Non-retryable errors should not
-    /// be retried.
-    pub fn is_retryable(&self) -> bool {
-        self.code.is_retryable()
-    }
+	/// Returns `true` if this error is retryable.
+	pub fn IsRetryable(&self) -> bool {
+		self.Code.IsRetryable()
+	}
 
-    /// Returns the recommended retry delay in milliseconds.
-    ///
-    /// This is based on the error code and can be used by retry logic
-    /// to determine how long to wait before the next attempt.
-    pub fn retry_delay_ms(&self) -> u64 {
-        self.code.recommended_retry_delay_ms()
-    }
+	/// Returns the recommended retry delay in milliseconds.
+	pub fn RetryDelayMilliseconds(&self) -> u64 {
+		self.Code.RecommendedRetryDelayMilliseconds()
+	}
 
-    /// Returns the full error message with all context included.
-    ///
-    /// This format is suitable for logging and user-facing display.
-    pub fn full_message(&self) -> String {
-        let mut msg = self.message.clone();
+	/// Returns the full error message with all context included.
+	pub fn FullMessage(&self) -> String {
+		let mut MessageText = self.Message.clone();
 
-        if let Some(method) = &self.method {
-            msg.push_str(&format!(" (method: {})", method));
-        }
+		if let Some(Method) = &self.Method {
+			MessageText.push_str(&format!(" (method: {})", Method));
+		}
 
-        if let Some(correlation_id) = &self.correlation_id {
-            msg.push_str(&format!(" (correlation_id: {})", correlation_id));
-        }
+		if let Some(CorrelationIdentifier) = &self.CorrelationIdentifier {
+			MessageText.push_str(&format!(" (correlation_id: {})", CorrelationIdentifier));
+		}
 
-        if !self.transport_type.is_empty() {
-            msg.push_str(&format!(" (transport: {})", self.transport_type));
-        }
+		if !self.TransportKind.is_empty() {
+			MessageText.push_str(&format!(" (transport: {})", self.TransportKind));
+		}
 
-        if self.retry_attempt > 0 {
-            msg.push_str(&format!(" (retry: {})", self.retry_attempt));
-        }
+		if self.RetryAttempt > 0 {
+			MessageText.push_str(&format!(" (retry: {})", self.RetryAttempt));
+		}
 
-        if !self.context.is_empty() {
-            let context_str = self
-                .context
-                .iter()
-                .map(|(k, v)| format!("{}={}", k, v))
-                .collect::<Vec<_>>()
-                .join(", ");
-            msg.push_str(&format!(" (context: {{{}}})", context_str));
-        }
+		if !self.Context.is_empty() {
+			let ContextString = self
+				.Context
+				.iter()
+				.map(|(Key, Value)| format!("{}={}", Key, Value))
+				.collect::<Vec<_>>()
+				.join(", ");
+			MessageText.push_str(&format!(" (context: {{{}}})", ContextString));
+		}
 
-        if let Some(source) = &self.source {
-            msg.push_str(&format!(" (cause: {})", source));
-        }
+		if let Some(SourceError) = &self.Source {
+			MessageText.push_str(&format!(" (cause: {})", SourceError));
+		}
 
-        msg
-    }
+		MessageText
+	}
 }
 
+impl Clone for TransportError {
+	fn clone(&self) -> Self {
+		Self {
+			Code: self.Code,
+			Message: self.Message.clone(),
+			Source: None,
+			TransportKind: self.TransportKind.clone(),
+			Method: self.Method.clone(),
+			CorrelationIdentifier: self.CorrelationIdentifier.clone(),
+			RetryAttempt: self.RetryAttempt,
+			Context: self.Context.clone(),
+		}
+	}
+}
+
+impl PartialEq for TransportError {
+	fn eq(&self, Other: &Self) -> bool {
+		self.Code == Other.Code
+			&& self.Message == Other.Message
+			&& self.TransportKind == Other.TransportKind
+			&& self.Method == Other.Method
+			&& self.CorrelationIdentifier == Other.CorrelationIdentifier
+			&& self.RetryAttempt == Other.RetryAttempt
+			&& self.Context == Other.Context
+	}
+}
+
+impl Eq for TransportError {}
+
 impl fmt::Display for TransportError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.full_message())
-    }
+	fn fmt(&self, Formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+		write!(Formatter, "{}", self.FullMessage())
+	}
 }
 
 impl std::error::Error for TransportError {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        self.source.as_deref()
-    }
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		self.Source
+			.as_ref()
+			.map(|SourceError| SourceError.as_ref() as &dyn std::error::Error)
+	}
 }
 
 /// Convenience constructors for common transport errors.
 impl TransportError {
-    /// Connection error: failed to connect or lost connection.
-    pub fn connection(message: impl Into<String>) -> Self {
-        Self::new(TransportErrorCode::ConnectionFailed, message)
-            .with_transport_type("unknown")
-    }
+	/// Connection error: failed to connect or lost connection.
+	pub fn Connection(Message: impl Into<String>) -> Self {
+		Self::New(TransportErrorCode::ConnectionFailed, Message).WithTransportKind("unknown")
+	}
 
-    /// Timeout error: operation exceeded deadline.
-    pub fn timeout(message: impl Into<String>) -> Self {
-        Self::new(TransportErrorCode::Timeout, message)
-            .with_transport_type("unknown")
-    }
+	/// Timeout error: operation exceeded deadline.
+	pub fn Timeout(Message: impl Into<String>) -> Self {
+		Self::New(TransportErrorCode::Timeout, Message).WithTransportKind("unknown")
+	}
 
-    /// Invalid request error: bad parameters or format.
-    pub fn invalid_request(message: impl Into<String>) -> Self {
-        Self::new(TransportErrorCode::InvalidRequest, message)
-    }
+	/// Invalid request error: bad parameters or format.
+	pub fn InvalidRequest(Message: impl Into<String>) -> Self {
+		Self::New(TransportErrorCode::InvalidRequest, Message)
+	}
 
-    /// Not supported error: feature not implemented by this transport.
-    pub fn not_supported(message: impl Into<String>) -> Self {
-        Self::new(TransportErrorCode::NotSupported, message)
-    }
+	/// Not supported error: feature not implemented by this transport.
+	pub fn NotSupported(Message: impl Into<String>) -> Self {
+		Self::New(TransportErrorCode::NotSupported, Message)
+	}
 
-    /// Remote error: the remote endpoint returned an error.
-    pub fn remote(message: impl Into<String>) -> Self {
-        Self::new(TransportErrorCode::RemoteError, message)
-    }
+	/// Remote error: the remote endpoint returned an error.
+	pub fn Remote(Message: impl Into<String>) -> Self {
+		Self::New(TransportErrorCode::RemoteError, Message)
+	}
 
-    /// Internal error: something went wrong inside the transport.
-    pub fn internal(message: impl Into<String>) -> Self {
-        Self::new(TransportErrorCode::InternalError, message)
-    }
+	/// Internal error: something went wrong inside the transport.
+	pub fn Internal(Message: impl Into<String>) -> Self {
+		Self::New(TransportErrorCode::InternalError, Message)
+	}
 
-    /// Circuit breaker open error: request rejected due to circuit breaker.
-    pub fn circuit_breaker_open() -> Self {
-        Self::new(TransportErrorCode::CircuitBreakerOpen, "Circuit breaker is open")
-            .with_transport_type("unknown")
-    }
+	/// Circuit breaker open error: request rejected due to circuit breaker.
+	pub fn CircuitBreakerOpen() -> Self {
+		Self::New(TransportErrorCode::CircuitBreakerOpen, "Circuit breaker is open")
+			.WithTransportKind("unknown")
+	}
 
-    /// Rate limited error: too many requests.
-    pub fn rate_limited(retry_after_ms: u64) -> Self {
-        let mut error = Self::new(TransportErrorCode::RateLimited, "Rate limit exceeded")
-            .with_context("retry_after_ms", &retry_after_ms.to_string());
-        // Add retry-after header suggestion
-        error.context.insert("retry_after".to_string(), format!("{}ms", retry_after_ms));
-        error
-    }
+	/// Rate limited error: too many requests.
+	pub fn RateLimited(RetryAfterMilliseconds: u64) -> Self {
+		let mut Error =
+			Self::New(TransportErrorCode::RateLimited, "Rate limit exceeded").WithContext(
+				"retry_after_ms",
+				&RetryAfterMilliseconds.to_string(),
+			);
+		Error
+			.Context
+			.insert("retry_after".to_string(), format!("{}ms", RetryAfterMilliseconds));
+		Error
+	}
 
-    /// Message too large error.
-    pub fn message_too_large(size: usize, max_size: usize) -> Self {
-        Self::new(
-            TransportErrorCode::MessageTooLarge,
-            format!("Message size {} exceeds maximum {}", size, max_size),
-        )
-        .with_context("size", &size.to_string())
-        .with_context("max_size", &max_size.to_string())
-    }
+	/// Message too large error.
+	pub fn MessageTooLarge(Size: usize, MaximumSize: usize) -> Self {
+		Self::New(
+			TransportErrorCode::MessageTooLarge,
+			format!("Message size {} exceeds maximum {}", Size, MaximumSize),
+		)
+		.WithContext("size", &Size.to_string())
+		.WithContext("max_size", &MaximumSize.to_string())
+	}
 
-    /// Serialization error.
-    pub fn serialization(message: impl Into<String>) -> Self {
-        Self::new(TransportErrorCode::SerializationError, message)
-    }
+	/// Not found error: resource or transport not found.
+	pub fn NotFound(Message: impl Into<String>) -> Self {
+		Self::New(TransportErrorCode::NotFound, Message)
+	}
+
+	/// Serialization error.
+	pub fn Serialization(Message: impl Into<String>) -> Self {
+		Self::New(TransportErrorCode::SerializationError, Message)
+	}
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+	use super::*;
 
-    #[test]
-    fn test_transport_error_construction() {
-        let error = TransportError::connection("Connection refused");
-        assert_eq!(error.code, TransportErrorCode::ConnectionFailed);
-        assert!(error.message.contains("Connection refused"));
-    }
+	#[test]
+	fn TestTransportErrorConstruction() {
+		let Error = TransportError::Connection("Connection refused");
+		assert_eq!(Error.Code, TransportErrorCode::ConnectionFailed);
+		assert!(Error.Message.contains("Connection refused"));
+	}
 
-    #[test]
-    fn test_error_context() {
-        let error = TransportError::new(TransportErrorCode::Timeout, "Request timed out")
-            .with_method("ping")
-            .with_correlation_id("12345")
-            .with_context("endpoint", "localhost:50051");
+	#[test]
+	fn TestErrorContext() {
+		let Error = TransportError::New(TransportErrorCode::Timeout, "Request timed out")
+			.WithMethod("ping")
+			.WithCorrelationIdentifier("12345")
+			.WithContext("endpoint", "localhost:50051");
 
-        assert_eq!(error.method, Some("ping".to_string()));
-        assert_eq!(error.correlation_id, Some("12345".to_string()));
-        assert_eq!(error.context.get("endpoint"), Some(&"localhost:50051".to_string()));
-    }
+		assert_eq!(Error.Method, Some("ping".to_string()));
+		assert_eq!(Error.CorrelationIdentifier, Some("12345".to_string()));
+		assert_eq!(
+			Error.Context.get("endpoint"),
+			Some(&"localhost:50051".to_string())
+		);
+	}
 
-    #[test]
-    fn test_error_is_retryable() {
-        let conn_error = TransportError::connection("Connection failed");
-        assert!(conn_error.is_retryable());
+	#[test]
+	fn TestErrorIsRetryable() {
+		let ConnectionError = TransportError::Connection("Connection failed");
+		assert!(ConnectionError.IsRetryable());
 
-        let invalid_error = TransportError::invalid_request("Bad params");
-        assert!(!invalid_error.is_retryable());
-    }
+		let InvalidError = TransportError::InvalidRequest("Bad params");
+		assert!(!InvalidError.IsRetryable());
+	}
 
-    #[test]
-    fn test_error_full_message() {
-        let error = TransportError::timeout("Operation timed out")
-            .with_method("get_file")
-            .with_correlation_id("abc-123")
-            .with_transport_type("grpc");
+	#[test]
+	fn TestErrorFullMessage() {
+		let Error = TransportError::Timeout("Operation timed out")
+			.WithMethod("get_file")
+			.WithCorrelationIdentifier("abc-123")
+			.WithTransportKind("grpc");
 
-        let full_msg = error.full_message();
-        assert!(full_msg.contains("Operation timed out"));
-        assert!(full_msg.contains("method: get_file"));
-        assert!(full_msg.contains("correlation_id: abc-123"));
-        assert!(full_msg.contains("transport: grpc"));
-    }
+		let FullMessage = Error.FullMessage();
+		assert!(FullMessage.contains("Operation timed out"));
+		assert!(FullMessage.contains("method: get_file"));
+		assert!(FullMessage.contains("correlation_id: abc-123"));
+		assert!(FullMessage.contains("transport: grpc"));
+	}
 }
