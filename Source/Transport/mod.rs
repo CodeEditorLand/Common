@@ -16,9 +16,9 @@
 //! ## Sub-modules
 //!
 //! - [`Common`] - Shared types and utilities
-//! - [`Grpc`] - gRPC transport implementation
-//! - [`Ipc`] - IPC (Unix sockets/Named pipes) implementation
-//! - [`Wasm`] - WebAssembly/WebWorker implementation
+//! - [`gRPC`] - gRPC transport implementation
+//! - [`IPC`] - IPC (Unix sockets/Named pipes) implementation
+//! - [`WASM`] - WebAssembly/WebWorker implementation
 //! - [`Registry`] - Transport registry and selection
 //! - [`Metrics`] - Metrics collection and monitoring
 //! - [`Retry`] - Retry strategies with backoff
@@ -46,10 +46,10 @@ pub mod UnifiedRequest;
 pub mod UnifiedResponse;
 pub mod TransportConfig;
 
-// --- Transport Implementations ---
-pub mod Grpc;
-pub mod Ipc;
-pub mod Wasm;
+// --- Transport Implementations (proper acronym casing: gRPC, IPC, WASM) ---
+pub mod gRPC;
+pub mod IPC;
+pub mod WASM;
 
 // --- Infrastructure ---
 pub mod Registry;

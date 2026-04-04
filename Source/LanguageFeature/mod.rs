@@ -27,5 +27,22 @@ pub mod UnregisterProvider;
 
 // Feature Invocation
 pub mod ProvideCompletions;
-
 pub mod ProvideHover;
+pub mod ProvideDefinition;
+pub mod ProvideReferences;
+pub mod ProvideDocumentSymbols;
+pub mod ProvideWorkspaceSymbols;
+pub mod ProvideRenameEdits;
+pub mod ProvideDocumentFormatting;
+pub mod ProvideSignatureHelp;
+pub mod ProvideCodeLenses;
+pub mod ProvideFoldingRanges;
+pub mod ProvideSelectionRanges;
+pub mod ProvideSemanticTokens;
+pub mod ProvideInlayHints;
+pub mod ProvideTypeHierarchy;
+pub mod ProvideCallHierarchy;
+pub mod ProvideLinkedEditingRanges;
+pub mod ProvideOnTypeFormatting;
+pub mod ProvideDocumentHighlights;
+pub mod ProvideCodeActions;
