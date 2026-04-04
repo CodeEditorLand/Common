@@ -26,40 +26,36 @@ application through a set of powerful, composable building blocks.
 The entire `Mountain` backend and any future native components are built by
 implementing the traits and consuming the effects defined in this crate.
 
-**`Common`** is engineered to:
+**What Common gives you:**
 
-1. **Enforce Architectural Boundaries:** By defining all application
-   capabilities as abstract `trait`s, it ensures a clean separation between the
-   definition of an operation and its execution.
-2. **Provide a Declarative Effect System:** Introduces the `ActionEffect` type,
-   which describes an asynchronous operation as a value, allowing logic to be
-   composed, tested, and executed in a controlled `ApplicationRunTime`.
-3. **Standardize Data Contracts:** Defines all Data Transfer Objects (DTOs) and
-   a universal `CommonError` enum, ensuring consistent data structures and error
-   handling across the entire native ecosystem.
-4. **Maximize Testability and Reusability:** Because this crate is pure and
-   abstract, any component that depends on it can be tested with mock
-   implementations of its traits, leading to fast and reliable unit tests.
+1. **Test without Tauri.** Every capability is an abstract trait. Mock the trait,
+   test your logic. No window, no webview, no sidecar needed.
+2. **Bugs at compile time.** The `ActionEffect` type describes operations as
+   values. The compiler catches missing dependencies and type mismatches before
+   runtime.
+3. **One error enum, everywhere.** `CommonError` covers every failure domain.
+   No stringly-typed errors, no `unwrap()` surprises.
+4. **Stable IPC contracts.** DTOs are `serde`-compatible and shared across
+   Mountain, Cocoon, and Wind. Change the type, and every consumer gets a
+   compile error.
+
+📖 **[Rust API Documentation](https://Rust.Documentation.Editor.Land/Common/)**
 
 ---
 
 ## Key Features & Concepts 🔐
 
-- **Declarative `ActionEffect` System:** Operations are not executed immediately
-  — they are described as `ActionEffect` data structures and then passed to a
-  runtime for execution.
-- **Trait-Based Dependency Injection:** A clean, compile-time DI system using
-  the `Environment` and `Requires` traits, allowing components to declare their
-  dependencies without being tied to a specific implementation.
-- **Asynchronous Service Traits:** All core application services (e.g.,
-  `FileSystemReader`, `UserInterfaceProvider`, `CommandExecutor`) are defined as
-  `async trait`s, providing a fully asynchronous-first architecture.
-- **Comprehensive DTO Library:** Contains definitions for all data structures
-  used for IPC communication with `Cocoon` and internal state management in
-  `Mountain`. All types are `serde`-compatible.
-- **Universal `CommonError` Enum:** A single, exhaustive `enum` for all possible
-  failures, enabling robust and predictable error handling across the entire
-  application.
+- **Declarative effects, not callbacks.** Operations are data. Describe what
+  you want, compose effects, then run them. Testing is trivial: just inspect
+  the effect value without executing it.
+- **Compile-time dependency injection.** The `Environment` and `Requires` traits
+  wire dependencies at compile time. No runtime reflection, no service locator.
+- **Async-first.** Every service trait (`FileSystemReader`, `CommandExecutor`,
+  etc.) is `async`. No blocking calls anywhere in the contract.
+- **Shared DTOs for all IPC.** Mountain, Cocoon, and Wind all use the same
+  `serde`-compatible types. Schema changes break at compile time, not at runtime.
+- **One error type.** `CommonError` covers all 20 service domains. Pattern match
+  once, handle every case.
 
 ---
 
@@ -282,6 +278,14 @@ Stay updated with our progress! See
 history of changes specific to **Common**.
 
 ---
+
+
+## See Also
+
+- [Architecture Overview](https://editor.land/Doc/architecture)
+- [Mountain](https://github.com/CodeEditorLand/Mountain)
+- [Echo](https://github.com/CodeEditorLand/Echo)
+- [Air](https://github.com/CodeEditorLand/Air)
 
 ## Funding & Acknowledgements 🙏🏻
 
