@@ -14,8 +14,8 @@
 The Architectural Core of Land
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Common/tree/Current/LICENSE)
-[![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
-[![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
+[<img src="https://cdn.simpleicons.org/rust" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
+[<img src="https://cdn.simpleicons.org/rust" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
 
 Welcome to **Common**! This crate is the architectural heart of the Land Code
 Editor's native backend. It provides a pure, abstract foundation for building
