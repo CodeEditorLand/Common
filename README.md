@@ -7,67 +7,124 @@
 </h3> </td>
 </tr></table>
 
-
 ---
 
 # **Common**&#x2001;👨🏻‍🏭
 
-> **VS Code's codebase imports concrete implementations directly. Testing a single component means mocking entire subsystems. There is no dependency injection at the architecture level.**
+The Architectural Core of Land
 
-_"Mock any service and test any element in isolation, no running editor required."_
+> **VS Code's codebase imports concrete implementations directly. Testing a
+> single component means mocking entire subsystems. There is no dependency
+> injection at the architecture level.**
+
+_"Mock any service and test any element in isolation, no running editor
+required."_
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Common/tree/Current/LICENSE)
 [<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
 [<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
 
-Common defines pure abstract traits with zero concrete implementations. Every element builds on Common's typed effects and composable building blocks. The Rust compiler enforces contracts at build time. If an element changes its signature, every consumer fails to compile immediately. Tests run in milliseconds because you can mock any trait and test any element without launching a window, a WebView, or a sidecar.
-
 📖 **[Rust API Documentation](https://Rust.Documentation.Editor.Land/Common/)**
 
+Welcome to **Common**! This crate is the architectural heart of the Land Code
+Editor's native backend. It provides a pure, abstract foundation for building
+application logic using a declarative, effects-based system. It contains **no
+concrete implementations**; instead, it defines the "language" of the
+application through a set of powerful, composable building blocks.
+
+The entire `Mountain` backend and any future native components are built by
+implementing the traits and consuming the effects defined in this crate.
+
+**`Common`** is engineered to:
+
+1. **Enforce Architectural Boundaries:** By defining all application
+   capabilities as abstract `trait`s, it ensures a clean separation between the
+   definition of an operation and its execution.
+2. **Provide a Declarative Effect System:** Introduces the `ActionEffect` type,
+   which describes an asynchronous operation as a value, allowing logic to be
+   composed, tested, and executed in a controlled `ApplicationRunTime`.
+3. **Standardize Data Contracts:** Defines all Data Transfer Objects (DTOs) and
+   a universal `CommonError` enum, ensuring consistent data structures and error
+   handling across the entire native ecosystem.
+4. **Maximize Testability and Reusability:** Because this crate is pure and
+   abstract, any component that depends on it can be tested with mock
+   implementations of its traits, leading to fast and reliable unit tests.
+
 ---
 
-## What It Does&#x2001;🔐
+## Key Features & Concepts&#x2001;🔐
 
-- **Pure abstract traits.** Zero concrete implementations. Every cross-element boundary is a typed contract.
-- **Compile-time enforcement.** Change a trait signature and every consumer fails to compile immediately.
-- **Millisecond tests.** Mock any trait and test any element without launching a window or WebView.
-- **ActionEffect system.** Declarative effects that are composable, testable, and type-safe.
+- **Declarative `ActionEffect` System:** Operations are not executed immediately
+  — they are described as `ActionEffect` data structures and then passed to a
+  runtime for execution.
+- **Trait-Based Dependency Injection:** A clean, compile-time DI system using
+  the `Environment` and `Requires` traits, allowing components to declare their
+  dependencies without being tied to a specific implementation.
+- **Asynchronous Service Traits:** All core application services (e.g.,
+  `FileSystemReader`, `UserInterfaceProvider`, `CommandExecutor`) are defined as
+  `async trait`s, providing a fully asynchronous-first architecture.
+- **Comprehensive DTO Library:** Contains definitions for all data structures
+  used for IPC communication with `Cocoon` and internal state management in
+  `Mountain`. All types are `serde`-compatible.
+- **Universal `CommonError` Enum:** A single, exhaustive `enum` for all possible
+  failures, enabling robust and predictable error handling across the entire
+  application.
 
 ---
 
-## In the Ecosystem&#x2001;👨🏻‍🏭 + 🏞️
+## Core Architecture Principles&#x2001;🏗️
 
-```mermaid
-graph LR
-    classDef Mountain fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef Common fill:#cfc,stroke:#333,stroke-width:1px;
-    classDef Consumer fill:#9cf,stroke:#333,stroke-width:2px;
+| Principle          | Description                                                                                                                                    | Key Components Involved                    |
+| :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------- |
+| **Abstraction**    | Define every application capability as an abstract `async trait`. Never include concrete implementation logic.                                 | All `*Provider.rs` and `*Manager.rs` files |
+| **Declarativism**  | Represent every operation as an `ActionEffect` value. The crate provides constructor functions for these effects.                              | `Effect/*`, all effect constructor files   |
+| **Composability**  | The `ActionEffect` system and trait-based DI are designed to be composed, allowing complex workflows to be built from simple, reusable pieces. | `Environment/*`, `Effect/*`                |
+| **Contract-First** | Define all data structures (`DTO/*`) and error types (`Error/*`) first. These form the stable contract for all other components.               | `DTO/`, `Error/`                           |
+| **Purity**         | This crate has minimal dependencies and is completely independent of Tauri, gRPC, or any specific application logic.                           | `Cargo.toml`                               |
 
-    subgraph "The \`Common\` Crate"
-        direction LR
-        Traits["Abstract Traits (e.g., \`FileSystemReader\`)"]:::Common
-        Effects["ActionEffects (e.g., \`ReadFile\`)"]:::Common
-        DTOs["Data Transfer Objects (e.g., \`FileTypeDTO\`)"]:::Common
+---
 
-        Effects -- Depend on --> Traits
-    end
+## The `ActionEffect` System Explained
 
-    subgraph "Consumers"
-        Mountain[**Mountain Application**]:::Mountain
-        Tests[Unit & Integration Tests]:::Consumer
-    end
+The core pattern in `Common` is the `ActionEffect`. Instead of writing a
+function that immediately performs a side effect, you call a function that
+_returns a description of that effect_.
 
-    Mountain -- Implements --> Traits
-    Mountain -- Executes --> Effects
-    Mountain -- Uses --> DTOs
+**Traditional (Imperative) Approach:**
 
-    Tests -- Mocks --> Traits
-    Tests -- Verifies --> Effects
+```rust
+async fn read_my_file(fs: &impl FileSystem) -> Result<Vec<u8>, Error> {
+    // The side effect happens here.
+    fs.read("/path/to/file").await
+}
 ```
 
+**The `Common` (Declarative) Approach:**
+
+```rust
+use CommonLibrary::FileSystem;
+use std::sync::Arc;
+
+// 1. Create a description of the desired effect. No I/O happens here.
+//    The effect's type signature explicitly declares its dependency: Arc<dyn FileSystemReader>.
+let ReadEffect: ActionEffect<Arc<dyn FileSystemReader>, _, _> =
+    FileSystem::ReadFile(PathBuf::from("/path/to/file"));
+
+// 2. Later, in a separate part of the system (the runtime), execute it.
+//    The runtime will see that the effect needs a FileSystemReader, provide one from its
+//    environment, and run the operation.
+let FileContent = Runtime.Run(ReadEffect).await?;
+```
+
+This separation makes the architecture flexible and testable — swap any trait
+implementation without changing the logic that uses it.
+
 ---
 
-## Project Structure&#x2001;🗺️
+## Project Structure Overview&#x2001;🗺️
+
+The `Common` crate is organized by service domain, with each domain containing
+its trait definitions, DTOs, and effect constructors.
 
 ```
 Common/
@@ -113,18 +170,103 @@ Common/
 
 ---
 
-## Development&#x2001;🛠️
+## Deep Dive & Architectural Patterns&#x2001;🔬
 
-Common is a component of the Land workspace. Follow the
-[Land Repository](https://github.com/CodeEditorLand/Land) instructions to
-build and run.
+To understand the core philosophy behind this crate and how its components work
+together, please refer to the detailed technical breakdown in
+[`Documentation/GitHub/DeepDive.md`](https://github.com/CodeEditorLand/Common/tree/Current/Documentation/GitHub/DeepDive.md).
+This document explains the `ActionEffect` system, the trait-based dependency
+injection model, and provides a guide for adding new services to the
+architecture.
 
 ---
 
-## License&#x2001;⚖️
+## How `Common` Fits into the Land Ecosystem&#x2001;👨🏻‍🏭 + 🏞️
 
-CC0 1.0 Universal. Public domain. No restrictions.
-[LICENSE](https://github.com/CodeEditorLand/Common/tree/Current/LICENSE)
+`Common` is the foundational layer upon which the entire native backend is
+built. It has no knowledge of its consumers, but they are entirely dependent on
+it.
+
+```mermaid
+graph LR
+    classDef Mountain fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef Common fill:#cfc,stroke:#333,stroke-width:1px;
+    classDef Consumer fill:#9cf,stroke:#333,stroke-width:2px;
+
+    subgraph "The Common Crate"
+        direction LR
+        Traits["Abstract Traits (e.g., FileSystemReader)"]:::Common
+        Effects["ActionEffects (e.g., ReadFile)"]:::Common
+        DTOs["Data Transfer Objects (e.g., FileTypeDTO)"]:::Common
+
+        Effects -- Depend on --> Traits
+    end
+
+    subgraph "Consumers"
+        Mountain[Mountain Application]:::Mountain
+        Tests[Unit & Integration Tests]:::Consumer
+    end
+
+    Mountain -- Implements --> Traits
+    Mountain -- Executes --> Effects
+    Mountain -- Uses --> DTOs
+
+    Tests -- Mocks --> Traits
+    Tests -- Verifies --> Effects
+```
+
+---
+
+## Getting Started&#x2001;🚀
+
+### Installation&#x2001;📥
+
+`Common` is intended to be used as a local path dependency within the `Land`
+workspace. In `Mountain`'s `Cargo.toml`:
+
+```toml
+[dependencies]
+Common = { path = "../Common" }
+```
+
+### Usage&#x2001;🚀
+
+1. **Implement a Trait:** In `Mountain/Source/Environment/`, provide the
+   concrete implementation for a `Common` trait.
+
+```rust
+// In Mountain/Source/Environment/FileSystemProvider.rs
+
+use CommonLibrary::FileSystem::{FileSystemReader, FileSystemWriter};
+
+#[async_trait]
+impl FileSystemReader for MountainEnvironment {
+    async fn ReadFile(&self, Path: &PathBuf) -> Result<Vec<u8>, CommonError> {
+        // ... actual tokio::fs call ...
+    }
+    // ...
+}
+```
+
+2. **Create and Execute an Effect:** In business logic, create and run an
+   effect.
+
+```rust
+// In a Mountain service or command
+
+use CommonLibrary::FileSystem;
+use CommonLibrary::Effect::ApplicationRunTime;
+
+async fn SomeLogic(Runtime: Arc<impl ApplicationRunTime>) {
+    let Path = PathBuf::from("/my/file.txt");
+    let ReadEffect = FileSystem::ReadFile(Path);
+
+    match Runtime.Run(ReadEffect).await {
+        Ok(Content) => info!("File content length: {}", Content.len()),
+        Err(Error) => error!("Failed to read file: {:?}", Error),
+    }
+}
+```
 
 ---
 
@@ -137,8 +279,27 @@ CC0 1.0 Universal. Public domain. No restrictions.
 - [Echo](https://github.com/CodeEditorLand/Echo)
 - [Air](https://github.com/CodeEditorLand/Air)
 
+---
 
-## Funding & Acknowledgements 🙏🏻
+## License&#x2001;⚖️
+
+This project is released into the public domain under the **Creative Commons CC0
+Universal** license. You are free to use, modify, distribute, and build upon
+this work for any purpose, without any restrictions. For the full legal text,
+see the [`LICENSE`](https://github.com/CodeEditorLand/Common/tree/Current/)
+file.
+
+---
+
+## Changelog&#x2001;📜
+
+Stay updated with our progress! See
+[`CHANGELOG.md`](https://github.com/CodeEditorLand/Common/tree/Current/) for a
+history of changes specific to **Common**.
+
+---
+
+## Funding \& Acknowledgements&#x2001;🙏🏻
 
 **Common** is a core element of the **Land** ecosystem. This project is funded
 through [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
