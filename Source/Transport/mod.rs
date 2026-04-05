@@ -8,7 +8,7 @@
 //! ## Architecture
 //!
 //! - [`TransportStrategy`] - Core trait all transports must implement
-//! - [`Registry::TransportRegistry`](crate::Transport::Registry::TransportRegistry) - Dynamic transport selection and management
+//! - [`Registry::TransportRegistry`] - Dynamic transport selection and management
 //! - [`UnifiedRequest`] / [`UnifiedResponse`] - Common message format
 //! - [`TransportError`] - Unified error taxonomy
 //! - [`TransportConfig`] - Configuration structures
