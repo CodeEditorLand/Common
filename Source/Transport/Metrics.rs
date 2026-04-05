@@ -11,7 +11,7 @@
 pub trait MetricsCollector: Send + Sync {
 	/// Records a completed request.
 	///
-	/// * `Success` — whether the request succeeded
-	/// * `LatencyMilliseconds` — round-trip latency in milliseconds
+	/// * `Success` - whether the request succeeded
+	/// * `LatencyMilliseconds` - round-trip latency in milliseconds
 	fn RecordRequest(&self, Success: bool, LatencyMilliseconds: f64);
 }

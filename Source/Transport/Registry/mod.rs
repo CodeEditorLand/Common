@@ -406,7 +406,7 @@ impl Default for TransportConstraints {
 
 /// Central registry for managing transport strategies.
 pub struct TransportRegistry {
-	/// Registered transports (name -> Arc<dyn CommonTransportStrategy>)
+	/// Registered transports (name -> Arc\<dyn CommonTransportStrategy\>)
 	Transports: HashMap<String, Arc<dyn CommonTransportStrategy>>,
 	/// Currently active transport name
 	Active: Option<String>,
