@@ -10,6 +10,5 @@ export default (async (...Option) =>
 		Option[1] ?? 302,
 	)) satisfies Interface as Interface;
 
-export const { Response } = await import(
-	"@cloudflare/workers-types/experimental/index.js"
-);
+export const { Response } =
+	await import("@cloudflare/workers-types/experimental/index.js");

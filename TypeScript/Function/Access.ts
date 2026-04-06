@@ -27,6 +27,5 @@ export default (async (...[Key, Identifier, { get }, View]) => {
 	}
 }) satisfies Interface as Interface;
 
-export const { default: Uint8ArrayFromObject } = await import(
-	"./Uint8ArrayFromObject.js"
-);
+export const { default: Uint8ArrayFromObject } =
+	await import("./Uint8ArrayFromObject.js");

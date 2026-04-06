@@ -4,12 +4,12 @@ toml = { workspace = true }
 
 [dependencies]
 tauri = { workspace = true, features = [
- 	"wry",
- 	"tray-icon",
- 	"devtools",
- 	"rustls-tls",
- 	"compression",
- ], default-features = false }
+	"wry",
+	"tray-icon",
+	"devtools",
+	"rustls-tls",
+	"compression",
+], default-features = false }
 
 async-trait = { workspace = true }
 serde = { workspace = true }
