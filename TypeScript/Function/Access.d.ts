@@ -1,5 +1,4 @@
 import type Interface from "../Interface/Access.js";
-
 /**
  * @module Access
  *
