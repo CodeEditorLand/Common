@@ -181,7 +181,7 @@ architecture.
 
 ---
 
-## How `Common` Fits into the Land Ecosystem&#x2001;👨🏻‍🏭 + 🏞️
+## How `Common` Fits into the Land Ecosystem&#x2001;👨🏻‍🏭 + 🏞️
 
 `Common` is the foundational layer upon which the entire native backend is
 built. It has no knowledge of its consumers, but they are entirely dependent on
