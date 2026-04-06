@@ -1,4 +1,5 @@
 import type Interface from "../Interface/Uint8ArrayFromObject.js";
+
 /**
  * @module Uint8ArrayFromObject
  *
