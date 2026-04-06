@@ -62,6 +62,10 @@ pub enum ProviderType {
 	LinkedEditingRange = 24,
 
 	TypeHierarchy = 25,
+
+	EvaluatableExpression = 26,
+
+	InlineValues = 27,
 }
 
 impl fmt::Display for ProviderType {
