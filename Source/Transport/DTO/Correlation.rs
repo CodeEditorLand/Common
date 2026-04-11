@@ -1,7 +1,6 @@
 #![allow(non_snake_case, non_camel_case_types, non_upper_case_globals)]
 //! Correlation ID types and utilities.
 
-
 /// Correlation ID type.
 ///
 /// Used to uniquely identify requests and match responses to requests.
@@ -20,9 +19,7 @@ pub trait CorrelationIdGenerator {
 pub struct UuidCorrelationIdGenerator;
 
 impl CorrelationIdGenerator for UuidCorrelationIdGenerator {
-	fn Generate() -> CorrelationId {
-		uuid::Uuid::new_v4().to_string()
-	}
+	fn Generate() -> CorrelationId { uuid::Uuid::new_v4().to_string() }
 }
 
 #[cfg(test)]

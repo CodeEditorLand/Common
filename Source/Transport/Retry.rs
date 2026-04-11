@@ -9,22 +9,22 @@ use std::time::Duration;
 #[derive(Debug, Clone)]
 pub struct RetryConfiguration {
 	/// Maximum number of retry attempts.
-	pub MaximumAttempts: u32,
+	pub MaximumAttempts:u32,
 	/// Base delay for exponential backoff.
-	pub BaseDelay: Duration,
+	pub BaseDelay:Duration,
 	/// Maximum delay cap.
-	pub MaximumDelay: Duration,
+	pub MaximumDelay:Duration,
 	/// Whether to add jitter to retry delays.
-	pub JitterEnabled: bool,
+	pub JitterEnabled:bool,
 }
 
 impl Default for RetryConfiguration {
 	fn default() -> Self {
 		Self {
-			MaximumAttempts: 3,
-			BaseDelay: Duration::from_millis(100),
-			MaximumDelay: Duration::from_secs(10),
-			JitterEnabled: true,
+			MaximumAttempts:3,
+			BaseDelay:Duration::from_millis(100),
+			MaximumDelay:Duration::from_secs(10),
+			JitterEnabled:true,
 		}
 	}
 }

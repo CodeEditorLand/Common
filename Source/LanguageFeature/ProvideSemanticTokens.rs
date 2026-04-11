@@ -1,7 +1,7 @@
 //! # ProvideSemanticTokens Effect
 //!
-//! Defines the `ActionEffect` for requesting semantic tokens from a language feature
-//! provider.
+//! Defines the `ActionEffect` for requesting semantic tokens from a language
+//! feature provider.
 
 use std::sync::Arc;
 

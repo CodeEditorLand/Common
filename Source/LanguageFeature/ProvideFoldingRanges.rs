@@ -1,7 +1,7 @@
 //! # ProvideFoldingRanges Effect
 //!
-//! Defines the `ActionEffect` for requesting folding ranges from a language feature
-//! provider.
+//! Defines the `ActionEffect` for requesting folding ranges from a language
+//! feature provider.
 
 use std::sync::Arc;
 

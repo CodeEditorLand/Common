@@ -206,13 +206,13 @@ graph LR
 // Service trait definition
 #[async_trait]
 pub trait FileSystemReader: Send + Sync {
-    async fn read_file(&self, path: &PathBuf) -> Result<Vec<u8>, CommonError>;
+    async fn ReadFile(&self, path: &PathBuf) -> Result<Vec<u8>, CommonError>;
 }
 
 // Effect requiring the trait
-pub fn read_file_effect(path: PathBuf) -> ActionEffect<Arc<dyn FileSystemReader>, CommonError, Vec<u8>> {
+pub fn ReadFile_effect(path: PathBuf) -> ActionEffect<Arc<dyn FileSystemReader>, CommonError, Vec<u8>> {
     ActionEffect::new(move |fs: Arc<dyn FileSystemReader>| {
-        Box::pin(async move { fs.read_file(&path).await })
+        Box::pin(async move { fs.ReadFile(&path).await })
     })
 }
 ```
@@ -333,7 +333,7 @@ sequenceDiagram
 #[async_trait]
 pub trait WorkspaceService: Send + Sync {
     async fn get_workspace_folders(&self) -> Result<Vec<WorkspaceFolder>, CommonError>;
-    async fn update_workspace_folders(&self, folders: Vec<WorkspaceFolder>) -> Result<(), CommonError>;
+    async fn UpdateWorkspaceFolders(&self, folders: Vec<WorkspaceFolder>) -> Result<(), CommonError>;
 }
 ```
 
@@ -368,15 +368,15 @@ pub struct WorkspaceFolderDTO {
 // VSCode file system service interface
 #[async_trait]
 pub trait FileSystemService: Send + Sync {
-    async fn read_file(&self, uri: &str) -> Result<Vec<u8>, CommonError>;
-    async fn write_file(&self, uri: &str, content: &[u8]) -> Result<(), CommonError>;
+    async fn ReadFile(&self, uri: &str) -> Result<Vec<u8>, CommonError>;
+    async fn WriteFile(&self, uri: &str, content: &[u8]) -> Result<(), CommonError>;
     async fn stat(&self, uri: &str) -> Result<FileStat, CommonError>;
 }
 
 // File system effect constructors
-pub fn read_file_effect(uri: String) -> ActionEffect<Arc<dyn FileSystemService>, CommonError, Vec<u8>> {
+pub fn ReadFile_effect(uri: String) -> ActionEffect<Arc<dyn FileSystemService>, CommonError, Vec<u8>> {
     ActionEffect::new(move |fs: Arc<dyn FileSystemService>| {
-        Box::pin(async move { fs.read_file(&uri).await })
+        Box::pin(async move { fs.ReadFile(&uri).await })
     })
 }
 ```
@@ -387,14 +387,14 @@ pub fn read_file_effect(uri: String) -> ActionEffect<Arc<dyn FileSystemService>,
 // VSCode configuration service interface
 #[async_trait]
 pub trait ConfigurationService: Send + Sync {
-    async fn get_configuration(&self, section: Option<&str>) -> Result<Value, CommonError>;
-    async fn update_configuration(&self, key: &str, value: Value) -> Result<(), CommonError>;
+    async fn GetConfiguration(&self, section: Option<&str>) -> Result<Value, CommonError>;
+    async fn UpdateConfiguration(&self, key: &str, value: Value) -> Result<(), CommonError>;
 }
 
 // Configuration effect constructors
-pub fn get_configuration_effect(section: Option<String>) -> ActionEffect<Arc<dyn ConfigurationService>, CommonError, Value> {
+pub fn GetConfiguration_effect(section: Option<String>) -> ActionEffect<Arc<dyn ConfigurationService>, CommonError, Value> {
     ActionEffect::new(move |config: Arc<dyn ConfigurationService>| {
-        Box::pin(async move { config.get_configuration(section.as_deref()).await })
+        Box::pin(async move { config.GetConfiguration(section.as_deref()).await })
     })
 }
 ```
@@ -527,12 +527,12 @@ use Common::Effect::ActionEffect;
 use std::sync::Arc;
 
 // Advanced effect composition
-let complex_effect = FileSystem::read_file(path.clone())
-    .and_then(|content| FileSystem::write_file(other_path, content))
+let complex_effect = FileSystem::ReadFile(path.clone())
+    .and_then(|content| FileSystem::WriteFile(other_path, content))
     .map(|_| println!("File operation completed successfully"));
 
 // Effect with custom error handling
-let resilient_effect = FileSystem::read_file(path)
+let resilient_effect = FileSystem::ReadFile(path)
     .recover_with(|error| {
         log::warn!("File read failed: {}", error);
         ActionEffect::pure(Vec::new()) // Fallback to empty content

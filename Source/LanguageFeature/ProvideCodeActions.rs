@@ -1,7 +1,7 @@
 //! # ProvideCodeActions Effect
 //!
-//! Defines the `ActionEffect` for requesting code actions from a language feature
-//! provider.
+//! Defines the `ActionEffect` for requesting code actions from a language
+//! feature provider.
 
 use std::sync::Arc;
 
@@ -24,6 +24,10 @@ pub fn ProvideCodeActions(
 		let RangeOrSelectionDTOClone = RangeOrSelectionDTO.clone();
 		let ContextDTOClone = ContextDTO.clone();
 
-		Box::pin(async move { Registry.ProvideCodeActions(DocumentURIClone, RangeOrSelectionDTOClone, ContextDTOClone).await })
+		Box::pin(async move {
+			Registry
+				.ProvideCodeActions(DocumentURIClone, RangeOrSelectionDTOClone, ContextDTOClone)
+				.await
+		})
 	}))
 }

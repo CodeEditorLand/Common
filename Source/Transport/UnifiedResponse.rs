@@ -3,8 +3,9 @@
 //!
 //! A protocol-agnostic response message that works across all transport types.
 
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
 
 use super::{
 	Common::{CorrelationId, SystemTimestampGenerator, Timestamp, TimestampGenerator},
@@ -15,102 +16,90 @@ use super::{
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct UnifiedResponse {
 	/// Correlation ID matching the request.
-	pub CorrelationIdentifier: CorrelationId,
+	pub CorrelationIdentifier:CorrelationId,
 
 	/// Success flag indicating whether the operation completed successfully.
-	pub Success: bool,
+	pub Success:bool,
 
 	/// Binary payload containing the serialized result (if `Success = true`).
 	#[serde(skip_serializing_if = "Vec::is_empty")]
-	pub Payload: Vec<u8>,
+	pub Payload:Vec<u8>,
 
 	/// Error information when `Success = false`.
 	#[serde(skip_serializing_if = "Option::is_none")]
-	pub Error: Option<ResponseError>,
+	pub Error:Option<ResponseError>,
 
 	/// Additional response metadata.
 	#[serde(skip_serializing_if = "HashMap::is_empty")]
-	pub Metadata: HashMap<String, String>,
+	pub Metadata:HashMap<String, String>,
 
-	/// Timestamp when the response was generated (microseconds since Unix epoch).
-	pub GeneratedAt: Timestamp,
+	/// Timestamp when the response was generated (microseconds since Unix
+	/// epoch).
+	pub GeneratedAt:Timestamp,
 }
 
 impl UnifiedResponse {
-	/// Creates a new successful response with the given correlation ID and payload.
-	pub fn Success(CorrelationIdentifier: CorrelationId, Payload: Vec<u8>) -> Self {
+	/// Creates a new successful response with the given correlation ID and
+	/// payload.
+	pub fn Success(CorrelationIdentifier:CorrelationId, Payload:Vec<u8>) -> Self {
 		Self {
 			CorrelationIdentifier,
-			Success: true,
+			Success:true,
 			Payload,
-			Error: None,
-			Metadata: HashMap::new(),
-			GeneratedAt: SystemTimestampGenerator::Now(),
+			Error:None,
+			Metadata:HashMap::new(),
+			GeneratedAt:SystemTimestampGenerator::Now(),
 		}
 	}
 
 	/// Creates a new error response with the given correlation ID and error.
-	pub fn Failure(
-		CorrelationIdentifier: CorrelationId,
-		Error: ResponseError,
-		Payload: Option<Vec<u8>>,
-	) -> Self {
+	pub fn Failure(CorrelationIdentifier:CorrelationId, Error:ResponseError, Payload:Option<Vec<u8>>) -> Self {
 		Self {
 			CorrelationIdentifier,
-			Success: false,
-			Payload: Payload.unwrap_or_default(),
-			Error: Some(Error),
-			Metadata: HashMap::new(),
-			GeneratedAt: SystemTimestampGenerator::Now(),
+			Success:false,
+			Payload:Payload.unwrap_or_default(),
+			Error:Some(Error),
+			Metadata:HashMap::new(),
+			GeneratedAt:SystemTimestampGenerator::Now(),
 		}
 	}
 
 	/// Creates a new error response from a `TransportError`.
 	pub fn FromTransportError(
-		CorrelationIdentifier: CorrelationId,
-		TransportError: &super::TransportError::TransportError,
+		CorrelationIdentifier:CorrelationId,
+		TransportError:&super::TransportError::TransportError,
 	) -> Self {
 		Self::Failure(
 			CorrelationIdentifier,
 			ResponseError {
-				Code: TransportError.Code,
-				Message: TransportError.Message.clone(),
-				Details: TransportError.Context.clone(),
+				Code:TransportError.Code,
+				Message:TransportError.Message.clone(),
+				Details:TransportError.Context.clone(),
 			},
 			None,
 		)
 	}
 
 	/// Adds metadata to the response.
-	pub fn WithMetadata(
-		mut self,
-		Key: impl Into<String>,
-		Value: impl Into<String>,
-	) -> Self {
+	pub fn WithMetadata(mut self, Key:impl Into<String>, Value:impl Into<String>) -> Self {
 		self.Metadata.insert(Key.into(), Value.into());
 		self
 	}
 
 	/// Sets the entire metadata map.
-	pub fn WithMetadataMap(mut self, Metadata: HashMap<String, String>) -> Self {
+	pub fn WithMetadataMap(mut self, Metadata:HashMap<String, String>) -> Self {
 		self.Metadata = Metadata;
 		self
 	}
 
 	/// Gets the error code if this is an error response.
-	pub fn ErrorCode(&self) -> Option<TransportErrorCode> {
-		self.Error.as_ref().map(|ErrorInfo| ErrorInfo.Code)
-	}
+	pub fn ErrorCode(&self) -> Option<TransportErrorCode> { self.Error.as_ref().map(|ErrorInfo| ErrorInfo.Code) }
 
 	/// Checks if this response is a success.
-	pub fn IsSuccess(&self) -> bool {
-		self.Success
-	}
+	pub fn IsSuccess(&self) -> bool { self.Success }
 
 	/// Checks if this response is an error.
-	pub fn IsError(&self) -> bool {
-		!self.Success
-	}
+	pub fn IsError(&self) -> bool { !self.Success }
 
 	/// Validates the response.
 	pub fn Validate(&self) -> Result<(), String> {
@@ -134,42 +123,35 @@ impl UnifiedResponse {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ResponseError {
 	/// Error code indicating the failure type.
-	pub Code: TransportErrorCode,
+	pub Code:TransportErrorCode,
 
 	/// Human-readable error message.
-	pub Message: String,
+	pub Message:String,
 
 	/// Optional additional details as key-value pairs.
 	#[serde(skip_serializing_if = "HashMap::is_empty")]
-	pub Details: HashMap<String, String>,
+	pub Details:HashMap<String, String>,
 }
 
 impl ResponseError {
 	/// Creates a new `ResponseError` with the given code and message.
-	pub fn New(Code: TransportErrorCode, Message: impl Into<String>) -> Self {
-		Self {
-			Code,
-			Message: Message.into(),
-			Details: HashMap::new(),
-		}
+	pub fn New(Code:TransportErrorCode, Message:impl Into<String>) -> Self {
+		Self { Code, Message:Message.into(), Details:HashMap::new() }
 	}
 
 	/// Adds a detail key-value pair to the error.
-	pub fn WithDetail(mut self, Key: impl Into<String>, Value: impl Into<String>) -> Self {
+	pub fn WithDetail(mut self, Key:impl Into<String>, Value:impl Into<String>) -> Self {
 		self.Details.insert(Key.into(), Value.into());
 		self
 	}
 }
 
 impl std::fmt::Display for ResponseError {
-	fn fmt(&self, Formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+	fn fmt(&self, Formatter:&mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(Formatter, "{} (code: {:?})", self.Message, self.Code)?;
 		if !self.Details.is_empty() {
-			let DetailsString: Vec<String> = self
-				.Details
-				.iter()
-				.map(|(Key, Value)| format!("{}={}", Key, Value))
-				.collect();
+			let DetailsString:Vec<String> =
+				self.Details.iter().map(|(Key, Value)| format!("{}={}", Key, Value)).collect();
 			write!(Formatter, " [{}]", DetailsString.join(", "))?;
 		}
 		Ok(())
@@ -180,9 +162,10 @@ impl std::error::Error for ResponseError {}
 
 #[cfg(test)]
 mod tests {
+	use TransportErrorCode::ConnectionFailed;
+
 	use super::*;
 	use crate::Transport::TransportStrategy::TransportErrorCode;
-	use TransportErrorCode::ConnectionFailed;
 
 	#[test]
 	fn TestUnifiedResponseSuccess() {
@@ -206,11 +189,9 @@ mod tests {
 
 	#[test]
 	fn TestUnifiedResponseFromTransportError() {
-		let TransportErrorValue =
-			super::super::TransportError::TransportError::New(ConnectionFailed, "Conn failed")
-				.WithMethod("test.method");
-		let Response =
-			UnifiedResponse::FromTransportError("req-789".to_string(), &TransportErrorValue);
+		let TransportErrorValue = super::super::TransportError::TransportError::New(ConnectionFailed, "Conn failed")
+			.WithMethod("test.method");
+		let Response = UnifiedResponse::FromTransportError("req-789".to_string(), &TransportErrorValue);
 
 		assert!(!Response.Success);
 		assert_eq!(Response.Error.as_ref().unwrap().Code, ConnectionFailed);

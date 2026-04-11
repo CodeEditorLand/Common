@@ -32,21 +32,14 @@ pub trait TransportStrategy: Send + Sync {
 	async fn Disconnect(&mut self) -> Result<(), TransportError>;
 
 	/// Sends a request and waits for a response.
-	async fn SendRequest(
-		&mut self,
-		Request: UnifiedRequest,
-	) -> Result<UnifiedResponse, TransportError>;
+	async fn SendRequest(&mut self, Request:UnifiedRequest) -> Result<UnifiedResponse, TransportError>;
 
 	/// Sends a notification (fire-and-forget message).
-	async fn SendNotification(
-		&mut self,
-		Notification: UnifiedRequest,
-	) -> Result<(), TransportError>;
+	async fn SendNotification(&mut self, Notification:UnifiedRequest) -> Result<(), TransportError>;
 
 	/// Creates a stream of events from the transport.
-	fn StreamEvents(
-		&self,
-	) -> std::result::Result<futures::stream::BoxStream<'static, UnifiedResponse>, TransportError>;
+	fn StreamEvents(&self)
+	-> std::result::Result<futures::stream::BoxStream<'static, UnifiedResponse>, TransportError>;
 
 	/// Checks if the transport is currently connected.
 	fn IsConnected(&self) -> bool;
@@ -74,49 +67,49 @@ pub trait TransportStrategy: Send + Sync {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct TransportCapabilities {
 	/// Maximum size of a single message in bytes.
-	pub MaximumMessageSize: usize,
+	pub MaximumMessageSize:usize,
 
 	/// Whether the transport supports request-response pattern.
-	pub SupportsRequestResponse: bool,
+	pub SupportsRequestResponse:bool,
 
 	/// Whether the transport supports server-side streaming.
-	pub SupportsServerStreaming: bool,
+	pub SupportsServerStreaming:bool,
 
 	/// Whether the transport supports client-side streaming.
-	pub SupportsClientStreaming: bool,
+	pub SupportsClientStreaming:bool,
 
 	/// Whether the transport supports bidirectional streaming.
-	pub SupportsBidirectionalStreaming: bool,
+	pub SupportsBidirectionalStreaming:bool,
 
 	/// Whether the transport supports broadcast/notifications.
-	pub SupportsNotifications: bool,
+	pub SupportsNotifications:bool,
 
 	/// Estimated maximum concurrent requests/connections.
-	pub MaximumConcurrent: usize,
+	pub MaximumConcurrent:usize,
 
 	/// Whether the transport requires network connectivity.
-	pub RequiresNetwork: bool,
+	pub RequiresNetwork:bool,
 
 	/// Whether the transport supports encryption/TLS.
-	pub SupportsEncryption: bool,
+	pub SupportsEncryption:bool,
 
 	/// Whether the transport supports compression.
-	pub SupportsCompression: bool,
+	pub SupportsCompression:bool,
 }
 
 impl Default for TransportCapabilities {
 	fn default() -> Self {
 		Self {
-			MaximumMessageSize: 1024 * 1024, // 1MB
-			SupportsRequestResponse: true,
-			SupportsServerStreaming: false,
-			SupportsClientStreaming: false,
-			SupportsBidirectionalStreaming: false,
-			SupportsNotifications: true,
-			MaximumConcurrent: 100,
-			RequiresNetwork: false,
-			SupportsEncryption: false,
-			SupportsCompression: false,
+			MaximumMessageSize:1024 * 1024, // 1MB
+			SupportsRequestResponse:true,
+			SupportsServerStreaming:false,
+			SupportsClientStreaming:false,
+			SupportsBidirectionalStreaming:false,
+			SupportsNotifications:true,
+			MaximumConcurrent:100,
+			RequiresNetwork:false,
+			SupportsEncryption:false,
+			SupportsCompression:false,
 		}
 	}
 }
@@ -125,53 +118,49 @@ impl Default for TransportCapabilities {
 #[derive(Debug, Clone, Default)]
 pub struct TransportMetrics {
 	/// Total number of requests sent (including retries).
-	pub RequestsTotal: u64,
+	pub RequestsTotal:u64,
 
 	/// Total number of successful requests (2xx/OK responses).
-	pub RequestsSuccessful: u64,
+	pub RequestsSuccessful:u64,
 
 	/// Total number of failed requests (excludes timeouts/retries).
-	pub RequestsFailed: u64,
+	pub RequestsFailed:u64,
 
 	/// Total number of notifications sent.
-	pub NotificationsSent: u64,
+	pub NotificationsSent:u64,
 
 	/// Total number of connections established (includes reconnections).
-	pub ConnectionsEstablished: u64,
+	pub ConnectionsEstablished:u64,
 
 	/// Total number of connection failures.
-	pub ConnectionFailures: u64,
+	pub ConnectionFailures:u64,
 
 	/// Total bytes sent (compressed size if compression enabled).
-	pub BytesSent: u64,
+	pub BytesSent:u64,
 
 	/// Total bytes received (compressed size if compression enabled).
-	pub BytesReceived: u64,
+	pub BytesReceived:u64,
 
 	/// Counter for circuit breaker state changes.
-	pub CircuitBreakerState: u32,
+	pub CircuitBreakerState:u32,
 
 	/// Histogram of request latencies in milliseconds (p50, p95, p99).
 	/// Stored as (count, sum, sum of squares) for online variance calculation.
-	pub LatencyMillisecondsHistogram: Option<(u64, f64, f64)>,
+	pub LatencyMillisecondsHistogram:Option<(u64, f64, f64)>,
 
 	/// Current active connections (gauge).
-	pub ActiveConnections: u32,
+	pub ActiveConnections:u32,
 
 	/// Current pending requests (gauge).
-	pub PendingRequests: u32,
+	pub PendingRequests:u32,
 }
 
 impl TransportMetrics {
 	/// Creates a new, empty metrics container.
-	pub fn New() -> Self {
-		Self::default()
-	}
+	pub fn New() -> Self { Self::default() }
 
 	/// Resets all cumulative metrics to zero.
-	pub fn Reset(&mut self) {
-		*self = Self::New();
-	}
+	pub fn Reset(&mut self) { *self = Self::New(); }
 
 	/// Computes the success rate as a percentage (0-100).
 	pub fn SuccessRate(&self) -> Option<f64> {
@@ -186,11 +175,7 @@ impl TransportMetrics {
 	/// Computes the average request latency in milliseconds.
 	pub fn AverageLatency(&self) -> Option<f64> {
 		let (Count, Sum, _) = self.LatencyMillisecondsHistogram?;
-		if Count == 0 {
-			None
-		} else {
-			Some(Sum / Count as f64)
-		}
+		if Count == 0 { None } else { Some(Sum / Count as f64) }
 	}
 
 	/// Computes the 95th percentile latency from the histogram.
@@ -205,9 +190,8 @@ impl TransportMetrics {
 	}
 
 	/// Records a request latency sample.
-	pub fn RecordLatency(&mut self, LatencyMilliseconds: f64) {
-		let (Count, Sum, SumSquared) =
-			self.LatencyMillisecondsHistogram.get_or_insert((0, 0.0, 0.0));
+	pub fn RecordLatency(&mut self, LatencyMilliseconds:f64) {
+		let (Count, Sum, SumSquared) = self.LatencyMillisecondsHistogram.get_or_insert((0, 0.0, 0.0));
 		*Count += 1;
 		*Sum += LatencyMilliseconds;
 		*SumSquared += LatencyMilliseconds * LatencyMilliseconds;
@@ -226,7 +210,7 @@ impl TransportMetrics {
 	}
 
 	/// Updates the circuit breaker state.
-	pub fn SetCircuitBreakerState(&mut self, State: CircuitBreakerState) {
+	pub fn SetCircuitBreakerState(&mut self, State:CircuitBreakerState) {
 		let StateCode = match State {
 			CircuitBreakerState::Closed => 1,
 			CircuitBreakerState::Open => 0,
@@ -323,10 +307,7 @@ mod tests {
 
 	#[test]
 	fn TestErrorRecommendedDelays() {
-		assert_eq!(
-			TransportErrorCode::ConnectionFailed.RecommendedRetryDelayMilliseconds(),
-			1000
-		);
+		assert_eq!(TransportErrorCode::ConnectionFailed.RecommendedRetryDelayMilliseconds(), 1000);
 		assert_eq!(TransportErrorCode::Timeout.RecommendedRetryDelayMilliseconds(), 500);
 		assert_eq!(TransportErrorCode::RateLimited.RecommendedRetryDelayMilliseconds(), 2000);
 		assert_eq!(TransportErrorCode::InvalidRequest.RecommendedRetryDelayMilliseconds(), 0);

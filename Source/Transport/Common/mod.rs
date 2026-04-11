@@ -3,9 +3,12 @@
 //!
 //! Shared types and utilities used across all transport implementations.
 
+use std::{
+	fmt,
+	time::{SystemTime, UNIX_EPOCH},
+};
+
 use serde::{Deserialize, Serialize};
-use std::fmt;
-use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Correlation ID type.
 ///
@@ -27,9 +30,7 @@ pub trait CorrelationIdGenerator {
 pub struct UuidCorrelationIdGenerator;
 
 impl CorrelationIdGenerator for UuidCorrelationIdGenerator {
-	fn Generate() -> CorrelationId {
-		uuid::Uuid::new_v4().to_string()
-	}
+	fn Generate() -> CorrelationId { uuid::Uuid::new_v4().to_string() }
 }
 
 /// Generator trait for timestamps.
@@ -76,15 +77,13 @@ impl TransportType {
 }
 
 impl fmt::Display for TransportType {
-	fn fmt(&self, Formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-		Formatter.write_str(self.AsString())
-	}
+	fn fmt(&self, Formatter:&mut fmt::Formatter<'_>) -> fmt::Result { Formatter.write_str(self.AsString()) }
 }
 
 impl std::str::FromStr for TransportType {
 	type Err = anyhow::Error;
 
-	fn from_str(Input: &str) -> Result<Self, Self::Err> {
+	fn from_str(Input:&str) -> Result<Self, Self::Err> {
 		match Input.to_lowercase().as_str() {
 			"grpc" => Ok(Self::Grpc),
 			"ipc" => Ok(Self::Ipc),
@@ -104,7 +103,7 @@ pub trait TransportTypeDetector: Send + Sync {
 	fn DetectBestTransport(&self) -> TransportType;
 
 	/// Checks if a specific transport is available in the current environment.
-	fn IsTransportAvailable(&self, TransportKind: TransportType) -> bool;
+	fn IsTransportAvailable(&self, TransportKind:TransportType) -> bool;
 
 	/// Lists all available transports in the current environment.
 	fn ListAvailableTransports(&self) -> Vec<TransportType>;
@@ -134,7 +133,7 @@ impl TransportTypeDetector for DefaultTransportTypeDetector {
 		}
 	}
 
-	fn IsTransportAvailable(&self, TransportKind: TransportType) -> bool {
+	fn IsTransportAvailable(&self, TransportKind:TransportType) -> bool {
 		match TransportKind {
 			TransportType::Grpc => true,
 			TransportType::Ipc => {
@@ -146,7 +145,7 @@ impl TransportTypeDetector for DefaultTransportTypeDetector {
 				{
 					false
 				}
-			}
+			},
 			TransportType::Wasm => {
 				#[cfg(target_arch = "wasm32")]
 				{
@@ -156,7 +155,7 @@ impl TransportTypeDetector for DefaultTransportTypeDetector {
 				{
 					false
 				}
-			}
+			},
 			TransportType::Unknown => false,
 		}
 	}

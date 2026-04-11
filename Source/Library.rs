@@ -22,8 +22,8 @@
 //!   Business logic is described as composable effects, not imperative calls.
 //! - **Service traits**: FileSystemService, ProcessService, ExtensionService,
 //!   and 15 more domain-specific contracts.
-//! - **DTOs**: Type-safe data objects shared across IPC boundaries (gRPC,
-//!   Tauri commands, WebSocket).
+//! - **DTOs**: Type-safe data objects shared across IPC boundaries (gRPC, Tauri
+//!   commands, WebSocket).
 //! - **Error types**: Structured errors with context for every service domain.
 //!
 //! ## Module Layout

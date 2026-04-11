@@ -8,7 +8,8 @@
 //! ## Architecture
 //!
 //! - [`TransportStrategy`] - Core trait all transports must implement
-//! - [`Registry::TransportRegistry`] - Dynamic transport selection and management
+//! - [`Registry::TransportRegistry`] - Dynamic transport selection and
+//!   management
 //! - [`UnifiedRequest`] / [`UnifiedResponse`] - Common message format
 //! - [`TransportError`] - Unified error taxonomy
 //! - [`TransportConfig`] - Configuration structures
@@ -27,15 +28,20 @@
 //!
 //! ## Usage
 //!
-//! Components should use the transport abstraction to remain transport-agnostic:
+//! Components should use the transport abstraction to remain
+//! transport-agnostic:
 //!
 //! ```rust
 //! use common_common::transport::{TransportStrategy, UnifiedRequest};
 //!
-//! async fn send_request(transport: &mut dyn TransportStrategy, method: &str, payload: Vec<u8>) -> Result<Vec<u8>, TransportError> {
-//!     let request = UnifiedRequest::new(method, payload);
-//!     let response = transport.send_request(request).await?;
-//!     Ok(response.payload)
+//! async fn send_request(
+//! 	transport:&mut dyn TransportStrategy,
+//! 	method:&str,
+//! 	payload:Vec<u8>,
+//! ) -> Result<Vec<u8>, TransportError> {
+//! 	let request = UnifiedRequest::new(method, payload);
+//! 	let response = transport.send_request(request).await?;
+//! 	Ok(response.payload)
 //! }
 //! ```
 
@@ -60,4 +66,3 @@ pub mod Common;
 
 // --- Data Transfer Objects ---
 pub mod DTO;
-

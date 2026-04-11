@@ -10,21 +10,15 @@ use std::time::Duration;
 #[derive(Debug, Clone)]
 pub struct CircuitBreakerConfiguration {
 	/// Number of consecutive failures before the circuit opens.
-	pub FailureThreshold: u32,
+	pub FailureThreshold:u32,
 	/// Duration to wait before transitioning to half-open.
-	pub ResetTimeout: Duration,
+	pub ResetTimeout:Duration,
 	/// Successful requests in half-open state required to close the circuit.
-	pub SuccessThreshold: u32,
+	pub SuccessThreshold:u32,
 }
 
 impl Default for CircuitBreakerConfiguration {
-	fn default() -> Self {
-		Self {
-			FailureThreshold: 5,
-			ResetTimeout: Duration::from_secs(60),
-			SuccessThreshold: 2,
-		}
-	}
+	fn default() -> Self { Self { FailureThreshold:5, ResetTimeout:Duration::from_secs(60), SuccessThreshold:2 } }
 }
 
 /// Circuit breaker that wraps a transport to add fault-tolerance.
@@ -33,25 +27,19 @@ impl Default for CircuitBreakerConfiguration {
 /// `FailureThreshold` is exceeded, preventing cascading failures.
 #[derive(Debug, Clone)]
 pub struct CircuitBreaker {
-	Configuration: CircuitBreakerConfiguration,
-	FailureCount: u32,
-	IsOpen: bool,
+	Configuration:CircuitBreakerConfiguration,
+	FailureCount:u32,
+	IsOpen:bool,
 }
 
 impl CircuitBreaker {
 	/// Creates a new circuit breaker with the given configuration.
-	pub fn New(Configuration: CircuitBreakerConfiguration) -> Self {
-		Self {
-			Configuration,
-			FailureCount: 0,
-			IsOpen: false,
-		}
+	pub fn New(Configuration:CircuitBreakerConfiguration) -> Self {
+		Self { Configuration, FailureCount:0, IsOpen:false }
 	}
 
 	/// Returns `true` if the circuit allows requests through.
-	pub fn IsClosed(&self) -> bool {
-		!self.IsOpen
-	}
+	pub fn IsClosed(&self) -> bool { !self.IsOpen }
 
 	/// Records a successful request, resetting the failure counter.
 	pub fn RecordSuccess(&mut self) {

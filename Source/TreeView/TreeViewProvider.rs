@@ -147,17 +147,25 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	/// # Parameters
 	/// * `ViewIdentifier`: The ID of the target tree view.
 	/// * `ElementHandle`: The handle of the element being expanded/collapsed.
-	/// * `IsExpanded`: Whether the node is being expanded (true) or collapsed (false).
-	async fn OnTreeNodeExpanded(&self, ViewIdentifier:String, ElementHandle:String, IsExpanded:bool)
-		-> Result<(), CommonError>;
+	/// * `IsExpanded`: Whether the node is being expanded (true) or collapsed
+	///   (false).
+	async fn OnTreeNodeExpanded(
+		&self,
+		ViewIdentifier:String,
+		ElementHandle:String,
+		IsExpanded:bool,
+	) -> Result<(), CommonError>;
 
 	/// Handles tree selection changes.
 	/// Called when the user selects or deselects items in the tree view.
 	/// # Parameters
 	/// * `ViewIdentifier`: The ID of the target tree view.
 	/// * `SelectedHandles`: Vector of handles currently selected.
-	async fn OnTreeSelectionChanged(&self, ViewIdentifier:String, SelectedHandles:Vec<String>)
-		-> Result<(), CommonError>;
+	async fn OnTreeSelectionChanged(
+		&self,
+		ViewIdentifier:String,
+		SelectedHandles:Vec<String>,
+	) -> Result<(), CommonError>;
 
 	/// Persists the current state of a tree view.
 	/// Saves the expansion and selection state for later restoration.
