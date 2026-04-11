@@ -55,8 +55,8 @@ implementing the traits and consuming the effects defined in this crate.
 ## Key Features & Concepts&#x2001;🔐
 
 - **Declarative `ActionEffect` System:** Operations are not executed immediately
-  — they are described as `ActionEffect` data structures and then passed to a
-  runtime for execution.
+    - they are described as `ActionEffect` data structures and then passed to a
+      runtime for execution.
 - **Trait-Based Dependency Injection:** A clean, compile-time DI system using
   the `Environment` and `Requires` traits, allowing components to declare their
   dependencies without being tied to a specific implementation.
@@ -116,7 +116,7 @@ let ReadEffect: ActionEffect<Arc<dyn FileSystemReader>, _, _> =
 let FileContent = Runtime.Run(ReadEffect).await?;
 ```
 
-This separation makes the architecture flexible and testable — swap any trait
+This separation makes the architecture flexible and testable - swap any trait
 implementation without changing the logic that uses it.
 
 ---
