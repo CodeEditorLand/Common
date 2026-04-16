@@ -66,6 +66,16 @@ pub enum ProviderType {
 	EvaluatableExpression = 26,
 
 	InlineValues = 27,
+
+	Task = 28,
+
+	Authentication = 29,
+
+	TreeView = 30,
+
+	SourceControl = 31,
+
+	DebugAdapter = 32,
 }
 
 impl fmt::Display for ProviderType {
