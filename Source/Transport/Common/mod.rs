@@ -191,9 +191,9 @@ mod tests {
 
 	#[test]
 	fn TestTransportTypeFromString() {
-		assert_eq!("grpc".parse().unwrap(), TransportType::Grpc);
-		assert_eq!("ipc".parse().unwrap(), TransportType::Ipc);
-		assert_eq!("wasm".parse().unwrap(), TransportType::Wasm);
+		assert_eq!("grpc".parse::<TransportType>().unwrap(), TransportType::Grpc);
+		assert_eq!("ipc".parse::<TransportType>().unwrap(), TransportType::Ipc);
+		assert_eq!("wasm".parse::<TransportType>().unwrap(), TransportType::Wasm);
 		assert!("invalid".parse::<TransportType>().is_err());
 	}
 

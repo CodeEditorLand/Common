@@ -130,7 +130,7 @@ mod tests {
 		let Request = UnifiedRequest::New("test.method");
 		assert!(!Request.Method.is_empty());
 		assert!(Request.CorrelationIdentifier.is_some());
-		assert_eq!(Request.Payload, Vec::new());
+		assert_eq!(Request.Payload, Vec::<u8>::new());
 		assert!(Request.Metadata.is_empty());
 		assert!(Request.TransportHint.is_none());
 	}
