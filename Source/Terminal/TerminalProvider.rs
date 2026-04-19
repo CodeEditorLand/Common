@@ -74,4 +74,14 @@ pub trait TerminalProvider: Environment + Send + Sync {
 	/// # Returns
 	/// An `Option<u32>` with the PID if the process is running, or `None`.
 	async fn GetTerminalProcessId(&self, TerminalId:u64) -> Result<Option<u32>, CommonError>;
+
+	/// Resizes the PTY backing a terminal to the given column/row count. The
+	/// shell process receives SIGWINCH (POSIX) or the equivalent on Windows,
+	/// so line-editing utilities like readline/shells pick up the new size.
+	///
+	/// # Parameters
+	/// * `TerminalId`: The unique identifier of the terminal to resize.
+	/// * `Columns`:   Desired column count (≥ 1).
+	/// * `Rows`:      Desired row count (≥ 1).
+	async fn ResizeTerminal(&self, TerminalId:u64, Columns:u16, Rows:u16) -> Result<(), CommonError>;
 }

@@ -83,4 +83,17 @@ pub trait DebugService: Environment + Send + Sync {
 	/// # Returns
 	/// A `Result` containing the JSON response from the debug adapter.
 	async fn SendCommand(&self, SessionID:String, Command:String, Arguments:Value) -> Result<Value, CommonError>;
+
+	/// Terminates an active debugging session.
+	///
+	/// Removes the session from the active-session registry, fires a DAP
+	/// `disconnect` request to the adapter if it is still alive, and emits an
+	/// `$onDidTerminateDebugSession` notification so the UI can hide the
+	/// debug toolbar.
+	///
+	/// # Parameters
+	/// * `SessionID`: The unique ID of the session to stop. An empty string is
+	///   treated as "stop the most recent session"; unknown IDs resolve to a
+	///   no-op that still returns `Ok(())` so the extension promise resolves.
+	async fn StopDebugging(&self, SessionID:String) -> Result<(), CommonError>;
 }

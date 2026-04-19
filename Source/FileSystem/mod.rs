@@ -10,6 +10,8 @@ pub mod FileSystemReader;
 
 pub mod FileSystemWriter;
 
+pub mod FileWatcherProvider;
+
 // --- Data Transfer Objects ---
 pub mod DTO;
 
