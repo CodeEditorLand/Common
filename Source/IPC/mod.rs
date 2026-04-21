@@ -6,6 +6,9 @@
 //! related Data Transfer Objects (DTOs), and the `ActionEffect` constructors
 //! for all IPC operations.
 
+// --- Channel Registry (Wind ↔ Mountain Tauri invoke table) ---
+pub mod Channel;
+
 // --- Trait Definition ---
 pub mod IPCProvider;
 
