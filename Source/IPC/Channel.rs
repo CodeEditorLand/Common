@@ -18,8 +18,32 @@
 //! The variant → wire-string mapping is pure data. `DefineChannels!` expands
 //! it into the enum body, `AsStr`, `All`, and `FromStr` in one pass so adding
 //! a channel is a single-line change that compilers can't forget.
+//!
+//! ## Channel priority classes (Atom O3)
+//!
+//! `Priority` returns the Echo scheduler lane a given channel should dispatch
+//! on. Used by the O1 wrap in `mountain_ipc_invoke` so user-facing latency
+//! never queues behind background work. Three classes:
+//!
+//!   - `High`: direct user action (commands, file read, terminal input,
+//!     notifications, VSIX install).
+//!   - `Low`: background / deferrable (search, logging, update checks,
+//!     offline-gallery stubs).
+//!   - `Normal`: everything else.
 
 #![allow(non_snake_case, non_camel_case_types)]
+
+/// Lane selector for Echo scheduler dispatch.
+///
+/// Deliberately isolated from `Echo::Task::Priority` so Common stays
+/// dependency-free on Echo. Mountain's `mountain_ipc_invoke` wrapper maps
+/// `ChannelPriority` → `Echo::Task::Priority` at the single submit site.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+pub enum ChannelPriority {
+	High,
+	Normal,
+	Low,
+}
 
 macro_rules! DefineChannels {
 	($($Variant:ident => $Wire:literal,)* $(,)?) => {
@@ -271,9 +295,96 @@ DefineChannels! {
 	WorkspacesRemoveRecentlyOpened                => "workspaces:removeRecentlyOpened",
 }
 
+impl Channel {
+	/// Echo scheduler lane for this channel. See module-level docs for the
+	/// classification rationale.
+	pub fn Priority(&self) -> ChannelPriority {
+		use Channel::*;
+
+		match self {
+			// --- Direct user action → High ---
+			CommandsExecute
+			| CocoonExtensionHostMessage
+			| ExtensionsInstall
+			| ExtensionsUninstall
+			| ExtensionsReinstall
+			| FileRead
+			| FileReadBinary
+			| FileReadFile
+			| FileStat
+			| FileExists
+			| FileOpen
+			| FileWrite
+			| FileWriteBinary
+			| FileWriteFile
+			| FileDelete
+			| FileCopy
+			| FileMove
+			| FileRename
+			| FileMkdir
+			| KeybindingLookup
+			| MenubarUpdateMenubar
+			| ModelUpdateContent
+			| NativeOpenExternal
+			| NativeShowItemInFolder
+			| NotificationShow
+			| NotificationShowProgress
+			| NotificationUpdateProgress
+			| NotificationEndProgress
+			| TerminalCreate
+			| TerminalSendText
+			| TerminalShow
+			| TerminalHide
+			| TerminalDispose
+			| WorkspacesEnterWorkspace
+			| WorkspacesAddFolder
+			| WorkspacesRemoveFolder
+			| WorkspacesCreateUntitledWorkspace
+			| WorkspacesDeleteUntitledWorkspace => ChannelPriority::High,
+
+			// --- Background / deferrable → Low ---
+			SearchFindFiles
+			| SearchFindInFiles
+			| LogCreateLogger
+			| LogRegisterLogger
+			| LoggerCreateLogger
+			| LoggerCritical
+			| LoggerDebug
+			| LoggerDeregisterLogger
+			| LoggerError
+			| LoggerFlush
+			| LoggerGetLevel
+			| LoggerGetRegisteredLoggers
+			| LoggerInfo
+			| LoggerLog
+			| LoggerRegisterLogger
+			| LoggerSetLevel
+			| LoggerSetVisibility
+			| LoggerTrace
+			| LoggerWarn
+			| StorageOptimize
+			| UpdateCheckForUpdates
+			| UpdateDownloadUpdate
+			| UpdateApplyUpdate
+			| UpdateIsLatestVersion
+			| UpdateQuitAndInstall
+			| ExtensionsQuery
+			| ExtensionsGetRecommendations
+			| ExtensionsGetExtensions
+			| ExtensionsGetExtensionsControlManifest
+			| ExtensionsGetUninstalled
+			| ExtensionsUpdateMetadata
+			| DiagnosticLog => ChannelPriority::Low,
+
+			// --- Everything else → Normal ---
+			_ => ChannelPriority::Normal,
+		}
+	}
+}
+
 #[cfg(test)]
 mod Tests {
-	use super::Channel;
+	use super::{Channel, ChannelPriority};
 	use std::str::FromStr;
 
 	#[test]
@@ -283,6 +394,29 @@ mod Tests {
 			let Parsed = Channel::from_str(Wire).expect("round-trip");
 			assert_eq!(*Variant, Parsed, "{} failed round-trip", Wire);
 		}
+	}
+
+	#[test]
+	fn PriorityIsTotal() {
+		// Every variant must match one of three classes; the `_` fallback
+		// returning Normal guarantees totality, so this test just runs the
+		// mapping on every variant to catch any future match panic.
+		for Variant in Channel::All() {
+			let _Class = Variant.Priority();
+		}
+	}
+
+	#[test]
+	fn UserActionIsHigh() {
+		assert_eq!(Channel::CommandsExecute.Priority(), ChannelPriority::High);
+		assert_eq!(Channel::ExtensionsInstall.Priority(), ChannelPriority::High);
+		assert_eq!(Channel::TerminalSendText.Priority(), ChannelPriority::High);
+	}
+
+	#[test]
+	fn BackgroundIsLow() {
+		assert_eq!(Channel::SearchFindInFiles.Priority(), ChannelPriority::Low);
+		assert_eq!(Channel::LoggerInfo.Priority(), ChannelPriority::Low);
 	}
 
 	#[test]
