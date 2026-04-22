@@ -9,6 +9,9 @@
 // --- Channel Registry (Wind ↔ Mountain Tauri invoke table) ---
 pub mod Channel;
 
+// --- Sky Event Registry (Mountain → Sky/Wind Tauri event table) ---
+pub mod SkyEvent;
+
 // --- Trait Definition ---
 pub mod IPCProvider;
 

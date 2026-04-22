@@ -308,6 +308,18 @@ DefineChannels! {
 	WorkspacesGetWorkspaceIdentifier              => "workspaces:getWorkspaceIdentifier",
 	WorkspacesRemoveFolder                        => "workspaces:removeFolder",
 	WorkspacesRemoveRecentlyOpened                => "workspaces:removeRecentlyOpened",
+
+	// --- Legacy wire-shape channels (non prefix:method) ---
+	// Two historical groups predate the `prefix:method` convention:
+	//   1. `UserInterface.Show*Dialog` — dotted names mirrored from
+	//      Cocoon→Mountain gRPC; the Wind-side Files/Live.ts routes them
+	//      through Tauri IPC today. Rename target: `dialog:showOpen` /
+	//      `dialog:showSave`.
+	//   2. `mountain_get_status` — snake_case Tauri command.
+	// Grouped at the tail so the eventual rename is a single block move.
+	MountainGetStatus                             => "mountain_get_status",
+	UserInterfaceShowOpenDialog                   => "UserInterface.ShowOpenDialog",
+	UserInterfaceShowSaveDialog                   => "UserInterface.ShowSaveDialog",
 }
 
 impl Channel {
