@@ -1,15 +1,15 @@
-//! # Sky Event Registry — single source of truth for Mountain → Sky/Wind events
+//! # Sky Event Registry - single source of truth for Mountain → Sky/Wind events
 //!
 //! Mountain emits Tauri events on `sky://…` URIs to notify the webview of
 //! state changes that don't originate from a Wind-initiated `invoke` call.
 //! Historically each emit site used a free-text string literal and each Wind
-//! listener matched against its own free-text string — drift was invisible
+//! listener matched against its own free-text string - drift was invisible
 //! until runtime (the listener simply never fired).
 //!
 //! `SkyEvent` is the enumerated registry. Mountain callers dispatch on the
 //! variant; the wire string is produced by `AsStr()` and parsed by `FromStr`.
 //! The matching TypeScript const object lives at
-//! `Element/Wind/Source/IPC/SkyEvent.ts` — kept in sync by convention, same
+//! `Element/Wind/Source/IPC/SkyEvent.ts` - kept in sync by convention, same
 //! protocol as the `Channel` registry.
 //!
 //! ## Adding a new event

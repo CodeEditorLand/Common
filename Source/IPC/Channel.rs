@@ -1,16 +1,16 @@
-//! # Channel Registry — single source of truth for Wind ↔ Mountain IPC
+//! # Channel Registry - single source of truth for Wind ↔ Mountain IPC
 //!
 //! Every Tauri `invoke` request from Wind is a string-typed RPC. Historically
 //! that string was hand-kept on both sides (Rust `match command.as_str()` in
 //! `Mountain/Source/IPC/WindServiceHandlers.rs` and string literals in Wind's
-//! `Effect/*/Live.ts` files). The result: drift — a channel could be declared
+//! `Effect/*/Live.ts` files). The result: drift - a channel could be declared
 //! in Wind, referenced in Mountain's match, and still have no implementation
 //! (the `extensions:install` no-op stub shipped for months).
 //!
 //! `Channel` is the enumerated registry. Rust callers dispatch on the variant;
 //! the wire string is produced by `AsStr()` and parsed by `FromStr`. The
 //! matching TypeScript const object lives at
-//! `Element/Wind/Source/IPC/Channel.ts` — kept in sync by convention (a grep
+//! `Element/Wind/Source/IPC/Channel.ts` - kept in sync by convention (a grep
 //! diff is cheap; a full codegen would be overkill for 147 strings).
 //!
 //! ## Why a declarative macro?
@@ -311,11 +311,11 @@ DefineChannels! {
 
 	// --- Legacy wire-shape channels (non prefix:method) ---
 	// Two historical groups predate the `prefix:method` convention:
-	//   1. `UserInterface.Show*Dialog` — dotted names mirrored from
+	//   1. `UserInterface.Show*Dialog` - dotted names mirrored from
 	//      Cocoon→Mountain gRPC; the Wind-side Files/Live.ts routes them
 	//      through Tauri IPC today. Rename target: `dialog:showOpen` /
 	//      `dialog:showSave`.
-	//   2. `mountain_get_status` — snake_case Tauri command.
+	//   2. `mountain_get_status` - snake_case Tauri command.
 	// Grouped at the tail so the eventual rename is a single block move.
 	MountainGetStatus                             => "mountain_get_status",
 	UserInterfaceShowOpenDialog                   => "UserInterface.ShowOpenDialog",
