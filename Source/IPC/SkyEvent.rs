@@ -151,6 +151,10 @@ DefineSkyEvents! {
 	SCMUpdateGroup                                => "sky://scm/updateGroup",
 
 	// --- Status bar ---
+	// Canonical prefix is `sky://statusbar/` (no hyphen). The earlier
+	// `sky://status-bar/message` channel was an accidental fork produced by
+	// a separate emit site and has been consolidated onto
+	// `sky://statusbar/set-message`.
 	StatusBarCreate                               => "sky://statusbar/create",
 	StatusBarDispose                              => "sky://statusbar/dispose",
 	StatusBarDisposeEntry                         => "sky://statusbar/dispose-entry",
@@ -158,7 +162,6 @@ DefineSkyEvents! {
 	StatusBarSetEntry                             => "sky://statusbar/set-entry",
 	StatusBarSetMessage                           => "sky://statusbar/set-message",
 	StatusBarUpdate                               => "sky://statusbar/update",
-	StatusBarMessage                              => "sky://status-bar/message",
 
 	// --- Task ---
 	TaskExecute                                   => "sky://task/execute",
@@ -184,6 +187,10 @@ DefineSkyEvents! {
 	ThemeChange                                   => "sky://theme/change",
 
 	// --- Tree view ---
+	// Canonical prefix is `sky://tree-view/` (kebab-case). The earlier
+	// `sky://treeView/register` camelCase channel was a parallel emission
+	// from `CocoonService/TreeView.rs`; it has been collapsed into
+	// `TreeViewCreate`, which every handler already subscribes to.
 	TreeViewCreate                                => "sky://tree-view/create",
 	TreeViewDispose                               => "sky://tree-view/dispose",
 	TreeViewNodeExpanded                          => "sky://tree-view/node-expanded",
@@ -194,7 +201,6 @@ DefineSkyEvents! {
 	TreeViewSetBadge                              => "sky://tree-view/set-badge",
 	TreeViewSetMessage                            => "sky://tree-view/set-message",
 	TreeViewSetTitle                              => "sky://tree-view/set-title",
-	TreeViewRegister                              => "sky://treeView/register",
 
 	// --- UI ---
 	UIShowInputBoxRequest                         => "sky://ui/show-input-box-request",
@@ -205,6 +211,11 @@ DefineSkyEvents! {
 	VFSFileChange                                 => "sky://vfs/fileChange",
 
 	// --- Webview ---
+	// Canonical form is kebab-case (`sky://webview/post-message`,
+	// `sky://webview/set-html`). The `…CamelCase` aliases existed because
+	// mod.rs emitted `sky://webview/postMessage` / `sky://webview/setHtml`
+	// inline; those emit sites have been migrated to the enum so Sky only
+	// ever sees the kebab-case form.
 	WebviewCreate                                 => "sky://webview/create",
 	WebviewCreated                                => "sky://webview/created",
 	WebviewDispose                                => "sky://webview/dispose",
@@ -212,10 +223,8 @@ DefineSkyEvents! {
 	WebviewMessage                                => "sky://webview/message",
 	WebviewOptionsChanged                         => "sky://webview/options-changed",
 	WebviewPostMessage                            => "sky://webview/post-message",
-	WebviewPostMessageCamelCase                   => "sky://webview/postMessage",
 	WebviewRevealed                               => "sky://webview/revealed",
 	WebviewSetHTML                                => "sky://webview/set-html",
-	WebviewSetHTMLCamelCase                       => "sky://webview/setHtml",
 
 	// --- Window ---
 	WindowShowTextDocument                        => "sky://window/showTextDocument",
@@ -254,6 +263,50 @@ mod Tests {
 	fn RejectsUnknown() {
 		assert!(SkyEvent::from_str("mountain://nope").is_err());
 		assert!(SkyEvent::from_str("").is_err());
+	}
+
+	/// Guards against drift between this Rust enum and its TS mirror at
+	/// `Element/Wind/Source/IPC/SkyEvent.ts`. Both files are hand-edited,
+	/// so the test scrapes the TS literal array and asserts every wire
+	/// string here exists there, and vice versa. If this fails the two
+	/// tables disagree - add or remove from whichever side is missing.
+	#[test]
+	fn RustAndTypeScriptTablesAgree() {
+		use std::{collections::HashSet, path::PathBuf};
+
+		let TsPath = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+			.join("../Wind/Source/IPC/SkyEvent.ts");
+		let Source = match std::fs::read_to_string(&TsPath) {
+			Ok(S) => S,
+			// In packaging contexts where Wind isn't checked out alongside
+			// Common we skip the cross-check silently rather than
+			// failing - the RoundTrip / UniqueWireStrings guards above
+			// still cover the Rust side on its own.
+			Err(_) => return,
+		};
+
+		let mut TsWires:HashSet<String> = HashSet::new();
+		for Line in Source.lines() {
+			if let Some(Start) = Line.find("\"sky://") {
+				let Tail = &Line[Start + 1..];
+				if let Some(End) = Tail.find('"') {
+					TsWires.insert(Tail[..End].to_string());
+				}
+			}
+		}
+
+		let RsWires:HashSet<String> =
+			SkyEvent::All().iter().map(|V| V.AsStr().to_string()).collect();
+
+		let OnlyInRust:Vec<_> = RsWires.difference(&TsWires).collect();
+		let OnlyInTs:Vec<_> = TsWires.difference(&RsWires).collect();
+
+		assert!(
+			OnlyInRust.is_empty() && OnlyInTs.is_empty(),
+			"SkyEvent drift between Rust and TS:\n  only in Rust: {:?}\n  only in TS:   {:?}",
+			OnlyInRust,
+			OnlyInTs
+		);
 	}
 
 	#[test]
