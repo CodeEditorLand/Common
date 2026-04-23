@@ -100,6 +100,20 @@ pub enum ProviderType {
 	FileDecoration = 43,
 
 	ExternalUriOpener = 44,
+
+	InlineEdit = 45,
+
+	MappedEdits = 46,
+
+	MultiDocumentHighlight = 47,
+
+	NotebookContent = 48,
+
+	RemoteAuthorityResolver = 49,
+
+	ResourceLabelFormatter = 50,
+
+	ScmResourceGroup = 51,
 }
 
 impl fmt::Display for ProviderType {
