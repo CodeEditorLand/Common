@@ -76,6 +76,30 @@ pub enum ProviderType {
 	SourceControl = 31,
 
 	DebugAdapter = 32,
+
+	DebugConfiguration = 33,
+
+	TextDocumentContent = 34,
+
+	FileSystem = 35,
+
+	UriHandler = 36,
+
+	DocumentPasteEdit = 37,
+
+	DocumentDropEdit = 38,
+
+	NotebookSerializer = 39,
+
+	TerminalProfile = 40,
+
+	TerminalLink = 41,
+
+	InlineCompletion = 42,
+
+	FileDecoration = 43,
+
+	ExternalUriOpener = 44,
 }
 
 impl fmt::Display for ProviderType {

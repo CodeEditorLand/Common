@@ -159,6 +159,20 @@ DefineChannels! {
 	FileWriteBinary                               => "file:writeBinary",
 	FileWriteFile                                 => "file:writeFile",
 
+	// --- Git (renderer `localGit` channel; stock VS Code names it
+	//          `ILocalGitService`, shared-process wire "localGit"). Land
+	//          routes each method to a Mountain subprocess handler that
+	//          spawns native `git`.
+	GitCancel                                     => "git:cancel",
+	GitCheckout                                   => "git:checkout",
+	GitClone                                      => "git:clone",
+	GitExec                                       => "git:exec",
+	GitFetch                                      => "git:fetch",
+	GitIsAvailable                                => "git:isAvailable",
+	GitPull                                       => "git:pull",
+	GitRevListCount                               => "git:revListCount",
+	GitRevParse                                   => "git:revParse",
+
 	// --- History ---
 	HistoryCanGoBack                              => "history:canGoBack",
 	HistoryCanGoForward                           => "history:canGoForward",
@@ -370,7 +384,11 @@ impl Channel {
 			| WorkspacesDeleteUntitledWorkspace => ChannelPriority::High,
 
 			// --- Background / deferrable → Low ---
-			SearchFindFiles
+			GitClone
+			| GitFetch
+			| GitPull
+			| GitRevListCount
+			| SearchFindFiles
 			| SearchFindInFiles
 			| LogCreateLogger
 			| LogRegisterLogger
