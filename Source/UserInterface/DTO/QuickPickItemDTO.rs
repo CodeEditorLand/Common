@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 /// A serializable struct that represents a single selectable item within a
 /// quick pick UI.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct QuickPickItemDTO {
 	/// The primary text label for the item.
 	pub Label:String,

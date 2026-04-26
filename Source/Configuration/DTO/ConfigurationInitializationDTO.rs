@@ -14,7 +14,7 @@ use serde_json::Value;
 /// snapshot of all configuration sources, allowing it to accurately reflect the
 /// application's settings state without needing to read files itself.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct ConfigurationInitializationDTO {
 	/// The final, merged configuration values after applying all scopes in the
 	/// correct order of precedence. This is the "effective" configuration.

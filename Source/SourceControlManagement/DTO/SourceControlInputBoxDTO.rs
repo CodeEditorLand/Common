@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 /// A serializable struct representing the state of the commit message input box
 /// associated with a source control provider.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct SourceControlInputBoxDTO {
 	/// The current text content of the input box.
 	pub Value:String,

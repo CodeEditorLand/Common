@@ -13,7 +13,7 @@ use crate::Utility::Serialization::URLSerializationHelper;
 /// `vscode.Location`. It is a core building block for features like "Go to
 /// Definition" and "Find All References".
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct LocationDTO {
 	/// The URI of the resource.
 	#[serde(with = "URLSerializationHelper")]

@@ -13,7 +13,7 @@ use serde_json::Value;
 /// UI components like the Settings editor to show where values are inherited
 /// from, what the default is, and what the final effective value is.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct InspectResultDataDTO {
 	/// The value from the default configuration.
 	pub DefaultValue:Option<Value>,

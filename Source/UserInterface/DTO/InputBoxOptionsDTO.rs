@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 /// A serializable struct that holds all configuration options for a user input
 /// box.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct InputBoxOptionsDTO {
 	/// An optional title for the input box window.
 	#[serde(skip_serializing_if = "Option::is_none")]

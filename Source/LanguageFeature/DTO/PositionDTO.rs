@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 /// consisting of a line number and a column number. This is a fundamental
 /// building block for many other DTOs.
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct PositionDTO {
 	/// The zero-based line number.
 	pub LineNumber:u32,

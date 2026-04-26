@@ -12,7 +12,7 @@ use serde_json::Value;
 /// optionally be marked as "trusted" to allow for command links and other
 /// active content. This is analogous to `vscode.MarkdownString`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct IMarkdownStringDTO {
 	/// The markdown string content.
 	pub Value:String,
@@ -29,16 +29,16 @@ pub struct IMarkdownStringDTO {
 
 	/// A flag to indicate that this markdown string might contain HTML tags
 	/// that need to be rendered.
-	#[serde(skip_serializing_if = "Option::is_none")]
+	#[serde(rename = "supportHtml", skip_serializing_if = "Option::is_none")]
 	pub SupportHTML:Option<bool>,
 
 	/// An optional base URI to resolve relative paths against, especially for
 	/// images. Serialized `UriComponents`.
-	#[serde(skip_serializing_if = "Option::is_none")]
+	#[serde(rename = "baseUri", skip_serializing_if = "Option::is_none")]
 	pub BaseURI:Option<Value>,
 
 	/// A map of URIs that are allowed to be accessed, for sanitization
 	/// purposes.
-	#[serde(skip_serializing_if = "Option::is_none")]
+	#[serde(rename = "uris", skip_serializing_if = "Option::is_none")]
 	pub URIs:Option<HashMap<String, Value>>,
 }

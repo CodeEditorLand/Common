@@ -8,7 +8,7 @@ use serde_json::Value;
 /// A serializable struct representing a single completion item, analogous to
 /// `vscode.CompletionItem`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct CompletionItemDTO {
 	/// The label of this completion item.
 	// Can be string or a CompletionItemLabel object

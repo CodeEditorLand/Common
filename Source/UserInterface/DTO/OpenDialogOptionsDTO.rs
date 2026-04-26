@@ -10,7 +10,7 @@ use super::DialogOptionsDTO::DialogOptionsDTO;
 /// file dialog. It flattens the shared `DialogOptionsDTO` and adds properties
 /// specific to opening files or folders.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct OpenDialogOptionsDTO {
 	/// The base options common to all file dialogs.
 	#[serde(flatten)]

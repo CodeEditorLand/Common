@@ -10,7 +10,7 @@ use super::DialogOptionsDTO::DialogOptionsDTO;
 /// file dialog. It flattens the shared `DialogOptionsDTO` and can be extended
 /// with save-specific properties in the future.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct SaveDialogOptionsDTO {
 	/// The base options common to all file dialogs.
 	#[serde(flatten)]

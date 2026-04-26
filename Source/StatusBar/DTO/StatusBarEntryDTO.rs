@@ -19,7 +19,7 @@ use serde_json::Value;
 /// an extension creates or updates a status bar item, providing the host with
 /// all the information needed to render it in the UI.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct StatusBarEntryDTO {
 	/// An internal, host-generated unique ID for this entry instance.
 	pub EntryIdentifier:String,

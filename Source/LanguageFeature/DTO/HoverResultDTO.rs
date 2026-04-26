@@ -9,7 +9,7 @@ use super::{IMarkdownStringDTO::IMarkdownStringDTO, RangeDTO::RangeDTO};
 /// A serializable struct that represents the content to be displayed in a
 /// hover tooltip, analogous to `vscode.Hover`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct HoverResultDTO {
 	/// The contents of the hover, which can be one or more markdown strings.
 	pub Contents:Vec<IMarkdownStringDTO>,

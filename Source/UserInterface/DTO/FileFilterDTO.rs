@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 /// A serializable struct that represents a single selectable filter in a file
 /// dialog's "files of type" dropdown.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct FileFilterDTO {
 	/// The human-readable name of the filter (e.g., "Image Files").
 	pub Name:String,

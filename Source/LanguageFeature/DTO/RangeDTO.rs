@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 /// defined by its start and end positions and is a fundamental building block
 /// for operations like selections, highlights, and text edits.
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct RangeDTO {
 	/// The starting line number of the range (zero-based).
 	pub StartLineNumber:u32,

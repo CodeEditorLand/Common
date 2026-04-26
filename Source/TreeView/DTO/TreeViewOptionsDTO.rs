@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 /// A struct that holds the configuration options for a tree view instance
 /// registered by an extension.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct TreeViewOptionsDTO {
 	#[serde(default)]
 	pub CanSelectMany:bool,

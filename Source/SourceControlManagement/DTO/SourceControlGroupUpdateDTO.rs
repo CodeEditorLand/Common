@@ -9,12 +9,13 @@ use serde::{Deserialize, Serialize};
 /// group, such as its label or visibility, without affecting its list of
 /// resources.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct SourceControlGroupUpdateDTO {
 	/// The handle of the provider that owns the group.
 	pub ProviderHandle:u32,
 
 	/// The unique identifier for the group within its provider.
+	#[serde(rename = "groupId")]
 	pub GroupID:String,
 
 	/// The new human-readable label for the group.

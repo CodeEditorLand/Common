@@ -9,7 +9,7 @@ use super::CompletionItemDTO::CompletionItemDTO;
 /// A serializable struct representing a list of completion items, analogous to
 /// `vscode.CompletionList`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct CompletionListDTO {
 	/// The completion items.
 	pub Suggestions:Vec<CompletionItemDTO>,

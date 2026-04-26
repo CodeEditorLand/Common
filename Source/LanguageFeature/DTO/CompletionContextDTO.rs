@@ -17,7 +17,7 @@ pub enum CompletionTriggerKindDTO {
 /// A serializable struct representing the context in which a completion was
 /// requested, analogous to `vscode.CompletionContext`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct CompletionContextDTO {
 	/// The kind of trigger that initiated the completion request.
 	pub TriggerKind:CompletionTriggerKindDTO,

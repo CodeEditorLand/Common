@@ -10,7 +10,7 @@ use crate::SourceControlManagement::DTO::SourceControlInputBoxDTO::SourceControl
 /// A serializable struct representing the metadata for a source control
 /// provider.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct SourceControlManagementProviderDTO {
 	pub Handle:u32,
 
@@ -18,6 +18,7 @@ pub struct SourceControlManagementProviderDTO {
 
 	/// The root URI of the repository this provider is managing. Serialized
 	/// `UriComponents`.
+	#[serde(rename = "rootUri")]
 	pub RootURI:Option<Value>,
 
 	/// An optional count of changed resources, often displayed as a badge.

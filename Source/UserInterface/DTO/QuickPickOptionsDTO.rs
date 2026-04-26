@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 /// A serializable struct that holds all configuration options for a quick pick
 /// UI.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct QuickPickOptionsDTO {
 	/// An optional title for the quick pick window.
 	#[serde(skip_serializing_if = "Option::is_none")]

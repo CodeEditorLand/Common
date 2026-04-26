@@ -11,7 +11,7 @@ use super::RangeDTO::RangeDTO;
 /// `vscode.TextEdit`. It is the fundamental building block for formatting edits
 /// and workspace edits.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct TextEditDTO {
 	/// The range of text to be replaced.
 	pub Range:RangeDTO,

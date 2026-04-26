@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 /// A serializable struct that holds all configuration options for a message
 /// shown to the user via `ShowMessage`.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct MessageOptionsDTO {
 	/// An optional title for the message dialog window.
 	#[serde(skip_serializing_if = "Option::is_none")]

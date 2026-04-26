@@ -10,13 +10,14 @@ use serde_json::Value;
 /// SourceControlManagement group, such as a file that has been modified, added,
 /// or deleted.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct SourceControlManagementResourceDTO {
 	pub ProviderHandle:u32,
 
 	pub GroupIdentifier:String,
 
 	/// The URI of the resource. Serialized `UriComponents`.
+	#[serde(rename = "resourceUri")]
 	pub ResourceURI:Value,
 
 	/// A DTO for decorations like color, tooltip, and file status icons.

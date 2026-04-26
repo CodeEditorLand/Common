@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 /// top-level properties, such as the commit message in the input box or the
 /// badge count.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct SourceControlUpdateDTO {
 	/// The handle of the provider to update.
 	pub ProviderHandle:u32,

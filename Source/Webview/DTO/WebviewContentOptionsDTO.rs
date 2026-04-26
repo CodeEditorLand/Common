@@ -12,9 +12,10 @@ use serde_json::Value;
 /// This DTO is sent from `Cocoon` to `Mountain` when a Webview is created to
 /// configure its security sandbox and capabilities.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct WebviewContentOptionsDTO {
 	/// Enables the use of `vscode:command:` URIs within the Webview.
+	#[serde(rename = "enableCommandUris")]
 	pub EnableCommandURIs:Option<bool>,
 
 	/// Enables the execution of scripts within the Webview.

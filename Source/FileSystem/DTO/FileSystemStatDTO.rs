@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 
 /// and modification times.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct FileSystemStatDTO {
 	/// A bitmask representing the type of the file.
 	/// @see FileTypeDTO

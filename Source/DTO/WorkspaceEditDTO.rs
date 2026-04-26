@@ -11,7 +11,7 @@ use serde_json::Value;
 
 /// rename). This is analogous to `vscode.WorkspaceEdit`.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct WorkspaceEditDTO {
 	/// A list of text edits to apply, grouped by resource URI.
 	/// The structure is `[ [uri_dto, [text_edit_dto, ...]], ... ]`

@@ -12,7 +12,7 @@ use serde_json::Value;
 /// This allows for fetching settings that are specific to a particular resource
 /// (like a file URI) or a language (like settings inside a `[rust]` block).
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct ConfigurationOverridesDTO {
 	/// The resource URI to which the configuration should be scoped.
 	/// This is used to resolve resource-specific and folder-specific settings.
