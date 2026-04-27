@@ -203,6 +203,11 @@ DefineSkyEvents! {
 	TreeViewSetTitle                              => "sky://tree-view/set-title",
 
 	// --- UI ---
+	// `UIShow{InputBox,QuickPick}Request` are deprecated aliases. The
+	// Sky listener channels are `InputBoxShow` and `QuickPickShow`
+	// declared earlier in this enum. `UserInterfaceProvider.rs` now
+	// references those directly so the `UIShow*Request` channel names
+	// below remain reachable only from older code paths and tests.
 	UIShowInputBoxRequest                         => "sky://ui/show-input-box-request",
 	UIShowMessageRequest                          => "sky://ui/show-message-request",
 	UIShowQuickPickRequest                        => "sky://ui/show-quick-pick-request",
