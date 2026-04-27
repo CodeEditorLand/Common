@@ -22,4 +22,19 @@ pub struct SourceControlCreateDTO {
 	/// The root URI of the repository this provider is managing.
 	#[serde(with = "URLSerializationHelper")]
 	pub RootUri:Url,
+
+	/// Caller-supplied provider handle. Cocoon uses a process-local
+	/// sequential allocator (`NextProviderHandle()` in `ScmNamespace.ts`)
+	/// and includes the same handle on every subsequent
+	/// `register_scm_resource_group` / `update_scm_group` /
+	/// `unregister_scm_provider` notification. When present, Mountain MUST
+	/// key its marker maps under this handle so group-update lookups
+	/// resolve - allocating a fresh handle here keys the
+	/// `SourceControlManagementProviders` map under a value Cocoon will
+	/// never reference, and every later `update_scm_group` warns
+	/// "Received group update for unknown provider handle: <H>" while the
+	/// SCM viewlet stays empty. Optional so callers without an external
+	/// handle (none currently) still work via Mountain-side allocation.
+	#[serde(default, skip_serializing_if = "Option::is_none")]
+	pub Handle:Option<u32>,
 }
