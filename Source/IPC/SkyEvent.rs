@@ -73,12 +73,16 @@ DefineSkyEvents! {
 	ConfigurationChanged                          => "sky://configuration/changed",
 
 	// --- Debug ---
+	DebugDapMessage                               => "sky://debug/dap-message",
 	DebugRegister                                 => "sky://debug/register",
 	DebugStart                                    => "sky://debug/start",
 	DebugStop                                     => "sky://debug/stop",
 
 	// --- Diagnostics ---
 	DiagnosticsChanged                            => "sky://diagnostics/changed",
+
+	// --- CustomEditor ---
+	CustomEditorSaved                             => "sky://customEditor/saved",
 
 	// --- Dialog ---
 	DialogOpen                                    => "sky://dialog/open",
