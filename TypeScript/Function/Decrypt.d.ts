@@ -1,4 +1,5 @@
 import type Interface from "../Interface/Decrypt.js";
+
 /**
  * @module Decrypt
  *
