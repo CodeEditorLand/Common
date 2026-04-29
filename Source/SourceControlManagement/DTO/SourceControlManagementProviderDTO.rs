@@ -14,6 +14,14 @@ use crate::SourceControlManagement::DTO::SourceControlInputBoxDTO::SourceControl
 pub struct SourceControlManagementProviderDTO {
 	pub Handle:u32,
 
+	/// The provider id ("git", "github", "hg", …). Used as the
+	/// `scmId` field on the `sky://scm/register` event payload so
+	/// replay-on-late-listener (Sky boot race) can re-emit with
+	/// the original id Cocoon's `ScmShimRegistry` keys against.
+	/// Defaults to empty for backwards-compat with old DTOs.
+	#[serde(default)]
+	pub Identifier:String,
+
 	pub Label:String,
 
 	/// The root URI of the repository this provider is managing. Serialized
