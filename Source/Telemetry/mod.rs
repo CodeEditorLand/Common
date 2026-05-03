@@ -38,3 +38,4 @@ pub mod EmitOTLPSpan;
 pub mod Initialize;
 pub mod IsAllowed;
 pub mod Tier;
+pub mod Traceparent;
