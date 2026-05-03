@@ -26,6 +26,11 @@ log = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
 rand = { workspace = true }
 
+# Shared dual-pipe telemetry (PostHog + OTLP). Sidecars import via
+# `CommonLibrary::Telemetry::*`; Mountain keeps its own compile-time-baked
+# plugin in `Binary/Build/PostHogPlugin/*` for release tree-shake.
+posthog-rs = { workspace = true }
+
 [features]
 default = []
 

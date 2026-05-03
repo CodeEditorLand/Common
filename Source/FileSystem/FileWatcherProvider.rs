@@ -52,10 +52,10 @@ pub trait FileWatcherProvider: Environment + Send + Sync {
 	/// * `Root`:        Absolute path of the directory to watch.
 	/// * `IsRecursive`: When `true`, observe children recursively.
 	/// * `Pattern`:     Optional glob pattern (e.g. `**/*.ts`). When present,
-	///                  events whose path does not match the compiled pattern
-	///                  are dropped before crossing the IPC boundary - this
-	///                  is critical for performance under TypeScript-style
-	///                  extensions that register 10+ watchers per activation.
+	///   events whose path does not match the compiled pattern are dropped
+	///   before crossing the IPC boundary - this is critical for performance
+	///   under TypeScript-style extensions that register 10+ watchers per
+	///   activation.
 	async fn RegisterWatcher(
 		&self,
 		Handle:String,

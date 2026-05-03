@@ -15,7 +15,8 @@
 //! ## Adding a new event
 //!
 //! 1. Add the variant here AND in `Element/Wind/Source/IPC/SkyEvent.ts`.
-//! 2. Emit from Mountain: `ApplicationHandle.emit(SkyEvent::TerminalData.AsStr(), Payload)`.
+//! 2. Emit from Mountain:
+//!    `ApplicationHandle.emit(SkyEvent::TerminalData.AsStr(), Payload)`.
 //! 3. Subscribe from Wind: `IPCService.events(SkyEvent.TerminalData)`.
 //!
 //! ## Why a declarative macro?
@@ -245,8 +246,9 @@ DefineSkyEvents! {
 
 #[cfg(test)]
 mod Tests {
-	use super::SkyEvent;
 	use std::str::FromStr;
+
+	use super::SkyEvent;
 
 	#[test]
 	fn RoundTrip() {
@@ -283,8 +285,7 @@ mod Tests {
 	fn RustAndTypeScriptTablesAgree() {
 		use std::{collections::HashSet, path::PathBuf};
 
-		let TsPath = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-			.join("../Wind/Source/IPC/SkyEvent.ts");
+		let TsPath = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../Wind/Source/IPC/SkyEvent.ts");
 		let Source = match std::fs::read_to_string(&TsPath) {
 			Ok(S) => S,
 			// In packaging contexts where Wind isn't checked out alongside
@@ -304,8 +305,7 @@ mod Tests {
 			}
 		}
 
-		let RsWires:HashSet<String> =
-			SkyEvent::All().iter().map(|V| V.AsStr().to_string()).collect();
+		let RsWires:HashSet<String> = SkyEvent::All().iter().map(|V| V.AsStr().to_string()).collect();
 
 		let OnlyInRust:Vec<_> = RsWires.difference(&TsWires).collect();
 		let OnlyInTs:Vec<_> = TsWires.difference(&RsWires).collect();

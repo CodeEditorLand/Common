@@ -429,8 +429,9 @@ impl Channel {
 
 #[cfg(test)]
 mod Tests {
-	use super::{Channel, ChannelPriority};
 	use std::str::FromStr;
+
+	use super::{Channel, ChannelPriority};
 
 	#[test]
 	fn RoundTrip() {

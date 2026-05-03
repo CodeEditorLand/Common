@@ -109,6 +109,12 @@ pub mod Workspace;
 // Provides transport-agnostic communication abstractions (gRPC, IPC, WASM)
 pub mod Transport;
 
+// --- Telemetry ---
+// Shared dual-pipe (PostHog + OTLP) emit module. Used by every Rust
+// sidecar (Air, Echo, Rest, Grove, Mist, SideCar). Mountain keeps its
+// own compile-time-baked plugin under `Binary/Build/PostHogPlugin/*`.
+pub mod Telemetry;
+
 // --- Global DTO Module ---
 //
 // A top-level module that re-exports all Data Transfer Objects (DTOs) from the
