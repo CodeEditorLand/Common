@@ -18,4 +18,5 @@ export default interface Interface {
 	 */
 	(Data: unknown, Key: string): Promise<Data>;
 }
+
 //# sourceMappingURL=Encrypt.d.ts.map

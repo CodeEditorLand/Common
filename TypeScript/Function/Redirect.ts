@@ -7,6 +7,7 @@ import type Interface from "../Interface/Redirect.js";
 export default (async (...Option) =>
 	Response.redirect(
 		Option[0] ?? "",
+
 		Option[1] ?? 302,
 	)) satisfies Interface as Interface;
 

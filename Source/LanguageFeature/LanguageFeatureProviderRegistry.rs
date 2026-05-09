@@ -164,94 +164,118 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 	/// Provides rename edits for a symbol at the given position.
 	async fn ProvideRenameEdits(
 		&self,
+
 		DocumentURI:Url,
+
 		PositionDTO:PositionDTO,
+
 		NewName:String,
 	) -> Result<Option<Value /* WorkspaceEditDTO */>, CommonError>;
 
 	/// Provides document symbols (outline) for the given document.
 	async fn ProvideDocumentSymbols(
 		&self,
+
 		DocumentURI:Url,
 	) -> Result<Option<Value /* Vec<DocumentSymbolDTO> */>, CommonError>;
 
 	/// Provides workspace symbols matching the given query.
 	async fn ProvideWorkspaceSymbols(
 		&self,
+
 		Query:String,
 	) -> Result<Option<Value /* Vec<WorkspaceSymbolDTO> */>, CommonError>;
 
 	/// Provides signature help at the given position.
 	async fn ProvideSignatureHelp(
 		&self,
+
 		DocumentURI:Url,
+
 		PositionDTO:PositionDTO,
+
 		ContextDTO:Value,
 	) -> Result<Option<Value /* SignatureHelpDTO */>, CommonError>;
 
 	/// Provides folding ranges for the given document.
 	async fn ProvideFoldingRanges(
 		&self,
+
 		DocumentURI:Url,
 	) -> Result<Option<Value /* Vec<FoldingRangeDTO> */>, CommonError>;
 
 	/// Provides selection ranges at the given positions.
 	async fn ProvideSelectionRanges(
 		&self,
+
 		DocumentURI:Url,
+
 		Positions:Vec<PositionDTO>,
 	) -> Result<Option<Value /* Vec<SelectionRangeDTO> */>, CommonError>;
 
 	/// Provides semantic tokens for the full document.
 	async fn ProvideSemanticTokensFull(
 		&self,
+
 		DocumentURI:Url,
 	) -> Result<Option<Value /* SemanticTokensDTO */>, CommonError>;
 
 	/// Provides inlay hints within the given range.
 	async fn ProvideInlayHints(
 		&self,
+
 		DocumentURI:Url,
+
 		RangeDTO:Value,
 	) -> Result<Option<Value /* Vec<InlayHintDTO> */>, CommonError>;
 
 	/// Provides type hierarchy supertypes for the given item.
 	async fn ProvideTypeHierarchySupertypes(
 		&self,
+
 		ItemDTO:Value,
 	) -> Result<Option<Value /* Vec<TypeHierarchyItemDTO> */>, CommonError>;
 
 	/// Provides type hierarchy subtypes for the given item.
 	async fn ProvideTypeHierarchySubtypes(
 		&self,
+
 		ItemDTO:Value,
 	) -> Result<Option<Value /* Vec<TypeHierarchyItemDTO> */>, CommonError>;
 
 	/// Provides call hierarchy incoming calls for the given item.
 	async fn ProvideCallHierarchyIncomingCalls(
 		&self,
+
 		ItemDTO:Value,
 	) -> Result<Option<Value /* Vec<CallHierarchyCallDTO> */>, CommonError>;
 
 	/// Provides call hierarchy outgoing calls for the given item.
 	async fn ProvideCallHierarchyOutgoingCalls(
 		&self,
+
 		ItemDTO:Value,
 	) -> Result<Option<Value /* Vec<CallHierarchyCallDTO> */>, CommonError>;
 
 	/// Provides linked editing ranges at the given position.
 	async fn ProvideLinkedEditingRanges(
 		&self,
+
 		DocumentURI:Url,
+
 		PositionDTO:PositionDTO,
 	) -> Result<Option<Value /* LinkedEditingRangesDTO */>, CommonError>;
 
 	/// Provides on-type formatting edits.
 	async fn ProvideOnTypeFormattingEdits(
 		&self,
+
 		DocumentURI:Url,
+
 		PositionDTO:PositionDTO,
+
 		Character:String,
+
 		OptionsDTO:Value,
 	) -> Result<Option<Vec<TextEditDTO>>, CommonError>;
 }

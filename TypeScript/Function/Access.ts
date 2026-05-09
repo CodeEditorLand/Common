@@ -17,7 +17,9 @@ export default (async (...[Key, Identifier, { get }, View]) => {
 					await import("./Decrypt.js")
 				).default(
 					await Uint8ArrayFromObject(Data),
+
 					Key ?? "",
+
 					await Uint8ArrayFromObject(Vector),
 				),
 			).toString(),

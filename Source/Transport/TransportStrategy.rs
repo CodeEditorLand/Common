@@ -102,13 +102,21 @@ impl Default for TransportCapabilities {
 		Self {
 			MaximumMessageSize:1024 * 1024, // 1MB
 			SupportsRequestResponse:true,
+
 			SupportsServerStreaming:false,
+
 			SupportsClientStreaming:false,
+
 			SupportsBidirectionalStreaming:false,
+
 			SupportsNotifications:true,
+
 			MaximumConcurrent:100,
+
 			RequiresNetwork:false,
+
 			SupportsEncryption:false,
+
 			SupportsCompression:false,
 		}
 	}
@@ -165,6 +173,7 @@ impl TransportMetrics {
 	/// Computes the success rate as a percentage (0-100).
 	pub fn SuccessRate(&self) -> Option<f64> {
 		let Total = self.RequestsTotal;
+
 		if Total == 0 {
 			None
 		} else {
@@ -175,23 +184,29 @@ impl TransportMetrics {
 	/// Computes the average request latency in milliseconds.
 	pub fn AverageLatency(&self) -> Option<f64> {
 		let (Count, Sum, _) = self.LatencyMillisecondsHistogram?;
+
 		if Count == 0 { None } else { Some(Sum / Count as f64) }
 	}
 
 	/// Computes the 95th percentile latency from the histogram.
 	pub fn LatencyPercentile95(&self) -> Option<f64> {
 		let (Count, Mean, SumSquared) = self.LatencyMillisecondsHistogram?;
+
 		if Count < 20 {
 			return None;
 		}
+
 		let Variance = (SumSquared / Count as f64) - (Mean * Mean);
+
 		let StandardDeviation = Variance.sqrt();
+
 		Some(Mean + 1.645 * StandardDeviation)
 	}
 
 	/// Records a request latency sample.
 	pub fn RecordLatency(&mut self, LatencyMilliseconds:f64) {
 		let (Count, Sum, SumSquared) = self.LatencyMillisecondsHistogram.get_or_insert((0, 0.0, 0.0));
+
 		*Count += 1;
 		*Sum += LatencyMilliseconds;
 		*SumSquared += LatencyMilliseconds * LatencyMilliseconds;
@@ -200,12 +215,14 @@ impl TransportMetrics {
 	/// Increments the RequestsTotal and RequestsSuccessful counters.
 	pub fn IncrementRequestSuccess(&mut self) {
 		self.RequestsTotal += 1;
+
 		self.RequestsSuccessful += 1;
 	}
 
 	/// Increments the RequestsTotal and RequestsFailed counters.
 	pub fn IncrementRequestFailure(&mut self) {
 		self.RequestsTotal += 1;
+
 		self.RequestsFailed += 1;
 	}
 
@@ -213,10 +230,14 @@ impl TransportMetrics {
 	pub fn SetCircuitBreakerState(&mut self, State:CircuitBreakerState) {
 		let StateCode = match State {
 			CircuitBreakerState::Closed => 1,
+
 			CircuitBreakerState::Open => 0,
+
 			CircuitBreakerState::HalfOpen => 2,
 		};
+
 		let OldState = self.CircuitBreakerState;
+
 		self.CircuitBreakerState = (OldState & 0xFFFF_0000) | StateCode as u32;
 	}
 }
@@ -226,8 +247,10 @@ impl TransportMetrics {
 pub enum CircuitBreakerState {
 	/// Circuit is closed; requests flow normally.
 	Closed,
+
 	/// Circuit is open; requests are rejected immediately.
 	Open,
+
 	/// Circuit is half-open; limited requests are allowed to test recovery.
 	HalfOpen,
 }
@@ -238,32 +261,46 @@ pub enum CircuitBreakerState {
 pub enum TransportErrorCode {
 	/// Connection to endpoint failed or was lost.
 	ConnectionFailed = 100,
+
 	/// Operation timed out.
 	Timeout = 101,
+
 	/// Target endpoint not found/service unavailable.
 	NotFound = 102,
+
 	/// Invalid request format or parameters.
 	InvalidRequest = 103,
+
 	/// Remote endpoint returned an application error.
 	RemoteError = 104,
+
 	/// Message too large for transport.
 	MessageTooLarge = 105,
+
 	/// Encryption/decryption failed.
 	EncryptionError = 106,
+
 	/// Serialization/deserialization failed.
 	SerializationError = 107,
+
 	/// Authentication/authorization failed.
 	Unauthorized = 108,
+
 	/// Rate limit exceeded.
 	RateLimited = 109,
+
 	/// Feature not supported by this transport.
 	NotSupported = 110,
+
 	/// Internal transport error (bug, corrupted state).
 	InternalError = 111,
+
 	/// Circuit breaker is open; request rejected.
 	CircuitBreakerOpen = 112,
+
 	/// Stream already in use or closed.
 	StreamError = 113,
+
 	/// Configuration error (invalid settings).
 	ConfigurationError = 114,
 }
@@ -284,9 +321,13 @@ impl TransportErrorCode {
 	pub fn RecommendedRetryDelayMilliseconds(&self) -> u64 {
 		match self {
 			TransportErrorCode::ConnectionFailed => 1000,
+
 			TransportErrorCode::Timeout => 500,
+
 			TransportErrorCode::RateLimited => 2000,
+
 			TransportErrorCode::RemoteError => 300,
+
 			_ => 0,
 		}
 	}
@@ -294,22 +335,30 @@ impl TransportErrorCode {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn TestRetryableErrorCodes() {
 		assert!(TransportErrorCode::ConnectionFailed.IsRetryable());
+
 		assert!(TransportErrorCode::Timeout.IsRetryable());
+
 		assert!(TransportErrorCode::RateLimited.IsRetryable());
+
 		assert!(!TransportErrorCode::InvalidRequest.IsRetryable());
+
 		assert!(!TransportErrorCode::NotFound.IsRetryable());
 	}
 
 	#[test]
 	fn TestErrorRecommendedDelays() {
 		assert_eq!(TransportErrorCode::ConnectionFailed.RecommendedRetryDelayMilliseconds(), 1000);
+
 		assert_eq!(TransportErrorCode::Timeout.RecommendedRetryDelayMilliseconds(), 500);
+
 		assert_eq!(TransportErrorCode::RateLimited.RecommendedRetryDelayMilliseconds(), 2000);
+
 		assert_eq!(TransportErrorCode::InvalidRequest.RecommendedRetryDelayMilliseconds(), 0);
 	}
 }

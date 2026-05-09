@@ -47,10 +47,15 @@ impl UnifiedRequest {
 	pub fn New(Method:impl Into<String>) -> Self {
 		Self {
 			CorrelationIdentifier:Some(UuidCorrelationIdGenerator::Generate()),
+
 			Method:Method.into(),
+
 			Payload:Vec::new(),
+
 			Metadata:HashMap::new(),
+
 			CreatedAt:SystemTimestampGenerator::Now(),
+
 			TransportHint:None,
 		}
 	}
@@ -58,42 +63,49 @@ impl UnifiedRequest {
 	/// Sets the correlation ID explicitly.
 	pub fn WithCorrelationIdentifier(mut self, CorrelationIdentifier:CorrelationId) -> Self {
 		self.CorrelationIdentifier = Some(CorrelationIdentifier);
+
 		self
 	}
 
 	/// Sets the binary payload.
 	pub fn WithPayload(mut self, Payload:Vec<u8>) -> Self {
 		self.Payload = Payload;
+
 		self
 	}
 
 	/// Adds a metadata key-value pair.
 	pub fn WithMetadata(mut self, Key:impl Into<String>, Value:impl Into<String>) -> Self {
 		self.Metadata.insert(Key.into(), Value.into());
+
 		self
 	}
 
 	/// Sets the entire metadata map.
 	pub fn WithMetadataMap(mut self, Metadata:HashMap<String, String>) -> Self {
 		self.Metadata = Metadata;
+
 		self
 	}
 
 	/// Sets the request timeout in milliseconds.
 	pub fn WithTimeout(mut self, TimeoutMilliseconds:u64) -> Self {
 		self.Metadata.insert("timeout_ms".to_string(), TimeoutMilliseconds.to_string());
+
 		self
 	}
 
 	/// Sets the request priority.
 	pub fn WithPriority(mut self, Priority:u32) -> Self {
 		self.Metadata.insert("priority".to_string(), Priority.to_string());
+
 		self
 	}
 
 	/// Sets the preferred transport type.
 	pub fn WithTransportHint(mut self, TransportKind:TransportType) -> Self {
 		self.TransportHint = Some(TransportKind);
+
 		self
 	}
 
@@ -123,15 +135,21 @@ impl UnifiedRequest {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn TestUnifiedRequestCreation() {
 		let Request = UnifiedRequest::New("test.method");
+
 		assert!(!Request.Method.is_empty());
+
 		assert!(Request.CorrelationIdentifier.is_some());
+
 		assert_eq!(Request.Payload, Vec::<u8>::new());
+
 		assert!(Request.Metadata.is_empty());
+
 		assert!(Request.TransportHint.is_none());
 	}
 
@@ -145,23 +163,32 @@ mod tests {
 			.WithTransportHint(TransportType::Grpc);
 
 		assert_eq!(Request.Method, "fileSystem.readFile");
+
 		assert_eq!(Request.Payload, b"{\"path\": \"/tmp/test.txt\"}");
+
 		assert_eq!(Request.TimeoutMilliseconds(), Some(5000));
+
 		assert_eq!(Request.Priority(), Some(10));
+
 		assert_eq!(Request.TransportHint, Some(TransportType::Grpc));
+
 		assert!(Request.Metadata.contains_key("traceparent"));
 	}
 
 	#[test]
 	fn TestUnifiedRequestValidation() {
 		let mut Request = UnifiedRequest::New("valid.method");
+
 		assert!(Request.Validate().is_ok());
 
 		Request.Method = String::new();
+
 		assert!(Request.Validate().is_err());
 
 		Request.Method = "valid.method".to_string();
+
 		Request.CorrelationIdentifier = Some("".to_string());
+
 		assert!(Request.Validate().is_err());
 	}
 }

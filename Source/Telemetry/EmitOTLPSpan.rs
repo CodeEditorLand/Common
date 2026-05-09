@@ -19,6 +19,7 @@ use std::{
 use crate::Telemetry::{Client, IsAllowed};
 
 static OTLP_AVAILABLE:AtomicBool = AtomicBool::new(true);
+
 static OTLP_TRACE_ID:OnceLock<String> = OnceLock::new();
 
 fn NowNano() -> u64 {
@@ -39,8 +40,11 @@ fn TraceId() -> &'static str {
 
 fn RandU64() -> u64 {
 	let mut H = DefaultHasher::new();
+
 	std::thread::current().id().hash(&mut H);
+
 	NowNano().hash(&mut H);
+
 	H.finish()
 }
 
@@ -49,11 +53,15 @@ fn ParseEndpoint(Endpoint:&str) -> (String, String) {
 		.strip_prefix("http://")
 		.or_else(|| Endpoint.strip_prefix("https://"))
 		.unwrap_or(Endpoint);
+
 	let (HostPort, Path) = match WithoutScheme.split_once('/') {
 		Some((HP, Rest)) => (HP.to_string(), format!("/{}", Rest.trim_start_matches('/'))),
+
 		None => (WithoutScheme.to_string(), "/v1/traces".to_string()),
 	};
+
 	let PathFinal = if Path == "/" { "/v1/traces".to_string() } else { Path };
+
 	(HostPort, PathFinal)
 }
 
@@ -63,15 +71,19 @@ pub fn Fn(Name:&str, StartNano:u64, EndNano:u64, Attributes:&[(&str, &str)]) {
 	if !IsAllowed::OTLP() {
 		return;
 	}
+
 	if !OTLP_AVAILABLE.load(Ordering::Relaxed) {
 		return;
 	}
 
 	let Configuration = IsAllowed::Cached();
+
 	let TierStr = Client::TIER.get().map(|T| T.AsStr()).unwrap_or("common");
 
 	let SpanId = format!("{:016x}", RandU64());
+
 	let TraceIdString = TraceId().to_string();
+
 	let SpanName = Name.to_string();
 
 	let AttributesJson:Vec<String> = Attributes
@@ -86,8 +98,11 @@ pub fn Fn(Name:&str, StartNano:u64, EndNano:u64, Attributes:&[(&str, &str)]) {
 		.collect();
 
 	let IsError = SpanName.contains("error");
+
 	let StatusCode = if IsError { 2 } else { 1 };
+
 	let ServiceName = format!("land-editor-{}", TierStr);
+
 	let Payload = format!(
 		concat!(
 			r#"{{"resourceSpans":[{{"resource":{{"attributes":["#,

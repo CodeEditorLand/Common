@@ -8,8 +8,11 @@ use crate::Telemetry::{CaptureEvent, Client};
 
 pub fn Fn() {
 	let TierStr = Client::TIER.get().map(|T| T.AsStr()).unwrap_or("common");
+
 	let EventName = format!("land:{}:session:start", TierStr);
+
 	let Pid = format!("{}", std::process::id());
+
 	CaptureEvent::Fn(
 		&EventName,
 		Some(vec![

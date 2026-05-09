@@ -19,10 +19,15 @@ pub fn Fn(EventName:&str, Properties:Option<Vec<(&str, &str)>>) {
 	let mut Event = posthog_rs::Event::new(EventName, &DistinctId::Fn());
 
 	let _ = Event.insert_prop("$app", "land-editor");
+
 	let _ = Event.insert_prop("$app_version", "0.0.1");
+
 	let _ = Event.insert_prop("$build_mode", "debug");
+
 	let _ = Event.insert_prop("$component", TierStr);
+
 	let _ = Event.insert_prop("$tier", TierStr);
+
 	let _ = Event.insert_prop("$lib", "land-common-telemetry");
 
 	if let Some(Props) = Properties {

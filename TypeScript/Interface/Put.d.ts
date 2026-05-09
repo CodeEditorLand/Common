@@ -12,4 +12,5 @@ export default interface Interface {
 	 */
 	(Instance: unknown): Promise<unknown>;
 }
+
 //# sourceMappingURL=Put.d.ts.map

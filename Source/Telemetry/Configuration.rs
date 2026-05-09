@@ -8,11 +8,17 @@
 
 pub struct Configuration {
 	pub Key:String,
+
 	pub Host:String,
+
 	pub Brand:String,
+
 	pub Report:bool,
+
 	pub Capture:bool,
+
 	pub OTLPEndpoint:String,
+
 	pub OTLPEnabled:bool,
 }
 
@@ -26,6 +32,7 @@ fn ReadString(Key:&str, Fallback:&str) -> String {
 fn ReadBool(Key:&str, Fallback:bool) -> bool {
 	match std::env::var(Key).ok().map(|V| V.to_lowercase()) {
 		Some(V) => !matches!(V.as_str(), "false" | "0" | "off"),
+
 		None => Fallback,
 	}
 }
@@ -33,11 +40,17 @@ fn ReadBool(Key:&str, Fallback:bool) -> bool {
 pub fn Fn() -> Configuration {
 	Configuration {
 		Key:ReadString("Authorize", ""),
+
 		Host:ReadString("Beam", "https://eu.i.posthog.com"),
+
 		Brand:ReadString("Brand", ""),
+
 		Report:ReadBool("Report", true),
+
 		Capture:ReadBool("Capture", true),
+
 		OTLPEndpoint:ReadString("OTLPEndpoint", "http://127.0.0.1:4318"),
+
 		OTLPEnabled:ReadBool("OTLPEnabled", true),
 	}
 }

@@ -151,8 +151,11 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	///   (false).
 	async fn OnTreeNodeExpanded(
 		&self,
+
 		ViewIdentifier:String,
+
 		ElementHandle:String,
+
 		IsExpanded:bool,
 	) -> Result<(), CommonError>;
 
@@ -163,7 +166,9 @@ pub trait TreeViewProvider: Environment + Send + Sync {
 	/// * `SelectedHandles`: Vector of handles currently selected.
 	async fn OnTreeSelectionChanged(
 		&self,
+
 		ViewIdentifier:String,
+
 		SelectedHandles:Vec<String>,
 	) -> Result<(), CommonError>;
 

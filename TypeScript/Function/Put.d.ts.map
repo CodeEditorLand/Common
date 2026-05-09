@@ -1,1 +1,10 @@
-{"version":3,"file":"Put.d.ts","sourceRoot":"","sources":["Put.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,SAAS,MAAM,qBAAqB,CAAC;AAEjD;;;GAGG;wBAsBuB,SAAS;AArBnC,wBAqBoC"}
+{
+	"version": 3,
+	"file": "Put.d.ts",
+	"sourceRoot": "",
+	"sources": [
+		"Put.ts"
+	],
+	"names": [],
+	"mappings": "AAAA,OAAO,KAAK,SAAS,MAAM,qBAAqB,CAAC;AAEjD;;;GAGG;wBAsBuB,SAAS;AArBnC,wBAqBoC"
+}

@@ -56,10 +56,13 @@ impl TimestampGenerator for SystemTimestampGenerator {
 pub enum TransportType {
 	/// gRPC over HTTP/2
 	Grpc,
+
 	/// Native inter-process communication (Unix sockets, named pipes)
 	Ipc,
+
 	/// WebAssembly/WebWorker transport (browser)
 	Wasm,
+
 	/// Unknown or unspecified transport
 	Unknown,
 }
@@ -69,8 +72,11 @@ impl TransportType {
 	pub fn AsString(&self) -> &'static str {
 		match self {
 			Self::Grpc => "grpc",
+
 			Self::Ipc => "ipc",
+
 			Self::Wasm => "wasm",
+
 			Self::Unknown => "unknown",
 		}
 	}
@@ -86,9 +92,13 @@ impl std::str::FromStr for TransportType {
 	fn from_str(Input:&str) -> Result<Self, Self::Err> {
 		match Input.to_lowercase().as_str() {
 			"grpc" => Ok(Self::Grpc),
+
 			"ipc" => Ok(Self::Ipc),
+
 			"wasm" => Ok(Self::Wasm),
+
 			"unknown" => Ok(Self::Unknown),
+
 			_ => Err(anyhow::anyhow!("Unknown transport type: {}", Input)),
 		}
 	}
@@ -116,6 +126,7 @@ impl DefaultTransportTypeDetector {
 	/// Lists all available transports (static convenience method).
 	pub fn list_available_transports() -> Vec<TransportType> {
 		let Instance = DefaultTransportTypeDetector;
+
 		Instance.ListAvailableTransports()
 	}
 }
@@ -136,26 +147,31 @@ impl TransportTypeDetector for DefaultTransportTypeDetector {
 	fn IsTransportAvailable(&self, TransportKind:TransportType) -> bool {
 		match TransportKind {
 			TransportType::Grpc => true,
+
 			TransportType::Ipc => {
 				#[cfg(any(unix, windows))]
 				{
 					true
 				}
+
 				#[cfg(not(any(unix, windows)))]
 				{
 					false
 				}
 			},
+
 			TransportType::Wasm => {
 				#[cfg(target_arch = "wasm32")]
 				{
 					true
 				}
+
 				#[cfg(not(target_arch = "wasm32"))]
 				{
 					false
 				}
 			},
+
 			TransportType::Unknown => false,
 		}
 	}
@@ -166,9 +182,11 @@ impl TransportTypeDetector for DefaultTransportTypeDetector {
 		if self.IsTransportAvailable(TransportType::Grpc) {
 			Available.push(TransportType::Grpc);
 		}
+
 		if self.IsTransportAvailable(TransportType::Ipc) {
 			Available.push(TransportType::Ipc);
 		}
+
 		if self.IsTransportAvailable(TransportType::Wasm) {
 			Available.push(TransportType::Wasm);
 		}
@@ -179,27 +197,35 @@ impl TransportTypeDetector for DefaultTransportTypeDetector {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn TestTransportTypeAsString() {
 		assert_eq!(TransportType::Grpc.AsString(), "grpc");
+
 		assert_eq!(TransportType::Ipc.AsString(), "ipc");
+
 		assert_eq!(TransportType::Wasm.AsString(), "wasm");
+
 		assert_eq!(TransportType::Unknown.AsString(), "unknown");
 	}
 
 	#[test]
 	fn TestTransportTypeFromString() {
 		assert_eq!("grpc".parse::<TransportType>().unwrap(), TransportType::Grpc);
+
 		assert_eq!("ipc".parse::<TransportType>().unwrap(), TransportType::Ipc);
+
 		assert_eq!("wasm".parse::<TransportType>().unwrap(), TransportType::Wasm);
+
 		assert!("invalid".parse::<TransportType>().is_err());
 	}
 
 	#[test]
 	fn TestDefaultDetector() {
 		let Available = DefaultTransportTypeDetector::list_available_transports();
+
 		assert!(Available.contains(&TransportType::Grpc));
 	}
 }

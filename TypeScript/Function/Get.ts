@@ -20,6 +20,7 @@ export default (async (...[Instance]) => {
 				) {
 					_Map.set(
 						Key,
+
 						await (
 							await import("@Function/Get.js")
 						).default(Instance[Key]),

@@ -29,38 +29,50 @@
 #![allow(non_snake_case, non_camel_case_types)]
 
 macro_rules! DefineSkyEvents {
+
 	($($Variant:ident => $Wire:literal,)* $(,)?) => {
+
 		/// Enumerated Mountain → Sky/Wind event identifiers.
 		#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 		pub enum SkyEvent {
+
 			$($Variant,)*
 		}
 
 		impl SkyEvent {
+
 			/// Wire string produced on the Tauri event transport.
 			pub fn AsStr(&self) -> &'static str {
+
 				match self {
+
 					$(Self::$Variant => $Wire,)*
 				}
 			}
 
 			/// Full set of events, in declaration order.
 			pub fn All() -> &'static [Self] {
+
 				&[$(Self::$Variant,)*]
 			}
 		}
 
 		impl ::std::fmt::Display for SkyEvent {
+
 			fn fmt(&self, Formatter:&mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+
 				Formatter.write_str(self.AsStr())
 			}
 		}
 
 		impl ::std::str::FromStr for SkyEvent {
+
 			type Err = ::std::string::String;
 
 			fn from_str(Wire:&str) -> ::std::result::Result<Self, Self::Err> {
+
 				match Wire {
+
 					$($Wire => Ok(Self::$Variant),)*
 					_ => Err(format!("unknown Sky event: {}", Wire)),
 				}
@@ -70,13 +82,17 @@ macro_rules! DefineSkyEvents {
 }
 
 DefineSkyEvents! {
+
 	// --- Configuration ---
 	ConfigurationChanged                          => "sky://configuration/changed",
 
 	// --- Debug ---
 	DebugDapMessage                               => "sky://debug/dap-message",
+
 	DebugRegister                                 => "sky://debug/register",
+
 	DebugStart                                    => "sky://debug/start",
+
 	DebugStop                                     => "sky://debug/stop",
 
 	// --- Diagnostics ---
@@ -87,24 +103,31 @@ DefineSkyEvents! {
 
 	// --- Dialog ---
 	DialogOpen                                    => "sky://dialog/open",
+
 	DialogSave                                    => "sky://dialog/save",
 
 	// --- Documents ---
 	DocumentsOpen                                 => "sky://documents/open",
+
 	DocumentsRenamed                              => "sky://documents/renamed",
+
 	DocumentsSaved                                => "sky://documents/saved",
 
 	// --- Editor ---
 	EditorApplyEdits                              => "sky://editor/applyEdits",
+
 	EditorOpenDocument                            => "sky://editor/openDocument",
+
 	EditorSaveAll                                 => "sky://editor/saveAll",
 
 	// --- Extensions ---
 	ExtensionsInstalled                           => "sky://extensions/installed",
+
 	ExtensionsUninstalled                         => "sky://extensions/uninstalled",
 
 	// --- ExtHost ---
 	ExtHostDebugClose                             => "sky://exthost/debug-close",
+
 	ExtHostDebugReload                            => "sky://exthost/debug-reload",
 
 	// --- Input ---
@@ -112,10 +135,12 @@ DefineSkyEvents! {
 
 	// --- Language ---
 	LanguageConfigure                             => "sky://language/configure",
+
 	LanguagesSetDocumentLanguage                  => "sky://languages/setDocumentLanguage",
 
 	// --- Lifecycle ---
 	LifecyclePhaseChanged                         => "sky://lifecycle/phaseChanged",
+
 	LifecycleWillShutdown                         => "sky://lifecycle/willShutdown",
 
 	// --- Native ---
@@ -123,25 +148,39 @@ DefineSkyEvents! {
 
 	// --- Notifications ---
 	NotificationProgressBegin                     => "sky://notification/progress-begin",
+
 	NotificationProgressEnd                       => "sky://notification/progress-end",
+
 	NotificationProgressUpdate                    => "sky://notification/progress-update",
+
 	NotificationShow                              => "sky://notification/show",
 
 	// --- Output ---
 	OutputAppend                                  => "sky://output/append",
+
 	OutputClear                                   => "sky://output/clear",
+
 	OutputCreate                                  => "sky://output/create",
+
 	OutputDispose                                 => "sky://output/dispose",
+
 	OutputReplace                                 => "sky://output/replace",
+
 	OutputReveal                                  => "sky://output/reveal",
+
 	OutputShow                                    => "sky://output/show",
 
 	// --- Progress ---
 	ProgressBegin                                 => "sky://progress/begin",
+
 	ProgressComplete                              => "sky://progress/complete",
+
 	ProgressEnd                                   => "sky://progress/end",
+
 	ProgressReport                                => "sky://progress/report",
+
 	ProgressStart                                 => "sky://progress/start",
+
 	ProgressUpdate                                => "sky://progress/update",
 
 	// --- QuickPick ---
@@ -149,10 +188,15 @@ DefineSkyEvents! {
 
 	// --- Source Control ---
 	SCMGroupChanged                               => "sky://scm/group/changed",
+
 	SCMProviderAdded                              => "sky://scm/provider/added",
+
 	SCMProviderChanged                            => "sky://scm/provider/changed",
+
 	SCMProviderRemoved                            => "sky://scm/provider/removed",
+
 	SCMRegister                                   => "sky://scm/register",
+
 	SCMUpdateGroup                                => "sky://scm/updateGroup",
 
 	// --- Status bar ---
@@ -161,31 +205,48 @@ DefineSkyEvents! {
 	// a separate emit site and has been consolidated onto
 	// `sky://statusbar/set-message`.
 	StatusBarCreate                               => "sky://statusbar/create",
+
 	StatusBarDispose                              => "sky://statusbar/dispose",
+
 	StatusBarDisposeEntry                         => "sky://statusbar/dispose-entry",
+
 	StatusBarDisposeMessage                       => "sky://statusbar/dispose-message",
+
 	StatusBarSetEntry                             => "sky://statusbar/set-entry",
+
 	StatusBarSetMessage                           => "sky://statusbar/set-message",
+
 	StatusBarUpdate                               => "sky://statusbar/update",
 
 	// --- Task ---
 	TaskExecute                                   => "sky://task/execute",
+
 	TaskTerminate                                 => "sky://task/terminate",
 
 	// --- Terminal ---
 	TerminalClosed                                => "sky://terminal/closed",
+
 	TerminalCreate                                => "sky://terminal/create",
+
 	TerminalData                                  => "sky://terminal/data",
+
 	TerminalExit                                  => "sky://terminal/exit",
+
 	TerminalHide                                  => "sky://terminal/hide",
+
 	TerminalOpened                                => "sky://terminal/opened",
+
 	TerminalProcessId                             => "sky://terminal/processId",
+
 	TerminalResize                                => "sky://terminal/resize",
+
 	TerminalShow                                  => "sky://terminal/show",
 
 	// --- Test ---
 	TestRegistered                                => "sky://test/registered",
+
 	TestRunStarted                                => "sky://test/run-started",
+
 	TestRunStatusChanged                          => "sky://test/run-status-changed",
 
 	// --- Theme ---
@@ -197,14 +258,23 @@ DefineSkyEvents! {
 	// from `CocoonService/TreeView.rs`; it has been collapsed into
 	// `TreeViewCreate`, which every handler already subscribes to.
 	TreeViewCreate                                => "sky://tree-view/create",
+
 	TreeViewDispose                               => "sky://tree-view/dispose",
+
 	TreeViewNodeExpanded                          => "sky://tree-view/node-expanded",
+
 	TreeViewRefresh                               => "sky://tree-view/refresh",
+
 	TreeViewRestoreState                          => "sky://tree-view/restore-state",
+
 	TreeViewReveal                                => "sky://tree-view/reveal",
+
 	TreeViewSelectionChanged                      => "sky://tree-view/selection-changed",
+
 	TreeViewSetBadge                              => "sky://tree-view/set-badge",
+
 	TreeViewSetMessage                            => "sky://tree-view/set-message",
+
 	TreeViewSetTitle                              => "sky://tree-view/set-title",
 
 	// --- UI ---
@@ -214,7 +284,9 @@ DefineSkyEvents! {
 	// references those directly so the `UIShow*Request` channel names
 	// below remain reachable only from older code paths and tests.
 	UIShowInputBoxRequest                         => "sky://ui/show-input-box-request",
+
 	UIShowMessageRequest                          => "sky://ui/show-message-request",
+
 	UIShowQuickPickRequest                        => "sky://ui/show-quick-pick-request",
 
 	// --- Virtual file system ---
@@ -227,13 +299,21 @@ DefineSkyEvents! {
 	// inline; those emit sites have been migrated to the enum so Sky only
 	// ever sees the kebab-case form.
 	WebviewCreate                                 => "sky://webview/create",
+
 	WebviewCreated                                => "sky://webview/created",
+
 	WebviewDispose                                => "sky://webview/dispose",
+
 	WebviewDisposed                               => "sky://webview/disposed",
+
 	WebviewMessage                                => "sky://webview/message",
+
 	WebviewOptionsChanged                         => "sky://webview/options-changed",
+
 	WebviewPostMessage                            => "sky://webview/post-message",
+
 	WebviewRevealed                               => "sky://webview/revealed",
+
 	WebviewSetHTML                                => "sky://webview/set-html",
 
 	// --- Window ---
@@ -241,11 +321,13 @@ DefineSkyEvents! {
 
 	// --- Workspace ---
 	WorkspaceApplyEdit                            => "sky://workspace/applyEdit",
+
 	WorkspacesChanged                             => "sky://workspaces/changed",
 }
 
 #[cfg(test)]
 mod Tests {
+
 	use std::str::FromStr;
 
 	use super::SkyEvent;
@@ -254,7 +336,9 @@ mod Tests {
 	fn RoundTrip() {
 		for Variant in SkyEvent::All() {
 			let Wire = Variant.AsStr();
+
 			let Parsed = SkyEvent::from_str(Wire).expect("round-trip");
+
 			assert_eq!(*Variant, Parsed, "{} failed round-trip", Wire);
 		}
 	}
@@ -273,6 +357,7 @@ mod Tests {
 	#[test]
 	fn RejectsUnknown() {
 		assert!(SkyEvent::from_str("mountain://nope").is_err());
+
 		assert!(SkyEvent::from_str("").is_err());
 	}
 
@@ -286,8 +371,10 @@ mod Tests {
 		use std::{collections::HashSet, path::PathBuf};
 
 		let TsPath = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../Wind/Source/IPC/SkyEvent.ts");
+
 		let Source = match std::fs::read_to_string(&TsPath) {
 			Ok(S) => S,
+
 			// In packaging contexts where Wind isn't checked out alongside
 			// Common we skip the cross-check silently rather than
 			// failing - the RoundTrip / UniqueWireStrings guards above
@@ -296,9 +383,11 @@ mod Tests {
 		};
 
 		let mut TsWires:HashSet<String> = HashSet::new();
+
 		for Line in Source.lines() {
 			if let Some(Start) = Line.find("\"sky://") {
 				let Tail = &Line[Start + 1..];
+
 				if let Some(End) = Tail.find('"') {
 					TsWires.insert(Tail[..End].to_string());
 				}
@@ -308,6 +397,7 @@ mod Tests {
 		let RsWires:HashSet<String> = SkyEvent::All().iter().map(|V| V.AsStr().to_string()).collect();
 
 		let OnlyInRust:Vec<_> = RsWires.difference(&TsWires).collect();
+
 		let OnlyInTs:Vec<_> = TsWires.difference(&RsWires).collect();
 
 		assert!(
@@ -321,6 +411,7 @@ mod Tests {
 	#[test]
 	fn UniqueWireStrings() {
 		let mut Seen = std::collections::HashSet::new();
+
 		for Variant in SkyEvent::All() {
 			assert!(Seen.insert(Variant.AsStr()), "duplicate wire: {}", Variant.AsStr());
 		}

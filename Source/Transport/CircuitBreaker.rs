@@ -11,8 +11,10 @@ use std::time::Duration;
 pub struct CircuitBreakerConfiguration {
 	/// Number of consecutive failures before the circuit opens.
 	pub FailureThreshold:u32,
+
 	/// Duration to wait before transitioning to half-open.
 	pub ResetTimeout:Duration,
+
 	/// Successful requests in half-open state required to close the circuit.
 	pub SuccessThreshold:u32,
 }
@@ -28,7 +30,9 @@ impl Default for CircuitBreakerConfiguration {
 #[derive(Debug, Clone)]
 pub struct CircuitBreaker {
 	Configuration:CircuitBreakerConfiguration,
+
 	FailureCount:u32,
+
 	IsOpen:bool,
 }
 
@@ -44,12 +48,14 @@ impl CircuitBreaker {
 	/// Records a successful request, resetting the failure counter.
 	pub fn RecordSuccess(&mut self) {
 		self.FailureCount = 0;
+
 		self.IsOpen = false;
 	}
 
 	/// Records a failed request, potentially opening the circuit.
 	pub fn RecordFailure(&mut self) {
 		self.FailureCount += 1;
+
 		if self.FailureCount >= self.Configuration.FailureThreshold {
 			self.IsOpen = true;
 		}

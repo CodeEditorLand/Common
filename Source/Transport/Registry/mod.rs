@@ -22,6 +22,7 @@ pub struct TransportSelector {
 	/// Environment detector for auto-selection
 	#[allow(dead_code)]
 	EnvironmentDetector:Box<dyn TransportTypeDetector + Send + Sync>,
+
 	/// Priority order for fallback chain
 	PriorityOrder:Vec<TransportType>,
 }
@@ -31,6 +32,7 @@ impl TransportSelector {
 	pub fn New() -> Self {
 		Self {
 			EnvironmentDetector:Box::new(DefaultTransportTypeDetector),
+
 			PriorityOrder:Self::DefaultPriorityOrder(),
 		}
 	}
@@ -47,12 +49,14 @@ impl TransportSelector {
 		#[cfg(target_arch = "wasm32")]
 		{
 			Order.push(TransportType::Wasm);
+
 			Order.push(TransportType::Grpc);
 		}
 
 		#[cfg(not(target_arch = "wasm32"))]
 		{
 			Order.push(TransportType::Ipc);
+
 			Order.push(TransportType::Grpc);
 		}
 
@@ -73,6 +77,7 @@ impl TransportSelector {
 			}
 
 			let Score = self.CalculateScore(*TransportKind, Context);
+
 			Candidates.push((*TransportKind, Score));
 		}
 
@@ -93,18 +98,25 @@ impl TransportSelector {
 		}
 
 		let Environment = Context.Environment();
+
 		match (Environment.IsWeb, TransportKind) {
 			(true, TransportType::Wasm) => Score += 50.0,
+
 			(false, TransportType::Ipc) => Score += 40.0,
+
 			_ => {},
 		}
 
 		let Requirements = Context.Requirements();
+
 		if Requirements.StreamingRequired {
 			match TransportKind {
 				TransportType::Grpc => Score += 30.0,
+
 				TransportType::Wasm => Score += 20.0,
+
 				TransportType::Ipc => Score -= 20.0,
+
 				TransportType::Unknown => {},
 			}
 		}
@@ -112,8 +124,11 @@ impl TransportSelector {
 		if Requirements.CrossNetwork {
 			match TransportKind {
 				TransportType::Grpc => Score += 50.0,
+
 				TransportType::Ipc => Score -= 50.0,
+
 				TransportType::Wasm => Score += 10.0,
+
 				TransportType::Unknown => {},
 			}
 		}
@@ -122,25 +137,35 @@ impl TransportSelector {
 			PerformanceLevel::Critical => {
 				match TransportKind {
 					TransportType::Ipc => 40.0,
+
 					TransportType::Grpc => 20.0,
+
 					TransportType::Wasm => 0.0,
+
 					TransportType::Unknown => 0.0,
 				}
 			},
+
 			PerformanceLevel::High => {
 				match TransportKind {
 					TransportType::Ipc => 30.0,
+
 					TransportType::Grpc => 20.0,
+
 					TransportType::Wasm => 10.0,
+
 					TransportType::Unknown => 0.0,
 				}
 			},
+
 			PerformanceLevel::Medium => 10.0,
+
 			PerformanceLevel::Low => 0.0,
 		};
 
 		if let Some(MaximumLatency) = Requirements.MaximumLatencyMilliseconds {
 			let EstimatedLatency = self.EstimateLatencyMilliseconds(TransportKind);
+
 			if EstimatedLatency <= MaximumLatency {
 				Score += 20.0;
 			} else {
@@ -155,8 +180,11 @@ impl TransportSelector {
 	fn EstimateLatencyMilliseconds(&self, TransportKind:TransportType) -> u64 {
 		match TransportKind {
 			TransportType::Ipc => 1,
+
 			TransportType::Grpc => 5,
+
 			TransportType::Wasm => 20,
+
 			TransportType::Unknown => u64::MAX,
 		}
 	}
@@ -170,8 +198,11 @@ impl Default for TransportSelector {
 #[derive(Debug, Clone)]
 pub struct TransportContext {
 	EnvironmentInfo:EnvironmentInfo,
+
 	RequirementsInfo:TransportRequirements,
+
 	ConstraintsInfo:TransportConstraints,
+
 	AvailableTransports:HashSet<TransportType>,
 }
 
@@ -179,7 +210,9 @@ impl TransportContext {
 	/// Creates a new transport selection context.
 	pub fn New(
 		EnvironmentInfo:EnvironmentInfo,
+
 		RequirementsInfo:TransportRequirements,
+
 		ConstraintsInfo:TransportConstraints,
 	) -> Self {
 		let AvailableTransports = DefaultTransportTypeDetector::list_available_transports().into_iter().collect();
@@ -191,7 +224,9 @@ impl TransportContext {
 	/// requirements.
 	pub fn Detect() -> Self {
 		let EnvironmentInfo = DefaultTransportTypeDetector::DetectEnvironment();
+
 		let RequirementsInfo = TransportRequirements::default();
+
 		let ConstraintsInfo = TransportConstraints::default();
 
 		Self::New(EnvironmentInfo, RequirementsInfo, ConstraintsInfo)
@@ -227,6 +262,7 @@ impl TransportContext {
 	/// Sets custom available transports (for testing or override).
 	pub fn WithAvailableTransports(mut self, Transports:Vec<TransportType>) -> Self {
 		self.AvailableTransports = Transports.into_iter().collect();
+
 		self
 	}
 }
@@ -236,10 +272,13 @@ impl TransportContext {
 pub struct EnvironmentInfo {
 	/// Operating system platform
 	pub Platform:Platform,
+
 	/// Whether running in a web browser
 	pub IsWeb:bool,
+
 	/// Whether running as a desktop application
 	pub IsDesktop:bool,
+
 	/// Browser capability information (if in browser)
 	pub BrowserCapabilities:Option<BrowserCapabilities>,
 }
@@ -255,10 +294,15 @@ impl EnvironmentInfo {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Platform {
 	Windows,
+
 	MacOS,
+
 	Linux,
+
 	Browser,
+
 	Mobile,
+
 	Unknown,
 }
 
@@ -267,10 +311,13 @@ impl Platform {
 	pub fn Current() -> Self {
 		#[cfg(target_os = "windows")]
 		return Self::Windows;
+
 		#[cfg(target_os = "macos")]
 		return Self::MacOS;
+
 		#[cfg(target_os = "linux")]
 		return Self::Linux;
+
 		#[cfg(all(not(target_os = "windows"), not(target_os = "macos"), not(target_os = "linux")))]
 		return Self::Unknown;
 	}
@@ -280,8 +327,11 @@ impl Platform {
 #[derive(Debug, Clone)]
 pub struct BrowserCapabilities {
 	pub WasmSupported:bool,
+
 	pub WebWorkerSupported:bool,
+
 	pub WebSocketSupported:bool,
+
 	pub SharedArrayBufferSupported:bool,
 }
 
@@ -289,8 +339,11 @@ impl Default for BrowserCapabilities {
 	fn default() -> Self {
 		Self {
 			WasmSupported:cfg!(target_arch = "wasm32"),
+
 			WebWorkerSupported:false,
+
 			WebSocketSupported:false,
+
 			SharedArrayBufferSupported:false,
 		}
 	}
@@ -301,14 +354,19 @@ impl Default for BrowserCapabilities {
 pub struct TransportRequirements {
 	/// Whether bidirectional streaming is required
 	pub StreamingRequired:bool,
+
 	/// Whether cross-process communication is needed
 	pub CrossProcess:bool,
+
 	/// Whether cross-network communication is needed
 	pub CrossNetwork:bool,
+
 	/// Performance requirement level
 	pub Performance:PerformanceLevel,
+
 	/// Reliability requirement level
 	pub Reliability:ReliabilityLevel,
+
 	/// Maximum acceptable latency in milliseconds (optional)
 	pub MaximumLatencyMilliseconds:Option<u64>,
 }
@@ -317,10 +375,15 @@ impl Default for TransportRequirements {
 	fn default() -> Self {
 		Self {
 			StreamingRequired:false,
+
 			CrossProcess:false,
+
 			CrossNetwork:false,
+
 			Performance:PerformanceLevel::Medium,
+
 			Reliability:ReliabilityLevel::Medium,
+
 			MaximumLatencyMilliseconds:None,
 		}
 	}
@@ -330,8 +393,11 @@ impl Default for TransportRequirements {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum PerformanceLevel {
 	Low = 1,
+
 	Medium = 2,
+
 	High = 3,
+
 	Critical = 4,
 }
 
@@ -339,8 +405,11 @@ pub enum PerformanceLevel {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ReliabilityLevel {
 	Low = 1,
+
 	Medium = 2,
+
 	High = 3,
+
 	Critical = 4,
 }
 
@@ -349,10 +418,13 @@ pub enum ReliabilityLevel {
 pub struct TransportConstraints {
 	/// Allowed transport types (empty means all allowed)
 	pub AllowedTransports:Vec<TransportType>,
+
 	/// Forbidden transport types
 	pub ForbiddenTransports:Vec<TransportType>,
+
 	/// Maximum allowed latency in milliseconds
 	pub MaximumLatencyMilliseconds:Option<u64>,
+
 	/// Maximum allowed bandwidth in bytes per second
 	pub MaximumBandwidthBytesPerSecond:Option<u64>,
 }
@@ -361,8 +433,11 @@ impl Default for TransportConstraints {
 	fn default() -> Self {
 		Self {
 			AllowedTransports:Vec::new(),
+
 			ForbiddenTransports:Vec::new(),
+
 			MaximumLatencyMilliseconds:None,
+
 			MaximumBandwidthBytesPerSecond:None,
 		}
 	}
@@ -372,8 +447,10 @@ impl Default for TransportConstraints {
 pub struct TransportRegistry {
 	/// Registered transports (name -> Arc\<dyn CommonTransportStrategy\>)
 	Transports:HashMap<String, Arc<dyn CommonTransportStrategy>>,
+
 	/// Currently active transport name
 	Active:Option<String>,
+
 	/// Transport selector for auto-selection
 	Selector:TransportSelector,
 }
@@ -390,6 +467,7 @@ impl TransportRegistry {
 	/// Registers a new transport with the registry.
 	pub fn Register(&mut self, Name:String, Transport:Arc<dyn CommonTransportStrategy>) {
 		log::info!("Registering transport: {}", Name);
+
 		self.Transports.insert(Name, Transport);
 	}
 
@@ -401,6 +479,7 @@ impl TransportRegistry {
 			// Arc<dyn CommonTransportStrategy> does not expose mutable disconnect here;
 			// callers should disconnect before unregistering if needed.
 			log::info!("Unregistered transport: {}", Name);
+
 			Ok(())
 		} else {
 			Err(TransportError::NotFound(format!("Transport '{}' not found", Name)))
@@ -414,14 +493,18 @@ impl TransportRegistry {
 		}
 
 		log::info!("Selecting transport: {}", Name);
+
 		self.Active = Some(Name.to_string());
+
 		Ok(())
 	}
 
 	/// Automatically selects the best transport based on the provided context.
 	pub async fn AutoSelect(&mut self, Context:&TransportContext) -> Result<String, TransportError> {
 		let SelectedName = self.Selector.SelectBest(Context)?;
+
 		self.Select(&SelectedName).await?;
+
 		Ok(SelectedName)
 	}
 
@@ -442,18 +525,22 @@ impl TransportRegistry {
 	/// Gets metrics for all registered transports.
 	pub fn GetAllMetrics(&self) -> HashMap<String, TransportMetrics> {
 		let mut Metrics = HashMap::new();
+
 		for (Name, Transport) in &self.Transports {
 			Metrics.insert(Name.clone(), Transport.Metrics());
 		}
+
 		Metrics
 	}
 
 	/// Gets health status (connected/not connected) for all transports.
 	pub fn GetHealthStatus(&self) -> HashMap<String, bool> {
 		let mut Status = HashMap::new();
+
 		for (Name, Transport) in &self.Transports {
 			Status.insert(Name.clone(), Transport.IsConnected());
 		}
+
 		Status
 	}
 
@@ -468,6 +555,7 @@ impl TransportRegistry {
 		use tokio::time::Instant;
 
 		let Start = Instant::now();
+
 		let Transport = self
 			.Get(Name)
 			.ok_or_else(|| TransportError::NotFound(format!("Transport '{}' not found", Name)))?;
@@ -495,6 +583,7 @@ impl DefaultTransportTypeDetector {
 	/// Detects the current environment information.
 	pub fn DetectEnvironment() -> EnvironmentInfo {
 		let CurrentPlatform = Platform::Current();
+
 		let IsDesktop = !cfg!(target_arch = "wasm32");
 
 		let Environment =
@@ -504,7 +593,9 @@ impl DefaultTransportTypeDetector {
 		{
 			EnvironmentInfo {
 				IsWeb:true,
+
 				IsDesktop:false,
+
 				BrowserCapabilities:Some(BrowserCapabilities::default()),
 				..Environment
 			}
@@ -519,6 +610,7 @@ impl DefaultTransportTypeDetector {
 
 #[cfg(test)]
 mod tests {
+
 	use async_trait::async_trait;
 
 	use super::{
@@ -535,16 +627,20 @@ mod tests {
 	#[test]
 	fn TestTransportSelectorCreation() {
 		let Selector = TransportSelector::New();
+
 		assert!(!Selector.PriorityOrder.is_empty());
 	}
 
 	#[test]
 	fn TestTransportContextCreation() {
 		let Environment = EnvironmentInfo::New(Platform::Linux, false, true, None);
+
 		let Requirements = TransportRequirements::default();
+
 		let Constraints = TransportConstraints::default();
 
 		let Context = TransportContext::New(Environment, Requirements, Constraints);
+
 		// Without real detector injection, available transports come from
 		// DefaultTransportTypeDetector
 		assert!(Context.TransportAvailable(TransportType::Grpc));
@@ -553,7 +649,9 @@ mod tests {
 	#[test]
 	fn TestTransportRegistryCreation() {
 		let Registry = TransportRegistry::New();
+
 		assert!(Registry.List().is_empty());
+
 		assert!(Registry.ActiveName().is_none());
 	}
 
@@ -562,12 +660,15 @@ mod tests {
 		let mut Registry = TransportRegistry::New();
 
 		let MockTransportInstance = Arc::new(MockTransport::New());
+
 		Registry.Register("mock".to_string(), MockTransportInstance);
 
 		assert!(Registry.Has("mock"));
+
 		assert_eq!(Registry.List().len(), 1);
 
 		Registry.Unregister("mock").await.unwrap();
+
 		assert!(!Registry.Has("mock"));
 	}
 
@@ -608,6 +709,7 @@ mod tests {
 
 		fn Configuration(&self) -> &TransportConfig {
 			static CONFIG:std::sync::OnceLock<TransportConfig> = std::sync::OnceLock::new();
+
 			CONFIG.get_or_init(TransportConfig::default)
 		}
 

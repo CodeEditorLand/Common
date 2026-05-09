@@ -1,1 +1,10 @@
-{"version":3,"file":"Uint8ArrayFromObject.d.ts","sourceRoot":"","sources":["Uint8ArrayFromObject.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,SAAS,MAAM,sCAAsC,CAAC;AAElE;;;GAGG;wBAauB,SAAS;AAZnC,wBAYoC"}
+{
+	"version": 3,
+	"file": "Uint8ArrayFromObject.d.ts",
+	"sourceRoot": "",
+	"sources": [
+		"Uint8ArrayFromObject.ts"
+	],
+	"names": [],
+	"mappings": "AAAA,OAAO,KAAK,SAAS,MAAM,sCAAsC,CAAC;AAElE;;;GAGG;wBAauB,SAAS;AAZnC,wBAYoC"
+}

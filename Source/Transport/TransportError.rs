@@ -40,12 +40,19 @@ impl TransportError {
 	pub fn New(Code:TransportErrorCode, Message:impl Into<String>) -> Self {
 		Self {
 			Code,
+
 			Message:Message.into(),
+
 			Source:None,
+
 			TransportKind:String::new(),
+
 			Method:None,
+
 			CorrelationIdentifier:None,
+
 			RetryAttempt:0,
+
 			Context:std::collections::HashMap::new(),
 		}
 	}
@@ -53,36 +60,42 @@ impl TransportError {
 	/// Sets the transport type on this error.
 	pub fn WithTransportKind(mut self, TransportKind:&str) -> Self {
 		self.TransportKind = TransportKind.to_string();
+
 		self
 	}
 
 	/// Sets the method name on this error.
 	pub fn WithMethod(mut self, Method:&str) -> Self {
 		self.Method = Some(Method.to_string());
+
 		self
 	}
 
 	/// Sets the correlation/request ID on this error.
 	pub fn WithCorrelationIdentifier(mut self, CorrelationIdentifier:&str) -> Self {
 		self.CorrelationIdentifier = Some(CorrelationIdentifier.to_string());
+
 		self
 	}
 
 	/// Sets the retry attempt count.
 	pub fn WithRetryAttempt(mut self, RetryAttempt:u32) -> Self {
 		self.RetryAttempt = RetryAttempt;
+
 		self
 	}
 
 	/// Adds a context key-value pair to this error.
 	pub fn WithContext(mut self, Key:&str, Value:&str) -> Self {
 		self.Context.insert(Key.to_string(), Value.to_string());
+
 		self
 	}
 
 	/// Sets the underlying source error.
 	pub fn WithSource(mut self, SourceError:impl std::error::Error + Send + Sync + 'static) -> Self {
 		self.Source = Some(Box::new(SourceError));
+
 		self
 	}
 
@@ -119,6 +132,7 @@ impl TransportError {
 				.map(|(Key, Value)| format!("{}={}", Key, Value))
 				.collect::<Vec<_>>()
 				.join(", ");
+
 			MessageText.push_str(&format!(" (context: {{{}}})", ContextString));
 		}
 
@@ -134,12 +148,19 @@ impl Clone for TransportError {
 	fn clone(&self) -> Self {
 		Self {
 			Code:self.Code,
+
 			Message:self.Message.clone(),
+
 			Source:None,
+
 			TransportKind:self.TransportKind.clone(),
+
 			Method:self.Method.clone(),
+
 			CorrelationIdentifier:self.CorrelationIdentifier.clone(),
+
 			RetryAttempt:self.RetryAttempt,
+
 			Context:self.Context.clone(),
 		}
 	}
@@ -204,9 +225,11 @@ impl TransportError {
 	pub fn RateLimited(RetryAfterMilliseconds:u64) -> Self {
 		let mut Error = Self::New(TransportErrorCode::RateLimited, "Rate limit exceeded")
 			.WithContext("retry_after_ms", &RetryAfterMilliseconds.to_string());
+
 		Error
 			.Context
 			.insert("retry_after".to_string(), format!("{}ms", RetryAfterMilliseconds));
+
 		Error
 	}
 
@@ -231,12 +254,15 @@ impl TransportError {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn TestTransportErrorConstruction() {
 		let Error = TransportError::Connection("Connection refused");
+
 		assert_eq!(Error.Code, TransportErrorCode::ConnectionFailed);
+
 		assert!(Error.Message.contains("Connection refused"));
 	}
 
@@ -248,16 +274,20 @@ mod tests {
 			.WithContext("endpoint", "localhost:50051");
 
 		assert_eq!(Error.Method, Some("ping".to_string()));
+
 		assert_eq!(Error.CorrelationIdentifier, Some("12345".to_string()));
+
 		assert_eq!(Error.Context.get("endpoint"), Some(&"localhost:50051".to_string()));
 	}
 
 	#[test]
 	fn TestErrorIsRetryable() {
 		let ConnectionError = TransportError::Connection("Connection failed");
+
 		assert!(ConnectionError.IsRetryable());
 
 		let InvalidError = TransportError::InvalidRequest("Bad params");
+
 		assert!(!InvalidError.IsRetryable());
 	}
 
@@ -269,9 +299,13 @@ mod tests {
 			.WithTransportKind("grpc");
 
 		let FullMessage = Error.FullMessage();
+
 		assert!(FullMessage.contains("Operation timed out"));
+
 		assert!(FullMessage.contains("method: get_file"));
+
 		assert!(FullMessage.contains("correlation_id: abc-123"));
+
 		assert!(FullMessage.contains("transport: grpc"));
 	}
 }

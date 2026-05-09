@@ -23,14 +23,18 @@ use crate::Telemetry::EmitOTLPSpan;
 
 /// W3C version 00, sampled flag set (`01`).
 const VERSION:&str = "00";
+
 const SAMPLED_FLAG:&str = "01";
 
 fn FreshSpanId() -> String {
 	let mut H = DefaultHasher::new();
+
 	std::thread::current().id().hash(&mut H);
+
 	if let Ok(D) = SystemTime::now().duration_since(UNIX_EPOCH) {
 		D.as_nanos().hash(&mut H);
 	}
+
 	format!("{:016x}", H.finish())
 }
 
@@ -40,7 +44,9 @@ fn FreshSpanId() -> String {
 /// Example: `00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01`
 pub fn Build() -> String {
 	let TraceId = TraceIdValue();
+
 	let SpanId = FreshSpanId();
+
 	format!("{}-{}-{}-{}", VERSION, TraceId, SpanId, SAMPLED_FLAG)
 }
 
@@ -49,7 +55,9 @@ pub fn Build() -> String {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Decoded {
 	pub TraceId:String,
+
 	pub ParentSpanId:String,
+
 	pub Sampled:bool,
 }
 
@@ -57,19 +65,25 @@ pub struct Decoded {
 /// doesn't match the W3C version-00 layout.
 pub fn Parse(Header:&str) -> Option<Decoded> {
 	let Parts:Vec<&str> = Header.split('-').collect();
+
 	if Parts.len() != 4 {
 		return None;
 	}
+
 	if Parts[0] != VERSION {
 		return None;
 	}
+
 	if Parts[1].len() != 32 || !Parts[1].chars().all(|C| C.is_ascii_hexdigit()) {
 		return None;
 	}
+
 	if Parts[2].len() != 16 || !Parts[2].chars().all(|C| C.is_ascii_hexdigit()) {
 		return None;
 	}
+
 	let Sampled = Parts[3] == SAMPLED_FLAG || Parts[3] == "01";
+
 	Some(Decoded { TraceId:Parts[1].to_string(), ParentSpanId:Parts[2].to_string(), Sampled })
 }
 
@@ -81,8 +95,11 @@ pub fn TraceIdValue() -> String {
 	// from the same seeds so a separately-built span and a separately-
 	// built traceparent header agree.
 	let mut H = DefaultHasher::new();
+
 	std::process::id().hash(&mut H);
+
 	EmitOTLPSpan::NowNanoPub().hash(&mut H);
+
 	// We can't access OTLP_TRACE_ID directly (it's module-private),
 	// but the exporter's `OTLP_TRACE_ID.get_or_init` uses the same
 	// seed pair. The first call from this module wins; subsequent
@@ -92,22 +109,30 @@ pub fn TraceIdValue() -> String {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn RoundTrip() {
 		let Header = Build();
+
 		let Decoded = Parse(&Header).expect("parse");
+
 		assert_eq!(Decoded.TraceId.len(), 32);
+
 		assert_eq!(Decoded.ParentSpanId.len(), 16);
+
 		assert!(Decoded.Sampled);
 	}
 
 	#[test]
 	fn RejectsMalformed() {
 		assert!(Parse("").is_none());
+
 		assert!(Parse("not-a-valid-header").is_none());
+
 		assert!(Parse("00-tooshort-00f067aa0ba902b7-01").is_none());
+
 		assert!(Parse("01-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01").is_none());
 	}
 }

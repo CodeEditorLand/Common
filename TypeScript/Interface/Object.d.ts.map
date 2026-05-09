@@ -1,1 +1,10 @@
-{"version":3,"file":"Object.d.ts","sourceRoot":"","sources":["Object.ts"],"names":[],"mappings":"AAAA;;;GAGG;AACH,MAAM,CAAC,OAAO,WAAW,SAAS;IACjC,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,CAAC;CACtB"}
+{
+	"version": 3,
+	"file": "Object.d.ts",
+	"sourceRoot": "",
+	"sources": [
+		"Object.ts"
+	],
+	"names": [],
+	"mappings": "AAAA;;;GAGG;AACH,MAAM,CAAC,OAAO,WAAW,SAAS;IACjC,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,CAAC;CACtB"
+}

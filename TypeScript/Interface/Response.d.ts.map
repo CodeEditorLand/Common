@@ -1,1 +1,10 @@
-{"version":3,"file":"Response.d.ts","sourceRoot":"","sources":["Response.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,iDAAiD,CAAC;AAEhF;;;GAGG;AACH,MAAM,CAAC,OAAO,WAAW,SAAS;IACjC,CAAC,OAAO,CAAC,EAAE,OAAO,EAAE,MAAM,CAAC,EAAE,MAAM,GAAG,OAAO,CAAC,QAAQ,CAAC,CAAC;CACxD"}
+{
+	"version": 3,
+	"file": "Response.d.ts",
+	"sourceRoot": "",
+	"sources": [
+		"Response.ts"
+	],
+	"names": [],
+	"mappings": "AAAA,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,iDAAiD,CAAC;AAEhF;;;GAGG;AACH,MAAM,CAAC,OAAO,WAAW,SAAS;IACjC,CAAC,OAAO,CAAC,EAAE,OAAO,EAAE,MAAM,CAAC,EAAE,MAAM,GAAG,OAAO,CAAC,QAAQ,CAAC,CAAC;CACxD"
+}

@@ -17,7 +17,9 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum WatchEventKind {
 	Create,
+
 	Change,
+
 	Delete,
 }
 
@@ -25,7 +27,9 @@ impl WatchEventKind {
 	pub fn AsString(&self) -> &'static str {
 		match self {
 			WatchEventKind::Create => "create",
+
 			WatchEventKind::Change => "change",
+
 			WatchEventKind::Delete => "delete",
 		}
 	}
@@ -35,7 +39,9 @@ impl WatchEventKind {
 #[derive(Debug, Clone)]
 pub struct WatchEvent {
 	pub Handle:String,
+
 	pub Kind:WatchEventKind,
+
 	pub Path:PathBuf,
 }
 
@@ -58,9 +64,13 @@ pub trait FileWatcherProvider: Environment + Send + Sync {
 	///   activation.
 	async fn RegisterWatcher(
 		&self,
+
 		Handle:String,
+
 		Root:PathBuf,
+
 		IsRecursive:bool,
+
 		Pattern:Option<String>,
 	) -> Result<(), CommonError>;
 

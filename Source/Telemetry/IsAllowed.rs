@@ -17,7 +17,9 @@ pub fn PostHog() -> bool {
 	if !cfg!(debug_assertions) {
 		return false;
 	}
+
 	let C = Get();
+
 	C.Capture && C.Report && !C.Key.is_empty()
 }
 
@@ -25,7 +27,9 @@ pub fn OTLP() -> bool {
 	if !cfg!(debug_assertions) {
 		return false;
 	}
+
 	let C = Get();
+
 	C.Capture && C.OTLPEnabled
 }
 

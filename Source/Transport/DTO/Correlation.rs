@@ -24,14 +24,19 @@ impl CorrelationIdGenerator for UuidCorrelationIdGenerator {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn TestCorrelationIdGeneration() {
 		let Identifier1 = UuidCorrelationIdGenerator::Generate();
+
 		let Identifier2 = UuidCorrelationIdGenerator::Generate();
+
 		assert!(!Identifier1.is_empty());
+
 		assert!(!Identifier2.is_empty());
+
 		assert_ne!(Identifier1, Identifier2);
 	}
 }

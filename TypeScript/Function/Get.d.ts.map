@@ -1,1 +1,10 @@
-{"version":3,"file":"Get.d.ts","sourceRoot":"","sources":["Get.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,SAAS,MAAM,qBAAqB,CAAC;AAEjD;;;GAGG;wBA6BuB,SAAS;AA5BnC,wBA4BoC"}
+{
+	"version": 3,
+	"file": "Get.d.ts",
+	"sourceRoot": "",
+	"sources": [
+		"Get.ts"
+	],
+	"names": [],
+	"mappings": "AAAA,OAAO,KAAK,SAAS,MAAM,qBAAqB,CAAC;AAEjD;;;GAGG;wBA6BuB,SAAS;AA5BnC,wBA4BoC"
+}

@@ -15,4 +15,5 @@ export default interface Interface {
 	 */
 	(_Object: _Object): Promise<Uint8Array>;
 }
+
 //# sourceMappingURL=Uint8ArrayFromObject.d.ts.map

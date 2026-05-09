@@ -61,17 +61,29 @@ impl Default for TransportConfig {
 	fn default() -> Self {
 		Self {
 			DefaultTimeout:Duration::from_secs(30),
+
 			MaximumRetries:3,
+
 			RetryBaseDelay:Duration::from_millis(100),
+
 			RetryMaximumDelay:Duration::from_secs(10),
+
 			RetryJitterEnabled:true,
+
 			CircuitBreakerFailureThreshold:5,
+
 			CircuitBreakerResetTimeout:Duration::from_secs(60),
+
 			HealthChecksEnabled:true,
+
 			HealthCheckInterval:Duration::from_secs(30),
+
 			MetricsEnabled:true,
+
 			TransportConfigurations:HashMap::new(),
+
 			AllowedTransports:Vec::new(),
+
 			ForbiddenTransports:Vec::new(),
 		}
 	}
@@ -84,66 +96,77 @@ impl TransportConfig {
 	/// Sets the default request timeout.
 	pub fn WithDefaultTimeout(mut self, Timeout:Duration) -> Self {
 		self.DefaultTimeout = Timeout;
+
 		self
 	}
 
 	/// Sets the maximum number of retry attempts.
 	pub fn WithMaximumRetries(mut self, MaximumRetries:u32) -> Self {
 		self.MaximumRetries = MaximumRetries;
+
 		self
 	}
 
 	/// Sets the base retry delay for exponential backoff.
 	pub fn WithRetryBaseDelay(mut self, Delay:Duration) -> Self {
 		self.RetryBaseDelay = Delay;
+
 		self
 	}
 
 	/// Sets the maximum retry delay cap.
 	pub fn WithRetryMaximumDelay(mut self, Delay:Duration) -> Self {
 		self.RetryMaximumDelay = Delay;
+
 		self
 	}
 
 	/// Enables or disables retry jitter.
 	pub fn WithRetryJitter(mut self, Enabled:bool) -> Self {
 		self.RetryJitterEnabled = Enabled;
+
 		self
 	}
 
 	/// Sets the circuit breaker failure threshold.
 	pub fn WithCircuitBreakerThreshold(mut self, Threshold:u32) -> Self {
 		self.CircuitBreakerFailureThreshold = Threshold;
+
 		self
 	}
 
 	/// Sets the circuit breaker reset timeout.
 	pub fn WithCircuitBreakerResetTimeout(mut self, Timeout:Duration) -> Self {
 		self.CircuitBreakerResetTimeout = Timeout;
+
 		self
 	}
 
 	/// Enables or disables health checks.
 	pub fn WithHealthChecksEnabled(mut self, Enabled:bool) -> Self {
 		self.HealthChecksEnabled = Enabled;
+
 		self
 	}
 
 	/// Sets the health check interval.
 	pub fn WithHealthCheckInterval(mut self, Interval:Duration) -> Self {
 		self.HealthCheckInterval = Interval;
+
 		self
 	}
 
 	/// Enables or disables metrics collection.
 	pub fn WithMetricsEnabled(mut self, Enabled:bool) -> Self {
 		self.MetricsEnabled = Enabled;
+
 		self
 	}
 
 	/// Adds a transport-specific configuration override.
 	pub fn WithTransportConfiguration(mut self, TransportKind:TransportType, Configuration:serde_json::Value) -> Self {
 		self.TransportConfigurations.insert(TransportKind, Configuration);
+
 		self
 	}
 
@@ -155,12 +178,14 @@ impl TransportConfig {
 	/// Sets the allowed transport types for auto-selection.
 	pub fn WithAllowedTransports(mut self, Transports:Vec<TransportType>) -> Self {
 		self.AllowedTransports = Transports;
+
 		self
 	}
 
 	/// Adds a forbidden transport type.
 	pub fn AddForbiddenTransport(mut self, TransportKind:TransportType) -> Self {
 		self.ForbiddenTransports.push(TransportKind);
+
 		self
 	}
 
@@ -174,6 +199,7 @@ impl TransportConfig {
 		if self.ForbiddenTransports.contains(&TransportKind) {
 			return false;
 		}
+
 		if self.AllowedTransports.is_empty() {
 			true
 		} else {
@@ -193,6 +219,7 @@ impl TransportConfig {
 	/// jitter.
 	pub fn EffectiveRetryDelay(&self, Attempt:u32) -> Duration {
 		let Multiplier = 1u32.checked_shl(Attempt.min(30)).unwrap_or(u32::MAX);
+
 		let mut Delay = self.RetryBaseDelay.checked_mul(Multiplier).unwrap_or(self.RetryMaximumDelay);
 
 		if Delay > self.RetryMaximumDelay {
@@ -204,9 +231,13 @@ impl TransportConfig {
 				.duration_since(std::time::UNIX_EPOCH)
 				.map(|Duration| Duration.subsec_nanos())
 				.unwrap_or(0);
+
 			let JitterFraction = (Nanoseconds % 1000) as f64 / 500.0 - 1.0;
+
 			let JitterAmount = Delay.as_millis() as f64 * 0.25;
+
 			let AdjustedMilliseconds = (Delay.as_millis() as f64 + JitterFraction * JitterAmount).max(1.0) as u64;
+
 			Delay = Duration::from_millis(AdjustedMilliseconds);
 		}
 
@@ -216,14 +247,19 @@ impl TransportConfig {
 
 #[cfg(test)]
 mod tests {
+
 	use super::*;
 
 	#[test]
 	fn TestTransportConfigDefaults() {
 		let Configuration = TransportConfig::default();
+
 		assert_eq!(Configuration.DefaultTimeout, Duration::from_secs(30));
+
 		assert_eq!(Configuration.MaximumRetries, 3);
+
 		assert!(Configuration.HealthChecksEnabled);
+
 		assert!(Configuration.MetricsEnabled);
 	}
 
@@ -235,21 +271,28 @@ mod tests {
 			.WithRetryJitter(false);
 
 		assert_eq!(Configuration.DefaultTimeout, Duration::from_secs(60));
+
 		assert_eq!(Configuration.MaximumRetries, 5);
+
 		assert!(!Configuration.RetryJitterEnabled);
 	}
 
 	#[test]
 	fn TestIsAllowed() {
 		let Configuration = TransportConfig::default();
+
 		assert!(Configuration.IsAllowed(TransportType::Grpc));
 
 		let Configuration = Configuration.WithForbiddenTransport(TransportType::Grpc);
+
 		assert!(!Configuration.IsAllowed(TransportType::Grpc));
+
 		assert!(Configuration.IsAllowed(TransportType::Ipc));
 
 		let Configuration = Configuration.WithAllowedTransports(vec![TransportType::Ipc]);
+
 		assert!(!Configuration.IsAllowed(TransportType::Grpc));
+
 		assert!(Configuration.IsAllowed(TransportType::Ipc));
 	}
 
@@ -258,6 +301,7 @@ mod tests {
 		let Configuration = TransportConfig::default().WithDefaultTimeout(Duration::from_secs(30));
 
 		assert_eq!(Configuration.EffectiveTimeout(None), Duration::from_secs(30));
+
 		assert_eq!(Configuration.EffectiveTimeout(Some(5000)), Duration::from_millis(5000));
 	}
 
@@ -269,8 +313,11 @@ mod tests {
 			.WithRetryJitter(false);
 
 		assert_eq!(Configuration.EffectiveRetryDelay(0), Duration::from_millis(100));
+
 		assert_eq!(Configuration.EffectiveRetryDelay(1), Duration::from_millis(200));
+
 		assert_eq!(Configuration.EffectiveRetryDelay(2), Duration::from_millis(400));
+
 		assert_eq!(Configuration.EffectiveRetryDelay(10), Duration::from_secs(10));
 	}
 }

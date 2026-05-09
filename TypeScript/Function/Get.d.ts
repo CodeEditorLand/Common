@@ -5,5 +5,7 @@ import type Interface from "../Interface/Get.js";
  *
  */
 declare const _default: Interface;
+
 export default _default;
+
 //# sourceMappingURL=Get.d.ts.map
