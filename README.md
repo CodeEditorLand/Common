@@ -3,13 +3,13 @@
 <source media="(prefers-color-scheme: dark)" srcset="https://PlayForm.Cloud/Dark/Image/GitHub/Land.svg">
 <source media="(prefers-color-scheme: light)" srcset="https://PlayForm.Cloud/Image/GitHub/Land.svg">
 <img width="28" alt="Land Logo" src="https://PlayForm.Cloud/Image/GitHub/Land.svg">
-</picture> </h3> </td> <td colspan="3" valign="top"> <h3 align="center"> Common 👨🏻‍🏭
+</picture> </h3> </td> <td colspan="3" valign="top"> <h3 align="center"> Common
 </h3> </td>
 </tr></table>
 
 ---
 
-# **Common**&#x2001;👨🏻‍🏭
+# **Common**
 
 The Architectural Core of Land
 
@@ -24,7 +24,7 @@ required."_
 [<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
 [<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
 
-📖 **[Rust API Documentation](https://Rust.Documentation.Editor.Land/Common/)**
+[Rust API Documentation](https://Rust.Documentation.Editor.Land/Common/)
 
 Welcome to **Common**! This crate is the architectural heart of the Land Code
 Editor's native backend. It provides a pure, abstract foundation for building
@@ -52,27 +52,33 @@ implementing the traits and consuming the effects defined in this crate.
 
 ---
 
-## Key Features & Concepts&#x2001;🔐
+## Key Features & Concepts
 
-- **Declarative `ActionEffect` System:** Operations are not executed immediately
-    - they are described as `ActionEffect` data structures and then passed to a
-      runtime for execution.
-- **Trait-Based Dependency Injection:** A clean, compile-time DI system using
-  the `Environment` and `Requires` traits, allowing components to declare their
-  dependencies without being tied to a specific implementation.
-- **Asynchronous Service Traits:** All core application services (e.g.,
-  `FileSystemReader`, `UserInterfaceProvider`, `CommandExecutor`) are defined as
-  `async trait`s, providing a fully asynchronous-first architecture.
-- **Comprehensive DTO Library:** Contains definitions for all data structures
-  used for IPC communication with `Cocoon` and internal state management in
-  `Mountain`. All types are `serde`-compatible.
-- **Universal `CommonError` Enum:** A single, exhaustive `enum` for all possible
-  failures, enabling robust and predictable error handling across the entire
-  application.
+The `ActionEffect` system treats operations as data structures rather than
+direct function calls. Effects are constructed as values that describe the
+desired side effect and are then passed to an `ApplicationRunTime` for execution.
+This declarative approach enables composition, testing, and controlled execution
+in a single unified pattern.
+
+Dependency injection is handled at compile time through the `Environment` and
+`Requires` traits. Components declare their service needs without coupling to
+specific implementations. All core application services are defined as `async
+trait`s, enforcing an asynchronous-first architecture across the entire system.
+
+The DTO library provides all data structures used for IPC communication with
+`Cocoon` and internal state management in `Mountain`. Every type is
+`serde`-compatible. A single `CommonError` enum covers all possible failures
+across every service domain, making error handling consistent and predictable.
+
+The `Transport` layer offers transport-agnostic communication through a unified
+`TransportStrategy` interface. It supports gRPC, IPC, and WASM with built-in
+circuit breaker, retry logic, metrics collection, and dynamic transport
+selection. The `Telemetry` module provides a dual-pipe (PostHog + OTLP) emit
+surface shared across all Rust sidecars.
 
 ---
 
-## Core Architecture Principles&#x2001;🏗️
+## Core Architecture Principles
 
 | Principle          | Description                                                                                                                                    | Key Components Involved                    |
 | :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------- |
@@ -121,56 +127,65 @@ implementation without changing the logic that uses it.
 
 ---
 
-## Project Structure Overview&#x2001;🗺️
+## Project Structure Overview
 
 The `Common` crate is organized by service domain, with each domain containing
 its trait definitions, DTOs, and effect constructors.
 
 ```
 Common/
-└── Source/
-    ├── Library.rs                     # Crate root, declares all modules.
-    ├── Environment/                   # The core DI system (Environment, Requires, HasEnvironment traits).
-    ├── Effect/                        # The ActionEffect system (ActionEffect, ApplicationRunTime traits).
-    ├── Error/                         # The universal CommonError enum.
-    ├── DTO/                           # Shared Data Transfer Objects (re-exports from service modules).
-    ├── Utility/                       # Utility functions (e.g., Serialization).
-    ├── Command/                       # Command management service.
-    ├── Configuration/                 # Configuration provider service.
-    ├── CustomEditor/                  # Custom editor provider service.
-    ├── Debug/                         # Debug service.
-    ├── Diagnostic/                    # Diagnostic manager service.
-    ├── Document/                      # Document provider service.
-    ├── ExtensionManagement/           # Extension management service.
-    ├── FileSystem/                    # FileSystem read/write service.
-    │   └── DTO/                       # FileSystem-specific DTOs (FileTypeDTO, FileSystemStatDTO).
-    ├── IPC/                           # Inter-process communication service.
-    ├── Keybinding/                    # Keybinding provider service.
-    ├── LanguageFeature/               # Language feature provider registry.
-    │   └── DTO/                       # Language feature DTOs (CompletionListDTO, HoverResultDTO, etc.).
-    ├── Output/                        # Output channel manager service.
-    ├── Search/                        # Search provider service.
-    ├── Secret/                        # Secret storage provider service.
-    ├── SourceControlManagement/       # Source control management service.
-    │   └── DTO/                       # SCM DTOs (SourceControlManagementProviderDTO, etc.).
-    ├── StatusBar/                     # Status bar provider service.
-    │   └── DTO/                       # StatusBar DTOs (StatusBarEntryDTO).
-    ├── Storage/                       # Storage provider service.
-    ├── Synchronization/               # Synchronization provider service.
-    ├── Terminal/                      # Terminal provider service.
-    ├── Testing/                       # Test controller service.
-    ├── TreeView/                      # Tree view provider service.
-    │   └── DTO/                       # TreeView DTOs (TreeItemDTO, TreeViewOptionsDTO).
-    ├── UserInterface/                 # User interface provider service.
-    │   └── DTO/                       # UI DTOs (MessageOptionsDTO, QuickPickOptionsDTO, etc.).
-    ├── Webview/                       # Webview provider service.
-    │   └── DTO/                       # Webview DTOs (WebviewContentOptionsDTO).
-    └── Workspace/                     # Workspace provider service.
+|-- Cargo.toml                            # Crate manifest and dependencies.
+|-- build.rs                              # Build-time configuration scripts.
++-- Source/
+    |-- Library.rs                        # Crate root, declares all modules.
+    |-- Environment/                      # The core DI system (Environment, Requires, HasEnvironment traits).
+    |-- Effect/                           # The ActionEffect system (ActionEffect, ApplicationRunTime traits).
+    |-- Error/                            # The universal CommonError enum.
+    |-- DTO/                              # Shared Data Transfer Objects (re-exports from service modules).
+    |-- Utility/                          # Utility functions (e.g., Serialization).
+    |-- Command/                          # Command management service.
+    |-- Configuration/                    # Configuration provider service.
+    |   +-- DTO/                          # Configuration DTOs (Initialization, Overrides, Scope, Target, etc.).
+    |-- CustomEditor/                     # Custom editor provider service.
+    |-- Debug/                            # Debug service.
+    |-- Diagnostic/                       # Diagnostic manager service.
+    |-- Document/                         # Document provider service.
+    |-- ExtensionManagement/              # Extension management service.
+    |-- FileSystem/                       # File system read/write service.
+    |   +-- DTO/                          # FileSystem-specific DTOs (FileTypeDTO, FileSystemStatDTO).
+    |-- IPC/                              # Inter-process communication service.
+    |   +-- DTO/                          # IPC DTOs (ProxyTarget).
+    |-- Keybinding/                       # Keybinding provider service.
+    |-- LanguageFeature/                  # Language feature provider registry.
+    |   +-- DTO/                          # Language feature DTOs (CompletionList, HoverResult, Location, etc.).
+    |-- Output/                           # Output channel manager service.
+    |-- Search/                           # Search provider service.
+    |-- Secret/                           # Secret storage provider service.
+    |-- SourceControlManagement/          # Source control management service.
+    |   +-- DTO/                          # SCM DTOs (Provider, Group, Resource, InputBox, etc.).
+    |-- StatusBar/                        # Status bar provider service.
+    |   +-- DTO/                          # StatusBar DTOs (StatusBarEntryDTO).
+    |-- Storage/                          # Storage provider service.
+    |-- Synchronization/                  # Synchronization provider service.
+    |-- Telemetry/                        # Telemetry service (dual-pipe PostHog + OTLP).
+    |-- Terminal/                         # Terminal provider service.
+    |-- Testing/                          # Test controller service.
+    |-- Transport/                        # Transport-agnostic communication layer.
+    |   |-- Common/                       # Shared transport types and utilities.
+    |   |-- DTO/                          # Transport DTOs (Correlation, UnifiedRequest, UnifiedResponse, etc.).
+    |   +-- Registry/                     # Dynamic transport selection and management.
+    |-- TreeView/                         # Tree view provider service.
+    |   +-- DTO/                          # TreeView DTOs (TreeItemDTO, TreeViewOptionsDTO).
+    |-- UserInterface/                    # User interface provider service.
+    |   +-- DTO/                          # UI DTOs (MessageOptions, QuickPickOptions, InputBoxOptions, etc.).
+    |-- Webview/                          # Webview provider service.
+    |   +-- DTO/                          # Webview DTOs (WebviewContentOptionsDTO).
+    +-- Workspace/                        # Workspace provider service.
 ```
 
 ---
 
-## Deep Dive & Architectural Patterns&#x2001;🔬
+## Deep Dive & Architectural Patterns
 
 To understand the core philosophy behind this crate and how its components work
 together, please refer to the detailed technical breakdown in
@@ -181,7 +196,7 @@ architecture.
 
 ---
 
-## How `Common` Fits into the Land Ecosystem&#x2001;👨🏻‍🏭 + 🏞️
+## How `Common` Fits into the Land Ecosystem
 
 `Common` is the foundational layer upon which the entire native backend is
 built. It has no knowledge of its consumers, but they are entirely dependent on
@@ -217,9 +232,9 @@ graph LR
 
 ---
 
-## Getting Started&#x2001;🚀
+## Getting Started
 
-### Installation&#x2001;📥
+### Installation
 
 `Common` is intended to be used as a local path dependency within the `Land`
 workspace. In `Mountain`'s `Cargo.toml`:
@@ -229,7 +244,7 @@ workspace. In `Mountain`'s `Cargo.toml`:
 Common = { path = "../Common" }
 ```
 
-### Usage&#x2001;🚀
+### Usage
 
 1. **Implement a Trait:** In `Mountain/Source/Environment/`, provide the
    concrete implementation for a `Common` trait.
@@ -281,7 +296,7 @@ async fn SomeLogic(Runtime: Arc<impl ApplicationRunTime>) {
 
 ---
 
-## License&#x2001;⚖️
+## License
 
 This project is released into the public domain under the **Creative Commons CC0
 Universal** license. You are free to use, modify, distribute, and build upon
@@ -291,7 +306,7 @@ file.
 
 ---
 
-## Changelog&#x2001;📜
+## Changelog
 
 Stay updated with our progress! See
 [`CHANGELOG.md`](https://github.com/CodeEditorLand/Common/tree/Current/) for a
@@ -299,7 +314,7 @@ history of changes specific to **Common**.
 
 ---
 
-## Funding \& Acknowledgements&#x2001;🙏🏻
+## Funding \& Acknowledgements
 
 **Common** is a core element of the **Land** ecosystem. This project is funded
 through [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
