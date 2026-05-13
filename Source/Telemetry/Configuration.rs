@@ -45,12 +45,12 @@ pub fn Fn() -> Configuration {
 
 		Brand:ReadString("Brand", ""),
 
-		Report:ReadBool("Report", true),
+		Report:ReadBool("Report", false),
 
-		Capture:ReadBool("Capture", true),
+		Capture:ReadBool("Capture", false),
 
 		OTLPEndpoint:ReadString("OTLPEndpoint", "http://127.0.0.1:4318"),
 
-		OTLPEnabled:ReadBool("OTLPEnabled", true),
+		OTLPEnabled:ReadBool("OTLPEnabled", false),
 	}
 }
