@@ -56,14 +56,15 @@ implementing the traits and consuming the effects defined in this crate.
 
 The `ActionEffect` system treats operations as data structures rather than
 direct function calls. Effects are constructed as values that describe the
-desired side effect and are then passed to an `ApplicationRunTime` for execution.
-This declarative approach enables composition, testing, and controlled execution
-in a single unified pattern.
+desired side effect and are then passed to an `ApplicationRunTime` for
+execution. This declarative approach enables composition, testing, and
+controlled execution in a single unified pattern.
 
 Dependency injection is handled at compile time through the `Environment` and
 `Requires` traits. Components declare their service needs without coupling to
-specific implementations. All core application services are defined as `async
-trait`s, enforcing an asynchronous-first architecture across the entire system.
+specific implementations. All core application services are defined as
+`async trait`s, enforcing an asynchronous-first architecture across the entire
+system.
 
 The DTO library provides all data structures used for IPC communication with
 `Cocoon` and internal state management in `Mountain`. Every type is
