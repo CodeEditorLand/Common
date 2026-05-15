@@ -1,17 +1,21 @@
-# Common: Abstract Core Library
+# Common: Abstract Core Library 🧩
 
-This document describes Common, the architectural foundation of Land's native
-Rust backend. Common is a pure abstract library that defines every application
-capability as async traits, the ActionEffect declarative system, Data Transfer
-Objects (DTOs), and a universal error type. It contains no concrete
-implementations.
+This document describes `Common`, the architectural foundation of `Land`'s
+native `Rust` backend. `Common` is a pure abstract library that defines:
+
+- Every application capability as async traits
+- The `ActionEffect` declarative system
+- Data Transfer Objects (`DTO`s)
+- A universal error type
+
+It contains no concrete implementations.
 
 ---
 
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Core Architecture Principles](#core-architecture-principles)
+2. [Architecture Principles](#architecture-principles)
 3. [Trait Architecture](#trait-architecture)
 4. [ActionEffect System](#actioneffect-system)
 5. [Environment and Dependency Injection](#environment-and-dependency-injection)
@@ -49,23 +53,25 @@ graph TB
     AE -->|"execute via"| RUNTIME["ApplicationRunTime<br/>(Echo-backed)"]
 ```
 
-## Overview
+## Overview 📋
 
-Common defines the architectural language of the entire native ecosystem. Every
-service interface, data contract, and communication pattern originates here.
-Mountain, Air, Echo, Mist, Rest, SideCar, and Grove all depend on Common's
-definitions.
+`Common` defines the architectural language of the entire native ecosystem:
 
-| Attribute    | Value                                                             |
-| ------------ | ----------------------------------------------------------------- |
-| Language     | Rust (edition 2024)                                               |
-| Crate type   | Library (no binary)                                               |
-| Dependencies | tauri, async-trait, serde, thiserror, url, prometheus, posthog-rs |
-| Consumers    | Mountain, Air, Echo, Mist, Rest, SideCar, Grove                   |
+- Every service interface, data contract, and communication pattern originates
+  here
+- `Mountain`, `Air`, `Echo`, `Mist`, `Rest`, `SideCar`, and `Grove` all depend
+  on `Common`'s definitions
+
+| Attribute    | Value                                                                           |
+| ------------ | ------------------------------------------------------------------------------- |
+| Language     | `Rust` (edition 2024)                                                           |
+| Crate type   | Library (no binary)                                                             |
+| Dependencies | `tauri`, `async-trait`, `serde`, `thiserror`, `url`, `prometheus`, `posthog-rs` |
+| Consumers    | `Mountain`, `Air`, `Echo`, `Mist`, `Rest`, `SideCar`, `Grove`                   |
 
 ---
 
-## Core Architecture Principles
+## Architecture Principles 📐
 
 | Principle                    | Description                                                                               | Key Components                             |
 | ---------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------ |
@@ -74,11 +80,11 @@ definitions.
 | **Trait-Based DI**           | Compile-time dependency injection via `Environment` and `Requires` traits                 | `Environment/` module                      |
 | **Universal Error Handling** | Single `CommonError` enum covering all failure scenarios                                  | `Error/CommonError.rs`                     |
 | **Contract-First Design**    | DTOs and errors defined before implementations                                            | `DTO/`, `Error/` modules                   |
-| **Minimal Dependencies**     | Independent from Tauri, gRPC, or any specific application logic                           | `Cargo.toml`                               |
+| **Minimal Dependencies**     | Independent from `Tauri`, `gRPC`, or any specific application logic                       | `Cargo.toml`                               |
 
 ---
 
-## Trait Architecture
+## Trait Architecture 📋
 
 Every application capability is defined as an async trait:
 
@@ -97,7 +103,7 @@ pub trait FileSystem: Send + Sync {
 }
 ```
 
-### Defined Service Traits
+### Defined Service Traits 📋
 
 | Module                     | Trait                                   | Domain          | Methods                                                           |
 | -------------------------- | --------------------------------------- | --------------- | ----------------------------------------------------------------- |
@@ -126,13 +132,16 @@ pub trait FileSystem: Send + Sync {
 
 ---
 
-## ActionEffect System
+## ActionEffect System ⚡
 
-The ActionEffect system treats operations as data structures rather than direct
-function calls. This declarative approach enables composition, testing, and
-controlled execution.
+The `ActionEffect` system treats operations as data structures rather than
+direct function calls. This declarative approach enables:
 
-### Type Signature
+- **Composition** - Combine effects sequentially or in parallel
+- **Testing** - Effects are data, easy to mock and assert
+- **Controlled execution** - Effects are executed by a runtime
+
+### Type Signature 📝
 
 ```rust
 pub struct ActionEffect<TCapability, TError, TOutput> {
@@ -149,7 +158,7 @@ pub struct ActionEffect<TCapability, TError, TOutput> {
 - **TError**: The error type that may result
 - **TOutput**: The successful result type
 
-### Effect Composition
+### Effect Composition 🔄
 
 ```rust
 // Sequential composition
@@ -165,7 +174,7 @@ let resilient = effect.fallback(backup_effect);
 let mapped = effect.map(|result| transform(result));
 ```
 
-### Execution
+### Execution ▶️
 
 ```rust
 // Effects are executed by ApplicationRunTime
@@ -177,9 +186,9 @@ let result: Result<Vec<u8>, CommonError> = runtime
 
 ---
 
-## Environment and Dependency Injection
+## Environment and Dependency Injection 🧩
 
-Common implements compile-time dependency injection through the `Environment`
+`Common` implements compile-time dependency injection through the `Environment`
 and `Requires` traits:
 
 ```rust
@@ -198,7 +207,7 @@ pub trait Environment {
 }
 ```
 
-### Capability Resolution Flow
+### Capability Resolution Flow 🗺️
 
 ```
 ActionEffect<C, E, T>
@@ -221,9 +230,9 @@ Effect executed with concrete implementation
 
 ---
 
-## Data Transfer Objects
+## Data Transfer Objects 📦
 
-Common defines all DTOs shared across components:
+`Common` defines all `DTO`s shared across components:
 
 | DTO                   | Module                | Fields                                   | Used By                  |
 | --------------------- | --------------------- | ---------------------------------------- | ------------------------ |
@@ -238,7 +247,7 @@ Common defines all DTOs shared across components:
 
 ---
 
-## CommonError
+## CommonError ⚠️
 
 A single error type covering all failure modes across every service domain:
 
@@ -258,9 +267,9 @@ pub enum CommonError {
 
 ---
 
-## Transport Layer
+## Transport Layer 🔗
 
-Common provides a transport-agnostic communication interface:
+`Common` provides a transport-agnostic communication interface:
 
 ```rust
 pub enum TransportStrategy {
@@ -279,21 +288,21 @@ pub enum TransportStrategy {
 
 ---
 
-## Telemetry Module
+## Telemetry Module 📡
 
-Common's telemetry module provides a dual-pipe emit surface:
+`Common`'s telemetry module provides a dual-pipe emit surface:
 
 | Pipe    | Crate           | Configuration                                  |
 | ------- | --------------- | ---------------------------------------------- |
 | PostHog | `posthog-rs`    | `TELEMETRY_POSTHOG_KEY`, `TELEMETRY_DISABLE`   |
 | OTLP    | `opentelemetry` | `TELEMETRY_OTLP_ENDPOINT`, `TELEMETRY_DISABLE` |
 
-Honors the `Disable=true` build-time flag to completely remove telemetry from
-the binary.
+- Honors the `Disable=true` build-time flag to completely remove telemetry from
+  the binary
 
 ---
 
-## Service Domain Map
+## Service Domain Map 🗺️
 
 ```
 Common/
@@ -331,16 +340,16 @@ Common/
 
 ---
 
-## Related Documentation
+## Related Documentation 📚
 
-- [Mountain](../Mountain/Documentation/GitHub/Architecture.md) - Trait
-  implementations
-- [Echo](../Echo/Documentation/GitHub/Architecture.md) - Task scheduler
-  integration
-- [Air](../Air/Documentation/GitHub/Architecture.md) - Background daemon (Common
-  consumer)
-- [RustInfrastructure](../../../Documentation/GitHub/RustInfrastructure.md) -
-  Rust backend components
+- [Mountain](https://github.com/CodeEditorLand/Mountain/tree/Current/Documentation/GitHub/Architecture.md) -
+  Trait implementations
+- [Echo](https://github.com/CodeEditorLand/Echo/tree/Current/Documentation/GitHub/Architecture.md) -
+  Task scheduler integration
+- [Air](https://github.com/CodeEditorLand/Air/tree/Current/Documentation/GitHub/Architecture.md) -
+  Background daemon (`Common` consumer)
+- [RustInfrastructure](https://github.com/CodeEditorLand/Land/tree/Current/Documentation/GitHub/RustInfrastructure.md) -
+  `Rust` backend components
 
 ---
 
