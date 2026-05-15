@@ -24,6 +24,31 @@ implementations.
 
 ---
 
+```mermaid
+graph TB
+    subgraph Common["Common Abstract Core"]
+        TRAITS["Async Traits<br/>FileSystem / Terminal /<br/>Configuration / Workspace<br/>+ 20 more"]
+        AE["ActionEffect<br/>System<br/>description / execution<br/>separation"]
+        ENV["Environment / Requires<br/>compile-time DI"]
+        DTO["Data Transfer Objects<br/>FileStat / InitData /<br/>TerminalOptions"]
+        ERR["CommonError<br/>unified error enum"]
+        TRANS["Transport Layer<br/>gRPC / IPC / WASM"]
+        TEL["Telemetry<br/>PostHog + OTLP"]
+
+        TRAITS --> AE
+        AE --> ENV
+        ENV -->|"capability resolution"| TRAITS
+        DTO --> TRAITS
+        DTO --> AE
+        ERR --> TRAITS
+        ERR --> AE
+        TRANS --> ENV
+        TEL -.->|"emit events"| TRAITS
+    end
+
+    AE -->|"execute via"| RUNTIME["ApplicationRunTime<br/>(Echo-backed)"]
+```
+
 ## Overview
 
 Common defines the architectural language of the entire native ecosystem. Every
