@@ -21,10 +21,10 @@ _"Mock any service and test any element in isolation, no running editor
 required."_
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Common/tree/Current/LICENSE)
-[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
-[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
+[<img src="https://land.playform.cloud/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
+[<img src="https://land.playform.cloud/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
 
-[Rust API Documentation](https://Rust.Documentation.Editor.Land/Common/)
+[Rust API Documentation](https://Rust.Documentation.Land.PlayForm.Cloud/Common/)
 
 Welcome to **Common**! This crate is the architectural heart of the Land Code
 Editor's native backend. It provides a pure, abstract foundation for building
@@ -288,9 +288,9 @@ async fn SomeLogic(Runtime: Arc<impl ApplicationRunTime>) {
 
 ## See Also
 
-- [Common Documentation](https://editor.land/Doc/common)
-- [Architecture Overview](https://editor.land/Doc/architecture)
-- [Why Rust](https://editor.land/Doc/why-rust)
+- [Common Documentation](https://land.playform.cloud/Doc/common)
+- [Architecture Overview](https://land.playform.cloud/Doc/architecture)
+- [Why Rust](https://land.playform.cloud/Doc/why-rust)
 - [Mountain](https://github.com/CodeEditorLand/Mountain)
 - [Echo](https://github.com/CodeEditorLand/Echo)
 - [Air](https://github.com/CodeEditorLand/Air)
@@ -340,7 +340,7 @@ Commons Fund grant.
 	<tbody>
 		<tr>
 			<td align="left" valign="middle">
-				<a href="https://Editor.Land">
+				<a href="https://Land.PlayForm.Cloud">
 					<img width="60" src="https://raw.githubusercontent.com/CodeEditorLand/Asset/refs/heads/Current/Logo/Land.svg" alt="Land">
 				</a>
 			</td>
@@ -366,7 +366,7 @@ Commons Fund grant.
 ---
 
 **Project Maintainers**: Source Open
-([Source/Open@Editor.Land](mailto:Source/Open@Editor.Land)) |
+([Source/Open@Land.PlayForm.Cloud](mailto:Source/Open@Land.PlayForm.Cloud)) |
 [GitHub Repository](https://github.com/CodeEditorLand/Common) |
 [Report an Issue](https://github.com/CodeEditorLand/Common/issues) |
 [Security Policy](https://github.com/CodeEditorLand/Common/security/policy)
