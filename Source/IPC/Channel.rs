@@ -145,6 +145,8 @@ DefineChannels! {
 	ExtensionHostDebugServiceTerminateSession     => "extensionhostdebugservice:terminateSession",
 
 	// --- Extensions ---
+	ExtensionsActivate                            => "extensions:activate",
+
 	ExtensionsGet                                 => "extensions:get",
 
 	ExtensionsGetAll                              => "extensions:getAll",
