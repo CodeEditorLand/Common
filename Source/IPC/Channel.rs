@@ -113,6 +113,10 @@ DefineChannels! {
 	// --- Configuration ---
 	ConfigurationGet                              => "configuration:get",
 
+	ConfigurationInspect                          => "configuration:inspect",
+
+	ConfigurationLookup                           => "configuration:lookup",
+
 	ConfigurationUpdate                           => "configuration:update",
 
 	// --- Decorations ---
@@ -161,6 +165,8 @@ DefineChannels! {
 
 	ExtensionsGetUninstalled                      => "extensions:getUninstalled",
 
+	ExtensionsGetManifest                         => "extensions:getManifest",
+
 	ExtensionsInstall                             => "extensions:install",
 
 	ExtensionsIsActive                            => "extensions:isActive",
@@ -168,6 +174,8 @@ DefineChannels! {
 	ExtensionsQuery                               => "extensions:query",
 
 	ExtensionsReinstall                           => "extensions:reinstall",
+
+	ExtensionsResetPinnedState                    => "extensions:resetPinnedStateForAllUserExtensions",
 
 	ExtensionsScanSystemExtensions                => "extensions:scanSystemExtensions",
 
@@ -422,6 +430,8 @@ DefineChannels! {
 
 	// --- Themes ---
 	ThemesGetActive                               => "themes:getActive",
+
+	ThemesGetColorTheme                           => "themes:getColorTheme",
 
 	ThemesList                                    => "themes:list",
 
