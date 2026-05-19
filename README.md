@@ -205,30 +205,45 @@ it.
 
 ```mermaid
 graph LR
-    classDef Mountain fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef Common fill:#cfc,stroke:#333,stroke-width:1px;
-    classDef Consumer fill:#9cf,stroke:#333,stroke-width:2px;
+    classDef common   fill:#d4f5d4,stroke:#27ae60,stroke-width:2px,color:#0a3a0a;
+    classDef mountain fill:#f0d0ff,stroke:#9b59b6,stroke-width:2px,color:#2c0050;
+    classDef consumer fill:#cce8ff,stroke:#2980b9,stroke-width:1px,color:#00304a;
+    classDef transport fill:#fff3c0,stroke:#f39c12,stroke-width:1px,stroke-dasharray:5 5,color:#5a3e00;
 
-    subgraph "The Common Crate"
-        direction LR
-        Traits["Abstract Traits (e.g., FileSystemReader)"]:::Common
-        Effects["ActionEffects (e.g., ReadFile)"]:::Common
-        DTOs["Data Transfer Objects (e.g., FileTypeDTO)"]:::Common
-
-        Effects -- Depend on --> Traits
+    subgraph COMMON["Common - Pure Abstract Foundation (no Tauri / gRPC deps)"]
+        direction TB
+        subgraph CORE["Effect System"]
+            Traits["async trait per service domain\nFileSystem · Terminal · SCM · Storage\nUI · Search · Document · TreeView…"]:::common
+            Effects["ActionEffect - operations as values\nConstructors per domain"]:::common
+            Effects -. depends on .-> Traits
+        end
+        subgraph DATA["Data Layer"]
+            DTOs["DTO/ - serde-compatible structs\nfor IPC + internal state"]:::common
+            Errors["CommonError - unified error enum"]:::common
+        end
+        subgraph INFRA["Infrastructure"]
+            Transport["Transport/ - TransportStrategy\ngRPC · IPC · WASM + circuit breaker"]:::transport
+            Telemetry["Telemetry/ - PostHog + OTLP\ndual-pipe emit surface"]:::common
+            Env["Environment/ + Effect/\nApplicationRunTime trait\nDI via Requires / HasEnvironment"]:::common
+        end
     end
 
-    subgraph "Consumers"
-        Mountain[Mountain Application]:::Mountain
-        Tests[Unit & Integration Tests]:::Consumer
+    subgraph MOUNTAIN["Mountain ⛰️ - Primary Consumer"]
+        MountainEnv["Environment/ Providers\n(concrete trait impls)"]:::mountain
+        AppRunTime["ApplicationRunTime\n(executes ActionEffects)"]:::mountain
+        MountainEnv -.implements.-> Traits
+        AppRunTime -.executes.-> Effects
+        AppRunTime -.uses.-> DTOs
     end
 
-    Mountain -- Implements --> Traits
-    Mountain -- Executes --> Effects
-    Mountain -- Uses --> DTOs
+    subgraph TESTS["Tests"]
+        MockImpls["Mock trait implementations"]:::consumer
+        MockImpls -.mocks.-> Traits
+    end
 
-    Tests -- Mocks --> Traits
-    Tests -- Verifies --> Effects
+    Air["Air 🪁 daemon\n(uses Transport + Telemetry)"]:::consumer
+    Air -.uses.-> Transport
+    Air -.uses.-> Telemetry
 ```
 
 ---
