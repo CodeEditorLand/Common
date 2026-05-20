@@ -95,6 +95,12 @@ DefineSkyEvents! {
 
 	DebugStop                                     => "sky://debug/stop",
 
+	// --- Decorations (set-ranges) ---
+	// Fired when an extension calls `editor.setDecorations(type, ranges)`.
+	// Payload: `{ decorationTypeKey, uri, rangesOrOptions }`.
+	// Sky listener applies to Monaco via ICodeEditorService.
+	DecorationSetRanges                           => "sky://decoration/set-ranges",
+
 	// --- Diagnostics ---
 	DiagnosticsChanged                            => "sky://diagnostics/changed",
 
@@ -116,9 +122,26 @@ DefineSkyEvents! {
 	// --- Editor ---
 	EditorApplyEdits                              => "sky://editor/applyEdits",
 
+	// Fired when an extension calls `editor.edit(editBuilder => { ... })`.
+	// Payload: `{ uri, edits: [{ range, text }] }`.
+	EditorApplyTextEdits                          => "sky://editor/apply-text-edits",
+
+	// Fired by Sky when the active text editor's selection changes.
+	// Payload: `{ uri, selections: [{ start, end, active, anchor }] }`.
+	// Mountain stores it and forwards to Cocoon via `window.didChangeTextEditorSelection`.
+	EditorSelectionChanged                        => "sky://editor/selection-changed",
+
 	EditorOpenDocument                            => "sky://editor/openDocument",
 
 	EditorSaveAll                                 => "sky://editor/saveAll",
+
+	// Fired by Sky when a text editor becomes visible (tab activated).
+	// Payload: `{ uri, viewColumn, selections }`.
+	EditorActiveChanged                           => "sky://editor/active-changed",
+
+	// `editor.revealRange(range, revealType)` - scroll Monaco to the range.
+	// Payload: `{ uri, range, revealType }`.
+	EditorRevealRange                             => "sky://editor/revealRange",
 
 	// --- Extensions ---
 	ExtensionsInstalled                           => "sky://extensions/installed",

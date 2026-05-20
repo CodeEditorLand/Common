@@ -236,6 +236,28 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 		ItemDTO:Value,
 	) -> Result<Option<Value /* Vec<TypeHierarchyItemDTO> */>, CommonError>;
 
+	/// Prepares a call hierarchy session at the given position.
+	/// Returns the root `CallHierarchyItem` or `None` if the provider
+	/// has no hierarchy at that location. This is the entry point call;
+	/// Mountain must issue this before requesting incoming/outgoing calls.
+	async fn PrepareCallHierarchy(
+		&self,
+
+		DocumentURI:Url,
+
+		PositionDTO:PositionDTO,
+	) -> Result<Option<Value /* Vec<CallHierarchyItemDTO> */>, CommonError>;
+
+	/// Prepares a type hierarchy session at the given position.
+	/// Returns the root `TypeHierarchyItem` or `None`.
+	async fn PrepareTypeHierarchy(
+		&self,
+
+		DocumentURI:Url,
+
+		PositionDTO:PositionDTO,
+	) -> Result<Option<Value /* Vec<TypeHierarchyItemDTO> */>, CommonError>;
+
 	/// Provides type hierarchy subtypes for the given item.
 	async fn ProvideTypeHierarchySubtypes(
 		&self,
