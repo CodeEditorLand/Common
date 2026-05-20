@@ -396,6 +396,11 @@ DefineChannels! {
 
 	StorageUpdateItems                            => "storage:updateItems",
 
+	// Storage event-channel stubs (ack-only; delivery via Tauri events).
+	StorageOnDidChangeItems                       => "storage:onDidChangeItems",
+
+	StorageLogStorage                             => "storage:logStorage",
+
 	// --- QuickInput (vscode.window.showQuickPick / showInputBox) ---
 	QuickInputShowInputBox                        => "quickInput:showInputBox",
 
@@ -480,6 +485,63 @@ DefineChannels! {
 	WorkspacesRemoveFolder                        => "workspaces:removeFolder",
 
 	WorkspacesRemoveRecentlyOpened                => "workspaces:removeRecentlyOpened",
+
+	// Workspace event-channel stubs (ack-only; delivery via Tauri events).
+	WorkspacesOnDidChangeWorkspaceFolders         => "workspaces:onDidChangeWorkspaceFolders",
+
+	WorkspacesOnDidChangeWorkspaceName            => "workspaces:onDidChangeWorkspaceName",
+
+	// Additional VS Code workspace service methods.
+	WorkspacesGetWorkspace                        => "workspaces:getWorkspace",
+
+	WorkspacesGetWorkspaceFolders                 => "workspaces:getWorkspaceFolders",
+
+	WorkspacesAddWorkspaceFolders                 => "workspaces:addWorkspaceFolders",
+
+	WorkspacesRemoveWorkspaceFolders              => "workspaces:removeWorkspaceFolders",
+
+	// --- Language features (dispatched to Cocoon via NodeDeferred) ---
+	// These reach Mountain from Wind's TauriMainProcessService via the
+	// `languages` channel prefix. Mountain's mod.rs defers them to Cocoon
+	// when TierIPC=NodeDeferred. They are registered here so the Channel
+	// registry logs "registered, no dispatch arm" instead of "Unknown".
+	LanguagesGetAll                               => "languages:getAll",
+
+	LanguagesGetEncodedLanguageId                 => "languages:getEncodedLanguageId",
+
+	// --- SCM (Source Control Management) ---
+	ScmCreateSourceControl                        => "scm:createSourceControl",
+
+	ScmGetSourceControls                          => "scm:getSourceControls",
+
+	ScmSetActiveProvider                          => "scm:setActiveProvider",
+
+	// --- Debug ---
+	DebugStartDebugging                           => "debug:startDebugging",
+
+	DebugStopDebugging                            => "debug:stopDebugging",
+
+	DebugGetSessions                              => "debug:getSessions",
+
+	DebugGetBreakpoints                           => "debug:getBreakpoints",
+
+	DebugAddBreakpoints                           => "debug:addBreakpoints",
+
+	DebugRemoveBreakpoints                        => "debug:removeBreakpoints",
+
+	// --- Tasks ---
+	TasksExecuteTask                              => "tasks:executeTask",
+
+	TasksGetTasks                                 => "tasks:getTasks",
+
+	TasksGetTaskExecution                         => "tasks:getTaskExecution",
+
+	// --- Authentication ---
+	AuthGetSessions                               => "auth:getSessions",
+
+	AuthCreateSession                             => "auth:createSession",
+
+	AuthRemoveSession                             => "auth:removeSession",
 
 	// --- Legacy wire-shape channels (non prefix:method) ---
 	// Two historical groups predate the `prefix:method` convention:
@@ -579,7 +641,11 @@ impl Channel {
 			| ExtensionsGetExtensionsControlManifest
 			| ExtensionsGetUninstalled
 			| ExtensionsUpdateMetadata
-			| DiagnosticLog => ChannelPriority::Low,
+			| DiagnosticLog
+			| StorageOnDidChangeItems
+			| StorageLogStorage
+			| WorkspacesOnDidChangeWorkspaceFolders
+			| WorkspacesOnDidChangeWorkspaceName => ChannelPriority::Low,
 
 			// --- Everything else → Normal ---
 			_ => ChannelPriority::Normal,
