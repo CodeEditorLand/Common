@@ -24,8 +24,8 @@ export default (async (...[Key, Identifier, { get }, View]) => {
 				),
 			).toString(),
 		)[View];
-	} catch (_Error) {
-		console.log(_Error);
+	} catch {
+		// Access failures are non-critical; swallow silently
 	}
 }) satisfies Interface as Interface;
 
