@@ -288,6 +288,22 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 		PositionDTO:PositionDTO,
 	) -> Result<Option<Value /* LinkedEditingRangesDTO */>, CommonError>;
 
+	/// Provides file decoration (badge, tooltip, colour) for a resource URI.
+	/// Called by the file explorer / SCM tree when rendering resource state.
+	async fn ProvideFileDecoration(&self, ResourceURI:Url) -> Result<Option<Value>, CommonError>;
+
+	/// Provides inline completion items (ghost text) for AI coding assistants
+	/// such as GitHub Copilot, Roo Code, and Continue.
+	async fn ProvideInlineCompletionItems(
+		&self,
+
+		DocumentURI:Url,
+
+		PositionDTO_:PositionDTO,
+
+		ContextDTO:Value,
+	) -> Result<Option<Value>, CommonError>;
+
 	/// Provides on-type formatting edits.
 	async fn ProvideOnTypeFormattingEdits(
 		&self,
