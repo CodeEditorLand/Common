@@ -1,4 +1,3 @@
-#![allow(non_camel_case_types, non_upper_case_globals)]
 //! # UnifiedResponse
 //!
 //! A protocol-agnostic response message that works across all transport types.

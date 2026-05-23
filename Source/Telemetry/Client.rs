@@ -1,4 +1,3 @@
-
 //! Process-wide PostHog client singleton. Populated once by
 //! `Initialize::Fn`; every `Capture*::Fn` reads through this static.
 //! Sidecars share one client per process, like Mountain's

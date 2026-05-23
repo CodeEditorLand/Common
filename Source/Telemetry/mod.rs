@@ -1,4 +1,3 @@
-
 //! # Telemetry - shared dual-pipe (PostHog + OTLP) for every Rust Element
 //!
 //! Single source of truth for the sidecar telemetry surface. Mountain

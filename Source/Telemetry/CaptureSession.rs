@@ -1,4 +1,3 @@
-
 //! Emit `land:<tier>:session:start` with pid / OS / arch. Called once
 //! by `Initialize::Fn` so the Boot & Startup Performance dashboard
 //! sees one start event per sidecar process.

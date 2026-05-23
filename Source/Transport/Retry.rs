@@ -1,4 +1,3 @@
-#![allow(non_camel_case_types, non_upper_case_globals)]
 //! # Retry Strategies
 //!
 //! Retry configuration and strategies for transport operations.

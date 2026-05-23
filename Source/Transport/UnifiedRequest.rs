@@ -1,4 +1,3 @@
-#![allow(non_camel_case_types, non_upper_case_globals)]
 //! # UnifiedRequest
 //!
 //! A protocol-agnostic request message that works across all transport types.

@@ -1,4 +1,3 @@
-#![allow(non_camel_case_types, non_upper_case_globals)]
 //! # Transport Registry
 //!
 //! The Transport Registry enables dynamic transport selection and management,

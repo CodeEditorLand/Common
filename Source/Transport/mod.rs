@@ -1,4 +1,3 @@
-#![allow(non_camel_case_types, non_upper_case_globals)]
 //! # Transport Layer
 //!
 //! This module defines the transport-layer abstraction that enables

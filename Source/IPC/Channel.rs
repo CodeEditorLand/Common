@@ -31,8 +31,6 @@
 //!     offline-gallery stubs).
 //!   - `Normal`: everything else.
 
-#![allow(non_camel_case_types)]
-
 /// Lane selector for Echo scheduler dispatch.
 ///
 /// Deliberately isolated from `Echo::Task::Priority` so Common stays

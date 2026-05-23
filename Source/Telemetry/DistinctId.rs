@@ -1,4 +1,3 @@
-
 //! Stable distinct ID for the dev session. Mirrors Mountain's
 //! `Binary/Build/PostHogPlugin/DistinctId` so a single dev run merges
 //! into one PostHog person across every sidecar.

@@ -1,4 +1,3 @@
-#![allow(non_camel_case_types, non_upper_case_globals)]
 //! # TransportStrategy Trait
 //!
 //! Defines the core trait that all transport implementations must implement.

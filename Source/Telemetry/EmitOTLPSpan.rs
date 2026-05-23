@@ -1,4 +1,3 @@
-
 //! Fire-and-forget OTLP span exporter. Lifted from Mountain's
 //! `IPC/DevLog/EmitOTLPSpan` so Air / Echo / Rest / Grove / Mist /
 //! SideCar all share the same raw HTTP path. Single failed POST flips

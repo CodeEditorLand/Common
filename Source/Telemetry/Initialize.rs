@@ -1,4 +1,3 @@
-
 //! Sidecar boot. Idempotent: subsequent calls are no-ops because
 //! `OnceLock::set` returns `Err`. Pass the `Tier` so every emitted
 //! event is tagged correctly without per-call boilerplate.

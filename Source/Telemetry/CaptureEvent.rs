@@ -1,4 +1,3 @@
-
 //! Emit a named PostHog event. Stamps the calling `Tier` plus the
 //! standard Land identity (`$app`, `$app_version`, `$build_mode`,
 //! `$component`, `$tier`) so dashboards can pivot by tier without

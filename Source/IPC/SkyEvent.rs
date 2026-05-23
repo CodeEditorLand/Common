@@ -26,8 +26,6 @@
 //! `FromStr` in one pass so adding an event is a single-line change that
 //! compilers can't forget.
 
-#![allow(non_camel_case_types)]
-
 macro_rules! DefineSkyEvents {
 
 	($($Variant:ident => $Wire:literal,)* $(,)?) => {

@@ -1,4 +1,3 @@
-
 //! Emit `land:<tier>:error` with `error_tag` + `error_message`. The
 //! Errors & Reliability dashboard rolls these up across Mountain /
 //! Cocoon / Sky / sidecars via `event LIKE 'land:%:error'`.

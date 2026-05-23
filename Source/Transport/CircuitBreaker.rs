@@ -1,4 +1,3 @@
-#![allow(non_camel_case_types, non_upper_case_globals)]
 //! # Circuit Breaker Pattern
 //!
 //! Circuit breaker implementation for transport fault tolerance.

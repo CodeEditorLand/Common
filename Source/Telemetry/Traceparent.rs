@@ -1,4 +1,3 @@
-
 //! W3C `traceparent` header builder + parser. Used by every emit
 //! / RPC site that crosses a tier boundary (Mountain → Sky tauri
 //! events, Mountain → Cocoon gRPC, Sky → Mountain TauriInvoke,
