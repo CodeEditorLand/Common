@@ -1,4 +1,3 @@
-#![allow(non_snake_case)]
 
 //! Identifier for the calling Element. Tags every emitted event so the
 //! Errors & Reliability dashboard can pivot by `$tier`.

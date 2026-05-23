@@ -1,4 +1,3 @@
-#![allow(non_snake_case)]
 
 //! Compile-time + runtime gates. `cfg!(debug_assertions)` strips both
 //! pipes from release builds; `Capture` is the master kill, `Report` /

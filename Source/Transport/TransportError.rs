@@ -1,4 +1,4 @@
-#![allow(non_snake_case, non_camel_case_types, non_upper_case_globals)]
+#![allow(non_camel_case_types, non_upper_case_globals)]
 //! # TransportError
 //!
 //! Defines the unified error type for all transport operations.

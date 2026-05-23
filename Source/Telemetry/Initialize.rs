@@ -1,4 +1,3 @@
-#![allow(non_snake_case)]
 
 //! Sidecar boot. Idempotent: subsequent calls are no-ops because
 //! `OnceLock::set` returns `Err`. Pass the `Tier` so every emitted

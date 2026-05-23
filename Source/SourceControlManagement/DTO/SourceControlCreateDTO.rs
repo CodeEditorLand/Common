@@ -32,7 +32,7 @@ pub struct SourceControlCreateDTO {
 	/// resolve - allocating a fresh handle here keys the
 	/// `SourceControlManagementProviders` map under a value Cocoon will
 	/// never reference, and every later `update_scm_group` warns
-	/// "Received group update for unknown provider handle: <H>" while the
+	/// "Received group update for unknown provider handle: \<H\>" while the
 	/// SCM viewlet stays empty. Optional so callers without an external
 	/// handle (none currently) still work via Mountain-side allocation.
 	#[serde(default, skip_serializing_if = "Option::is_none")]

@@ -1,4 +1,3 @@
-#![allow(non_snake_case)]
 
 //! Emit `land:<tier>:session:start` with pid / OS / arch. Called once
 //! by `Initialize::Fn` so the Boot & Startup Performance dashboard

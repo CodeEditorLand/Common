@@ -31,7 +31,7 @@
 //!     offline-gallery stubs).
 //!   - `Normal`: everything else.
 
-#![allow(non_snake_case, non_camel_case_types)]
+#![allow(non_camel_case_types)]
 
 /// Lane selector for Echo scheduler dispatch.
 ///

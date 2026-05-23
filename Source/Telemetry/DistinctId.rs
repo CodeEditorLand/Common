@@ -1,4 +1,3 @@
-#![allow(non_snake_case)]
 
 //! Stable distinct ID for the dev session. Mirrors Mountain's
 //! `Binary/Build/PostHogPlugin/DistinctId` so a single dev run merges

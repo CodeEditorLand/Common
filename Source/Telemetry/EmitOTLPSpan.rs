@@ -1,4 +1,3 @@
-#![allow(non_snake_case)]
 
 //! Fire-and-forget OTLP span exporter. Lifted from Mountain's
 //! `IPC/DevLog/EmitOTLPSpan` so Air / Echo / Rest / Grove / Mist /

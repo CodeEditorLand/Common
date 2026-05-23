@@ -1,11 +1,10 @@
-#![allow(non_snake_case)]
 
 //! W3C `traceparent` header builder + parser. Used by every emit
 //! / RPC site that crosses a tier boundary (Mountain → Sky tauri
 //! events, Mountain → Cocoon gRPC, Sky → Mountain TauriInvoke,
 //! Cocoon → Mountain gRPC). The format is the standard
 //! `version-traceid-parentid-flags` from
-//! https://www.w3.org/TR/trace-context/.
+//! <https://www.w3.org/TR/trace-context/>.
 //!
 //! Mountain (and every sidecar that imports `CommonLibrary::Telemetry`)
 //! reuses one `OTLP_TRACE_ID` per process via `EmitOTLPSpan::TraceId`,

@@ -1,4 +1,3 @@
-#![allow(non_snake_case)]
 
 //! # Telemetry - shared dual-pipe (PostHog + OTLP) for every Rust Element
 //!
