@@ -18,8 +18,20 @@ pub struct SourceControlUpdateDTO {
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub InputBoxValue:Option<String>,
 
+	/// The new placeholder text for the commit message input box.
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub InputBoxPlaceholder:Option<String>,
+
+	/// The commit template string shown as placeholder when the input is empty.
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub CommitTemplate:Option<String>,
+
+	/// The command executed when the user accepts the input (e.g. presses
+	/// Enter).
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub AcceptInputCommand:Option<serde_json::Value>,
+
 	/// The new count to display as a badge on the SourceControlManagement icon.
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub Count:Option<u32>,
-	// This could be expanded to include other updatable properties.
 }

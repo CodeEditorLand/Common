@@ -37,6 +37,11 @@ pub struct SourceControlManagementProviderDTO {
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub CommitTemplate:Option<String>,
 
+	/// The command executed when the user accepts the SCM input box (e.g.
+	/// Ctrl+Enter).
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub AcceptInputCommand:Option<Value>,
+
 	/// The state of the SourceControlManagement input box (commit message
 	/// area).
 	#[serde(skip_serializing_if = "Option::is_none")]
