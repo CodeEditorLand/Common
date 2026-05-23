@@ -27,13 +27,23 @@
 //! - `Initialize::Fn` - `Tier`-tagged boot
 
 pub mod CaptureError;
+
 pub mod CaptureEvent;
+
 pub mod CaptureSession;
+
 pub mod Client;
+
 pub mod Configuration;
+
 pub mod DistinctId;
+
 pub mod EmitOTLPSpan;
+
 pub mod Initialize;
+
 pub mod IsAllowed;
+
 pub mod Tier;
+
 pub mod Traceparent;

@@ -100,6 +100,7 @@ impl Default for TransportCapabilities {
 	fn default() -> Self {
 		Self {
 			MaximumMessageSize:1024 * 1024, // 1MB
+
 			SupportsRequestResponse:true,
 
 			SupportsServerStreaming:false,

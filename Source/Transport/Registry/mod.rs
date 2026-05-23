@@ -19,7 +19,6 @@ use super::{
 /// Selection strategy for automatic transport selection.
 pub struct TransportSelector {
 	/// Environment detector for auto-selection
-	#[allow(dead_code)]
 	EnvironmentDetector:Box<dyn TransportTypeDetector + Send + Sync>,
 
 	/// Priority order for fallback chain
