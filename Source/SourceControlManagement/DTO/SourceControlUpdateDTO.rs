@@ -11,8 +11,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SourceControlUpdateDTO {
-	/// The handle of the provider to update.
-	pub ProviderHandle:u32,
+	/// The handle of the provider to update. Optional: callers that pass the
+	/// handle as a positional argument (SCM.rs effect) may omit this field.
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub ProviderHandle:Option<u32>,
 
 	/// The new value for the commit message input box.
 	#[serde(skip_serializing_if = "Option::is_none")]
