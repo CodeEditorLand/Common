@@ -292,7 +292,7 @@ pub trait LanguageFeatureProviderRegistry: Environment + Send + Sync {
 	/// Called by the file explorer / SCM tree when rendering resource state.
 	async fn ProvideFileDecoration(&self, ResourceURI:Url) -> Result<Option<Value>, CommonError>;
 
-	/// Provides inline completion items (ghost text) for AI coding assistants
+	/// Provides inline completion items (ghost text) consumed by extensions
 	/// such as GitHub Copilot, Roo Code, and Continue.
 	async fn ProvideInlineCompletionItems(
 		&self,
