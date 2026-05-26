@@ -15,9 +15,9 @@ pub struct Configuration {
 
 	pub Capture:bool,
 
-	pub OTLPEndpoint:String,
+	pub Pipe:String,
 
-	pub OTLPEnabled:bool,
+	pub Emit:bool,
 }
 
 fn ReadString(Key:&str, Fallback:&str) -> String {
@@ -47,8 +47,8 @@ pub fn Fn() -> Configuration {
 
 		Capture:ReadBool("Capture", false),
 
-		OTLPEndpoint:ReadString("OTLPEndpoint", "http://127.0.0.1:4318"),
+		Pipe:ReadString("Pipe", "http://127.0.0.1:4318"),
 
-		OTLPEnabled:ReadBool("OTLPEnabled", false),
+		Emit:ReadBool("Emit", false),
 	}
 }

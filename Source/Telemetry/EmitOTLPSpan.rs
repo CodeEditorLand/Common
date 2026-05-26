@@ -124,7 +124,7 @@ pub fn Fn(Name:&str, StartNano:u64, EndNano:u64, Attributes:&[(&str, &str)]) {
 		StatusCode,
 	);
 
-	let (HostAddress, PathSegment) = ParseEndpoint(&Configuration.OTLPEndpoint);
+	let (HostAddress, PathSegment) = ParseEndpoint(&Configuration.Pipe);
 
 	std::thread::spawn(move || {
 		use std::{

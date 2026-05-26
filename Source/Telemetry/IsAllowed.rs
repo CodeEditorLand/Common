@@ -1,6 +1,6 @@
 //! Compile-time + runtime gates. `cfg!(debug_assertions)` strips both
 //! pipes from release builds; `Capture` is the master kill, `Report` /
-//! `OTLPEnabled` are per-pipe toggles. Cached after first read so the
+//! `Emit` are per-pipe toggles. Cached after first read so the
 //! hot path is one atomic load.
 
 use std::sync::OnceLock;
@@ -28,7 +28,7 @@ pub fn OTLP() -> bool {
 
 	let C = Get();
 
-	C.Capture && C.OTLPEnabled
+	C.Capture && C.Emit
 }
 
 pub fn Cached() -> &'static Configuration::Configuration { Get() }
