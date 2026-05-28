@@ -55,9 +55,6 @@
 //!
 //! Full setup: <https://github.com/CodeEditorLand/Land>
 
-// --- Core Architecture ---
-pub mod Effect;
-
 pub mod Environment;
 
 pub mod Error;

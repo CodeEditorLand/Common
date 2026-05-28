@@ -55,23 +55,4 @@ pub mod UnifiedResponse;
 
 pub mod TransportConfig;
 
-// --- Transport Implementations (proper acronym casing: gRPC, IPC, WASM) ---
-pub mod gRPC;
-
-pub mod IPC;
-
-pub mod WASM;
-
-// --- Infrastructure ---
-pub mod Registry;
-
-pub mod Metrics;
-
-pub mod Retry;
-
-pub mod CircuitBreaker;
-
 pub mod Common;
-
-// --- Data Transfer Objects ---
-pub mod DTO;
