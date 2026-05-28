@@ -27,7 +27,9 @@ pub fn ProvideOnTypeFormatting(
 ) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<Vec<TextEditDTO>>> {
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let DocumentURIClone = DocumentURI.clone();
+
 		let CharacterClone = Character.clone();
+
 		let OptionsDTOClone = OptionsDTO.clone();
 
 		Box::pin(async move {

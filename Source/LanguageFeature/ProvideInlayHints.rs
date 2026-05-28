@@ -19,6 +19,7 @@ pub fn ProvideInlayHints(
 ) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<Value>> {
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let DocumentURIClone = DocumentURI.clone();
+
 		let RangeDTOClone = RangeDTO.clone();
 
 		Box::pin(async move { Registry.ProvideInlayHints(DocumentURIClone, RangeDTOClone).await })

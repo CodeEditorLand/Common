@@ -21,6 +21,7 @@ pub fn ProvideRenameEdits(
 ) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<Value>> {
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let DocumentURIClone = DocumentURI.clone();
+
 		let NewNameClone = NewName.clone();
 
 		Box::pin(async move { Registry.ProvideRenameEdits(DocumentURIClone, PositionDTO, NewNameClone).await })

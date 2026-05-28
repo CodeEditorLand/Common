@@ -24,6 +24,7 @@ pub fn ProvideReferences(
 ) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<Vec<LocationDTO>>> {
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let DocumentURIClone = DocumentURI.clone();
+
 		let ContextDTOClone = ContextDTO.clone();
 
 		Box::pin(async move { Registry.ProvideReferences(DocumentURIClone, PositionDTO, ContextDTOClone).await })

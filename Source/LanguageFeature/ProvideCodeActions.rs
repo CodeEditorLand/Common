@@ -21,7 +21,9 @@ pub fn ProvideCodeActions(
 ) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<Value>> {
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let DocumentURIClone = DocumentURI.clone();
+
 		let RangeOrSelectionDTOClone = RangeOrSelectionDTO.clone();
+
 		let ContextDTOClone = ContextDTO.clone();
 
 		Box::pin(async move {

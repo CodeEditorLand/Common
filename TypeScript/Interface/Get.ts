@@ -13,6 +13,7 @@ export default interface Interface {
 	(Instance: {
 		// biome-ignore lint/suspicious/noExplicitAny:
 		[key: string]: any;
+
 		// biome-ignore lint/suspicious/noExplicitAny:
 	}): Promise<Map<any, any>>;
 }

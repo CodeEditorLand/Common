@@ -19,6 +19,7 @@ pub fn ProvideSelectionRanges(
 ) -> ActionEffect<Arc<dyn LanguageFeatureProviderRegistry>, CommonError, Option<Value>> {
 	ActionEffect::New(Arc::new(move |Registry:Arc<dyn LanguageFeatureProviderRegistry>| {
 		let DocumentURIClone = DocumentURI.clone();
+
 		let PositionsClone = Positions.clone();
 
 		Box::pin(async move { Registry.ProvideSelectionRanges(DocumentURIClone, PositionsClone).await })
