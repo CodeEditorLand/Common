@@ -55,6 +55,8 @@
 //!
 //! Full setup: <https://github.com/CodeEditorLand/Land>
 
+pub mod Effect;
+
 pub mod Environment;
 
 pub mod Error;
