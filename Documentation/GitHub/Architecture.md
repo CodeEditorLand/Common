@@ -36,7 +36,7 @@ graph TB
         ENV["Environment / Requires<br/>compile-time DI"]
         DTO["Data Transfer Objects<br/>FileStat / InitData /<br/>TerminalOptions"]
         ERR["CommonError<br/>unified error enum"]
-        TRANS["Transport Layer<br/>gRPC / IPC / WASM"]
+        TRANS["Transport Layer<br/>TransportStrategy + Config"]
         TEL["Telemetry<br/>PostHog + OTLP"]
 
         TRAITS --> AE
@@ -123,7 +123,7 @@ pub trait FileSystem: Send + Sync {
 | `Testing/`                 | `TestController`                        | Testing         | run, discover, results                                            |
 | `SourceControlManagement/` | `SourceControlManagementProvider`       | SCM             | status, commit, push, pull, diff                                  |
 | `Synchronization/`         | `SynchronizationProvider`               | Sync            | push, pull, merge, resolve                                        |
-| `IPC/`                     | `IPCProvider`                           | Communication   | establish, send, receive, proxy                                   |
+| `IPC/`                     | `IPCProvider`                           | Communication   | send, receive, proxy                                              |
 | `Webview/`                 | `WebviewProvider`                       | Webviews        | create, sendMessage, dispose                                      |
 | `TreeView/`                | `TreeViewProvider`                      | Tree views      | getChildren, getParent, resolveItem                               |
 | `StatusBar/`               | `StatusBarProvider`                     | Status bar      | setItem, updateItem, removeItem                                   |
@@ -243,7 +243,7 @@ Effect executed with concrete implementation
 | `ConfigurationTarget` | `Configuration`       | Global, Workspace, WorkspaceFolder       | Config ops               |
 | `SearchOptions`       | `Search`              | pattern, include, exclude, maxResults    | Search ops               |
 | `WorkspaceEditDTO`    | `DTO/`                | edits, fileCreates, fileDeletes          | Workspace edits          |
-| `TransportConfig`     | `Transport`           | strategy, timeout, retry config          | IPC configuration        |
+| `TransportConfig`     | `Transport`           | timeout, retry config                    | Transport configuration  |
 
 ---
 
@@ -272,19 +272,17 @@ pub enum CommonError {
 `Common` provides a transport-agnostic communication interface:
 
 ```rust
-pub enum TransportStrategy {
-    Grpc(GrpcConfig),
-    Ipc(IpcConfig),
-    Wasm(WasmConfig),
+pub trait TransportStrategy: Send + Sync {
+    type Error: std::error::Error + Send + Sync + 'static;
+    async fn connect(&self) -> Result<(), Self::Error>;
+    async fn send(&self, request: &[u8]) -> Result<Vec<u8>, Self::Error>;
+    async fn close(&self) -> Result<(), Self::Error>;
+    fn is_connected(&self) -> bool;
+    fn transport_type(&self) -> TransportType;
 }
 ```
 
-| Feature           | Description                                       |
-| ----------------- | ------------------------------------------------- |
-| Circuit breaker   | Automatic failure detection and isolation         |
-| Retry             | Configurable retry with exponential backoff       |
-| Metrics           | Prometheus metrics for transport operations       |
-| Dynamic selection | Runtime transport switching based on availability |
+`Common` defines the trait surface and `TransportConfig`; concrete transports (`gRPCTransport`, `IPCTransport`, `WASMTransport`, `MistTransport`) live in `Grove`.
 
 ---
 
