@@ -282,7 +282,9 @@ pub trait TransportStrategy: Send + Sync {
 }
 ```
 
-`Common` defines the trait surface and `TransportConfig`; concrete transports (`gRPCTransport`, `IPCTransport`, `WASMTransport`, `MistTransport`) live in `Grove`.
+`Common` defines the trait surface and `TransportConfig`; concrete transports
+(`gRPCTransport`, `IPCTransport`, `WASMTransport`, `MistTransport`) live in
+`Grove`.
 
 ---
 

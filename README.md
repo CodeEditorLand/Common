@@ -72,9 +72,10 @@ The DTO library provides all data structures used for IPC communication with
 across every service domain, making error handling consistent and predictable.
 
 The `Transport` layer offers transport-agnostic communication through a unified
-`TransportStrategy` trait. Concrete implementations (`gRPCTransport`, `IPCTransport`,
-`WASMTransport`, `MistTransport`) live in `Grove`. The `Telemetry` module provides a dual-pipe (`PostHog` + `OTLP`) emit
-surface shared across all `Rust` sidecars.
+`TransportStrategy` trait. Concrete implementations (`gRPCTransport`,
+`IPCTransport`, `WASMTransport`, `MistTransport`) live in `Grove`. The
+`Telemetry` module provides a dual-pipe (`PostHog` + `OTLP`) emit surface shared
+across all `Rust` sidecars.
 
 ---
 
