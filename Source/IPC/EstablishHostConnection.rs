@@ -8,6 +8,7 @@ use std::sync::Arc;
 use serde_json::Value;
 
 use super::SendNotificationToSideCar::SendNotificationToSideCar;
+
 use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError, IPC::IPCProvider::IPCProvider};
 
 /// Creates a convenience effect that can be used to perform an initial
@@ -27,5 +28,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError,
 /// An `ActionEffect` that resolves to `()` on success and requires the
 /// `IPCProvider` capability to be executed.
 pub fn EstablishHostConnection(SideCarIdentifier:String) -> ActionEffect<Arc<dyn IPCProvider>, CommonError, ()> {
+
 	SendNotificationToSideCar(SideCarIdentifier, "$InitialHandshake".to_string(), Value::Null)
 }

@@ -8,6 +8,7 @@ use std::time::Duration;
 /// Configuration for the circuit breaker.
 #[derive(Debug, Clone)]
 pub struct CircuitBreakerConfiguration {
+
 	/// Number of consecutive failures before the circuit opens.
 	pub FailureThreshold:u32,
 
@@ -19,6 +20,7 @@ pub struct CircuitBreakerConfiguration {
 }
 
 impl Default for CircuitBreakerConfiguration {
+
 	fn default() -> Self { Self { FailureThreshold:5, ResetTimeout:Duration::from_secs(60), SuccessThreshold:2 } }
 }
 
@@ -28,6 +30,7 @@ impl Default for CircuitBreakerConfiguration {
 /// `FailureThreshold` is exceeded, preventing cascading failures.
 #[derive(Debug, Clone)]
 pub struct CircuitBreaker {
+
 	Configuration:CircuitBreakerConfiguration,
 
 	FailureCount:u32,
@@ -36,6 +39,7 @@ pub struct CircuitBreaker {
 }
 
 impl CircuitBreaker {
+
 	/// Creates a new circuit breaker with the given configuration.
 	pub fn New(Configuration:CircuitBreakerConfiguration) -> Self {
 		Self { Configuration, FailureCount:0, IsOpen:false }

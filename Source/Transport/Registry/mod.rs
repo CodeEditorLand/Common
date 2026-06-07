@@ -18,6 +18,7 @@ use super::{
 
 /// Selection strategy for automatic transport selection.
 pub struct TransportSelector {
+
 	/// Environment detector for auto-selection
 	EnvironmentDetector:Box<dyn TransportTypeDetector + Send + Sync>,
 
@@ -26,6 +27,7 @@ pub struct TransportSelector {
 }
 
 impl TransportSelector {
+
 	/// Creates a new `TransportSelector` with default settings.
 	pub fn New() -> Self {
 		Self {
@@ -189,12 +191,14 @@ impl TransportSelector {
 }
 
 impl Default for TransportSelector {
+
 	fn default() -> Self { Self::New() }
 }
 
 /// Context information for transport selection.
 #[derive(Debug, Clone)]
 pub struct TransportContext {
+
 	EnvironmentInfo:EnvironmentInfo,
 
 	RequirementsInfo:TransportRequirements,
@@ -205,6 +209,7 @@ pub struct TransportContext {
 }
 
 impl TransportContext {
+
 	/// Creates a new transport selection context.
 	pub fn New(
 		EnvironmentInfo:EnvironmentInfo,
@@ -268,6 +273,7 @@ impl TransportContext {
 /// Environment information for transport selection.
 #[derive(Debug, Clone)]
 pub struct EnvironmentInfo {
+
 	/// Operating system platform
 	pub Platform:Platform,
 
@@ -282,6 +288,7 @@ pub struct EnvironmentInfo {
 }
 
 impl EnvironmentInfo {
+
 	/// Creates a new environment info.
 	pub fn New(Platform:Platform, IsWeb:bool, IsDesktop:bool, BrowserCapabilities:Option<BrowserCapabilities>) -> Self {
 		Self { Platform, IsWeb, IsDesktop, BrowserCapabilities }
@@ -291,6 +298,7 @@ impl EnvironmentInfo {
 /// Platform enumeration.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Platform {
+
 	Windows,
 
 	MacOS,
@@ -305,6 +313,7 @@ pub enum Platform {
 }
 
 impl Platform {
+
 	/// Gets the current platform.
 	pub fn Current() -> Self {
 		#[cfg(target_os = "windows")]
@@ -324,6 +333,7 @@ impl Platform {
 /// Browser capabilities detection.
 #[derive(Debug, Clone)]
 pub struct BrowserCapabilities {
+
 	pub WasmSupported:bool,
 
 	pub WebWorkerSupported:bool,
@@ -334,6 +344,7 @@ pub struct BrowserCapabilities {
 }
 
 impl Default for BrowserCapabilities {
+
 	fn default() -> Self {
 		Self {
 			WasmSupported:cfg!(target_arch = "wasm32"),
@@ -350,6 +361,7 @@ impl Default for BrowserCapabilities {
 /// Transport requirements for selection.
 #[derive(Debug, Clone)]
 pub struct TransportRequirements {
+
 	/// Whether bidirectional streaming is required
 	pub StreamingRequired:bool,
 
@@ -370,6 +382,7 @@ pub struct TransportRequirements {
 }
 
 impl Default for TransportRequirements {
+
 	fn default() -> Self {
 		Self {
 			StreamingRequired:false,
@@ -390,6 +403,7 @@ impl Default for TransportRequirements {
 /// Performance requirement level.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum PerformanceLevel {
+
 	Low = 1,
 
 	Medium = 2,
@@ -402,6 +416,7 @@ pub enum PerformanceLevel {
 /// Reliability requirement level.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ReliabilityLevel {
+
 	Low = 1,
 
 	Medium = 2,
@@ -414,6 +429,7 @@ pub enum ReliabilityLevel {
 /// Transport selection constraints.
 #[derive(Debug, Clone)]
 pub struct TransportConstraints {
+
 	/// Allowed transport types (empty means all allowed)
 	pub AllowedTransports:Vec<TransportType>,
 
@@ -428,6 +444,7 @@ pub struct TransportConstraints {
 }
 
 impl Default for TransportConstraints {
+
 	fn default() -> Self {
 		Self {
 			AllowedTransports:Vec::new(),
@@ -443,6 +460,7 @@ impl Default for TransportConstraints {
 
 /// Central registry for managing transport strategies.
 pub struct TransportRegistry {
+
 	/// Registered transports (name -> Arc\<dyn CommonTransportStrategy\>)
 	Transports:HashMap<String, Arc<dyn CommonTransportStrategy>>,
 
@@ -454,6 +472,7 @@ pub struct TransportRegistry {
 }
 
 impl TransportRegistry {
+
 	/// Creates a new, empty transport registry.
 	pub fn New() -> Self { Self { Transports:HashMap::new(), Active:None, Selector:TransportSelector::New() } }
 
@@ -573,11 +592,13 @@ impl TransportRegistry {
 }
 
 impl Default for TransportRegistry {
+
 	fn default() -> Self { Self::New() }
 }
 
 /// Provides environment detection for DefaultTransportTypeDetector.
 impl DefaultTransportTypeDetector {
+
 	/// Detects the current environment information.
 	pub fn DetectEnvironment() -> EnvironmentInfo {
 		let CurrentPlatform = Platform::Current();
@@ -687,6 +708,7 @@ mod tests {
 		async fn SendRequest(&mut self, Request:UnifiedRequest) -> Result<UnifiedResponse, TransportError> {
 			Ok(UnifiedResponse::Success(
 				Request.CorrelationIdentifier.clone().unwrap_or_default(),
+
 				Vec::new(),
 			))
 		}

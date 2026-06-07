@@ -7,6 +7,7 @@ use std::time::Duration;
 /// Configuration for retry behaviour.
 #[derive(Debug, Clone)]
 pub struct RetryConfiguration {
+
 	/// Maximum number of retry attempts.
 	pub MaximumAttempts:u32,
 
@@ -21,6 +22,7 @@ pub struct RetryConfiguration {
 }
 
 impl Default for RetryConfiguration {
+
 	fn default() -> Self {
 		Self {
 			MaximumAttempts:3,
@@ -37,6 +39,7 @@ impl Default for RetryConfiguration {
 /// Retry strategy selector.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RetryStrategy {
+
 	/// No retries.
 	None,
 
