@@ -7,16 +7,16 @@
 
 import { describe, expect, it } from "vitest";
 
-import { Async } from "../Source/EffectSmol.js";
 import {
 	createContainer,
 	createLayer,
 	createMockLayer,
 	createToken,
 } from "../Source/Container.js";
-import { createRef } from "../Source/Ref.js";
+import { Async } from "../Source/EffectSmol.js";
 import { createPubSub } from "../Source/PubSub.js";
-import { Err, Ok, isErr, isOk } from "../Source/Result.js";
+import { createRef } from "../Source/Ref.js";
+import { Err, isErr, isOk, Ok } from "../Source/Result.js";
 
 // ──────────────────────────────────────────────
 // Async (replaces Effect<T, E>)
@@ -28,9 +28,7 @@ describe("Async", () => {
 
 		expect(r1).toEqual({ ok: true, value: 42 });
 
-		const r2 = await Promise.resolve(
-			Async.fail("NotFound", { id: "x" }),
-		);
+		const r2 = await Promise.resolve(Async.fail("NotFound", { id: "x" }));
 
 		expect(r2).toEqual({
 			ok: false,

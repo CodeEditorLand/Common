@@ -5,8 +5,7 @@
  * with a simple symbol-keyed memoising container.
  */
 
-import type { Async } from "./EffectSmol.js";
-import { Async as AsyncNS } from "./EffectSmol.js";
+import { Async as AsyncNS, type Async } from "./EffectSmol.js";
 
 // ──────────────────────────────────────────────
 // Service token (replaces Context.Tag)
@@ -60,7 +59,11 @@ export interface ServiceContainer {
 	): this;
 	registerAll(
 		entries: Array<
-			[ServiceToken<unknown>, ServiceFactory<unknown>, ServiceToken<unknown>[]?]
+			[
+				ServiceToken<unknown>,
+				ServiceFactory<unknown>,
+				ServiceToken<unknown>[]?,
+			]
 		>,
 	): this;
 	get<T>(token: ServiceToken<T>): T;
@@ -102,9 +105,7 @@ export const createContainer = (): ServiceContainer => {
 			const entry = registry.get(token);
 
 			if (!entry)
-				throw new Error(
-					`Service not registered: ${String(token)}`,
-				);
+				throw new Error(`Service not registered: ${String(token)}`);
 
 			const value = entry.factory(container);
 
@@ -147,8 +148,7 @@ export const createMutableContainer = (
 			return this;
 		},
 		get<T>(token: ServiceToken<T>): T {
-			if (overrides.has(token))
-				return overrides.get(token) as T;
+			if (overrides.has(token)) return overrides.get(token) as T;
 			return base.get(token);
 		},
 		freeze() {

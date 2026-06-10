@@ -25,10 +25,8 @@ export type Async<T, E extends string = string> = Promise<
 
 const succeed = <T>(value: T): AsyncOk<T> => ({ ok: true, value }) as const;
 
-const fail = <E extends string>(
-	type: E,
-	cause?: unknown,
-): AsyncErr<E> => ({ ok: false, error: { type, cause } }) as const;
+const fail = <E extends string>(type: E, cause?: unknown): AsyncErr<E> =>
+	({ ok: false, error: { type, cause } }) as const;
 
 const voidOk: AsyncOk<void> = { ok: true, value: undefined };
 
