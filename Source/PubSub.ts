@@ -7,7 +7,9 @@
 
 export interface PubSub<T> {
 	publish(value: T): void;
+
 	subscribe(listener: (value: T) => void): () => void;
+
 	readonly subscriberCount: number;
 }
 
@@ -21,6 +23,7 @@ export const createPubSub = <T>(): PubSub<T> => {
 
 		subscribe(listener) {
 			listeners.add(listener);
+
 			return () => listeners.delete(listener);
 		},
 

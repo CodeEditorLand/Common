@@ -62,6 +62,7 @@ describe("Async", () => {
 
 	it("Async.map transforms ok value", async () => {
 		const base = Promise.resolve(Async.succeed(10));
+
 		const r = await Async.map(base, (v) => v * 2);
 
 		expect(r).toEqual({ ok: true, value: 20 });
@@ -69,6 +70,7 @@ describe("Async", () => {
 
 	it("Async.map passes err unchanged", async () => {
 		const base = Promise.resolve(Async.fail<"E">("E"));
+
 		const r = await Async.map(base, (v: number) => v * 2);
 
 		expect(r.ok).toBe(false);
@@ -82,6 +84,7 @@ describe("Async", () => {
 describe("Container", () => {
 	it("token identity - same name produces same symbol", () => {
 		const A = createToken<number>("SameService");
+
 		const B = createToken<number>("SameService");
 
 		expect(A).toBe(B);
@@ -89,6 +92,7 @@ describe("Container", () => {
 
 	it("token uniqueness - different names are distinct", () => {
 		const A = createToken<number>("ServiceA");
+
 		const B = createToken<number>("ServiceB");
 
 		expect(A).not.toBe(B);
@@ -96,6 +100,7 @@ describe("Container", () => {
 
 	it("register + get synchronous service", () => {
 		const Token = createToken<{ value: number }>("SyncSvc");
+
 		const container = createContainer();
 
 		container.register(Token, () => ({ value: 42 }));
@@ -105,6 +110,7 @@ describe("Container", () => {
 
 	it("get is memoised (same instance)", () => {
 		const Token = createToken<object>("MemoSvc");
+
 		const container = createContainer();
 
 		container.register(Token, () => ({}));
@@ -114,6 +120,7 @@ describe("Container", () => {
 
 	it("get throws on unknown token", () => {
 		const Token = createToken<unknown>("UnknownSvc");
+
 		const container = createContainer();
 
 		expect(() => container.get(Token)).toThrow();
@@ -121,21 +128,25 @@ describe("Container", () => {
 
 	it("registerAll wires multiple tokens", () => {
 		const NumToken = createToken<number>("Num");
+
 		const StrToken = createToken<string>("Str");
 
 		const container = createContainer();
 
 		container.registerAll([
 			[NumToken, () => 1],
+
 			[StrToken, () => "hello"],
 		]);
 
 		expect(container.get(NumToken)).toBe(1);
+
 		expect(container.get(StrToken)).toBe("hello");
 	});
 
 	it("freeze prevents further registration", () => {
 		const Token = createToken<number>("FrozenSvc");
+
 		const container = createContainer().freeze();
 
 		expect(() => container.register(Token, () => 1)).toThrow();
@@ -143,6 +154,7 @@ describe("Container", () => {
 
 	it("createMockLayer overrides via container", () => {
 		const Token = createToken<number>("MockSvc");
+
 		const mock = createMockLayer(Token, 99);
 
 		const container = createContainer();
@@ -184,13 +196,17 @@ describe("createRef", () => {
 
 	it("subscribe notifies on set", () => {
 		const ref = createRef(0);
+
 		const values: number[] = [];
 
 		const unsub = ref.subscribe((v) => values.push(v));
 
 		ref.set(1);
+
 		ref.set(2);
+
 		unsub();
+
 		ref.set(3);
 
 		expect(values).toEqual([1, 2]);
@@ -204,27 +220,35 @@ describe("createRef", () => {
 describe("createPubSub", () => {
 	it("fan-out delivers to all subscribers", () => {
 		const bus = createPubSub<number>();
+
 		const a: number[] = [];
+
 		const b: number[] = [];
 
 		bus.subscribe((v) => a.push(v));
+
 		bus.subscribe((v) => b.push(v));
 
 		bus.publish(1);
+
 		bus.publish(2);
 
 		expect(a).toEqual([1, 2]);
+
 		expect(b).toEqual([1, 2]);
 	});
 
 	it("unsubscribed listener stops receiving", () => {
 		const bus = createPubSub<number>();
+
 		const received: number[] = [];
 
 		const unsub = bus.subscribe((v) => received.push(v));
 
 		bus.publish(1);
+
 		unsub();
+
 		bus.publish(2);
 
 		expect(received).toEqual([1]);
@@ -254,6 +278,7 @@ describe("Result", () => {
 		const r = Ok(42);
 
 		expect(r).toEqual({ ok: true, value: 42 });
+
 		expect(isOk(r)).toBe(true);
 	});
 
@@ -261,6 +286,7 @@ describe("Result", () => {
 		const r = Err("NotFound", { id: "x" });
 
 		expect(r.ok).toBe(false);
+
 		expect(isErr(r)).toBe(true);
 
 		if (!r.ok) expect(r.error.type).toBe("NotFound");
