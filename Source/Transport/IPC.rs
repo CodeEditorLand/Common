@@ -1,4 +1,4 @@
 //! # IPC Transport Implementation
 //!
-//! Placeholder for the inter-process communication transport
-//! using Unix domain sockets (macOS/Linux) or named pipes (Windows).
+//! Inter-process communication transport using Unix domain sockets
+//! on macOS/Linux, or TCP loopback on Windows.

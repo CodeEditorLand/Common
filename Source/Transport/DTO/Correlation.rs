@@ -10,7 +10,6 @@ pub type CorrelationId = String;
 /// This allows different ID generation strategies (UUID, sequential, etc.)
 /// for testing or special requirements.
 pub trait CorrelationIdGenerator {
-
 	/// Generates a new unique correlation ID.
 	fn Generate() -> CorrelationId;
 }
@@ -19,7 +18,6 @@ pub trait CorrelationIdGenerator {
 pub struct UuidCorrelationIdGenerator;
 
 impl CorrelationIdGenerator for UuidCorrelationIdGenerator {
-
 	fn Generate() -> CorrelationId { uuid::Uuid::new_v4().to_string() }
 }
 

@@ -259,6 +259,13 @@ DefineSkyEvents! {
 
 	TerminalProcessId                             => "sky://terminal/processId",
 
+	/// Fired when `localPty:updateProperty` changes a terminal's title
+	/// (property 2 / 3) or shell type (property 5). Payload:
+	/// `{ id, property, value }`. Sky Bridge forwards this to the
+	/// xterm panel so the workbench tab label and icon update without a
+	/// full round-trip.
+	TerminalPropertyChanged                       => "sky://terminal/property-changed",
+
 	TerminalResize                                => "sky://terminal/resize",
 
 	TerminalShow                                  => "sky://terminal/show",

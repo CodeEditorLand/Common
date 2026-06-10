@@ -8,7 +8,6 @@
 /// Implementations record request outcomes and latency samples,
 /// and produce snapshots for monitoring and diagnostics.
 pub trait MetricsCollector: Send + Sync {
-
 	/// Records a completed request.
 	///
 	/// * `Success` - whether the request succeeded

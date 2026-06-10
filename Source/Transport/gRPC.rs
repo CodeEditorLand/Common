@@ -1,4 +1,4 @@
 //! # gRPC Transport Implementation
 //!
-//! Placeholder for the gRPC transport over HTTP/2.
-//! Full implementation uses `tonic` for gRPC communication.
+//! Connects to a tonic gRPC endpoint and forwards
+//! UnifiedRequest/UnifiedResponse over a raw HTTP/2 unary call.

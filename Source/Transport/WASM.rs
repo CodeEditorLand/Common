@@ -1,4 +1,5 @@
 //! # WASM Transport Implementation
 //!
-//! Placeholder for the WebAssembly/WebWorker transport used in browser
-//! environments.
+//! Channel-based transport for the Grove WebAssembly extension host.
+//! Because WASM has no sockets, message passing is done through a
+//! tokio mpsc channel pair created on Connect.
