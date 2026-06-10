@@ -3,7 +3,7 @@
 	"version": "0.0.6",
 	"private": false,
 	"description": "Common 👨🏻‍🏭",
-	"homepage": "https://common.land.PlayForm.Cloud",
+	"homepage": "https://common.editor.land",
 	"bugs": {
 		"url": "https://GitHub.Com/CodeEditorLand/Common/issues"
 	},
@@ -19,11 +19,13 @@
 	},
 	"type": "module",
 	"scripts": {
-		"prepublishOnly": "Build 'Source/**/*.ts'"
+		"prepublishOnly": "Build 'Source/**/*.ts'",
+		"test": "vitest run"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "4.20260605.1",
-		"@playform/build": "0.3.2"
+		"@cloudflare/workers-types": "4.20260609.1",
+		"@playform/build": "0.3.2",
+		"vitest": "3.2.6"
 	},
 	"publishConfig": {
 		"access": "public"
