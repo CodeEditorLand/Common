@@ -313,9 +313,9 @@ async fn SomeLogic(Runtime: Arc<impl ApplicationRunTime>) {
 
 ## See Also
 
-- [Common Documentation](https://editor.land/Doc/common)
-- [Architecture Overview](https://editor.land/Doc/architecture)
-- [Why Rust](https://editor.land/Doc/why-rust)
+- [Common Documentation](https://Editor.Land/Doc/common)
+- [Architecture Overview](https://Editor.Land/Doc/architecture)
+- [Why Rust](https://Editor.Land/Doc/why-rust)
 - [Mountain](https://github.com/CodeEditorLand/Mountain)
 - [Echo](https://github.com/CodeEditorLand/Echo)
 - [Air](https://github.com/CodeEditorLand/Air)
