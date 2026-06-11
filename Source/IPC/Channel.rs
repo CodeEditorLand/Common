@@ -264,11 +264,15 @@ DefineChannels! {
 	// --- Keybindings ---
 	KeybindingAdd                                 => "keybinding:add",
 
+	KeybindingEvaluateWhen                        => "keybinding:evaluateWhen",
+
 	KeybindingGetAll                              => "keybinding:getAll",
 
 	KeybindingLookup                              => "keybinding:lookup",
 
 	KeybindingRemove                              => "keybinding:remove",
+
+	KeybindingResolve                             => "keybinding:resolve",
 
 	// --- Labels ---
 	LabelGetBase                                  => "label:getBase",
