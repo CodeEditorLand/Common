@@ -149,6 +149,8 @@ DefineChannels! {
 	// --- Extensions ---
 	ExtensionsActivate                            => "extensions:activate",
 
+	ExtensionsDownload                            => "extensions:download",
+
 	ExtensionsGet                                 => "extensions:get",
 
 	ExtensionsGetAll                              => "extensions:getAll",
@@ -159,6 +161,8 @@ DefineChannels! {
 
 	ExtensionsGetInstalled                        => "extensions:getInstalled",
 
+	ExtensionsGetCoreTranslation                  => "extensions:getCoreTranslation",
+
 	ExtensionsGetRecommendations                  => "extensions:getRecommendations",
 
 	ExtensionsGetUninstalled                      => "extensions:getUninstalled",
@@ -166,6 +170,8 @@ DefineChannels! {
 	ExtensionsGetManifest                         => "extensions:getManifest",
 
 	ExtensionsInstall                             => "extensions:install",
+
+	ExtensionsSearch                              => "extensions:search",
 
 	ExtensionsIsActive                            => "extensions:isActive",
 
@@ -365,7 +371,14 @@ DefineChannels! {
 
 	OutputCreate                                  => "output:create",
 
+	OutputDispose                                 => "output:dispose",
+
+	OutputReplace                                 => "output:replace",
+
 	OutputShow                                    => "output:show",
+
+	// --- Process ---
+	ProcessGetMemoryInfo                          => "process:getMemoryInfo",
 
 	// --- Progress ---
 	ProgressBegin                                 => "progress:begin",
@@ -378,6 +391,10 @@ DefineChannels! {
 	SearchFindFiles                               => "search:findFiles",
 
 	SearchFindInFiles                             => "search:findInFiles",
+
+	SearchCancel                                  => "search:cancel",
+
+	SearchClearCache                              => "search:clearCache",
 
 	// --- Storage ---
 	StorageClose                                  => "storage:close",
@@ -508,6 +525,8 @@ DefineChannels! {
 	// when TierIPC=NodeDeferred. They are registered here so the Channel
 	// registry logs "registered, no dispatch arm" instead of "Unknown".
 	LanguagesGetAll                               => "languages:getAll",
+
+	LanguagesGetLanguages                         => "languages:getLanguages",
 
 	LanguagesGetEncodedLanguageId                 => "languages:getEncodedLanguageId",
 
