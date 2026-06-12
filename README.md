@@ -59,7 +59,7 @@ required."_
 ## Overview
 
 **Common** is the architectural core of the Land Code Editor's native backend.
-It provides a pure, abstract foundation with **no concrete implementations** —
+It provides a pure, abstract foundation with **no concrete implementations** -
 defining the application's "language" through `async trait`s per service domain,
 an `ActionEffect` declarative system, Data Transfer Objects (DTOs) for IPC, a
 unified `CommonError` enum, a transport-agnostic communication layer, and a
@@ -73,22 +73,22 @@ and ensures consistent data contracts across the entire native ecosystem.
 
 **Common is engineered to:**
 
-1. **Define Pure Abstractions** — Every application capability is expressed as
+1. **Define Pure Abstractions** - Every application capability is expressed as
    an `async trait` with zero concrete implementation logic.
-2. **Enable Compile-Time DI** — The `Environment` and `Requires` traits allow
+2. **Enable Compile-Time DI** - The `Environment` and `Requires` traits allow
    components to declare service needs without coupling to specific
    implementations.
-3. **Stabilize Data Contracts** — All `serde`-compatible DTOs and error types
+3. **Stabilize Data Contracts** - All `serde`-compatible DTOs and error types
    form the stable IPC contract between `Mountain` ⛰️, `Cocoon` 🦋, `Grove` 🌳,
    and all sidecars.
-4. **Provide Transport-Agnostic Communication** — The `Transport` layer defines
+4. **Provide Transport-Agnostic Communication** - The `Transport` layer defines
    a `TransportStrategy` trait implemented by concrete transports in `Grove`.
 
 ---
 
 ## Key Features&#x2001;⚙️
 
-**Declarative `ActionEffect` System** — Operations are treated as data
+**Declarative `ActionEffect` System** - Operations are treated as data
 structures rather than direct function calls. Effects are constructed as values
 that describe the desired side effect and are then passed to an
 `ApplicationRunTime` for execution. This enables composition, testing, and
@@ -96,29 +96,29 @@ controlled execution in a single unified pattern. Instead of writing a function
 that immediately performs I/O, you call a function that _returns a description
 of that effect_.
 
-**Compile-Time Dependency Injection** — The `Environment` and `Requires` traits
+**Compile-Time Dependency Injection** - The `Environment` and `Requires` traits
 handle DI at compile time. Components declare their service needs without
 coupling to specific implementations. All core application services are defined
 as `async trait`s, enforcing an asynchronous-first architecture across the
 entire system.
 
-**DTO Library for IPC** — Every data structure used for IPC communication with
+**DTO Library for IPC** - Every data structure used for IPC communication with
 `Cocoon` and internal state management in `Mountain` is defined here. All types
 are `serde`-compatible, forming the stable contract between all Land components.
 
-**Unified Error Handling** — A single `CommonError` enum covers every possible
-failure across all service domains — `FileSystem`, `Terminal`, `SCM`,
+**Unified Error Handling** - A single `CommonError` enum covers every possible
+failure across all service domains - `FileSystem`, `Terminal`, `SCM`,
 `LanguageFeature`, `Transport`, and more. Error handling is consistent and
 predictable everywhere.
 
-**Transport-Agnostic Communication** — The `Transport/` layer defines a
+**Transport-Agnostic Communication** - The `Transport/` layer defines a
 `TransportStrategy` trait. Concrete implementations (`gRPCTransport`,
 `IPCTransport`, `WASMTransport`, `MistTransport`) live in `Grove`.
 
-**Dual-Pipe Telemetry** — The `Telemetry/` module provides a shared `PostHog` +
+**Dual-Pipe Telemetry** - The `Telemetry/` module provides a shared `PostHog` +
 `OTLP` emit surface consumed by all `Rust` sidecars.
 
-**Minimal Dependencies** — This crate depends only on `serde`, `tokio`,
+**Minimal Dependencies** - This crate depends only on `serde`, `tokio`,
 `async-trait`, and a handful of foundational crates. It has zero knowledge of
 `Tauri`, `gRPC`, or any specific application logic.
 
@@ -621,10 +621,10 @@ Common enforces security at the architectural level:
 
 | Layer              | Mechanism                                                                          |
 | ------------------ | ---------------------------------------------------------------------------------- |
-| **Architecture**   | No concrete implementations — consumers cannot bypass trait boundaries             |
+| **Architecture**   | No concrete implementations - consumers cannot bypass trait boundaries             |
 | **Type system**    | All capabilities are abstract `async trait`s with explicit type signatures         |
 | **Error model**    | Single `CommonError` enum prevents information leakage through ad-hoc error types  |
-| **Dependencies**   | Zero dependency on `Tauri`, `gRPC`, or any networking crate — no ambient authority |
+| **Dependencies**   | Zero dependency on `Tauri`, `gRPC`, or any networking crate - no ambient authority |
 | **Testing**        | Mock implementations allow security-critical paths to be tested in isolation       |
 | **Data contracts** | `serde`-compatible DTOs with explicit schemas prevent deserialization attacks      |
 
@@ -636,7 +636,7 @@ Common is designed to be compatible with:
 
 | Target          | Integration                                                                       |
 | --------------- | --------------------------------------------------------------------------------- |
-| **Mountain** ⛰️ | Primary consumer — implements all traits, executes effects                        |
+| **Mountain** ⛰️ | Primary consumer - implements all traits, executes effects                        |
 | **Grove** 🌳    | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports |
 | **Cocoon** 🦋   | Shares DTOs via `serde` for IPC data contract compatibility                       |
 | **Air** 🪁      | Consumes `Transport` and `Telemetry` modules for daemon communication             |
@@ -649,25 +649,25 @@ Common is designed to be compatible with:
 
 - **[Rust API Documentation](https://rust.documentation.common.editor.land/)**&#x2001;📖
 - [Architecture Overview](https://Editor.Land/Doc/architecture)
-- [Deep Dive](Documentation/GitHub/DeepDive.md) — The `ActionEffect` system,
+- [Deep Dive](Documentation/GitHub/DeepDive.md) - The `ActionEffect` system,
   trait-based DI model, and guide for adding new services
 
 ---
 
 ## Related Documentation
 
-- [Architecture Overview](https://Editor.Land/Doc/architecture) — Internal
+- [Architecture Overview](https://Editor.Land/Doc/architecture) - Internal
   module structure
-- [Deep Dive](Documentation/GitHub/DeepDive.md) — In-depth technical details
-- [Land Documentation](../../Documentation/GitHub/README.md) — Complete
+- [Deep Dive](Documentation/GitHub/DeepDive.md) - In-depth technical details
+- [Land Documentation](../../Documentation/GitHub/README.md) - Complete
   documentation index
-- [`Mountain`](https://github.com/CodeEditorLand/Mountain) — Primary consumer
+- [`Mountain`](https://github.com/CodeEditorLand/Mountain) - Primary consumer
   implementing Common traits
-- [`Echo`](https://github.com/CodeEditorLand/Echo) — Work-stealing scheduler
-- [`Air`](https://github.com/CodeEditorLand/Air) — Background daemon
+- [`Echo`](https://github.com/CodeEditorLand/Echo) - Work-stealing scheduler
+- [`Air`](https://github.com/CodeEditorLand/Air) - Background daemon
 - [Why Rust](https://Editor.Land/Doc/why-rust)
 - [`CHANGELOG.md`](https://github.com/CodeEditorLand/Common/tree/Current/CHANGELOG.md)
-  — History of changes specific to Common
+  - History of changes specific to Common
 
 ---
 
