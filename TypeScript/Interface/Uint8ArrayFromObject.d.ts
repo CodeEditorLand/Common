@@ -5,6 +5,7 @@ import type _Object from "../Interface/Object.ts";
  *
  */
 export default interface Interface {
+
 	/**
 	 * The function `Uint8ArrayFromObject` converts an object with keys as numbers and
 	 * values as Uint8Array elements into a sorted Uint8Array.

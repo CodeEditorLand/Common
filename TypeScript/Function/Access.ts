@@ -1,4 +1,5 @@
 import type Interface from "../Interface/Access.js";
+
 import type Data from "../Interface/Data.js";
 
 /**

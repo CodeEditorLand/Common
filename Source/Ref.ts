@@ -6,6 +6,7 @@
  */
 
 export interface Ref<T> {
+
 	get(): T;
 
 	set(value: T): void;
@@ -18,6 +19,7 @@ export interface Ref<T> {
 }
 
 export const createRef = <T>(initial: T): Ref<T> => {
+
 	let current = initial;
 
 	const listeners = new Set<(value: T) => void>();
