@@ -667,7 +667,7 @@ Common is designed to be compatible with:
 - [`Air`](https://github.com/CodeEditorLand/Air) - Background daemon
 - [Why Rust](https://Editor.Land/Doc/why-rust)
 - [`CHANGELOG.md`](https://github.com/CodeEditorLand/Common/tree/Current/CHANGELOG.md)
-  - History of changes specific to Common
+    - History of changes specific to Common
 
 ---
 
