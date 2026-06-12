@@ -11,7 +11,9 @@
 //! constructors for every terminal-related operation.
 
 // --- Trait Definition ---
+/// Trait for creating and managing terminal instances.
 pub mod TerminalProvider;
 
 // --- Effect Constructors ---
+/// Effect constructor for creating a new terminal.
 pub mod CreateTerminal;

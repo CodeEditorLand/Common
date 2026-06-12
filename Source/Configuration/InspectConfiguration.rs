@@ -6,6 +6,12 @@
 //   - This effect abstracts the "what" (inspect a configuration) from the "how"
 //     (the ConfigurationInspector implementation).
 
+//! # InspectConfiguration Effect
+//!
+//! Defines a declarative `ActionEffect` for inspecting a configuration key
+//! across all its sources (default, user, workspace) via the
+//! `ConfigurationInspector`.
+
 use std::sync::Arc;
 
 use serde_json::Value;

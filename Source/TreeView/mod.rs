@@ -6,7 +6,9 @@
 //! operation.
 
 // --- Trait Definition ---
+/// Trait for providing tree data to sidebar views.
 pub mod TreeViewProvider;
 
 // --- Data Transfer Objects ---
+/// DTOs for the TreeView service.
 pub mod DTO;

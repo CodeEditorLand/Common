@@ -66,8 +66,18 @@ fn ParseEndpoint(Endpoint:&str) -> (String, String) {
 	(HostPort, PathFinal)
 }
 
-/// Emit one span. `StartNano` / `EndNano` are wall-clock (not monotonic)
-/// nanosecond timestamps - use `NowNano()` from the caller's start.
+/// Emit one OTLP span as a raw HTTP POST to the OTLP collector.
+///
+/// `StartNano` / `EndNano` are wall-clock (not monotonic)
+/// nanosecond timestamps - use `NowNanoPub()` from the caller's start.
+/// Respects the `IsAllowed::OTLP()` gate and the `OTLP_AVAILABLE`
+/// circuit-breaker (single failed POST disables the pipe).
+///
+/// # Parameters
+/// * `Name` - The span name (e.g., `"ipc:request"`, `"file:read"`).
+/// * `StartNano` - Wall-clock start timestamp in nanoseconds.
+/// * `EndNano` - Wall-clock end timestamp in nanoseconds.
+/// * `Attributes` - Key-value pairs of span attributes.
 pub fn Fn(Name:&str, StartNano:u64, EndNano:u64, Attributes:&[(&str, &str)]) {
 	if !IsAllowed::OTLP() {
 		return;
@@ -113,7 +123,7 @@ pub fn Fn(Name:&str, StartNano:u64, EndNano:u64, Attributes:&[(&str, &str)]) {
 			r#"]}},"scopeSpans":[{{"scope":{{"name":"land.{}","version":"1.0.0"}},"#,
 			r#""spans":[{{"traceId":"{}","spanId":"{}","name":"{}","kind":1,"#,
 			r#""startTimeUnixNano":"{}","endTimeUnixNano":"{}","#,
-			r#""attributes":[{}],"status":{{"code":{}}}}}]}}]}}]}}"#,
+			r#""attributes":[{}],"status":{{"code":{}}}}}]}}]}}]"#,
 		),
 		ServiceName,
 		TierStr,
@@ -178,5 +188,6 @@ pub fn Fn(Name:&str, StartNano:u64, EndNano:u64, Attributes:&[(&str, &str)]) {
 	});
 }
 
-/// Helper exposed to callers that need a span window timestamp.
+/// Returns the current wall-clock time in nanoseconds since Unix epoch.
+/// Exposed to callers that need a span window timestamp.
 pub fn NowNanoPub() -> u64 { NowNano() }

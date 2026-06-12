@@ -5,6 +5,7 @@
 
 use std::sync::OnceLock;
 
+/// The global PostHog client instance, initialized by `Initialize::Fn`.
 pub static CLIENT:OnceLock<posthog_rs::Client> = OnceLock::new();
 
 /// The Tier that called `Initialize`, captured for default `$component`

@@ -6,6 +6,11 @@
 //   - This effect abstracts the "what" (get all commands) from the "how" (the
 //     CommandExecutor implementation).
 
+//! # GetAllCommands Effect
+//!
+//! Defines a declarative `ActionEffect` for retrieving all currently registered
+//! command identifiers from the `CommandExecutor`.
+
 use std::sync::Arc;
 
 use super::CommandExecutor::CommandExecutor;

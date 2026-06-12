@@ -11,7 +11,9 @@
 //! (DTOs), and `ActionEffect` constructors for status bar operations.
 
 // --- Trait Definition ---
+/// Trait for managing status bar items and messages.
 pub mod StatusBarProvider;
 
 // --- Data Transfer Objects ---
+/// DTOs for the StatusBar service.
 pub mod DTO;

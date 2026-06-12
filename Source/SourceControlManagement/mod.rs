@@ -11,7 +11,9 @@
 //! version control systems like Git.
 
 // --- Trait Definition ---
+/// Trait for source control management (VCS integration).
 pub mod SourceControlManagementProvider;
 
 // --- Data Transfer Objects ---
+/// DTOs for the Source Control Management API.
 pub mod DTO;

@@ -12,11 +12,15 @@
 //! `ActionEffect` constructors for all diagnostic operations.
 
 // --- Trait Definition ---
+/// Trait for managing document diagnostics.
 pub mod DiagnosticManager;
 
 // --- Effect Constructors ---
+/// Effect constructor for clearing all diagnostics.
 pub mod ClearDiagnostics;
 
+/// Effect constructor for retrieving all diagnostics.
 pub mod GetAllDiagnostics;
 
+/// Effect constructor for setting diagnostics on a document.
 pub mod SetDiagnostics;

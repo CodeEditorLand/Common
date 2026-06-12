@@ -11,7 +11,9 @@
 //! (DTOs), and `ActionEffect` constructors for every Webview operation.
 
 // --- Trait Definition ---
+/// Trait for creating and managing webview instances.
 pub mod WebviewProvider;
 
 // --- Data Transfer Objects ---
+/// DTOs for the Webview service.
 pub mod DTO;

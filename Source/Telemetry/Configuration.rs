@@ -4,6 +4,16 @@
 //! Environment::Fn` populates these into the spawned process's env so
 //! sidecars launched as Mountain children pick them up automatically.
 
+/// Runtime telemetry configuration loaded from environment variables.
+///
+/// # Fields
+/// * `Key` - PostHog API key (from `Authorize` env var).
+/// * `Host` - PostHog host URL (from `Beam` env var; default `https://eu.i.posthog.com`).
+/// * `Brand` - Brand identifier (from `Brand` env var).
+/// * `Report` - Whether PostHog reporting is enabled (from `Report` env var).
+/// * `Capture` - Master telemetry capture toggle (from `Capture` env var).
+/// * `Pipe` - OTLP exporter endpoint (from `Pipe` env var; default `http://127.0.0.1:4318`).
+/// * `Emit` - Whether OTLP emission is enabled (from `Emit` env var).
 pub struct Configuration {
 	pub Key:String,
 
@@ -35,6 +45,7 @@ fn ReadBool(Key:&str, Fallback:bool) -> bool {
 	}
 }
 
+/// Reads telemetry configuration from environment variables at runtime.
 pub fn Fn() -> Configuration {
 	Configuration {
 		Key:ReadString("Authorize", ""),

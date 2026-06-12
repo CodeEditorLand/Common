@@ -4,6 +4,11 @@
 
 use crate::Telemetry::IsAllowed;
 
+/// Generates a stable distinct ID for the current session.
+///
+/// Uses the `Brand` from cached configuration if non-empty, otherwise
+/// falls back to `land-dev-{USER}` derived from the `USER` or `USERNAME`
+/// environment variable.
 pub fn Fn() -> String {
 	let Brand = &IsAllowed::Cached().Brand;
 

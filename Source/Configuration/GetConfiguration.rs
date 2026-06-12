@@ -6,6 +6,11 @@
 //   - This effect abstracts the "what" (get a configuration) from the "how"
 //     (the ConfigurationProvider implementation).
 
+//! # GetConfiguration Effect
+//!
+//! Defines a declarative `ActionEffect` for retrieving a merged configuration
+//! value or section from the `ConfigurationProvider`.
+
 use std::sync::Arc;
 
 use serde_json::Value;

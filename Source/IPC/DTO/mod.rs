@@ -7,5 +7,5 @@
 // respective modules. This file serves as a placeholder for future DTOs.
 // It is kept for structural consistency.
 
-// Re-export DTOs from their modules
+/// Enum identifying the target service context for an RPC message.
 pub mod ProxyTarget;

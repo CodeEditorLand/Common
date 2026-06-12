@@ -7,11 +7,15 @@
 //! all secret management operations.
 
 // --- Trait Definition ---
+/// Trait for accessing the OS keychain or credential store.
 pub mod SecretProvider;
 
 // --- Effect Constructors ---
+/// Effect constructor for deleting a stored secret.
 pub mod DeleteSecret;
 
+/// Effect constructor for retrieving a stored secret.
 pub mod GetSecret;
 
+/// Effect constructor for storing a new secret.
 pub mod StoreSecret;

@@ -5,6 +5,11 @@
 //   - Provide a contract for updating configuration values at specific targets
 //     (e.g., User, Workspace).
 
+//! # ConfigurationProvider Trait
+//!
+//! Defines the abstract service trait for reading and writing configuration
+//! values, including merged resolution from multiple scopes.
+
 use async_trait::async_trait;
 use serde_json::Value;
 

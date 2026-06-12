@@ -4,6 +4,10 @@
 
 use crate::Telemetry::{CaptureEvent, Client};
 
+/// Captures a session-start event for the current process.
+///
+/// Emitted as `land:<tier>:session:start` with `pid`, `os`, and `arch`
+/// properties. Called once during boot by `Initialize::Fn`.
 pub fn Fn() {
 	let TierStr = Client::TIER.get().map(|T| T.AsStr()).unwrap_or("common");
 

@@ -13,10 +13,13 @@
 //! for all storage operations.
 
 // --- Trait Definition ---
+/// Trait for persistent key-value storage for extensions (Memento API).
 pub mod StorageProvider;
 
 // --- Effect Constructors ---
 // Legacy per-key effects
+/// Effect constructor for retrieving a single storage item by key.
 pub mod GetStorageItem;
 
+/// Effect constructor for storing a single item by key.
 pub mod SetStorageItem;

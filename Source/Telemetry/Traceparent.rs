@@ -52,10 +52,13 @@ pub fn Build() -> String {
 /// `(TraceId, ParentSpanId)`.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Decoded {
+	/// The trace ID from the header.
 	pub TraceId:String,
 
+	/// The parent span ID from the header.
 	pub ParentSpanId:String,
 
+	/// Whether the sampled flag was set.
 	pub Sampled:bool,
 }
 

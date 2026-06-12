@@ -8,4 +8,5 @@
 //! Aggregates and re-exports all Data Transfer Objects (DTOs) related to the
 //! StatusBar service.
 
+/// DTO for a status bar entry (text, tooltip, color, priority).
 pub mod StatusBarEntryDTO;

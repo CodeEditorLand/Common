@@ -26,24 +26,35 @@
 //! - `EmitOTLPSpan::Fn` - raw HTTP OTLP exporter
 //! - `Initialize::Fn` - `Tier`-tagged boot
 
+/// PostHog error capture function.
 pub mod CaptureError;
 
+/// PostHog event capture function.
 pub mod CaptureEvent;
 
+/// PostHog session capture function.
 pub mod CaptureSession;
 
+/// `OnceLock<posthog_rs::Client>` singleton.
 pub mod Client;
 
+/// Runtime telemetry configuration reader.
 pub mod Configuration;
 
+/// Stable per-machine identity provider.
 pub mod DistinctId;
 
+/// Raw HTTP OTLP span exporter.
 pub mod EmitOTLPSpan;
 
+/// Telemetry initialization (call once during boot).
 pub mod Initialize;
 
+/// Per-pipe gate checks (`PostHog`, `OTLP`, `Cached`).
 pub mod IsAllowed;
 
+/// Enum identifying the calling sidecar (Air, Echo, Rest, etc.).
 pub mod Tier;
 
+/// W3C Traceparent header for distributed tracing.
 pub mod Traceparent;

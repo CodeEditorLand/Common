@@ -5,8 +5,12 @@
 //! trait for executing effects, and a convenience helper function.
 
 // --- Sub-modules ---
+/// The core `ActionEffect` struct - a first-class async operation value.
 pub mod ActionEffect;
 
+/// The `ApplicationRunTime` trait for providing capabilities and executing
+/// effects.
 pub mod ApplicationRunTime;
 
+/// Convenience function for executing an `ActionEffect` via the runtime.
 pub mod ExecuteEffect;
