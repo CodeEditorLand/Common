@@ -115,8 +115,8 @@ predictable everywhere.
 `TransportStrategy` trait. Concrete implementations (`gRPCTransport`,
 `IPCTransport`, `WASMTransport`, `MistTransport`) live in `Grove`.
 
-**Dual-Pipe Telemetry** — The `Telemetry/` module provides a shared
-`PostHog` + `OTLP` emit surface consumed by all `Rust` sidecars.
+**Dual-Pipe Telemetry** — The `Telemetry/` module provides a shared `PostHog` +
+`OTLP` emit surface consumed by all `Rust` sidecars.
 
 **Minimal Dependencies** — This crate depends only on `serde`, `tokio`,
 `async-trait`, and a handful of foundational crates. It has zero knowledge of
@@ -126,13 +126,13 @@ predictable everywhere.
 
 ## Core Architecture Principles&#x2001;🏗️
 
-| Principle | Description | Key Components |
-|-----------|-------------|----------------|
-| **Abstraction** | Define every application capability as an abstract `async trait`. Never include concrete implementation logic. | All `*Provider.rs` and `*Manager.rs` files |
-| **Declarativism** | Represent every operation as an `ActionEffect` value. The crate provides constructor functions for these effects. | `Effect/*`, all effect constructor files |
-| **Composability** | The `ActionEffect` system and trait-based DI are designed to be composed, allowing complex workflows to be built from simple, reusable pieces. | `Environment/*`, `Effect/*` |
-| **Contract-First** | Define all data structures (`DTO/*`) and error types (`Error/*`) first. These form the stable contract for all other components. | `DTO/`, `Error/` |
-| **Purity** | This crate has minimal dependencies and is completely independent of `Tauri`, `gRPC`, or any specific application logic. | `Cargo.toml` |
+| Principle          | Description                                                                                                                                    | Key Components                             |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| **Abstraction**    | Define every application capability as an abstract `async trait`. Never include concrete implementation logic.                                 | All `*Provider.rs` and `*Manager.rs` files |
+| **Declarativism**  | Represent every operation as an `ActionEffect` value. The crate provides constructor functions for these effects.                              | `Effect/*`, all effect constructor files   |
+| **Composability**  | The `ActionEffect` system and trait-based DI are designed to be composed, allowing complex workflows to be built from simple, reusable pieces. | `Environment/*`, `Effect/*`                |
+| **Contract-First** | Define all data structures (`DTO/*`) and error types (`Error/*`) first. These form the stable contract for all other components.               | `DTO/`, `Error/`                           |
+| **Purity**         | This crate has minimal dependencies and is completely independent of `Tauri`, `gRPC`, or any specific application logic.                       | `Cargo.toml`                               |
 
 ---
 
@@ -184,53 +184,53 @@ graph LR
 
 **Connection paths:**
 
-| Path | Relationship | Use Case |
-|------|-------------|----------|
-| `Mountain` → `Common` | Implements traits, consumes effects | Primary consumer of all service definitions |
-| `Grove` → `Common` transport layer | Implements `TransportStrategy` | `gRPC`, `IPC`, `WASM`, `Mist` transports |
-| `Air` → `Common` transport + telemetry | Uses `Transport` and `Telemetry` modules | Background daemon communication |
-| Sidecars → `Common` telemetry | Consumes `PostHog` + `OTLP` emit surface | Shared telemetry across all `Rust` sidecars |
-| Mock tests → `Common` traits | Implements mock providers | Fast, isolated unit tests |
-| `Cocoon` ↔ `Common` | Shares DTOs via `serde` | IPC data contract compatibility |
+| Path                                   | Relationship                             | Use Case                                    |
+| -------------------------------------- | ---------------------------------------- | ------------------------------------------- |
+| `Mountain` → `Common`                  | Implements traits, consumes effects      | Primary consumer of all service definitions |
+| `Grove` → `Common` transport layer     | Implements `TransportStrategy`           | `gRPC`, `IPC`, `WASM`, `Mist` transports    |
+| `Air` → `Common` transport + telemetry | Uses `Transport` and `Telemetry` modules | Background daemon communication             |
+| Sidecars → `Common` telemetry          | Consumes `PostHog` + `OTLP` emit surface | Shared telemetry across all `Rust` sidecars |
+| Mock tests → `Common` traits           | Implements mock providers                | Fast, isolated unit tests                   |
+| `Cocoon` ↔ `Common`                    | Shares DTOs via `serde`                  | IPC data contract compatibility             |
 
 ---
 
 ## Key Components
 
-| Component | Path | Description |
-|-----------|------|-------------|
-| Library Root | `Source/Library.rs` | Crate root, declares all modules. |
-| Environment | `Source/Environment/` | The core DI system (Environment, Requires, HasEnvironment traits). |
-| Effect | `Source/Effect/` | The ActionEffect system (ActionEffect, ApplicationRunTime traits). |
-| Error | `Source/Error/` | The universal CommonError enum. |
-| DTO | `Source/DTO/` | Shared Data Transfer Objects (re-exports from service modules). |
-| Utility | `Source/Utility/` | Utility functions (e.g., Serialization). |
-| Command | `Source/Command/` | Command management service. |
-| Configuration | `Source/Configuration/` | Configuration provider service. |
-| CustomEditor | `Source/CustomEditor/` | Custom editor provider service. |
-| Debug | `Source/Debug/` | Debug service. |
-| Diagnostic | `Source/Diagnostic/` | Diagnostic manager service. |
-| Document | `Source/Document/` | Document provider service. |
-| ExtensionManagement | `Source/ExtensionManagement/` | Extension management service. |
-| FileSystem | `Source/FileSystem/` | File system read/write service. |
-| IPC | `Source/IPC/` | Inter-process communication service. |
-| Keybinding | `Source/Keybinding/` | Keybinding provider service. |
-| LanguageFeature | `Source/LanguageFeature/` | Language feature provider registry. |
-| Output | `Source/Output/` | Output channel manager service. |
-| Search | `Source/Search/` | Search provider service. |
-| Secret | `Source/Secret/` | Secret storage provider service. |
-| SourceControlManagement | `Source/SourceControlManagement/` | Source control management service. |
-| StatusBar | `Source/StatusBar/` | Status bar provider service. |
-| Storage | `Source/Storage/` | Storage provider service. |
-| Synchronization | `Source/Synchronization/` | Synchronization provider service. |
-| Telemetry | `Source/Telemetry/` | Telemetry service (dual-pipe PostHog + OTLP). |
-| Terminal | `Source/Terminal/` | Terminal provider service. |
-| Testing | `Source/Testing/` | Test controller service. |
-| Transport | `Source/Transport/` | Transport-agnostic communication layer. |
-| TreeView | `Source/TreeView/` | Tree view provider service. |
-| UserInterface | `Source/UserInterface/` | User interface provider service. |
-| Webview | `Source/Webview/` | Webview provider service. |
-| Workspace | `Source/Workspace/` | Workspace provider service. |
+| Component               | Path                              | Description                                                        |
+| ----------------------- | --------------------------------- | ------------------------------------------------------------------ |
+| Library Root            | `Source/Library.rs`               | Crate root, declares all modules.                                  |
+| Environment             | `Source/Environment/`             | The core DI system (Environment, Requires, HasEnvironment traits). |
+| Effect                  | `Source/Effect/`                  | The ActionEffect system (ActionEffect, ApplicationRunTime traits). |
+| Error                   | `Source/Error/`                   | The universal CommonError enum.                                    |
+| DTO                     | `Source/DTO/`                     | Shared Data Transfer Objects (re-exports from service modules).    |
+| Utility                 | `Source/Utility/`                 | Utility functions (e.g., Serialization).                           |
+| Command                 | `Source/Command/`                 | Command management service.                                        |
+| Configuration           | `Source/Configuration/`           | Configuration provider service.                                    |
+| CustomEditor            | `Source/CustomEditor/`            | Custom editor provider service.                                    |
+| Debug                   | `Source/Debug/`                   | Debug service.                                                     |
+| Diagnostic              | `Source/Diagnostic/`              | Diagnostic manager service.                                        |
+| Document                | `Source/Document/`                | Document provider service.                                         |
+| ExtensionManagement     | `Source/ExtensionManagement/`     | Extension management service.                                      |
+| FileSystem              | `Source/FileSystem/`              | File system read/write service.                                    |
+| IPC                     | `Source/IPC/`                     | Inter-process communication service.                               |
+| Keybinding              | `Source/Keybinding/`              | Keybinding provider service.                                       |
+| LanguageFeature         | `Source/LanguageFeature/`         | Language feature provider registry.                                |
+| Output                  | `Source/Output/`                  | Output channel manager service.                                    |
+| Search                  | `Source/Search/`                  | Search provider service.                                           |
+| Secret                  | `Source/Secret/`                  | Secret storage provider service.                                   |
+| SourceControlManagement | `Source/SourceControlManagement/` | Source control management service.                                 |
+| StatusBar               | `Source/StatusBar/`               | Status bar provider service.                                       |
+| Storage                 | `Source/Storage/`                 | Storage provider service.                                          |
+| Synchronization         | `Source/Synchronization/`         | Synchronization provider service.                                  |
+| Telemetry               | `Source/Telemetry/`               | Telemetry service (dual-pipe PostHog + OTLP).                      |
+| Terminal                | `Source/Terminal/`                | Terminal provider service.                                         |
+| Testing                 | `Source/Testing/`                 | Test controller service.                                           |
+| Transport               | `Source/Transport/`               | Transport-agnostic communication layer.                            |
+| TreeView                | `Source/TreeView/`                | Tree view provider service.                                        |
+| UserInterface           | `Source/UserInterface/`           | User interface provider service.                                   |
+| Webview                 | `Source/Webview/`                 | Webview provider service.                                          |
+| Workspace               | `Source/Workspace/`               | Workspace provider service.                                        |
 
 ---
 
@@ -535,14 +535,14 @@ Element/Common/
 built. It has no knowledge of its consumers, but they are entirely dependent on
 it.
 
-| Element | Relationship | Description |
-|---------|-------------|-------------|
-| **Mountain** ⛰️ | Primary consumer | Implements traits with concrete `Environment/` providers, executes `ActionEffect`s via `ApplicationRunTime` |
-| **Grove** 🌳 | Transport consumer | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports |
-| **Cocoon** 🦋 | DTO consumer | Shares DTOs via `serde` for IPC data contract compatibility |
-| **Air** 🪁 | Module consumer | Uses `Transport` and `Telemetry` modules for daemon communication |
-| **Echo** 📣 | Telemetry consumer | Consumes the shared `PostHog` + `OTLP` telemetry pipe |
-| **Tests** | Mock consumer | Implements mock trait providers for fast, isolated unit testing |
+| Element         | Relationship       | Description                                                                                                 |
+| --------------- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **Mountain** ⛰️ | Primary consumer   | Implements traits with concrete `Environment/` providers, executes `ActionEffect`s via `ApplicationRunTime` |
+| **Grove** 🌳    | Transport consumer | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports                           |
+| **Cocoon** 🦋   | DTO consumer       | Shares DTOs via `serde` for IPC data contract compatibility                                                 |
+| **Air** 🪁      | Module consumer    | Uses `Transport` and `Telemetry` modules for daemon communication                                           |
+| **Echo** 📣     | Telemetry consumer | Consumes the shared `PostHog` + `OTLP` telemetry pipe                                                       |
+| **Tests**       | Mock consumer      | Implements mock trait providers for fast, isolated unit testing                                             |
 
 ---
 
@@ -603,15 +603,15 @@ async fn SomeLogic(Runtime: Arc<impl ApplicationRunTime>) {
 
 ### Key Dependencies
 
-| Crate | Purpose |
-|-------|---------|
-| `serde` | Serialization/deserialization for all DTOs |
-| `tokio` | Async runtime for trait definitions |
-| `async-trait` | Enables `async fn` in trait definitions |
-| `thiserror` | Derive macro for `CommonError` |
-| `posthog-rs` | Shared PostHog telemetry client |
-| `uuid` | Transport correlation IDs |
-| `prometheus` | Transport metrics |
+| Crate         | Purpose                                    |
+| ------------- | ------------------------------------------ |
+| `serde`       | Serialization/deserialization for all DTOs |
+| `tokio`       | Async runtime for trait definitions        |
+| `async-trait` | Enables `async fn` in trait definitions    |
+| `thiserror`   | Derive macro for `CommonError`             |
+| `posthog-rs`  | Shared PostHog telemetry client            |
+| `uuid`        | Transport correlation IDs                  |
+| `prometheus`  | Transport metrics                          |
 
 ---
 
@@ -619,14 +619,14 @@ async fn SomeLogic(Runtime: Arc<impl ApplicationRunTime>) {
 
 Common enforces security at the architectural level:
 
-| Layer | Mechanism |
-|-------|-----------|
-| **Architecture** | No concrete implementations — consumers cannot bypass trait boundaries |
-| **Type system** | All capabilities are abstract `async trait`s with explicit type signatures |
-| **Error model** | Single `CommonError` enum prevents information leakage through ad-hoc error types |
-| **Dependencies** | Zero dependency on `Tauri`, `gRPC`, or any networking crate — no ambient authority |
-| **Testing** | Mock implementations allow security-critical paths to be tested in isolation |
-| **Data contracts** | `serde`-compatible DTOs with explicit schemas prevent deserialization attacks |
+| Layer              | Mechanism                                                                          |
+| ------------------ | ---------------------------------------------------------------------------------- |
+| **Architecture**   | No concrete implementations — consumers cannot bypass trait boundaries             |
+| **Type system**    | All capabilities are abstract `async trait`s with explicit type signatures         |
+| **Error model**    | Single `CommonError` enum prevents information leakage through ad-hoc error types  |
+| **Dependencies**   | Zero dependency on `Tauri`, `gRPC`, or any networking crate — no ambient authority |
+| **Testing**        | Mock implementations allow security-critical paths to be tested in isolation       |
+| **Data contracts** | `serde`-compatible DTOs with explicit schemas prevent deserialization attacks      |
 
 ---
 
@@ -634,14 +634,14 @@ Common enforces security at the architectural level:
 
 Common is designed to be compatible with:
 
-| Target | Integration |
-|--------|-------------|
-| **Mountain** ⛰️ | Primary consumer — implements all traits, executes effects |
-| **Grove** 🌳 | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports |
-| **Cocoon** 🦋 | Shares DTOs via `serde` for IPC data contract compatibility |
-| **Air** 🪁 | Consumes `Transport` and `Telemetry` modules for daemon communication |
-| **Sidecars** | All `Rust` sidecars consume the shared `PostHog` + `OTLP` telemetry pipe |
-| **Tests** | Mock implementations of all traits enable fast, isolated unit testing |
+| Target          | Integration                                                                       |
+| --------------- | --------------------------------------------------------------------------------- |
+| **Mountain** ⛰️ | Primary consumer — implements all traits, executes effects                        |
+| **Grove** 🌳    | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports |
+| **Cocoon** 🦋   | Shares DTOs via `serde` for IPC data contract compatibility                       |
+| **Air** 🪁      | Consumes `Transport` and `Telemetry` modules for daemon communication             |
+| **Sidecars**    | All `Rust` sidecars consume the shared `PostHog` + `OTLP` telemetry pipe          |
+| **Tests**       | Mock implementations of all traits enable fast, isolated unit testing             |
 
 ---
 
@@ -667,7 +667,7 @@ Common is designed to be compatible with:
 - [`Air`](https://github.com/CodeEditorLand/Air) — Background daemon
 - [Why Rust](https://Editor.Land/Doc/why-rust)
 - [`CHANGELOG.md`](https://github.com/CodeEditorLand/Common/tree/Current/CHANGELOG.md)
-    — History of changes specific to Common
+  — History of changes specific to Common
 
 ---
 

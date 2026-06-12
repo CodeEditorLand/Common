@@ -13,13 +13,9 @@ import {
 	createMockLayer,
 	createToken,
 } from "../Source/Container.js";
-
 import { Async } from "../Source/EffectSmol.js";
-
 import { createPubSub } from "../Source/PubSub.js";
-
 import { createRef } from "../Source/Ref.js";
-
 import { Err, isErr, isOk, Ok } from "../Source/Result.js";
 
 // ──────────────────────────────────────────────

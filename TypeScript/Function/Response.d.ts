@@ -9,7 +9,6 @@ declare const _default: Interface;
 export default _default;
 
 export declare const Response: {
-
 	new (
 		body?:
 			| import("@cloudflare/workers-types/experimental/index.js").BodyInit

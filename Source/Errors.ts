@@ -7,11 +7,8 @@
 
 export type Tagged<
 	E extends string,
-
 	R extends Record<string, unknown> = Record<string, unknown>,
-
 > = {
-
 	readonly type: E;
 
 	readonly cause?: unknown;
@@ -19,9 +16,7 @@ export type Tagged<
 
 export const makeError = <
 	E extends string,
-
 	R extends Record<string, unknown> = Record<string, unknown>,
-
 >(
 	type: E,
 
@@ -41,13 +36,10 @@ export type NotFoundError = Tagged<"NotFound", { id?: string }>;
 
 export type StateLockPoisoned = Tagged<
 	"StateLockPoisoned",
-
 	{ context: string }
-
 >;
 
 export const Errors = {
-
 	unhandled: (message: string, cause?: unknown): UnhandledError =>
 		makeError("UnhandledError", { message, cause }),
 

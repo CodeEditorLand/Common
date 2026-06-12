@@ -27,7 +27,6 @@ export type ServiceFactory<T> = (container: ServiceContainer) => T | Promise<T>;
 // ──────────────────────────────────────────────
 
 export interface Layer<T> {
-
 	readonly token: ServiceToken<T>;
 
 	readonly factory: ServiceFactory<T>;
@@ -58,7 +57,6 @@ export const createMockLayer = <T>(
 // ──────────────────────────────────────────────
 
 export interface ServiceContainer {
-
 	register<T>(
 		token: ServiceToken<T>,
 
@@ -85,12 +83,9 @@ export interface ServiceContainer {
 }
 
 export const createContainer = (): ServiceContainer => {
-
 	const registry = new Map<
 		ServiceToken<unknown>,
-
 		{ factory: ServiceFactory<unknown>; deps: ServiceToken<unknown>[] }
-
 	>();
 
 	const cache = new Map<ServiceToken<unknown>, unknown>();
@@ -100,13 +95,11 @@ export const createContainer = (): ServiceContainer => {
 	const container: ServiceContainer = {
 		register(token, factory, opts = {}) {
 			if (frozen)
-
 				throw new Error(
 					`Container is frozen; cannot register ${String(token)}`,
 				);
 
 			if (!registry.has(token))
-
 				registry.set(token, { factory, deps: opts.deps ?? [] });
 
 			return this;
@@ -114,7 +107,6 @@ export const createContainer = (): ServiceContainer => {
 
 		registerAll(entries) {
 			for (const [token, factory, deps] of entries)
-
 				this.register(
 					token as ServiceToken<unknown>,
 
@@ -132,13 +124,11 @@ export const createContainer = (): ServiceContainer => {
 			const entry = registry.get(token);
 
 			if (!entry)
-
 				throw new Error(`Service not registered: ${String(token)}`);
 
 			const value = entry.factory(container);
 
 			if (value instanceof Promise)
-
 				throw new Error(
 					`Service factory for ${String(token)} returned a Promise - use async container.build() instead`,
 				);
@@ -162,7 +152,6 @@ export const createContainer = (): ServiceContainer => {
 export const createMutableContainer = (
 	base: ServiceContainer,
 ): ServiceContainer => {
-
 	const overrides = new Map<ServiceToken<unknown>, unknown>();
 
 	return {
@@ -174,7 +163,6 @@ export const createMutableContainer = (
 
 		registerAll(entries) {
 			for (const [token, factory] of entries)
-
 				this.register(
 					token as ServiceToken<unknown>,
 

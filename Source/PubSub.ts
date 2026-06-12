@@ -6,7 +6,6 @@
  */
 
 export interface PubSub<T> {
-
 	publish(value: T): void;
 
 	subscribe(listener: (value: T) => void): () => void;
@@ -15,7 +14,6 @@ export interface PubSub<T> {
 }
 
 export const createPubSub = <T>(): PubSub<T> => {
-
 	const listeners = new Set<(value: T) => void>();
 
 	return {

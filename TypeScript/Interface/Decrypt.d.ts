@@ -5,7 +5,6 @@ import type { JsonWebKey } from "@cloudflare/workers-types/experimental/index.js
  *
  */
 export default interface Interface {
-
 	/**
 	 * The function `Decrypt` is a TypeScript function that uses the Web Crypto API to
 	 * decrypt data using the AES-GCM algorithm.

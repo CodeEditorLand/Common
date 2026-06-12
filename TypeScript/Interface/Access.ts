@@ -8,7 +8,6 @@ import type {
  *
  */
 export default interface Interface {
-
 	/**
 	 * The function `Access` is a TypeScript function that decrypts and retrieves a specific
 	 * view from a stored data object using a provided key and unique identifier.
