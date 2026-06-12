@@ -1,7 +1,26 @@
-# Common: Abstract Core Library 🧩
+<table>
+	<tr>
+		<td colspan="1">
+			<h3 align="center">
+				<picture>
+					<source media="(prefers-color-scheme: dark)" srcset="https://editor.land/Dark/Image/GitHub/Land.svg">
+					<source media="(prefers-color-scheme: light)" srcset="https://editor.land/Image/GitHub/Land.svg">
+					<img width="28" alt="Land Logo" src="https://editor.land/Image/GitHub/Land.svg">
+				</picture>
+			</h3>
+		</td>
+		<td colspan="3" valign="top">
+			<h3 align="center"> Common 🧩</h3>
+		</td>
+	</tr>
+</table>
 
-This document describes `Common`, the architectural foundation of `Land`'s
-native `Rust` backend. `Common` is a pure abstract library that defines:
+---
+
+# **Common** 🧩 Architecture
+
+`Common` is the architectural foundation of `Land`'s native `Rust` backend. It
+is a pure abstract library that defines:
 
 - Every application capability as async traits
 - The `ActionEffect` declarative system

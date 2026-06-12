@@ -19,8 +19,8 @@
 
 # **Common** 👨🏻‍🏭 Deep Dive & Architecture
 
-This document provides the technical foundation for lifting VSCode services into
-the Land ecosystem. `Common` 👨🏻‍🏭 defines the abstract architectural patterns,
+**Common** provides the technical foundation for lifting VSCode services into
+the Land platform. `Common` 👨🏻‍🏭 defines the abstract architectural patterns,
 service contracts, and data structures that enable type-safe, testable service
 implementations across Rust and TypeScript boundaries.
 
