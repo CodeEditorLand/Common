@@ -530,6 +530,21 @@ DefineChannels! {
 
 	LanguagesGetEncodedLanguageId                 => "languages:getEncodedLanguageId",
 
+	LanguageProvideInlineCompletions              => "language:provideInlineCompletions",
+
+	// --- Tree view ---
+	TreeGetChildren                               => "tree:getChildren",
+
+	TreeReveal                                    => "tree:reveal",
+
+	TreeSelectionChanged                          => "tree:selectionChanged",
+
+	TreeCollapseElement                           => "tree:collapseElement",
+
+	TreeExpandElement                             => "tree:expandElement",
+
+	TreeVisibilityChanged                         => "tree:visibilityChanged",
+
 	// --- SCM (Source Control Management) ---
 	ScmCreateSourceControl                        => "scm:createSourceControl",
 
@@ -563,6 +578,8 @@ DefineChannels! {
 	AuthCreateSession                             => "auth:createSession",
 
 	AuthRemoveSession                             => "auth:removeSession",
+
+	AuthValidateToken                             => "auth:validateToken",
 
 	// --- Legacy wire-shape channels (non prefix:method) ---
 	// Two historical groups predate the `prefix:method` convention:
