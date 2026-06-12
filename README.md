@@ -24,7 +24,7 @@
 				<picture>
 					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/stars/CodeEditorLand/Common?style=flat&label=Star&logo=github&color=black&labelColor=black&logoColor=white&logoWidth=0" />
 					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/stars/CodeEditorLand/Common?style=flat&label=Star&logo=github&color=white&labelColor=white&logoColor=black&logoWidth=0" />
-					<img src="https://img.shields.io/github/stars/CodeEditorLand/Common?style=flat&label=Star&logo=github&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Star" />
+					<img src="https://img.shields.io/github/stars/CodeEditorLand/Common?style=flat&label=Star&logo=github&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Star" title="Star" />
 				</picture>
 			</a>
 			<br />
@@ -49,29 +49,40 @@ _"Mock any service and test any element in isolation, no running editor
 required."_
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://github.com/CodeEditorLand/Common/tree/Current/LICENSE)
-[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)
-[![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
-[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)
-[![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
+[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
+[<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/)&#x2001;[![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
 
-[Rust API Documentation](https://rust.documentation.common.editor.land/)
+**[Rust API Documentation](https://rust.documentation.common.editor.land/)**&#x2001;📖
 
 ---
 
 ## Overview
 
-**Common** 🧩 is the architectural core of the Land Code Editor's native
-backend. It provides a pure, abstract foundation with **no concrete
-implementations** — defining the application's "language" through `async trait`s
-per service domain, an `ActionEffect` declarative system, Data Transfer Objects
-(DTOs) for IPC, a unified `CommonError` enum, a transport-agnostic communication
-layer, and a telemetry dual-pipe.
+**Common** is the architectural core of the Land Code Editor's native backend.
+It provides a pure, abstract foundation with **no concrete implementations** —
+defining the application's "language" through `async trait`s per service domain,
+an `ActionEffect` declarative system, Data Transfer Objects (DTOs) for IPC, a
+unified `CommonError` enum, a transport-agnostic communication layer, and a
+telemetry dual-pipe.
 
 The entire `Mountain` backend and any future native components are built by
 implementing the traits and consuming the effects defined in this crate. By
 defining all application capabilities as abstract `trait`s, it enforces clean
 architectural boundaries, maximizes testability through mock implementations,
 and ensures consistent data contracts across the entire native ecosystem.
+
+**Common is engineered to:**
+
+1. **Define Pure Abstractions** — Every application capability is expressed as
+   an `async trait` with zero concrete implementation logic.
+2. **Enable Compile-Time DI** — The `Environment` and `Requires` traits allow
+   components to declare service needs without coupling to specific
+   implementations.
+3. **Stabilize Data Contracts** — All `serde`-compatible DTOs and error types
+   form the stable IPC contract between `Mountain` ⛰️, `Cocoon` 🦋, `Grove` 🌳,
+   and all sidecars.
+4. **Provide Transport-Agnostic Communication** — The `Transport` layer defines
+   a `TransportStrategy` trait implemented by concrete transports in `Grove`.
 
 ---
 
@@ -115,13 +126,13 @@ predictable everywhere.
 
 ## Core Architecture Principles&#x2001;🏗️
 
-| Principle          | Description                                                                                                                                    | Key Components Involved                    |
-| :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------- |
-| **Abstraction**    | Define every application capability as an abstract `async trait`. Never include concrete implementation logic.                                 | All `*Provider.rs` and `*Manager.rs` files |
-| **Declarativism**  | Represent every operation as an `ActionEffect` value. The crate provides constructor functions for these effects.                              | `Effect/*`, all effect constructor files   |
-| **Composability**  | The `ActionEffect` system and trait-based DI are designed to be composed, allowing complex workflows to be built from simple, reusable pieces. | `Environment/*`, `Effect/*`                |
-| **Contract-First** | Define all data structures (`DTO/*`) and error types (`Error/*`) first. These form the stable contract for all other components.               | `DTO/`, `Error/`                           |
-| **Purity**         | This crate has minimal dependencies and is completely independent of Tauri, gRPC, or any specific application logic.                           | `Cargo.toml`                               |
+| Principle | Description | Key Components |
+|-----------|-------------|----------------|
+| **Abstraction** | Define every application capability as an abstract `async trait`. Never include concrete implementation logic. | All `*Provider.rs` and `*Manager.rs` files |
+| **Declarativism** | Represent every operation as an `ActionEffect` value. The crate provides constructor functions for these effects. | `Effect/*`, all effect constructor files |
+| **Composability** | The `ActionEffect` system and trait-based DI are designed to be composed, allowing complex workflows to be built from simple, reusable pieces. | `Environment/*`, `Effect/*` |
+| **Contract-First** | Define all data structures (`DTO/*`) and error types (`Error/*`) first. These form the stable contract for all other components. | `DTO/`, `Error/` |
+| **Purity** | This crate has minimal dependencies and is completely independent of `Tauri`, `gRPC`, or any specific application logic. | `Cargo.toml` |
 
 ---
 
@@ -171,7 +182,7 @@ graph LR
     Air -.uses.-> Telemetry
 ```
 
-**Dependency flow:**
+**Connection paths:**
 
 | Path | Relationship | Use Case |
 |------|-------------|----------|
@@ -186,40 +197,40 @@ graph LR
 
 ## Key Components
 
-| Component               | Path                              | Description                                                        |
-| ----------------------- | --------------------------------- | ------------------------------------------------------------------ |
-| Library Root            | `Source/Library.rs`               | Crate root, declares all modules.                                  |
-| Environment             | `Source/Environment/`             | The core DI system (Environment, Requires, HasEnvironment traits). |
-| Effect                  | `Source/Effect/`                  | The ActionEffect system (ActionEffect, ApplicationRunTime traits). |
-| Error                   | `Source/Error/`                   | The universal CommonError enum.                                    |
-| DTO                     | `Source/DTO/`                     | Shared Data Transfer Objects (re-exports from service modules).    |
-| Utility                 | `Source/Utility/`                 | Utility functions (e.g., Serialization).                           |
-| Command                 | `Source/Command/`                 | Command management service.                                        |
-| Configuration           | `Source/Configuration/`           | Configuration provider service.                                    |
-| CustomEditor            | `Source/CustomEditor/`            | Custom editor provider service.                                    |
-| Debug                   | `Source/Debug/`                   | Debug service.                                                     |
-| Diagnostic              | `Source/Diagnostic/`              | Diagnostic manager service.                                        |
-| Document                | `Source/Document/`                | Document provider service.                                         |
-| ExtensionManagement     | `Source/ExtensionManagement/`     | Extension management service.                                      |
-| FileSystem              | `Source/FileSystem/`              | File system read/write service.                                    |
-| IPC                     | `Source/IPC/`                     | Inter-process communication service.                               |
-| Keybinding              | `Source/Keybinding/`              | Keybinding provider service.                                       |
-| LanguageFeature         | `Source/LanguageFeature/`         | Language feature provider registry.                                |
-| Output                  | `Source/Output/`                  | Output channel manager service.                                    |
-| Search                  | `Source/Search/`                  | Search provider service.                                           |
-| Secret                  | `Source/Secret/`                  | Secret storage provider service.                                   |
-| SourceControlManagement | `Source/SourceControlManagement/` | Source control management service.                                 |
-| StatusBar               | `Source/StatusBar/`               | Status bar provider service.                                       |
-| Storage                 | `Source/Storage/`                 | Storage provider service.                                          |
-| Synchronization         | `Source/Synchronization/`         | Synchronization provider service.                                  |
-| Telemetry               | `Source/Telemetry/`               | Telemetry service (dual-pipe PostHog + OTLP).                      |
-| Terminal                | `Source/Terminal/`                | Terminal provider service.                                         |
-| Testing                 | `Source/Testing/`                 | Test controller service.                                           |
-| Transport               | `Source/Transport/`               | Transport-agnostic communication layer.                            |
-| TreeView                | `Source/TreeView/`                | Tree view provider service.                                        |
-| UserInterface           | `Source/UserInterface/`           | User interface provider service.                                   |
-| Webview                 | `Source/Webview/`                 | Webview provider service.                                          |
-| Workspace               | `Source/Workspace/`               | Workspace provider service.                                        |
+| Component | Path | Description |
+|-----------|------|-------------|
+| Library Root | `Source/Library.rs` | Crate root, declares all modules. |
+| Environment | `Source/Environment/` | The core DI system (Environment, Requires, HasEnvironment traits). |
+| Effect | `Source/Effect/` | The ActionEffect system (ActionEffect, ApplicationRunTime traits). |
+| Error | `Source/Error/` | The universal CommonError enum. |
+| DTO | `Source/DTO/` | Shared Data Transfer Objects (re-exports from service modules). |
+| Utility | `Source/Utility/` | Utility functions (e.g., Serialization). |
+| Command | `Source/Command/` | Command management service. |
+| Configuration | `Source/Configuration/` | Configuration provider service. |
+| CustomEditor | `Source/CustomEditor/` | Custom editor provider service. |
+| Debug | `Source/Debug/` | Debug service. |
+| Diagnostic | `Source/Diagnostic/` | Diagnostic manager service. |
+| Document | `Source/Document/` | Document provider service. |
+| ExtensionManagement | `Source/ExtensionManagement/` | Extension management service. |
+| FileSystem | `Source/FileSystem/` | File system read/write service. |
+| IPC | `Source/IPC/` | Inter-process communication service. |
+| Keybinding | `Source/Keybinding/` | Keybinding provider service. |
+| LanguageFeature | `Source/LanguageFeature/` | Language feature provider registry. |
+| Output | `Source/Output/` | Output channel manager service. |
+| Search | `Source/Search/` | Search provider service. |
+| Secret | `Source/Secret/` | Secret storage provider service. |
+| SourceControlManagement | `Source/SourceControlManagement/` | Source control management service. |
+| StatusBar | `Source/StatusBar/` | Status bar provider service. |
+| Storage | `Source/Storage/` | Storage provider service. |
+| Synchronization | `Source/Synchronization/` | Synchronization provider service. |
+| Telemetry | `Source/Telemetry/` | Telemetry service (dual-pipe PostHog + OTLP). |
+| Terminal | `Source/Terminal/` | Terminal provider service. |
+| Testing | `Source/Testing/` | Test controller service. |
+| Transport | `Source/Transport/` | Transport-agnostic communication layer. |
+| TreeView | `Source/TreeView/` | Tree view provider service. |
+| UserInterface | `Source/UserInterface/` | User interface provider service. |
+| Webview | `Source/Webview/` | Webview provider service. |
+| Workspace | `Source/Workspace/` | Workspace provider service. |
 
 ---
 
@@ -228,15 +239,15 @@ graph LR
 ```
 Element/Common/
 ├── Source/
-│   ├── Library.rs              # Crate root, declares all modules
-│   ├── Command/                # Command management service
+│   ├── Library.rs                       # Crate root, declares all modules
+│   ├── Command/                         # Command management service
 │   │   ├── mod.rs
 │   │   ├── CommandExecutor.rs
 │   │   ├── ExecuteCommand.rs
 │   │   ├── GetAllCommands.rs
 │   │   ├── RegisterCommand.rs
 │   │   └── UnregisterCommand.rs
-│   ├── Configuration/          # Configuration provider service
+│   ├── Configuration/                   # Configuration provider service
 │   │   ├── mod.rs
 │   │   ├── ConfigurationProvider.rs
 │   │   ├── ConfigurationInspector.rs
@@ -244,19 +255,25 @@ Element/Common/
 │   │   ├── InspectConfiguration.rs
 │   │   ├── UpdateConfiguration.rs
 │   │   └── DTO/
-│   ├── CustomEditor/           # Custom editor provider service
+│   │       ├── mod.rs
+│   │       ├── ConfigurationInitializationDTO.rs
+│   │       ├── ConfigurationOverridesDTO.rs
+│   │       ├── ConfigurationScope.rs
+│   │       ├── ConfigurationTarget.rs
+│   │       └── InspectResultDataDTO.rs
+│   ├── CustomEditor/                    # Custom editor provider service
 │   │   ├── mod.rs
 │   │   └── CustomEditorProvider.rs
-│   ├── Debug/                  # Debug service
+│   ├── Debug/                           # Debug service
 │   │   ├── mod.rs
 │   │   └── DebugService.rs
-│   ├── Diagnostic/             # Diagnostic manager service
+│   ├── Diagnostic/                      # Diagnostic manager service
 │   │   ├── mod.rs
 │   │   ├── DiagnosticManager.rs
 │   │   ├── ClearDiagnostics.rs
 │   │   ├── GetAllDiagnostics.rs
 │   │   └── SetDiagnostics.rs
-│   ├── Document/               # Document provider service
+│   ├── Document/                        # Document provider service
 │   │   ├── mod.rs
 │   │   ├── DocumentProvider.rs
 │   │   ├── ApplyDocumentChanges.rs
@@ -264,26 +281,26 @@ Element/Common/
 │   │   ├── SaveAllDocuments.rs
 │   │   ├── SaveDocument.rs
 │   │   └── SaveDocumentAs.rs
-│   ├── DTO/                    # Shared Data Transfer Objects
+│   ├── DTO/                             # Shared Data Transfer Objects
 │   │   ├── mod.rs
 │   │   └── WorkspaceEditDTO.rs
-│   ├── Effect/                 # ActionEffect system
+│   ├── Effect/                          # ActionEffect system
 │   │   ├── mod.rs
 │   │   ├── ActionEffect.rs
 │   │   ├── ApplicationRunTime.rs
 │   │   └── ExecuteEffect.rs
-│   ├── Environment/            # Dependency injection system
+│   ├── Environment/                     # Dependency injection system
 │   │   ├── mod.rs
 │   │   ├── Environment.rs
 │   │   ├── HasEnvironment.rs
 │   │   └── Requires.rs
-│   ├── Error/                  # Unified error handling
+│   ├── Error/                           # Unified error handling
 │   │   ├── mod.rs
 │   │   └── CommonError.rs
-│   ├── ExtensionManagement/    # Extension management service
+│   ├── ExtensionManagement/             # Extension management service
 │   │   ├── mod.rs
 │   │   └── ExtensionManagementService.rs
-│   ├── FileSystem/             # File system read/write service
+│   ├── FileSystem/                      # File system read/write service
 │   │   ├── mod.rs
 │   │   ├── FileSystemReader.rs
 │   │   ├── FileSystemWriter.rs
@@ -299,7 +316,10 @@ Element/Common/
 │   │   ├── WriteFileBytes.rs
 │   │   ├── WriteFileString.rs
 │   │   └── DTO/
-│   ├── IPC/                    # Inter-process communication service
+│   │       ├── mod.rs
+│   │       ├── FileSystemStatDTO.rs
+│   │       └── FileTypeDTO.rs
+│   ├── IPC/                             # Inter-process communication service
 │   │   ├── mod.rs
 │   │   ├── Channel.rs
 │   │   ├── IPCProvider.rs
@@ -309,10 +329,12 @@ Element/Common/
 │   │   ├── SendRequestToSideCar.rs
 │   │   ├── SkyEvent.rs
 │   │   └── DTO/
-│   ├── Keybinding/             # Keybinding provider service
+│   │       ├── mod.rs
+│   │       └── ProxyTarget.rs
+│   ├── Keybinding/                      # Keybinding provider service
 │   │   ├── mod.rs
 │   │   └── KeybindingProvider.rs
-│   ├── LanguageFeature/        # Language feature provider registry
+│   ├── LanguageFeature/                 # Language feature provider registry
 │   │   ├── mod.rs
 │   │   ├── LanguageFeatureProviderRegistry.rs
 │   │   ├── RegisterProvider.rs
@@ -338,7 +360,18 @@ Element/Common/
 │   │   ├── ProvideTypeHierarchy.rs
 │   │   ├── ProvideWorkspaceSymbols.rs
 │   │   └── DTO/
-│   ├── Output/                 # Output channel manager service
+│   │       ├── mod.rs
+│   │       ├── CompletionContextDTO.rs
+│   │       ├── CompletionItemDTO.rs
+│   │       ├── CompletionListDTO.rs
+│   │       ├── HoverResultDTO.rs
+│   │       ├── IMarkdownStringDTO.rs
+│   │       ├── LocationDTO.rs
+│   │       ├── PositionDTO.rs
+│   │       ├── ProviderType.rs
+│   │       ├── RangeDTO.rs
+│   │       └── TextEditDTO.rs
+│   ├── Output/                          # Output channel manager service
 │   │   ├── mod.rs
 │   │   ├── OutputChannelManager.rs
 │   │   ├── AppendToOutputChannel.rs
@@ -348,32 +381,42 @@ Element/Common/
 │   │   ├── RegisterOutputChannel.rs
 │   │   ├── ReplaceOutputChannelContent.rs
 │   │   └── RevealOutputChannel.rs
-│   ├── Search/                 # Search provider service
+│   ├── Search/                          # Search provider service
 │   │   ├── mod.rs
 │   │   └── SearchProvider.rs
-│   ├── Secret/                 # Secret storage provider service
+│   ├── Secret/                          # Secret storage provider service
 │   │   ├── mod.rs
 │   │   ├── SecretProvider.rs
 │   │   ├── DeleteSecret.rs
 │   │   ├── GetSecret.rs
 │   │   └── StoreSecret.rs
-│   ├── SourceControlManagement/ # Source control management service
+│   ├── SourceControlManagement/         # Source control management service
 │   │   ├── mod.rs
 │   │   ├── SourceControlManagementProvider.rs
 │   │   └── DTO/
-│   ├── StatusBar/              # Status bar provider service
+│   │       ├── mod.rs
+│   │       ├── SourceControlCreateDTO.rs
+│   │       ├── SourceControlGroupUpdateDTO.rs
+│   │       ├── SourceControlInputBoxDTO.rs
+│   │       ├── SourceControlManagementGroupDTO.rs
+│   │       ├── SourceControlManagementProviderDTO.rs
+│   │       ├── SourceControlManagementResourceDTO.rs
+│   │       └── SourceControlUpdateDTO.rs
+│   ├── StatusBar/                       # Status bar provider service
 │   │   ├── mod.rs
 │   │   ├── StatusBarProvider.rs
 │   │   └── DTO/
-│   ├── Storage/                # Storage provider service
+│   │       ├── mod.rs
+│   │       └── StatusBarEntryDTO.rs
+│   ├── Storage/                         # Storage provider service
 │   │   ├── mod.rs
 │   │   ├── StorageProvider.rs
 │   │   ├── GetStorageItem.rs
 │   │   └── SetStorageItem.rs
-│   ├── Synchronization/        # Synchronization provider service
+│   ├── Synchronization/                 # Synchronization provider service
 │   │   ├── mod.rs
 │   │   └── SynchronizationProvider.rs
-│   ├── Telemetry/              # Telemetry service (PostHog + OTLP)
+│   ├── Telemetry/                       # Telemetry service (PostHog + OTLP)
 │   │   ├── mod.rs
 │   │   ├── CaptureError.rs
 │   │   ├── CaptureEvent.rs
@@ -386,21 +429,20 @@ Element/Common/
 │   │   ├── IsAllowed.rs
 │   │   ├── Tier.rs
 │   │   └── Traceparent.rs
-│   ├── Terminal/               # Terminal provider service
+│   ├── Terminal/                        # Terminal provider service
 │   │   ├── mod.rs
 │   │   ├── TerminalProvider.rs
 │   │   └── CreateTerminal.rs
-│   ├── Testing/                # Test controller service
+│   ├── Testing/                         # Test controller service
 │   │   ├── mod.rs
 │   │   └── TestController.rs
-│   ├── Transport/              # Transport-agnostic communication layer
+│   ├── Transport/                       # Transport-agnostic communication layer
 │   │   ├── mod.rs
 │   │   ├── TransportStrategy.rs
 │   │   ├── TransportConfig.rs
 │   │   ├── TransportError.rs
 │   │   ├── CircuitBreaker.rs
 │   │   ├── Metrics.rs
-│   │   ├── Registry/
 │   │   ├── Retry.rs
 │   │   ├── UnifiedRequest.rs
 │   │   ├── UnifiedResponse.rs
@@ -408,12 +450,23 @@ Element/Common/
 │   │   ├── IPC.rs
 │   │   ├── WASM.rs
 │   │   ├── Common/
+│   │   │   └── mod.rs
+│   │   ├── Registry/
+│   │   │   └── mod.rs
 │   │   └── DTO/
-│   ├── TreeView/               # Tree view provider service
+│   │       ├── mod.rs
+│   │       ├── Correlation.rs
+│   │       ├── TransportError.rs
+│   │       ├── UnifiedRequest.rs
+│   │       └── UnifiedResponse.rs
+│   ├── TreeView/                        # Tree view provider service
 │   │   ├── mod.rs
 │   │   ├── TreeViewProvider.rs
 │   │   └── DTO/
-│   ├── UserInterface/          # User interface provider service
+│   │       ├── mod.rs
+│   │       ├── TreeItemDTO.rs
+│   │       └── TreeViewOptionsDTO.rs
+│   ├── UserInterface/                   # User interface provider service
 │   │   ├── mod.rs
 │   │   ├── UserInterfaceProvider.rs
 │   │   ├── ShowInputBox.rs
@@ -422,42 +475,52 @@ Element/Common/
 │   │   ├── ShowQuickPick.rs
 │   │   ├── ShowSaveDialog.rs
 │   │   └── DTO/
-│   ├── Utility/                # Utility functions
+│   │       ├── mod.rs
+│   │       ├── DialogOptionsDTO.rs
+│   │       ├── FileFilterDTO.rs
+│   │       ├── InputBoxOptionsDTO.rs
+│   │       ├── MessageOptionsDTO.rs
+│   │       ├── MessageSeverity.rs
+│   │       ├── OpenDialogOptionsDTO.rs
+│   │       ├── QuickPickItemDTO.rs
+│   │       ├── QuickPickOptionsDTO.rs
+│   │       └── SaveDialogOptionsDTO.rs
+│   ├── Utility/                         # Utility functions
 │   │   ├── mod.rs
 │   │   └── Serialization.rs
-│   ├── Webview/                # Webview provider service
+│   ├── Webview/                         # Webview provider service
 │   │   ├── mod.rs
 │   │   ├── WebviewProvider.rs
 │   │   └── DTO/
-│   └── Workspace/              # Workspace provider service
-│       ├── mod.rs
-│       ├── WorkspaceProvider.rs
-│       ├── WorkspaceEditApplier.rs
-│       ├── ApplyWorkspaceEdit.rs
-│       ├── FindFilesInWorkspace.rs
-│       ├── GetWorkspaceConfigurationPath.rs
-│       ├── GetWorkspaceFolderInfo.rs
-│       ├── GetWorkspaceFoldersInfo.rs
-│       ├── GetWorkspaceName.rs
-│       ├── IsWorkspaceTrusted.rs
-│       ├── OpenFile.rs
-│       └── RequestWorkspaceTrust.rs
-├── Documentation/
-│   ├── GitHub/
-│   │   ├── DeepDive.md         # ActionEffect system deep dive
-│   │   └── Architecture.md     # Internal architecture overview
-│   └── Rust/doc/               # Cargo doc output
+│   │       ├── mod.rs
+│   │       └── WebviewContentOptionsDTO.rs
+│   ├── Workspace/                       # Workspace provider service
+│   │   ├── mod.rs
+│   │   ├── WorkspaceProvider.rs
+│   │   ├── WorkspaceEditApplier.rs
+│   │   ├── ApplyWorkspaceEdit.rs
+│   │   ├── FindFilesInWorkspace.rs
+│   │   ├── GetWorkspaceConfigurationPath.rs
+│   │   ├── GetWorkspaceFolderInfo.rs
+│   │   ├── GetWorkspaceFoldersInfo.rs
+│   │   ├── GetWorkspaceName.rs
+│   │   ├── IsWorkspaceTrusted.rs
+│   │   ├── OpenFile.rs
+│   │   └── RequestWorkspaceTrust.rs
+│   ├── Container.ts                     # DI container (TypeScript)
+│   ├── EffectSmol.ts                    # Lightweight effect runtime (TypeScript)
+│   ├── Errors.ts                        # Error types (TypeScript)
+│   ├── PubSub.ts                        # Pub/sub bus (TypeScript)
+│   ├── Ref.ts                           # Mutable references (TypeScript)
+│   └── Result.ts                        # Result type (TypeScript)
 ├── TypeScript/
-│   ├── Function/               # Effect constructors (TypeScript)
-│   └── Interface/              # Service interfaces (TypeScript)
-├── Source/                     # TypeScript shared runtime
-│   ├── EffectSmol.ts           # Lightweight effect runtime
-│   ├── PubSub.ts               # Pub/sub bus
-│   ├── Ref.ts                  # Mutable references
-│   ├── Result.ts               # Result type
-│   ├── Errors.ts               # Error types
-│   └── Container.ts            # DI container
-├── build.rs                    # Cargo build script
+│   ├── Function/                        # Effect constructors (TypeScript)
+│   └── Interface/                       # Service interfaces (TypeScript)
+├── Documentation/
+│   └── GitHub/
+│       ├── Architecture.md              # Internal architecture overview
+│       └── DeepDive.md                  # ActionEffect system deep dive
+├── build.rs                             # Cargo build script
 ├── Cargo.toml
 ├── CHANGELOG.md
 ├── LICENSE
@@ -472,16 +535,24 @@ Element/Common/
 built. It has no knowledge of its consumers, but they are entirely dependent on
 it.
 
-- **Mountain** 🏔️ - Primary consumer: implements traits with concrete
-  `Environment/` providers, executes `ActionEffect`s via `ApplicationRunTime`
-- **Air** 🪁 - Background daemon: uses `Transport` and `Telemetry` modules
-- **Tests** - Mock trait implementations for unit testing
+| Element | Relationship | Description |
+|---------|-------------|-------------|
+| **Mountain** ⛰️ | Primary consumer | Implements traits with concrete `Environment/` providers, executes `ActionEffect`s via `ApplicationRunTime` |
+| **Grove** 🌳 | Transport consumer | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports |
+| **Cocoon** 🦋 | DTO consumer | Shares DTOs via `serde` for IPC data contract compatibility |
+| **Air** 🪁 | Module consumer | Uses `Transport` and `Telemetry` modules for daemon communication |
+| **Echo** 📣 | Telemetry consumer | Consumes the shared `PostHog` + `OTLP` telemetry pipe |
+| **Tests** | Mock consumer | Implements mock trait providers for fast, isolated unit testing |
 
 ---
 
-## Getting Started
+## Getting Started&#x2001;🚀
 
-### Installation
+### Prerequisites
+
+- **`Rust`** 1.85 or later
+
+### Build
 
 `Common` is intended to be used as a local path dependency within the `Land`
 workspace. In `Mountain`'s `Cargo.toml`:
@@ -530,6 +601,18 @@ async fn SomeLogic(Runtime: Arc<impl ApplicationRunTime>) {
 }
 ```
 
+### Key Dependencies
+
+| Crate | Purpose |
+|-------|---------|
+| `serde` | Serialization/deserialization for all DTOs |
+| `tokio` | Async runtime for trait definitions |
+| `async-trait` | Enables `async fn` in trait definitions |
+| `thiserror` | Derive macro for `CommonError` |
+| `posthog-rs` | Shared PostHog telemetry client |
+| `uuid` | Transport correlation IDs |
+| `prometheus` | Transport metrics |
+
 ---
 
 ## Security&#x2001;🔒
@@ -553,10 +636,10 @@ Common is designed to be compatible with:
 
 | Target | Integration |
 |--------|-------------|
-| **Mountain** | Primary consumer — implements all traits, executes effects |
-| **Grove** | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports |
-| **Cocoon** | Shares DTOs via `serde` for IPC data contract compatibility |
-| **Air** | Consumes `Transport` and `Telemetry` modules for daemon communication |
+| **Mountain** ⛰️ | Primary consumer — implements all traits, executes effects |
+| **Grove** 🌳 | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports |
+| **Cocoon** 🦋 | Shares DTOs via `serde` for IPC data contract compatibility |
+| **Air** 🪁 | Consumes `Transport` and `Telemetry` modules for daemon communication |
 | **Sidecars** | All `Rust` sidecars consume the shared `PostHog` + `OTLP` telemetry pipe |
 | **Tests** | Mock implementations of all traits enable fast, isolated unit testing |
 
@@ -564,27 +647,27 @@ Common is designed to be compatible with:
 
 ## API Reference
 
-- [Rust API Documentation](https://rust.documentation.common.editor.land/)
+- **[Rust API Documentation](https://rust.documentation.common.editor.land/)**&#x2001;📖
 - [Architecture Overview](https://Editor.Land/Doc/architecture)
-- [Deep Dive](Documentation/GitHub/DeepDive.md) - The `ActionEffect` system,
+- [Deep Dive](Documentation/GitHub/DeepDive.md) — The `ActionEffect` system,
   trait-based DI model, and guide for adding new services
 
 ---
 
 ## Related Documentation
 
-- [Architecture Overview](https://Editor.Land/Doc/architecture) - Internal
+- [Architecture Overview](https://Editor.Land/Doc/architecture) — Internal
   module structure
-- [Deep Dive](Documentation/GitHub/DeepDive.md) - In-depth technical details
-- [Land Documentation](../../Documentation/GitHub/README.md) - Complete
+- [Deep Dive](Documentation/GitHub/DeepDive.md) — In-depth technical details
+- [Land Documentation](../../Documentation/GitHub/README.md) — Complete
   documentation index
-- [`Mountain`](https://github.com/CodeEditorLand/Mountain) - Primary consumer
+- [`Mountain`](https://github.com/CodeEditorLand/Mountain) — Primary consumer
   implementing Common traits
-- [`Echo`](https://github.com/CodeEditorLand/Echo) - Work-stealing scheduler
-- [`Air`](https://github.com/CodeEditorLand/Air) - Background daemon
+- [`Echo`](https://github.com/CodeEditorLand/Echo) — Work-stealing scheduler
+- [`Air`](https://github.com/CodeEditorLand/Air) — Background daemon
 - [Why Rust](https://Editor.Land/Doc/why-rust)
 - [`CHANGELOG.md`](https://github.com/CodeEditorLand/Common/tree/Current/CHANGELOG.md)
-    - History of changes specific to Common
+    — History of changes specific to Common
 
 ---
 
@@ -594,12 +677,6 @@ This project is funded through
 [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
 [NLnet](https://NLnet.NL) with financial support from the European Commission's
 Next Generation Internet program, under grant agreement No 101135429.
-
-**Common** is a core element of the **Land** ecosystem. This project is funded
-through [NGI0 Commons Fund](https://NLnet.NL/commonsfund), a fund established by
-[NLnet](https://NLnet.NL) with financial support from the European Commission's
-[Next Generation Internet](https://ngi.eu) program. Learn more at the
-[NLnet project page](https://NLnet.NL/project/Land).
 
 The project is operated by PlayForm, based in Sofia, Bulgaria. PlayForm acts as
 the open-source steward for Code Editor Land under the NGI0 Commons Fund grant.
