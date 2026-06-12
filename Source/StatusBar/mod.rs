@@ -6,9 +6,9 @@
 
 //! # StatusBar Service
 //!
-//! This module defines the abstract contract for the StatusBar service. It
-//! includes the `StatusBarProvider` trait, all related Data Transfer Objects
-//! (DTOs), and `ActionEffect` constructors for status bar operations.
+//! Defines the abstract contract for the StatusBar service, including the
+//! `StatusBarProvider` trait, related Data Transfer Objects (DTOs), and
+//! `ActionEffect` constructors for status bar operations.
 
 // --- Trait Definition ---
 /// Trait for managing status bar items and messages.

@@ -19,7 +19,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will create a new terminal instance
 /// based on the provided options.
-///
 /// The effect will use the `TerminalProvider` capability from the environment
 /// to perform the actual creation, which typically involves spawning a new
 /// pseudo-terminal (PTY) process.

@@ -12,7 +12,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will set or update diagnostics for a
 /// given owner. This is the primary way extensions report problems to the host.
-///
 /// It uses the `DiagnosticManager` capability from the environment to perform
 /// the operation, which involves updating the central diagnostic store.
 ///

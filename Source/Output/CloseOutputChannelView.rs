@@ -10,7 +10,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will close the view of the specified
 /// output channel in the UI.
-///
 /// This does not dispose of the channel or its content; it can be revealed
 /// again later. It uses the `OutputChannelManager` capability from the
 /// environment.

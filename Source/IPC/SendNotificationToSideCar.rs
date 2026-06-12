@@ -12,7 +12,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will send a fire-and-forget
 /// notification to a specified sidecar process.
-///
 /// It uses the `IPCProvider` capability from the environment to perform the
 /// actual IPC send operation. Unlike `SendRequestToSideCar`, this effect does
 /// not wait for or expect a response.

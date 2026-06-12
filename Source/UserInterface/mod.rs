@@ -1,9 +1,8 @@
 //! # UserInterface Service
 //!
-//! This module defines the abstract contract for the UserInterface service. It
-//! includes the `UserInterfaceProvider` trait, all related Data Transfer
-//! Objects (DTOs), and the `ActionEffect` constructors for every
-//! UI-related operation.
+//! Defines the abstract contract for the UserInterface service, including the
+//! `UserInterfaceProvider` trait, related Data Transfer Objects (DTOs), and
+//! `ActionEffect` constructors for every UI-related operation.
 
 // --- Trait Definition ---
 /// Trait for showing dialogs, messages, quick picks, and input boxes.

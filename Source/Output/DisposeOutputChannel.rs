@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will dispose of the specified output
 /// channel, removing it and its content permanently from the application.
-///
 /// It uses the `OutputChannelManager` capability from the environment.
 ///
 /// # Parameters

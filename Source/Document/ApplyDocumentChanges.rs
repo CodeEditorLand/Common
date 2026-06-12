@@ -14,7 +14,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// Creates an effect that, when executed, will apply a collection of content
 /// changes to the document at the given URI. This is the primary mechanism
 /// for handling edits originating from the extension host.
-///
 /// It uses the `DocumentProvider` capability from the environment to perform
 /// the operation, which involves updating the in-memory representation of the
 /// document's text.

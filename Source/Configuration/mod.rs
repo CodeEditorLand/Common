@@ -6,10 +6,10 @@
 
 //! # Configuration Service
 //!
-//! This module defines the abstract contract for the Configuration service.
-//! It includes the `ConfigurationProvider` and `ConfigurationInspector` traits,
-//! all related Data Transfer Objects (DTOs), and the `ActionEffect`
-//! constructors for all configuration-related operations.
+//! Defines the abstract contract for the Configuration service, including the
+//! `ConfigurationProvider` and `ConfigurationInspector` traits, related Data
+//! Transfer Objects (DTOs), and `ActionEffect` constructors for all
+//! configuration-related operations.
 
 // --- Trait Definitions ---
 /// Trait for inspecting configuration metadata (defaults, descriptions).

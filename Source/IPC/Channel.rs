@@ -32,7 +32,6 @@
 //!   - `Normal`: everything else.
 
 /// Lane selector for Echo scheduler dispatch.
-///
 /// Deliberately isolated from `Echo::Task::Priority` so Common stays
 /// dependency-free on Echo. Mountain's `mountain_ipc_invoke` wrapper maps
 /// `ChannelPriority` → `Echo::Task::Priority` at the single submit site.

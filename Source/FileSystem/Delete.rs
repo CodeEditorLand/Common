@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will delete a file or directory at
 /// the specified path.
-///
 /// It uses the `FileSystemWriter` capability from the environment to perform
 /// the actual file I/O.
 ///

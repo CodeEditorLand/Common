@@ -6,11 +6,11 @@
 
 //! # LanguageFeature Service
 //!
-//! This module defines the abstract contract for all language intelligence
-//! services. It includes the main `LanguageFeatureProviderRegistry` trait, all
-//! related Data Transfer Objects (DTOs), and the `ActionEffect` constructors
-//! for every language feature operation. This is the largest and most complex
-//! service contract in the application.
+//! Defines the abstract contract for all language intelligence services,
+//! including the `LanguageFeatureProviderRegistry` trait, related Data Transfer
+//! Objects (DTOs), and `ActionEffect` constructors for every language feature
+//! operation. This is the largest and most complex service contract in the
+//! application.
 
 // --- Trait Definition ---
 /// Trait for registering and unregistering language feature providers.

@@ -18,7 +18,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can manage
 /// integrated terminal processes.
-///
 /// Implemented by `MountainEnvironment` and responsible for spawning and
 /// managing native pseudo-terminal (PTY) processes, handling their I/O, and
 /// managing their lifecycle.

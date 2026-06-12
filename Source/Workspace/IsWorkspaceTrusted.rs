@@ -9,10 +9,8 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will check if the current workspace
 /// is considered trusted by the user.
-///
 /// Workspace Trust is a security feature that restricts certain operations
 /// (like automatic task execution) in untrusted folders.
-///
 /// It uses the `WorkspaceProvider` capability from the environment.
 ///
 /// # Returns

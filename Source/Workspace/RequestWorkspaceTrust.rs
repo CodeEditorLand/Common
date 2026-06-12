@@ -11,7 +11,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will prompt the user to grant or
 /// deny trust to the current workspace via a UI dialog.
-///
 /// It uses the `WorkspaceProvider` capability from the environment, which in
 /// turn will likely use the `UserInterfaceProvider` to show the dialog.
 ///

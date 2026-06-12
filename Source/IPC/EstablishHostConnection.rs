@@ -12,7 +12,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError,
 
 /// Creates a convenience effect that can be used to perform an initial
 /// handshake or ping a sidecar process to confirm connectivity.
-///
 /// A specialized wrapper around `SendNotificationToSideCar`, pre-filling the
 /// method name and parameters for a standard handshake notification.
 ///

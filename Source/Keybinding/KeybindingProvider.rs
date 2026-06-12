@@ -19,7 +19,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 #[async_trait]
 pub trait KeybindingProvider: Environment + Send + Sync {
 	/// Resolves and retrieves the complete list of active keybinding rules.
-	///
 	/// Reads default keybindings contributed by extensions, merges them with
 	/// user-defined keybindings from `keybindings.json`, and returns the final
 	/// list.

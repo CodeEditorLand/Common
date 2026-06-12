@@ -6,7 +6,6 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// A serializable struct that represents a `vscode.TreeItem`.
-///
 /// This DTO is sent from `Cocoon` (where the `TreeDataProvider` logic lives)
 /// to `Mountain` (where the UI state is managed) to describe how to render an
 /// item in a tree view. It uses `serde_json::Value` for complex properties to

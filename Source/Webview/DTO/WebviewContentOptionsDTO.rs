@@ -8,7 +8,6 @@ use serde_json::Value;
 
 /// A serializable struct that represents the options controlling the content
 /// within a Webview, including script enablement and local resource access.
-///
 /// This DTO is sent from `Cocoon` to `Mountain` when a Webview is created to
 /// configure its security sandbox and capabilities.
 #[derive(Serialize, Deserialize, Debug, Clone)]

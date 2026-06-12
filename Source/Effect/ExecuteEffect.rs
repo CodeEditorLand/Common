@@ -10,7 +10,6 @@ use crate::{Environment::Requires::Requires, Error::CommonError::CommonError};
 
 /// A generic effect execution helper that takes a runtime and an effect, and
 /// executes the effect using that runtime.
-///
 /// Provides a more concise and declarative syntax for running effects,
 /// abstracting away the direct `RunTime.Run(Effect)` call and making
 /// the intent of the code clearer.

@@ -18,7 +18,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will display a message to the user
 /// with a given severity and a set of optional action buttons.
-///
 /// It uses the `UserInterfaceProvider` capability from the environment to
 /// perform the operation, which typically involves sending an event to the
 /// frontend and waiting for the user's interaction.

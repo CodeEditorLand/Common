@@ -12,7 +12,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will find the workspace folder that
 /// contains the given URI.
-///
 /// It uses the `WorkspaceProvider` capability from the environment. This is
 /// useful for determining which folder-level settings apply to a specific
 /// file.

@@ -10,7 +10,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can execute
 /// and manage commands within the application.
-///
 /// Implemented by the concrete `MountainEnvironment` to provide the core logic
 /// for the command palette and programmatic command execution. Designed to
 /// handle both native commands implemented in Rust and proxied commands

@@ -18,7 +18,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can manage
 /// Webview panels.
-///
 /// Defines all the operations necessary for creating Webview-based UI, setting
 /// their content, and managing their lifecycle, abstracting away the specific
 /// UI framework (e.g., Tauri, Electron) being used by the host.

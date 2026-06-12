@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will append a string to the
 /// specified output channel's buffer.
-///
 /// It uses the `OutputChannelManager` capability from the environment.
 ///
 /// # Parameters

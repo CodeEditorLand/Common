@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will reveal (open and focus) the
 /// specified output channel in the user interface.
-///
 /// It uses the `OutputChannelManager` capability from the environment.
 ///
 /// # Parameters

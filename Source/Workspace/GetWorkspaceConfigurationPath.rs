@@ -10,7 +10,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will retrieve the file path of the
 /// current workspace's configuration file (e.g., the `.code-workspace` file).
-///
 /// It uses the `WorkspaceProvider` capability from the environment.
 ///
 /// # Returns

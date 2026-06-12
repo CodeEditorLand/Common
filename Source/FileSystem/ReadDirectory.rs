@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will read the entries of a directory
 /// at the specified path.
-///
 /// It uses the `FileSystemReader` capability from the environment to perform
 /// the actual file I/O.
 ///

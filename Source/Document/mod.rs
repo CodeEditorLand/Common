@@ -1,9 +1,9 @@
 //! # Document Service
 //!
-//! This module defines the abstract contract for the Document service, which is
-//! responsible for managing the lifecycle and content of text documents. It
-//! includes the `DocumentProvider` trait and the `ActionEffect` constructors
-//! for all document operations.
+//! Defines the abstract contract for the Document service, responsible for
+//! managing the lifecycle and content of text documents. Includes the
+//! `DocumentProvider` trait and `ActionEffect` constructors for all document
+//! operations.
 
 // --- Trait Definition ---
 /// Trait for managing document lifecycle and content.

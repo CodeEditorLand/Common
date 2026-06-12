@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will create a new, empty file at the
 /// specified path.
-///
 /// It uses the `FileSystemWriter` capability from the environment to perform
 /// the actual file I/O. This operation will typically fail if the file already
 /// exists, as it is not intended to overwrite.

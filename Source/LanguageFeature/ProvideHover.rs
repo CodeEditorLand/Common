@@ -15,7 +15,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will request hover information for a
 /// symbol at a given position in a document.
-///
 /// It uses the `LanguageFeatureProviderRegistry` capability from the
 /// environment to find and invoke the appropriate hover provider.
 ///

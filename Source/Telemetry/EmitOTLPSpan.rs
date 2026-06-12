@@ -67,7 +67,6 @@ fn ParseEndpoint(Endpoint:&str) -> (String, String) {
 }
 
 /// Emit one OTLP span as a raw HTTP POST to the OTLP collector.
-///
 /// `StartNano` / `EndNano` are wall-clock (not monotonic)
 /// nanosecond timestamps - use `NowNanoPub()` from the caller's start.
 /// Respects the `IsAllowed::OTLP()` gate and the `OTLP_AVAILABLE`

@@ -10,7 +10,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will unregister a command from the
 /// host's command registry.
-///
 /// Typically called when an extension is deactivated or explicitly disposes of
 /// a command registration.
 ///

@@ -10,7 +10,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will retrieve the display name of the
 /// current workspace.
-///
 /// It uses the `WorkspaceProvider` capability from the environment to perform
 /// the operation.
 ///

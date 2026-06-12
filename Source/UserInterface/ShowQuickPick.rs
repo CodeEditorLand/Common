@@ -19,7 +19,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will display a quick pick list to
 /// the user, allowing them to select one or more items.
-///
 /// It uses the `UserInterfaceProvider` capability from the environment to
 /// orchestrate the interaction with the frontend UI.
 ///

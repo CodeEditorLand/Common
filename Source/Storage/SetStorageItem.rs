@@ -26,7 +26,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will set or update an item in either
 /// global or workspace-scoped Memento storage.
-///
 /// It uses the `StorageProvider` capability from the environment to perform the
 /// actual data persistence on the host.
 ///

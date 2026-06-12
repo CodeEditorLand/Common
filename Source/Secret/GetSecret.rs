@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will retrieve a secret from the
 /// host's secure storage (e.g., OS keychain).
-///
 /// It uses the `SecretProvider` capability from the environment to perform the
 /// actual retrieval.
 ///

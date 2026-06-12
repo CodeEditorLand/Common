@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will unregister a language feature
 /// provider from the host's central registry using its unique handle.
-///
 /// It uses the `LanguageFeatureProviderRegistry` capability from the
 /// environment.
 ///

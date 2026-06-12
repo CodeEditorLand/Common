@@ -6,7 +6,6 @@
 
 /// An enum that provides strongly-typed identifiers for all services that can
 /// be communicated with across the IPC boundary.
-///
 /// This is used to construct fully qualified RPC method names, ensuring that a
 /// message sent from one process is routed to the correct service
 /// implementation in the other.

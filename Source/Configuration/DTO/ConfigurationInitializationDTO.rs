@@ -8,7 +8,6 @@ use serde_json::Value;
 
 /// A serializable struct that represents the initial configuration data
 /// structure.
-///
 /// This DTO is typically sent from the main application (`Mountain`) to a
 /// sidecar (`Cocoon`) on startup. It provides the sidecar with a complete
 /// snapshot of all configuration sources, allowing it to accurately reflect the

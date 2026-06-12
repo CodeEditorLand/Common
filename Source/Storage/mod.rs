@@ -7,10 +7,10 @@
 
 //! # Storage Service
 //!
-//! This module defines the abstract contract for the Storage service, which
-//! provides Memento-style persistent key-value storage for extensions. It
-//! includes the `StorageProvider` trait and the `ActionEffect` constructors
-//! for all storage operations.
+//! Defines the abstract contract for the Storage service, which provides
+//! Memento-style persistent key-value storage for extensions. Includes the
+//! `StorageProvider` trait and `ActionEffect` constructors for all storage
+//! operations.
 
 // --- Trait Definition ---
 /// Trait for persistent key-value storage for extensions (Memento API).

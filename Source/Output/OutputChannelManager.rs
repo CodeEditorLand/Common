@@ -8,7 +8,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can manage
 /// output channels.
-///
 /// Output channels are a common feature in IDEs, used for displaying logs,
 
 /// build outputs, or other textual information from extensions or system

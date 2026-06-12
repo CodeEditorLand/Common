@@ -17,7 +17,6 @@ use crate::{
 #[async_trait]
 pub trait ApplicationRunTime: HasEnvironment + Send + Sync + 'static {
 	/// Executes an effect using the environment provided by the runtime.
-	///
 	/// The runtime is responsible for acquiring the necessary capability from
 	/// its environment and passing it to the effect's execution logic.
 	async fn Run<TCapabilityProvider, TError, TOutput>(

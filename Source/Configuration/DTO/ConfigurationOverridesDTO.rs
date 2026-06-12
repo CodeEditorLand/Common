@@ -8,7 +8,6 @@ use serde_json::Value;
 
 /// A serializable struct for specifying overrides when retrieving or inspecting
 /// configuration values.
-///
 /// This allows for fetching settings that are specific to a particular resource
 /// (like a file URI) or a language (like settings inside a `[rust]` block).
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

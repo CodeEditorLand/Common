@@ -1,8 +1,7 @@
 //! # Command Service
 //!
-//! This module defines the abstract contract for the Command service. It
-//! includes the `CommandExecutor` trait, which outlines the capabilities for
-//! command management, and the `ActionEffect` constructors for all
+//! Defines the abstract contract for the Command service, including
+//! the `CommandExecutor` trait and `ActionEffect` constructors for all
 //! command-related operations.
 
 // --- Trait Definition ---

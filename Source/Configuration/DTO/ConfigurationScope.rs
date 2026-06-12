@@ -7,7 +7,6 @@ use serde::{Deserialize, Serialize};
 
 /// An enum that describes the scope of a configuration value, as typically
 /// defined in an extension's `package.json` manifest.
-///
 /// This determines where the setting can be configured by a user (e.g., in
 /// User settings, Workspace settings, or both). The integer values are chosen
 /// for direct compatibility with VS Code's internal API.

@@ -12,11 +12,10 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can apply a
 /// `WorkspaceEdit`.
-///
 /// A `WorkspaceEdit` is a complex, potentially transactional operation that can
 /// include text edits to multiple files, as well as file system operations like
-/// creating, deleting, or renaming files. This trait isolates the complex
-/// logic of applying such edits.
+/// creating, deleting, or renaming files. This trait isolates the logic
+/// of applying such edits.
 #[async_trait]
 pub trait WorkspaceEditApplier: Environment + Send + Sync {
 	/// Applies the given `WorkspaceEditDTO` to the workspace.

@@ -14,7 +14,6 @@ use crate::{
 
 /// Creates an effect that, when executed, will apply a `WorkspaceEdit` to the
 /// workspace.
-///
 /// A `WorkspaceEdit` is a batch of operations that can include text edits to
 /// multiple files and filesystem operations like creating, deleting, or
 /// renaming files. This effect uses the dedicated `WorkspaceEditApplier`

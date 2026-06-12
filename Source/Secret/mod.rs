@@ -1,10 +1,10 @@
 //! # Secret Service
 //!
-//! This module defines the abstract contract for the Secret service, which
-//! provides secure storage capabilities for extensions, typically by
-//! integrating with the operating system's keychain or credential store. It
-//! includes the `SecretProvider` trait and the `ActionEffect` constructors for
-//! all secret management operations.
+//! Defines the abstract contract for the Secret service, which provides secure
+//! storage capabilities for extensions, typically by integrating with the
+//! operating system's keychain or credential store. Includes the
+//! `SecretProvider` trait and `ActionEffect` constructors for all secret
+//! management operations.
 
 // --- Trait Definition ---
 /// Trait for accessing the OS keychain or credential store.

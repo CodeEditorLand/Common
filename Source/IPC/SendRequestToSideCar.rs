@@ -12,7 +12,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will send a request to a specified
 /// sidecar process and await its response.
-///
 /// It uses the `IPCProvider` capability from the environment to perform the
 /// actual IPC request operation over the underlying transport (e.g., gRPC).
 ///

@@ -9,7 +9,6 @@ use super::Environment::Environment;
 
 /// A generic trait for any type that holds a shared, reference-counted pointer
 /// to an `Environment`.
-///
 /// This is primarily implemented by the `ApplicationRunTime`, which needs to
 /// provide access to the `MountainEnvironment` it manages so that
 /// `ActionEffect`s can be executed with the correct context and capabilities.

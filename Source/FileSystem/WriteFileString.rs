@@ -12,7 +12,6 @@ use crate::{
 };
 
 /// Creates a convenience effect that writes string content to a file.
-///
 /// A wrapper around `WriteFileBytes`. It first converts the provided `String`
 /// into a byte vector (`Vec<u8>`) and then delegates to the `WriteFileBytes`
 /// effect constructor. This simplifies call sites that are working with text

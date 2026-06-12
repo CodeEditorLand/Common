@@ -6,9 +6,9 @@
 
 //! # Webview Service
 //!
-//! This module defines the abstract contract for the Webview service. It
-//! includes the `WebviewProvider` trait, all related Data Transfer Objects
-//! (DTOs), and `ActionEffect` constructors for every Webview operation.
+//! Defines the abstract contract for the Webview service, including the
+//! `WebviewProvider` trait, related Data Transfer Objects (DTOs), and
+//! `ActionEffect` constructors for every Webview operation.
 
 // --- Trait Definition ---
 /// Trait for creating and managing webview instances.

@@ -19,7 +19,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can manage
 /// the state and rendering of status bar entries and temporary messages.
-///
 /// Implemented by `MountainEnvironment` to define the operations that `Cocoon`
 /// can request from the host to manage the UI state of the status bar.
 #[async_trait]

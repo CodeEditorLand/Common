@@ -6,7 +6,6 @@
 use crate::Telemetry::{Client, DistinctId, IsAllowed};
 
 /// Captures a named PostHog event with standard Land identity properties.
-///
 /// Automatically stamps every event with `$app`, `$app_version`,
 /// `$build_mode`, `$component`, `$tier`, and `$lib`. Respects the
 /// `IsAllowed::PostHog()` gate - this is a no-op when telemetry is

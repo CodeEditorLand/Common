@@ -33,7 +33,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// unregister, and invoke all types of language feature providers (e.g., for
 /// completions, hovers, definitions).
-///
 /// By consolidating all features into a single registry, we avoid the need for
 /// dozens of separate provider traits, simplifying the overall architecture.
 #[async_trait]

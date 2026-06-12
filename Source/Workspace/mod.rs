@@ -1,8 +1,8 @@
 //! # Workspace Service
 //!
-//! This module defines the abstract contract for the Workspace service. It
-//! includes the `WorkspaceProvider` and `WorkspaceEditApplier` traits, and
-//! the `ActionEffect` constructors for every workspace-related operation.
+//! Defines the abstract contract for the Workspace service, including the
+//! `WorkspaceProvider` and `WorkspaceEditApplier` traits, and `ActionEffect`
+//! constructors for every workspace-related operation.
 
 // --- Trait Definitions ---
 /// Trait for applying workspace edits (text edits across multiple files).

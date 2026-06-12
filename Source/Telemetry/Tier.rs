@@ -2,7 +2,6 @@
 //! Errors & Reliability dashboard can pivot by `$tier`.
 
 /// Identifier for the calling Rust element (sidecar or library).
-///
 /// Each variant represents a distinct process or component in the Land
 /// ecosystem. Used to tag every telemetry event so dashboards can filter
 /// by source tier.

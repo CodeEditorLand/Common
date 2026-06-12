@@ -10,7 +10,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will register a command that is
 /// implemented in a sidecar process like Cocoon.
-///
 /// Allows the host application (`Mountain`) to know about commands contributed
 /// by extensions so they can be displayed in the command palette and invoked
 /// correctly. The `CommandExecutor` implementation will typically store this as

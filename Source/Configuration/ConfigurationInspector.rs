@@ -11,7 +11,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that can inspect
 /// a configuration key to provide details about its value in all relevant
 /// scopes (e.g., default, user, workspace) and its final effective value.
-///
 /// This capability is used to power UIs like the "Settings" editor, which
 /// often shows where a particular setting is defined and allows the user to
 /// see inherited values.

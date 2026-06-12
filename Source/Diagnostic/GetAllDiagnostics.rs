@@ -12,7 +12,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// Creates an effect that, when executed, will retrieve all diagnostics
 /// currently managed by the host, with an option to filter for a specific
 /// resource URI.
-///
 /// It uses the `DiagnosticManager` capability from the environment to perform
 /// the operation.
 ///

@@ -12,7 +12,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will retrieve information about all
 /// currently open workspace folders.
-///
 /// It uses the `WorkspaceProvider` capability from the environment to perform
 /// the operation.
 ///

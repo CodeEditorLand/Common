@@ -46,7 +46,6 @@ pub trait SourceControlManagementProvider: Environment + Send + Sync {
 	async fn DisposeSourceControl(&self, ProviderHandle:u32) -> Result<(), CommonError>;
 
 	/// Updates the core properties of an SourceControlManagement provider.
-	///
 	/// This is used to update properties like the commit message template, the
 	/// count badge, and the accept command.
 	///
@@ -64,7 +63,6 @@ pub trait SourceControlManagementProvider: Environment + Send + Sync {
 
 	/// Updates the properties of an SourceControlManagement resource group
 	/// (e.g., "Changes").
-	///
 	/// This can update the group's label, hide state, and its list of
 	/// resources.
 	///

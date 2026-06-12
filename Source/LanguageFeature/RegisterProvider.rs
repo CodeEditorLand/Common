@@ -11,7 +11,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will register a new language feature
 /// provider with the host's central registry.
-///
 /// It uses the `LanguageFeatureProviderRegistry` capability from the
 /// environment.
 ///

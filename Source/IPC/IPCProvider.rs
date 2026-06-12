@@ -10,13 +10,12 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can
 /// communicate with external sidecar processes (like `Cocoon`).
-///
 /// Implemented by `MountainEnvironment` and typically uses gRPC as the
 /// underlying transport mechanism to send and receive messages.
 #[async_trait]
 pub trait IPCProvider: Environment + Send + Sync {
 	/// Sends a notification (a fire-and-forget message) to a specified
-	/// sidecar. This method does not wait for a response.
+	/// sidecar. Does not wait for a response.
 	///
 	/// # Parameters
 	/// * `SideCarIdentifier`: The unique ID of the target sidecar process.

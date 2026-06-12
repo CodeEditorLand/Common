@@ -10,7 +10,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that handles the
 /// secure storage and retrieval of sensitive information like API tokens.
-///
 /// Implemented by `MountainEnvironment` and typically uses a library like
 /// `keyring` to interact with the native operating system's credential
 /// manager. Secrets are namespaced by an `ExtensionIdentifier` to ensure that

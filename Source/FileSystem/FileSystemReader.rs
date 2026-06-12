@@ -11,7 +11,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can perform
 /// read-only filesystem operations.
-///
 /// Implemented by `MountainEnvironment` and typically uses `tokio::fs` to
 /// fulfill the contract. Separating read operations from write operations
 /// allows for more granular and secure dependency injection, as some parts of

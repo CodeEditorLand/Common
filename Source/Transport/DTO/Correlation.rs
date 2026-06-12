@@ -1,7 +1,6 @@
 //! Correlation ID types and utilities.
 
 /// Correlation ID type.
-///
 /// Used to uniquely identify requests and match responses to requests.
 pub type CorrelationId = String;
 

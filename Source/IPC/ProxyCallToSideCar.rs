@@ -11,7 +11,6 @@ use super::IPCProvider::IPCProvider;
 use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError};
 
 /// Creates an effect that proxies an RPC call to a specified target sidecar.
-///
 /// This is a powerful utility for scenarios where the host application
 /// (`Mountain`) needs to act as a router, forwarding a request it received from
 /// one process to another without needing to understand the request's content.

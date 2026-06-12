@@ -18,7 +18,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will retrieve a list of all currently
 /// registered command identifiers.
-///
 /// Includes both native commands implemented in Rust and proxied commands
 /// contributed by external sidecars. Uses the `CommandExecutor` capability
 /// from the environment to perform the operation.

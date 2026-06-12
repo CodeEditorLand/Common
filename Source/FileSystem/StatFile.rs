@@ -10,7 +10,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will retrieve metadata (such as file
 /// type, size, and modification times) for a given path.
-///
 /// It uses the `FileSystemReader` capability from the environment to perform
 /// the underlying `stat` system call asynchronously.
 ///

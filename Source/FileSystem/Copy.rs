@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will copy a file or directory from a
 /// source path to a target path.
-///
 /// It uses the `FileSystemWriter` capability from the environment to perform
 /// the actual file I/O.
 ///

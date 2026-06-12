@@ -1,8 +1,8 @@
 //! # Output Service
 //!
-//! This module defines the abstract contract for the Output Channel service.
-//! It includes the `OutputChannelManager` trait and the `ActionEffect`
-//! constructors for every output channel operation.
+//! Defines the abstract contract for the Output Channel service, including the
+//! `OutputChannelManager` trait and `ActionEffect` constructors for every
+//! output channel operation.
 
 // --- Trait Definition ---
 /// Trait for managing output channels.

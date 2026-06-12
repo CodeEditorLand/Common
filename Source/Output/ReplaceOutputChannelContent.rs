@@ -10,7 +10,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will replace the entire buffer of
 /// the specified output channel with a new string.
-///
 /// It uses the `OutputChannelManager` capability from the environment.
 ///
 /// # Parameters

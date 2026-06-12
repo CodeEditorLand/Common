@@ -6,9 +6,9 @@
 
 //! # SourceControlManagement Service
 //!
-//! This module defines the abstract contract for the Source Control Management
-//! (SourceControlManagement) service, which is responsible for integrating with
-//! version control systems like Git.
+//! Defines the abstract contract for the Source Control Management
+//! (SourceControlManagement) service, responsible for integrating with version
+//! control systems like Git.
 
 // --- Trait Definition ---
 /// Trait for source control management (VCS integration).

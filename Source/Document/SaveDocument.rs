@@ -19,7 +19,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will save the document at the
 /// specified URI.
-///
 /// It uses the `DocumentProvider` capability from the environment to perform
 /// the operation, which involves getting the document's current content from
 /// the in-memory store and writing it to disk.

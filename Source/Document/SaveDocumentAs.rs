@@ -19,7 +19,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will save a document to a new
 /// location. This is typically used for "Save As..." functionality.
-///
 /// It uses the `DocumentProvider` capability from the environment to perform
 /// the operation. If `NewTargetURI` is `None`, the provider is expected to
 /// interact with the user (via the `UserInterfaceProvider`) to prompt for a

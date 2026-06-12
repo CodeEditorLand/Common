@@ -14,7 +14,6 @@ use serde_json::Value;
 
 /// A serializable struct that represents the complete state of a single status
 /// bar item, analogous to `vscode.StatusBarItem`.
-///
 /// This DTO is sent from the `Cocoon` sidecar to the `Mountain` host whenever
 /// an extension creates or updates a status bar item, providing the host with
 /// all the information needed to render it in the UI.

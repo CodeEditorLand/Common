@@ -13,7 +13,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can provide
 /// information about the current workspace.
-///
 /// Primary interface for interacting with workspace folders, configuration
 /// paths, trust settings, and for performing workspace-wide operations like
 /// finding files.

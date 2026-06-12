@@ -6,10 +6,10 @@
 
 //! # Diagnostic Service
 //!
-//! This module defines the abstract contract for the Diagnostic service, which
-//! is responsible for managing problems like errors and warnings detected in
-//! the workspace. It includes the `DiagnosticManager` trait and the
-//! `ActionEffect` constructors for all diagnostic operations.
+//! Defines the abstract contract for the Diagnostic service, responsible for
+//! managing problems like errors and warnings detected in the workspace.
+//! Includes the `DiagnosticManager` trait and `ActionEffect` constructors for
+//! all diagnostic operations.
 
 // --- Trait Definition ---
 /// Trait for managing document diagnostics.

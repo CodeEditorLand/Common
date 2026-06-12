@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will read the entire contents of a
 /// file at the specified path into a byte vector.
-///
 /// It uses the `FileSystemReader` capability from the environment to perform
 /// the actual file I/O.
 ///

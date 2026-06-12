@@ -8,7 +8,6 @@ use serde_json::Value;
 
 /// A serializable struct that represents the detailed breakdown of a
 /// configuration value from all possible sources.
-///
 /// This DTO is returned by the `InspectConfiguration` effect and is used by
 /// UI components like the Settings editor to show where values are inherited
 /// from, what the default is, and what the final effective value is.

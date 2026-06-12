@@ -1,9 +1,9 @@
 //! # FileSystem Service
 //!
-//! This module defines the abstract contract for the FileSystem service. It
-//! includes the `FileSystemReader` and `FileSystemWriter` traits, all related
-//! Data Transfer Objects (DTOs), and the `ActionEffect` constructors for every
-//! filesystem operation.
+//! Defines the abstract contract for the FileSystem service, including
+//! `FileSystemReader` and `FileSystemWriter` traits, related Data Transfer
+//! Objects (DTOs), and `ActionEffect` constructors for every filesystem
+//! operation.
 
 // --- Trait Definitions ---
 /// Trait for reading files and listing directories.

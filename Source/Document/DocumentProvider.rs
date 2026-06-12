@@ -11,7 +11,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can manage
 /// the lifecycle and content of text documents.
-///
 /// Implemented by `MountainEnvironment` and responsible for maintaining the
 /// "single source of truth" for all open documents, handling file I/O, and
 /// synchronizing state with the `Cocoon` sidecar.

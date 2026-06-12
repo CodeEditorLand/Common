@@ -6,9 +6,9 @@
 
 //! # Terminal Service
 //!
-//! This module defines the abstract contract for the integrated Terminal
-//! service. It includes the `TerminalProvider` trait and the `ActionEffect`
-//! constructors for every terminal-related operation.
+//! Defines the abstract contract for the integrated Terminal service, including
+//! the `TerminalProvider` trait and `ActionEffect` constructors for every
+//! terminal-related operation.
 
 // --- Trait Definition ---
 /// Trait for creating and managing terminal instances.

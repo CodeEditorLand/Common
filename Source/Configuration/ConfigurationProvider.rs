@@ -23,7 +23,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 pub trait ConfigurationProvider: Environment + Send + Sync {
 	/// Retrieves a configuration value for a given section or key, applying
 	/// specified overrides.
-	///
 	/// Returns the final, effective value after merging all configuration sources
 	/// (e.g., default, user, workspace) in the correct order of precedence.
 	///

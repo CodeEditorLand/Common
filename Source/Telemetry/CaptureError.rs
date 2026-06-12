@@ -5,7 +5,6 @@
 use crate::Telemetry::{CaptureEvent, Client};
 
 /// Captures a PostHog error event tagged with the current tier.
-///
 /// The event is emitted as `land:<tier>:error` with `error_tag` and
 /// `error_message` properties. Respects the global telemetry gate
 /// (`IsAllowed::PostHog`), so this is a no-op when telemetry is disabled.

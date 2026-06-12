@@ -23,7 +23,6 @@ impl Default for CircuitBreakerConfiguration {
 }
 
 /// Circuit breaker that wraps a transport to add fault-tolerance.
-///
 /// Tracks consecutive failures and opens the circuit when the
 /// `FailureThreshold` is exceeded, preventing cascading failures.
 #[derive(Debug, Clone)]

@@ -16,7 +16,6 @@
 use crate::Telemetry::{CaptureSession, Client, IsAllowed, Tier};
 
 /// Initializes the telemetry infrastructure for a given sidecar tier.
-///
 /// Sets the tier, creates the PostHog client, and emits a session-start
 /// event. Idempotent - subsequent calls are no-ops.
 ///

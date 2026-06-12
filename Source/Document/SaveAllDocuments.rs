@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will save all documents that have
 /// unsaved changes.
-///
 /// It uses the `DocumentProvider` capability from the environment to perform
 /// the operation. This involves iterating through all open documents, checking
 /// their dirty state, and writing the modified ones to disk.

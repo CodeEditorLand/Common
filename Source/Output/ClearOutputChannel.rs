@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will clear the entire buffer of the
 /// specified output channel.
-///
 /// It uses the `OutputChannelManager` capability from the environment.
 ///
 /// # Parameters

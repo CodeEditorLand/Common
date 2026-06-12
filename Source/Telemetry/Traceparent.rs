@@ -38,7 +38,6 @@ fn FreshSpanId() -> String {
 
 /// Build a W3C `traceparent` header value for an outgoing crossing.
 /// Same trace ID across the whole process; fresh span ID per call.
-///
 /// Example: `00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01`
 pub fn Build() -> String {
 	let TraceId = TraceIdValue();

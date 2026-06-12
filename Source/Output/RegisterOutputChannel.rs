@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will register a new output channel
 /// with the host application.
-///
 /// It uses the `OutputChannelManager` capability from the environment.
 ///
 /// # Parameters

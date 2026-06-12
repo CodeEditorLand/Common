@@ -10,7 +10,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will request that the host
 /// application open the specified file path in an editor.
-///
 /// It uses the `WorkspaceProvider` capability from the environment. The actual
 /// implementation will likely involve creating a new document model (if one
 /// doesn't exist) and sending an event to the UI to reveal an editor for it.

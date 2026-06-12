@@ -10,12 +10,10 @@ use std::{
 use serde::{Deserialize, Serialize};
 
 /// Correlation ID type.
-///
 /// Used to uniquely identify requests and match responses to requests.
 pub type CorrelationId = String;
 
 /// Timestamp type.
-///
 /// Time in microseconds since Unix epoch (1970-01-01 00:00:00 UTC).
 pub type Timestamp = u64;
 
@@ -104,7 +102,6 @@ impl std::str::FromStr for TransportType {
 }
 
 /// Transport type detector.
-///
 /// Provides runtime detection of the appropriate transport based on
 /// environment and capabilities.
 pub trait TransportTypeDetector: Send + Sync {

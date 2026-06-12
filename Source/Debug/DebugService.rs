@@ -85,7 +85,6 @@ pub trait DebugService: Environment + Send + Sync {
 	async fn SendCommand(&self, SessionID:String, Command:String, Arguments:Value) -> Result<Value, CommonError>;
 
 	/// Terminates an active debugging session.
-	///
 	/// Removes the session from the active-session registry, fires a DAP
 	/// `disconnect` request to the adapter if it is still alive, and emits an
 	/// `$onDidTerminateDebugSession` notification so the UI can hide the

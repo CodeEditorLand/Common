@@ -20,7 +20,6 @@ pub trait ExtensionManagementService: Environment + Send + Sync {
 	/// Scans the predefined extension directories, parses the `package.json`
 	/// for each found extension, and populates the internal state with the
 	/// results.
-	///
 	/// This is typically a long-running operation that should be performed
 	/// during application startup.
 	async fn ScanForExtensions(&self) -> Result<(), CommonError>;

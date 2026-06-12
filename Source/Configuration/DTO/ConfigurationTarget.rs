@@ -8,7 +8,6 @@ use serde::{Deserialize, Serialize};
 /// An enum that defines the target level for a configuration update. This tells
 /// the `ConfigurationProvider` which `settings.json` file or memory layer to
 /// modify when a setting is changed.
-///
 /// The integer values are chosen for direct compatibility with VS Code's
 /// internal API, ensuring seamless interoperability across IPC boundaries.
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]

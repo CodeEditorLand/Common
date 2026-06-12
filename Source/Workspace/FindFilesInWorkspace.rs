@@ -13,7 +13,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will find files within the workspace
 /// based on include and exclude glob patterns.
-///
 /// It uses the `WorkspaceProvider` capability from the environment to perform
 /// the search.
 ///

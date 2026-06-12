@@ -19,7 +19,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will open an existing document from a
 /// URI or create a new untitled document, potentially with initial content.
-///
 /// It uses the `DocumentProvider` capability from the environment to perform
 /// the operation, which may involve file I/O and updating the central document
 /// store.

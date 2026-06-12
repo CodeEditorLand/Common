@@ -9,7 +9,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will display a native dialog for
 /// saving a file.
-///
 /// Uses the `UserInterfaceProvider` capability from the environment to
 /// orchestrate the interaction with the frontend.
 ///

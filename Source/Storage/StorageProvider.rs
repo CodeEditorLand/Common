@@ -10,7 +10,6 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that provides
 /// persistent key-value storage, similar to VS Code's Memento API.
-///
 /// Implemented by `MountainEnvironment` and responsible for reading from and
 /// writing to the appropriate JSON storage files on disk, separating global
 /// state from workspace-specific state.

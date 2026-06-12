@@ -20,7 +20,6 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 
 /// Creates an effect that, when executed, will retrieve the final, merged
 /// configuration value for a given section, applying any specified overrides.
-///
 /// Uses the `ConfigurationProvider` capability from the environment to perform
 /// the operation.
 ///

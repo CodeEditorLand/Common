@@ -1,8 +1,8 @@
 //! # Transport Layer
 //!
-//! This module defines the transport-layer abstraction that enables
-//! communication between CodeEditorLand components through various mechanisms
-//! (gRPC, IPC, WASM) using a unified Strategy pattern interface.
+//! Defines the transport-layer abstraction that enables communication between
+//! CodeEditorLand components through various mechanisms (gRPC, IPC, WASM)
+//! using a unified Strategy pattern interface.
 //!
 //! ## Architecture
 //!

@@ -1,7 +1,7 @@
 //! # TransportStrategy Trait
 //!
 //! Defines the core trait that all transport implementations must implement.
-//! This trait provides a unified, transport-agnostic interface for sending
+//! provides a unified, transport-agnostic interface for sending
 //! requests and notifications, with optional event streaming capabilities.
 //!
 //! All transports must be async and thread-safe (`Send + Sync`).
@@ -18,7 +18,6 @@ use super::{
 };
 
 /// Core transport strategy trait.
-///
 /// Defines the essential operations that any transport mechanism must provide.
 /// Components interact with transports through this trait, allowing them to be
 /// transport-agnostic.

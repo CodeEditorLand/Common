@@ -7,11 +7,10 @@ use std::{future::Future, pin::Pin, sync::Arc};
 
 /// An `ActionEffect` encapsulates an asynchronous operation as a first-class
 /// value.
-///
-/// It is a data structure that contains a function. This function, when
-/// provided with its required capability (`TCapability`), produces a `Future`
-/// that will yield the result of the operation. This pattern cleanly separates
-/// the *definition* of an operation from its *execution*.
+/// Contains a closure that, when provided with its required capability
+/// (`TCapability`), produces a `Future` yielding the operation's result.
+/// This pattern cleanly separates the *definition* of an operation from its
+/// *execution*.
 ///
 /// # Type Parameters
 ///
