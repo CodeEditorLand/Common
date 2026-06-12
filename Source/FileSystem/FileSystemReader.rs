@@ -12,10 +12,10 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that can perform
 /// read-only filesystem operations.
 ///
-/// This trait is implemented by `MountainEnvironment` and typically uses
-/// `tokio::fs` to fulfill the contract. Separating read operations from write
-/// operations allows for more granular and secure dependency injection, as
-/// some parts of the application may only need read access.
+/// Implemented by `MountainEnvironment` and typically uses `tokio::fs` to
+/// fulfill the contract. Separating read operations from write operations
+/// allows for more granular and secure dependency injection, as some parts of
+/// the application may only need read access.
 #[async_trait]
 pub trait FileSystemReader: Environment + Send + Sync {
 	/// Reads the entire content of a file into a byte vector.

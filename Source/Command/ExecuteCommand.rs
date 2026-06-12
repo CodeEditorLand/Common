@@ -12,9 +12,9 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// Creates an effect that, when executed, will run a command by its unique
 /// identifier.
 ///
-/// It uses the `CommandExecutor` capability from the environment to dispatch
-/// the command to the appropriate handler, whether that handler is a native
-/// Rust function or a proxied function in an external sidecar process.
+/// Uses the `CommandExecutor` capability from the environment to dispatch the
+/// command to the appropriate handler, whether that handler is a native Rust
+/// function or a proxied function in an external sidecar process.
 ///
 /// # Parameters
 ///

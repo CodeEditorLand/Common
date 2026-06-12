@@ -11,8 +11,8 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that can
 /// communicate with external sidecar processes (like `Cocoon`).
 ///
-/// This trait is implemented by `MountainEnvironment` and typically uses gRPC
-/// as the underlying transport mechanism to send and receive messages.
+/// Implemented by `MountainEnvironment` and typically uses gRPC as the
+/// underlying transport mechanism to send and receive messages.
 #[async_trait]
 pub trait IPCProvider: Environment + Send + Sync {
 	/// Sends a notification (a fire-and-forget message) to a specified

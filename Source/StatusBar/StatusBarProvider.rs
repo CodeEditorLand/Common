@@ -20,14 +20,12 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that can manage
 /// the state and rendering of status bar entries and temporary messages.
 ///
-/// This trait is implemented by `MountainEnvironment` and defines the
-/// operations that `Cocoon` can request from the host to manage the UI state of
-/// the status bar.
+/// Implemented by `MountainEnvironment` to define the operations that `Cocoon`
+/// can request from the host to manage the UI state of the status bar.
 #[async_trait]
 pub trait StatusBarProvider: Environment + Send + Sync {
 	/// Informs the host to create a new status bar entry or update an existing
-	/// one. The `EntryIdentifier` within the DTO is used to identify the
-	/// entry.
+	/// one. The `EntryIdentifier` within the DTO identifies the entry.
 	///
 	/// # Parameters
 	/// * `Entry`: The DTO containing the complete state of the status bar item.
@@ -39,8 +37,7 @@ pub trait StatusBarProvider: Environment + Send + Sync {
 	/// * `EntryIdentifier`: The unique identifier of the entry to remove.
 	async fn DisposeStatusBarEntry(&self, EntryIdentifier:String) -> Result<(), CommonError>;
 
-	/// Shows a temporary message in the status bar. The message is identified
-	/// by a unique ID so it can be disposed of later.
+	/// Shows a temporary message in the status bar.
 	///
 	/// # Parameters
 	/// * `MessageIdentifier`: A unique ID for this message instance.
@@ -53,8 +50,8 @@ pub trait StatusBarProvider: Environment + Send + Sync {
 	/// * `MessageIdentifier`: The unique ID of the message to remove.
 	async fn DisposeStatusBarMessage(&self, MessageIdentifier:String) -> Result<(), CommonError>;
 
-	/// This method is called *by* the host *to* the extension host (`Cocoon`)
-	/// when a dynamic tooltip needs to be resolved for a status bar item.
+	/// Called *by* the host *to* the extension host (`Cocoon`) when a dynamic
+	/// tooltip needs to be resolved for a status bar item.
 	///
 	/// # Parameters
 	/// * `EntryIdentifier`: The unique identifier of the entry for which to
@@ -62,7 +59,6 @@ pub trait StatusBarProvider: Environment + Send + Sync {
 	///
 	/// # Returns
 	/// A `Result` containing an optional DTO for the tooltip (e.g.,
-
 	/// `IMarkdownStringDTO`).
 	async fn ProvideTooltip(&self, EntryIdentifier:String) -> Result<Option<Value>, CommonError>;
 }

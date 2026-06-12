@@ -16,7 +16,7 @@ pub type CorrelationId = String;
 
 /// Timestamp type.
 ///
-/// Represents time in microseconds since Unix epoch (1970-01-01 00:00:00 UTC).
+/// Time in microseconds since Unix epoch (1970-01-01 00:00:00 UTC).
 pub type Timestamp = u64;
 
 /// Generator trait for correlation IDs.

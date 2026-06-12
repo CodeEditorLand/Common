@@ -11,10 +11,10 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that handles the
 /// secure storage and retrieval of sensitive information like API tokens.
 ///
-/// This trait is implemented by `MountainEnvironment` and typically uses a
-/// library like `keyring` to interact with the native operating system's
-/// credential manager. Secrets are namespaced by an `ExtensionIdentifier` to
-/// ensure that one extension cannot access the secrets of another.
+/// Implemented by `MountainEnvironment` and typically uses a library like
+/// `keyring` to interact with the native operating system's credential
+/// manager. Secrets are namespaced by an `ExtensionIdentifier` to ensure that
+/// one extension cannot access the secrets of another.
 #[async_trait]
 pub trait SecretProvider: Environment + Send + Sync {
 	/// Retrieves a secret for a given extension and key.

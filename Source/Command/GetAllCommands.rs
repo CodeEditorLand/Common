@@ -19,12 +19,11 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// Creates an effect that, when executed, will retrieve a list of all currently
 /// registered command identifiers.
 ///
-/// This includes both native commands implemented in Rust and proxied commands
-/// contributed by external sidecars. It uses the `CommandExecutor` capability
+/// Includes both native commands implemented in Rust and proxied commands
+/// contributed by external sidecars. Uses the `CommandExecutor` capability
 /// from the environment to perform the operation.
 ///
 /// # Returns
-///
 /// An `ActionEffect` that resolves with a `Vec<String>` of command
 /// identifiers. The capability required to run this effect is an
 /// `Arc<dyn CommandExecutor>`.

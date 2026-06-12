@@ -14,10 +14,9 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that can provide
 /// information about the current workspace.
 ///
-/// This trait is the primary interface for interacting with workspace folders,
-
-/// configuration paths, trust settings, and for performing workspace-wide
-/// operations like finding files.
+/// Primary interface for interacting with workspace folders, configuration
+/// paths, trust settings, and for performing workspace-wide operations like
+/// finding files.
 #[async_trait]
 pub trait WorkspaceProvider: Environment + Send + Sync {
 	/// Retrieves information about all currently open workspace folders.

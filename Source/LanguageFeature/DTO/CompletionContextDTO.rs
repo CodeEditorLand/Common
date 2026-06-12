@@ -4,7 +4,7 @@
 
 use serde::{Deserialize, Serialize};
 
-/// Represents the reason why code completion was triggered.
+/// The reason why code completion was triggered.
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CompletionTriggerKindDTO {
 	/// Completion was triggered by typing a trigger character.

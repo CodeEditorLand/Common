@@ -20,7 +20,7 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that can manage
 /// the lifecycle and data flow for custom tree views.
 ///
-/// This trait uses a hybrid model:
+/// Uses a hybrid model:
 /// - "Push" methods are called by the extension host (`Cocoon`) to manage the
 ///   view's state and appearance in the main host (`Mountain`).
 /// - "Pull" methods are called by the main host (`Mountain`) to request data

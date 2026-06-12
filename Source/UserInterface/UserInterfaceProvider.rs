@@ -20,10 +20,9 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 
 /// An abstract service contract for an environment component that can perform
 /// UI interactions that require user input, such as showing dialogs, messages,
-
 /// and quick pick menus.
 ///
-/// This trait is implemented by `MountainEnvironment`, and the methods are
+/// Implemented by `MountainEnvironment` so that the methods are
 /// typically handled by sending events to the `Sky` frontend and awaiting a
 /// response.
 #[async_trait]

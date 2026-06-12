@@ -19,9 +19,9 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that can manage
 /// integrated terminal processes.
 ///
-/// This trait is implemented by `MountainEnvironment`, and its methods are
-/// responsible for spawning and managing native pseudo-terminal (PTY)
-/// processes, handling their I/O, and managing their lifecycle.
+/// Implemented by `MountainEnvironment` and responsible for spawning and
+/// managing native pseudo-terminal (PTY) processes, handling their I/O, and
+/// managing their lifecycle.
 #[async_trait]
 pub trait TerminalProvider: Environment + Send + Sync {
 	/// Creates a new terminal instance with the given options.

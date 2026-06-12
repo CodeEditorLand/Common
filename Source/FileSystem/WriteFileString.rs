@@ -13,10 +13,10 @@ use crate::{
 
 /// Creates a convenience effect that writes string content to a file.
 ///
-/// This function is a wrapper around `WriteFileBytes`. It first converts the
-/// provided `String` into a byte vector (`Vec<u8>`) and then delegates to the
-/// `WriteFileBytes` effect constructor. This simplifies call sites that are
-/// working with text data.
+/// A wrapper around `WriteFileBytes`. It first converts the provided `String`
+/// into a byte vector (`Vec<u8>`) and then delegates to the `WriteFileBytes`
+/// effect constructor. This simplifies call sites that are working with text
+/// data.
 ///
 /// # Parameters
 /// * `Path`: The `PathBuf` of the file to write to.

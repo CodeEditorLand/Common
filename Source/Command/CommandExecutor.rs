@@ -11,10 +11,10 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that can execute
 /// and manage commands within the application.
 ///
-/// This trait is implemented by the concrete `MountainEnvironment` and provides
-/// the core logic for the command palette and programmatic command execution.
-/// It is designed to handle both native commands implemented in Rust and
-/// proxied commands implemented in external sidecars.
+/// Implemented by the concrete `MountainEnvironment` to provide the core logic
+/// for the command palette and programmatic command execution. Designed to
+/// handle both native commands implemented in Rust and proxied commands
+/// implemented in external sidecars.
 #[async_trait]
 pub trait CommandExecutor: Environment + Send + Sync {
 	/// Executes a command with the given identifier and arguments.

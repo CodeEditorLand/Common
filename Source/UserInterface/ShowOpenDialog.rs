@@ -18,7 +18,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// Creates an effect that, when executed, will display a native dialog for
 /// opening files or folders.
 ///
-/// It uses the `UserInterfaceProvider` capability from the environment to
+/// Uses the `UserInterfaceProvider` capability from the environment to
 /// orchestrate the interaction with the frontend, which is responsible for
 /// showing the actual OS-level dialog.
 ///

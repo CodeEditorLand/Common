@@ -19,9 +19,9 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that can manage
 /// Webview panels.
 ///
-/// This trait defines all the operations necessary for creating Webview-based
-/// UI, setting their content, and managing their lifecycle, abstracting away
-/// the specific UI framework (e.g., Tauri, Electron) being used by the host.
+/// Defines all the operations necessary for creating Webview-based UI, setting
+/// their content, and managing their lifecycle, abstracting away the specific
+/// UI framework (e.g., Tauri, Electron) being used by the host.
 #[async_trait]
 pub trait WebviewProvider: Environment + Send + Sync {
 	/// Creates a new Webview panel.
@@ -92,7 +92,8 @@ pub trait WebviewProvider: Environment + Send + Sync {
 	async fn SetWebviewOptions(&self, Handle:String, OptionsValue:Value) -> Result<(), CommonError>;
 
 	/// Sets the HTML content of a Webview panel.
-	// # Parameters
+	///
+	/// # Parameters
 	/// * `Handle`: The unique handle of the Webview panel.
 	/// * `HTML`: The HTML string to set as the content.
 	async fn SetWebviewHTML(&self, Handle:String, HTML:String) -> Result<(), CommonError>;

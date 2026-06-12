@@ -6,7 +6,6 @@
 pub type CorrelationId = String;
 
 /// Trait for generating correlation IDs.
-///
 /// This allows different ID generation strategies (UUID, sequential, etc.)
 /// for testing or special requirements.
 pub trait CorrelationIdGenerator {

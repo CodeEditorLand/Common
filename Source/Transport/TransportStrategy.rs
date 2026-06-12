@@ -19,9 +19,9 @@ use super::{
 
 /// Core transport strategy trait.
 ///
-/// This trait defines the essential operations that any transport mechanism
-/// must provide. Components interact with transports through this trait,
-/// allowing them to be transport-agnostic.
+/// Defines the essential operations that any transport mechanism must provide.
+/// Components interact with transports through this trait, allowing them to be
+/// transport-agnostic.
 #[async_trait]
 pub trait TransportStrategy: Send + Sync {
 	/// Establishes a connection to the transport endpoint.

@@ -12,9 +12,9 @@ use crate::{Environment::Environment::Environment, Error::CommonError::CommonErr
 /// An abstract service contract for an environment component that can perform
 /// write and modification filesystem operations.
 ///
-/// This trait is implemented by `MountainEnvironment` and typically uses
-/// `tokio::fs` to fulfill the contract. Separating write operations from read
-/// operations enhances security by allowing capabilities to be granted on a
+/// Implemented by `MountainEnvironment` and typically uses `tokio::fs` to
+/// fulfill the contract. Separating write operations from read operations
+/// enhances security by allowing capabilities to be granted on a
 /// need-to-know basis.
 #[async_trait]
 pub trait FileSystemWriter: Environment + Send + Sync {

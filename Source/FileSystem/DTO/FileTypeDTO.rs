@@ -5,7 +5,7 @@
 
 use serde::{Deserialize, Serialize};
 
-/// Represents the type of a filesystem entry.
+/// The type of a filesystem entry.
 ///
 /// This is a C-like enum with an explicit `u8` representation. The values are
 /// chosen to align directly with VS Code's internal `FileType` enum, ensuring

@@ -11,17 +11,15 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// Creates an effect that, when executed, will unregister a command from the
 /// host's command registry.
 ///
-/// This is typically called when an extension is deactivated or explicitly
-/// disposes of a command registration.
+/// Typically called when an extension is deactivated or explicitly disposes of
+/// a command registration.
 ///
 /// # Parameters
-///
 /// * `SideCarIdentifier`: The unique ID of the sidecar that originally
 ///   registered the command.
 /// * `CommandIdentifier`: The unique ID of the command to unregister.
 ///
 /// # Returns
-///
 /// An `ActionEffect` that resolves to `()` on success.
 pub fn UnregisterCommand(
 	SideCarIdentifier:String,

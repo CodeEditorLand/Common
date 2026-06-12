@@ -25,7 +25,7 @@ use crate::{Effect::ActionEffect::ActionEffect, Error::CommonError::CommonError}
 /// Creates an effect that, when executed, will inspect a configuration key to
 /// get its value from all relevant sources (e.g., default, user, workspace).
 ///
-/// It uses the `ConfigurationInspector` capability from the environment to
+/// Uses the `ConfigurationInspector` capability from the environment to
 /// perform the operation.
 ///
 /// # Parameters
