@@ -1,4 +1,4 @@
-# **Common** 🧩
+# **Common**&#x2001;🧩
 
 <table>
 	<tr>
