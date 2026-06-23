@@ -5,17 +5,17 @@
 		<td>
 			<a href="https://GitHub.Com/CodeEditorLand/Common" target="_blank">
 				<picture>
-					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/last-commit/CodeEditorLand/Common?label=Last-commit&color=black&labelColor=black&logoColor=white&logoWidth=0" />
-					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/last-commit/CodeEditorLand/Common?label=Last-commit&color=white&labelColor=white&logoColor=black&logoWidth=0" />
-					<img src="https://img.shields.io/github/last-commit/CodeEditorLand/Common?label=Last-commit&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Last-commit" title="Last-commit" />
+					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/last-commit/CodeEditorLand/Common?label=Update&color=black&labelColor=black&logoColor=white&logoWidth=0" />
+					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/last-commit/CodeEditorLand/Common?label=Update&color=white&labelColor=white&logoColor=black&logoWidth=0" />
+					<img src="https://img.shields.io/github/last-commit/CodeEditorLand/Common?label=Update&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Update" title="Update" />
 				</picture>
 			</a>
 			<br />
 			<a href="https://GitHub.Com/CodeEditorLand/Common" target="_blank">
 				<picture>
-					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/CodeEditorLand/Common?label=Issues&color=black&labelColor=black&logoColor=white&logoWidth=0" />
-					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/issues/CodeEditorLand/Common?label=Issues&color=white&labelColor=white&logoColor=black&logoWidth=0" />
-					<img src="https://img.shields.io/github/issues/CodeEditorLand/Common?label=Issues&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Issues" title="Issues" />
+					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/CodeEditorLand/Common?label=Issue&color=black&labelColor=black&logoColor=white&logoWidth=0" />
+					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/issues/CodeEditorLand/Common?label=Issue&color=white&labelColor=white&logoColor=black&logoWidth=0" />
+					<img src="https://img.shields.io/github/issues/CodeEditorLand/Common?label=Issue&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Issue" title="Issue" />
 				</picture>
 			</a>
 		</td>
@@ -30,9 +30,9 @@
 			<br />
 			<a href="https://GitHub.Com/CodeEditorLand/Common" target="_blank">
 				<picture>
-					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/downloads/CodeEditorLand/Common?label=Downloads&color=black&labelColor=black&logoColor=white&logoWidth=0" />
-					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/downloads/CodeEditorLand/Common?label=Downloads&color=white&labelColor=white&logoColor=black&logoWidth=0" />
-					<img src="https://img.shields.io/github/downloads/CodeEditorLand/Common?label=Downloads&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Downloads" title="Downloads" />
+					<source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/downloads/CodeEditorLand/Common/total?label=Download&color=black&labelColor=black&logoColor=white&logoWidth=0" />
+					<source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/github/downloads/CodeEditorLand/Common/total?label=Download&color=white&labelColor=white&logoColor=black&logoWidth=0" />
+					<img src="https://img.shields.io/github/downloads/CodeEditorLand/Common/total?label=Download&color=black&labelColor=black&logoColor=white&logoWidth=0" alt="Download" title="Download" />
 				</picture>
 			</a>
 		</td>
@@ -59,48 +59,70 @@ required."_
 ## Overview
 
 **Common** is the architectural core of the Land Code Editor's native backend.
-It provides a pure, abstract foundation with **no concrete implementations** -
-defining the application's "language" through `async trait`s per service domain,
-an `ActionEffect` declarative system, Data Transfer Objects (DTOs) for IPC, a
-unified `CommonError` enum, a transport-agnostic communication layer, and a
-telemetry dual-pipe.
+It contains no working code — only abstract definitions. Think of it as the
+shared vocabulary that every other native component speaks.
 
-The entire `Mountain` backend and any future native components are built by
-implementing the traits and consuming the effects defined in this crate. By
-defining all application capabilities as abstract `trait`s, it enforces clean
-architectural boundaries, maximizes testability through mock implementations,
-and ensures consistent data contracts across the entire native ecosystem.
+It defines several things that the rest of the system depends on:
+
+- **Service traits** — Abstract descriptions of what every editor service
+  should be able to do (read files, open terminals, search code, show UI
+  dialogs). Each trait says _what_ needs to happen, never _how_.
+- **ActionEffect system** — Instead of calling functions that immediately do
+  work, components construct descriptions of the work they want done (an
+  "effect") and hand it to a runtime. This means effects can be inspected,
+  tested, composed, and controlled before execution.
+- **Data Transfer Objects (DTOs)** — The data structures that flow between
+  components. All types work with `serde` so they serialize cleanly for
+  IPC between `Mountain` ⛰️, `Cocoon` 🦋, `Grove` 🌳, and all sidecars.
+- **CommonError** — One error type for every possible failure across every
+  service. File system errors, terminal errors, language feature errors —
+  all reported the same way.
+- **Transport layer** — A `TransportStrategy` trait that defines how
+  components talk to each other, without committing to any specific protocol.
+  Concrete transports (`gRPC`, `IPC`, `WASM`, `Mist`) are implemented in
+  `Grove` 🌳.
+- **Telemetry** — A shared pipeline for sending events to `PostHog` and
+  traces to any `OTLP`-compatible backend.
+
+Everything in `Mountain` ⛰️ — and any future native component — is built by
+implementing these traits and consuming these effects. The crate itself knows
+nothing about `Tauri`, `gRPC`, or application startup. That separation is what
+lets you test any component in isolation by providing mock implementations of
+the traits it needs.
 
 **Common is engineered to:**
 
-1. **Define Pure Abstractions** - Every application capability is expressed as
+1. **Define Pure Abstractions** — Every application capability is expressed as
    an `async trait` with zero concrete implementation logic.
-2. **Enable Compile-Time DI** - The `Environment` and `Requires` traits allow
-   components to declare service needs without coupling to specific
-   implementations.
-3. **Stabilize Data Contracts** - All `serde`-compatible DTOs and error types
-   form the stable IPC contract between `Mountain` ⛰️, `Cocoon` 🦋, `Grove` 🌳,
-   and all sidecars.
-4. **Provide Transport-Agnostic Communication** - The `Transport` layer defines
-   a `TransportStrategy` trait implemented by concrete transports in `Grove`.
+2. **Enable Compile-Time DI** — The `Environment` and `Requires` traits let
+   components declare what services they need without hard-coding where those
+   services come from.
+3. **Stabilize Data Contracts** — All DTOs and error types form the stable
+   IPC contract between `Mountain` ⛰️, `Cocoon` 🦋, `Grove` 🌳, and all
+   sidecars.
+4. **Provide Transport-Agnostic Communication** — The `TransportStrategy`
+   trait abstracts the wire protocol so the same handler code works over
+   `gRPC`, `IPC`, `WASM`, or `Mist` without changes.
 
 ---
 
 ## Key Features&#x2001;⚙️
 
-**Declarative `ActionEffect` System** - Operations are treated as data
-structures rather than direct function calls. Effects are constructed as values
-that describe the desired side effect and are then passed to an
-`ApplicationRunTime` for execution. This enables composition, testing, and
-controlled execution in a single unified pattern. Instead of writing a function
-that immediately performs I/O, you call a function that _returns a description
-of that effect_.
+**Declarative `ActionEffect` System** — Instead of calling functions that
+immediately perform work, components construct an `ActionEffect` — a value
+that _describes_ what should happen — and hand it to the
+`ApplicationRunTime` for execution. This makes operations inspectable,
+composable, and testable before they ever touch the filesystem or network.
+For example, instead of writing a function that opens a file, you call a
+function that _returns a description_ of opening that file. The runtime
+decides when and how to execute it.
 
-**Compile-Time Dependency Injection** - The `Environment` and `Requires` traits
-handle DI at compile time. Components declare their service needs without
-coupling to specific implementations. All core application services are defined
-as `async trait`s, enforcing an asynchronous-first architecture across the
-entire system.
+**Compile-Time Dependency Injection** — The `Environment` and `Requires` traits
+let components declare what services they need without hard-coding where those
+services come from. A component that needs a file system just says "I require a
+`FileSystemReader`" — it doesn't care whether that's a real disk, a mock for
+testing, or a virtual filesystem. All core services are defined as `async
+trait`s, keeping the entire system asynchronous-first.
 
 **DTO Library for IPC** - Every data structure used for IPC communication with
 `Cocoon` and internal state management in `Mountain` is defined here. All types
