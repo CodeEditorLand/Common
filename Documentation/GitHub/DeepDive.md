@@ -9,24 +9,22 @@
 				</picture>
 			</h3>
 		</td>
-		<td colspan="3" valign="top">
-			<h3 align="center"> Common 👨🏻‍🏭</h3>
-		</td>
+		<td colspan="3" valign="top"><h3 align="center">Common&#x2001;👨🏻‍🏭</h3></td>
 	</tr>
 </table>
 
 ---
 
-# **Common** 👨🏻‍🏭 Deep Dive & Architecture
+# **Common**&#x2001;👨🏻‍🏭&#x2001;Deep Dive & Architecture
 
 **Common** provides the technical foundation for lifting VSCode services into
-the Land platform. `Common` 👨🏻‍🏭 defines the abstract architectural patterns,
+the Land platform. `Common`&#x2001;👨🏻‍🏭 defines the abstract architectural patterns,
 service contracts, and data structures that enable type-safe, testable service
 implementations across Rust and TypeScript boundaries.
 
 ---
 
-## Core Architecture Principles 🏛️
+## Core Architecture Principles&#x2001;🏛️
 
 | Principle                    | Description                                                                                                                                          | Key Components Involved                    |
 | :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------- |
@@ -39,9 +37,9 @@ implementations across Rust and TypeScript boundaries.
 
 ---
 
-## Deep Dive into `Common`'s Components 🔬
+## Deep Dive into `Common`'s Components&#x2001;🔬
 
-### 1. The `ActionEffect` System: Concrete Implementation ⚙️
+### 1. The `ActionEffect` System: Concrete Implementation&#x2001;⚙️
 
 The `ActionEffect` system implements declarative programming patterns where
 operations are described as values rather than executed immediately.
@@ -77,7 +75,7 @@ let parallel_effect = effect1.zip(effect2);
 let resilient_effect = effect.fallback(backup_effect);
 ```
 
-### 2. Concrete Environment System Architecture 🌐
+### 2. Concrete Environment System Architecture&#x2001;🌐
 
 The `Environment` trait system implements capability-based architecture for
 clean dependency management:
@@ -107,7 +105,7 @@ For any `ActionEffect<C, E, T>`, the runtime provides `C` through these steps:
 3. **Runtime Resolution:** ApplicationRunTime resolves and provides capabilities
 4. **Execution:** Effect executes with provided capability
 
-### 3. Concrete DTO System Design 📦
+### 3. Concrete DTO System Design&#x2001;📦
 
 The Data Transfer Object system provides type-safe serialization for IPC
 communication:
@@ -144,7 +142,7 @@ DTOs ensure consistent data structures across the Land ecosystem:
 - **Type Safety:** Compile-time validation of data structures
 - **Performance:** Efficient serialization for high-frequency operations
 
-### 4. Concrete Error System Architecture 🚨
+### 4. Concrete Error System Architecture&#x2001;🚨
 
 The `CommonError` enum provides comprehensive error handling:
 
@@ -171,9 +169,9 @@ graph TB
 
 ---
 
-## Concrete Technical Architecture 🏗️
+## Concrete Technical Architecture&#x2001;🏗️
 
-### Core Architectural Components 🧱
+### Core Architectural Components&#x2001;🧱
 
 #### 1. Concrete Effect Composition Architecture
 
@@ -217,7 +215,7 @@ pub fn ReadFile_effect(path: PathBuf) -> ActionEffect<Arc<dyn FileSystemReader>,
 }
 ```
 
-### Concrete Technical Implementation 🔩
+### Concrete Technical Implementation&#x2001;🔩
 
 #### Performance Characteristics: Effect Execution Overhead
 
@@ -244,7 +242,7 @@ The type system prevents runtime capability errors through:
 3. **Compile-Time Verification:** Invalid compositions fail to compile
 4. **Runtime Safety:** Successful compilation guarantees capability availability
 
-### Ecosystem Integration Mapping 🗺️
+### Ecosystem Integration Mapping&#x2001;🗺️
 
 ```mermaid
 graph TD
@@ -281,7 +279,7 @@ graph TD
     class Traits,Effects,DTOs,Errors common;
 ```
 
-### Concrete Integration Patterns 🔗
+### Concrete Integration Patterns&#x2001;🔗
 
 #### Effect-Based Testing Architecture
 
@@ -320,9 +318,9 @@ sequenceDiagram
 
 ---
 
-## Concrete VSCode Service Lifting Patterns 🔧
+## Concrete VSCode Service Lifting Patterns&#x2001;🔧
 
-### Service Migration Strategy 🔄
+### Service Migration Strategy&#x2001;🔄
 
 `Common` provides the foundation for lifting VSCode services through:
 
@@ -360,7 +358,7 @@ pub struct WorkspaceFolderDTO {
 }
 ```
 
-### Concrete Service Integration Examples 📋
+### Concrete Service Integration Examples&#x2001;📋
 
 #### File System Service Lifting
 
@@ -399,7 +397,7 @@ pub fn GetConfiguration_effect(section: Option<String>) -> ActionEffect<Arc<dyn 
 }
 ```
 
-### Concrete VSCode Service Lifting Architecture 🏗️
+### Concrete VSCode Service Lifting Architecture&#x2001;🏗️
 
 ```mermaid
 graph TD
@@ -443,7 +441,7 @@ graph TD
 | `ICommandService`       | `CommandService`       | `MountainCommand`       | `CommandService`       |
 | `IDocumentService`      | `DocumentProvider`     | `MountainDocument`      | `DocumentService`      |
 
-### Component Block Map 🧩
+### Component Block Map&#x2001;🧩
 
 ```mermaid
 graph TB
@@ -483,30 +481,30 @@ graph TB
     class Traits,Effects,DTOs,Errors common;
 ```
 
-## Performance Optimization Strategies ⚡
+## Performance Optimization Strategies&#x2001;⚡
 
-### 1. Zero-Cost Abstractions 🔮
+### 1. Zero-Cost Abstractions&#x2001;🔮
 
 - **Inline Optimization:** Effect constructors marked `#[inline]` for direct
   embedding
 - **Generic Specialization:** Monomorphization creates specialized versions
 - **Stack Allocation:** Small effects avoid heap allocation
 
-### 2. Memory Management Optimization 🧠
+### 2. Memory Management Optimization&#x2001;🧠
 
 - **Arena Allocation:** Related effects use arena allocation for locality
 - **Object Pooling:** Frequently used effect types are pooled
 - **Cache-Friendly Layout:** Data structures optimized for CPU cache
 
-### 3. Concurrency Optimization 🔄
+### 3. Concurrency Optimization&#x2001;🔄
 
 - **Send + Sync Bounds:** Effects designed for seamless cross-thread usage
 - **Atomic Reference Counting:** Efficient `Arc` usage with minimal overhead
 - **Lock-Free Patterns:** Internal data structures use lock-free algorithms
 
-## Development Guidelines 📖
+## Development Guidelines&#x2001;📖
 
-### Adding New Services ➕
+### Adding New Services&#x2001;➕
 
 When adding new services to `Common`, follow these concrete patterns:
 
@@ -517,7 +515,7 @@ When adding new services to `Common`, follow these concrete patterns:
 3. **Define DTOs:** Create serializable DTOs for cross-language communication
 4. **Define Errors:** Add appropriate error variants to CommonError
 
-### Concrete Usage Patterns 💡
+### Concrete Usage Patterns&#x2001;💡
 
 #### Custom Effect Creation
 
