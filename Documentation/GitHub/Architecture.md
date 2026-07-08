@@ -9,13 +9,13 @@
 				</picture>
 			</h3>
 		</td>
-		<td colspan="3" valign="top"><h3 align="center">Common&#x2001;🧩</h3></td>
+		<td colspan="3" valign="top"><h3 align="center">Common&#x2001;🧑🏻‍🏭</h3></td>
 	</tr>
 </table>
 
 ---
 
-# **Common**&#x2001;🧩&#x2001;Architecture
+# **Common**&#x2001;🧑🏻‍🏭&#x2001;Architecture
 
 `Common` is the architectural foundation of `Land`'s native `Rust` backend. It
 is a pure abstract library that defines:
