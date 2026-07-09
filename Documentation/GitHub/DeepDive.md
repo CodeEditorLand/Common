@@ -9,16 +9,16 @@
 				</picture>
 			</h3>
 		</td>
-		<td colspan="3" valign="top"><h3 align="center">Common&#x2001;👨🏻‍🏭</h3></td>
+		<td colspan="3" valign="top"><h3 align="center">Common&#x2001;🧑🏻‍🏭</h3></td>
 	</tr>
 </table>
 
 ---
 
-# **Common**&#x2001;👨🏻‍🏭&#x2001;Deep Dive & Architecture
+# **Common**&#x2001;🧑🏻‍🏭&#x2001;Deep Dive & Architecture
 
 **Common** provides the technical foundation for lifting VSCode services into
-the Land platform. `Common`&#x2001;👨🏻‍🏭 defines the abstract architectural patterns,
+the Land platform. `Common`&#x2001;🧑🏻‍🏭 defines the abstract architectural patterns,
 service contracts, and data structures that enable type-safe, testable service
 implementations across Rust and TypeScript boundaries.
 
