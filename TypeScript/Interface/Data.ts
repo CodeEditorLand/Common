@@ -5,6 +5,7 @@ import type _Object from "./Object.js";
  *
  */
 export default interface Interface {
+
 	Vector: _Object;
 
 	Data: _Object;

@@ -5,6 +5,7 @@ import type Data from "../Interface/Data.js";
  *
  */
 export default interface Interface {
+
 	/**
 	 * The Encrypt function encrypts data using the AES-GCM algorithm with a given key.
 	 *

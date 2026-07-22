@@ -13,6 +13,7 @@
 export type AsyncOk<T> = { readonly ok: true; readonly value: T };
 
 export type AsyncErr<E extends string = string> = {
+
 	readonly ok: false;
 
 	readonly error: { readonly type: E; readonly cause?: unknown };
@@ -34,6 +35,7 @@ const fail = <E extends string>(type: E, cause?: unknown): AsyncErr<E> =>
 const voidOk: AsyncOk<void> = { ok: true, value: undefined };
 
 const from = async <T>(fn: () => Promise<T>): Async<T> => {
+
 	try {
 		return succeed(await fn());
 	} catch (cause) {
@@ -42,6 +44,7 @@ const from = async <T>(fn: () => Promise<T>): Async<T> => {
 };
 
 const tryFn = async <T>(fn: () => T): Async<T> => {
+
 	try {
 		return succeed(fn());
 	} catch (cause) {
@@ -54,6 +57,7 @@ const map = async <T, U, E extends string>(
 
 	fn: (value: T) => U,
 ): Async<U, E> => {
+
 	const r = await a;
 
 	if (r.ok) return succeed(fn(r.value)) as AsyncOk<U>;
@@ -66,6 +70,7 @@ const flatMap = async <T, U, E extends string, F extends string>(
 
 	fn: (value: T) => Async<U, F>,
 ): Async<U, E | F> => {
+
 	const r = await a;
 
 	if (r.ok) return fn(r.value) as Async<U, E | F>;
@@ -78,6 +83,7 @@ const catchError = async <T, E extends string>(
 
 	fn: (error: { type: E; cause?: unknown }) => Async<T>,
 ): Async<T> => {
+
 	const r = await a;
 
 	if (!r.ok) return fn(r.error as { type: E; cause?: unknown });
@@ -90,6 +96,7 @@ const withTimeout = async <T, E extends string>(
 
 	ms: number,
 ): Async<T, E | "Timeout"> => {
+
 	const timeout = new Promise<AsyncErr<"Timeout">>((resolve) =>
 		setTimeout(
 			() => resolve(fail("Timeout", `timed out after ${ms}ms`)),
@@ -105,6 +112,7 @@ const sleep = (ms: number): Promise<void> =>
 	new Promise((resolve) => setTimeout(resolve, ms));
 
 export const Async = {
+
 	succeed,
 
 	fail,

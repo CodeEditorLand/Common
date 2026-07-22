@@ -3,6 +3,7 @@
  *
  */
 export default interface Interface {
+
 	/**
 	 * The Get function recursively converts an object into a Map data structure.
 	 *
