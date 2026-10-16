@@ -52,8 +52,9 @@ pub fn ProxyCallToSideCar(
 
 			let ParametersValue = CallDataClone.get("Parameters").cloned().unwrap_or(Value::Null);
 
-			// Using a default timeout here; a real implementation might make this
-			// configurable by extracting it from the CallData payload.
+			// Using a default timeout here; a real implementation might make
+			// this configurable by extracting it from the CallData
+			// payload.
 			let DefaultTimeoutMilliseconds = 30000;
 
 			Provider

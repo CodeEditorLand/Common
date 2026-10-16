@@ -474,8 +474,9 @@ impl TransportRegistry {
 		let TransportOption = self.Transports.remove(Name);
 
 		if let Some(_Transport) = TransportOption {
-			// Arc<dyn CommonTransportStrategy> does not expose mutable disconnect here;
-			// callers should disconnect before unregistering if needed.
+			// Arc<dyn CommonTransportStrategy> does not expose mutable
+			// disconnect here; callers should disconnect before
+			// unregistering if needed.
 			log::info!("Unregistered transport: {}", Name);
 
 			Ok(())

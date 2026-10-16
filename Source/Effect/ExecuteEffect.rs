@@ -39,7 +39,7 @@ where
 	TRunTime::EnvironmentType: Requires<TCapabilityProvider>,
 	TError: From<CommonError> + Send + Sync + 'static,
 	TOutput: Send + Sync + 'static, {
-	// The RunTime::Run method expects an effect whose closure takes the capability.
-	// This now matches perfectly.
+	// The RunTime::Run method expects an effect whose closure takes the
+	// capability. This now matches perfectly.
 	RunTime.Run(Effect).await
 }

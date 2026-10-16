@@ -23,9 +23,9 @@
 		"test": "vitest run"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "5.20260903.1",
+		"@cloudflare/workers-types": "5.20261012.1",
 		"@playform/build": "0.3.4",
-		"vitest": "5.0.0"
+		"vitest": "5.0.4"
 	},
 	"publishConfig": {
 		"access": "public"
