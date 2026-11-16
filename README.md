@@ -1,4 +1,4 @@
-# **Common**&#x2001;🧑🏻‍🏭
+# **Common** 🧑🏻‍🏭
 
 <table>
 	<tr>
@@ -39,7 +39,7 @@
 	</tr>
 </table>
 
-The Pure Abstract Foundation for Land&#x2001;🏞️
+The Pure Abstract Foundation for Land 🏞️
 
 > **VS Code's codebase imports concrete implementations directly. Testing a
 > single component means mocking entire subsystems. There is no dependency
@@ -52,7 +52,7 @@ required."_
 [<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/) [![Crates.io](https://img.shields.io/crates/v/land-common.svg)](https://crates.io/crates/land-common)
 [<img src="https://editor.land/Image/Rust.svg" width="14" alt="Rust" />](https://www.rust-lang.org/) [![Rust Version](https://img.shields.io/badge/Rust-1.85+-blue.svg)](https://www.rust-lang.org/)
 
-**[Rust API Documentation](https://rust.documentation.common.editor.land/)**&#x2001;📖
+**[Rust API Documentation](https://rust.documentation.common.editor.land/)** 📖
 
 ---
 
@@ -73,7 +73,7 @@ It defines several things that the rest of the system depends on:
   tested, composed, and controlled before execution.
 - **Data Transfer Objects (DTOs)** - The data structures that flow between
   components. All types work with `serde` so they serialize cleanly for IPC
-  between `Mountain`&#x2001;⛰️, `Cocoon`&#x2001;🦋, `Grove`&#x2001;🌳, and all
+  between `Mountain` ⛰️, `Cocoon` 🦋, `Grove` 🌳, and all
   sidecars.
 - **CommonError** - One error type for every possible failure across every
   service. File system errors, terminal errors, language feature errors - all
@@ -81,11 +81,11 @@ It defines several things that the rest of the system depends on:
 - **Transport layer** - A `TransportStrategy` trait that defines how components
   talk to each other, without committing to any specific protocol. Concrete
   transports (`gRPC`, `IPC`, `WASM`, `Mist`) are implemented in
-  `Grove`&#x2001;🌳.
+  `Grove` 🌳.
 - **Telemetry** - A shared pipeline for sending events to `PostHog` and traces
   to any `OTLP`-compatible backend.
 
-Everything in `Mountain`&#x2001;⛰️ - and any future native component - is built
+Everything in `Mountain` ⛰️ - and any future native component - is built
 by implementing these traits and consuming these effects. The crate itself knows
 nothing about `Tauri`, `gRPC`, or application startup. That separation is what
 lets you test any component in isolation by providing mock implementations of
@@ -99,7 +99,7 @@ the traits it needs.
    components declare what services they need without hard-coding where those
    services come from.
 3. **Stabilize Data Contracts** - All DTOs and error types form the stable IPC
-   contract between `Mountain`&#x2001;⛰️, `Cocoon`&#x2001;🦋, `Grove`&#x2001;🌳,
+   contract between `Mountain` ⛰️, `Cocoon` 🦋, `Grove` 🌳,
    and all sidecars.
 4. **Provide Transport-Agnostic Communication** - The `TransportStrategy` trait
    abstracts the wire protocol so the same handler code works over `gRPC`,
@@ -107,7 +107,7 @@ the traits it needs.
 
 ---
 
-## Key Features&#x2001;⚙️
+## Key Features ⚙️
 
 **Declarative `ActionEffect` System** - Instead of calling functions that
 immediately perform work, components construct an `ActionEffect` - a value that
@@ -125,7 +125,7 @@ testing, or a virtual filesystem. All core services are defined as
 `async trait`s, keeping the entire system asynchronous-first.
 
 **DTO Library for IPC** - Every data structure used for IPC communication with
-`Cocoon`&#x2001;🦋 and internal state management in `Mountain`&#x2001;⛰️ is
+`Cocoon` 🦋 and internal state management in `Mountain` ⛰️ is
 defined here. All types are `serde`-compatible, forming the stable contract
 between all Land components.
 
@@ -136,7 +136,7 @@ predictable everywhere.
 
 **Transport-Agnostic Communication** - The `Transport/` layer defines a
 `TransportStrategy` trait. Concrete implementations (`gRPCTransport`,
-`IPCTransport`, `WASMTransport`, `MistTransport`) live in `Grove`&#x2001;🌳.
+`IPCTransport`, `WASMTransport`, `MistTransport`) live in `Grove` 🌳.
 
 **Dual-Pipe Telemetry** - The `Telemetry/` module provides a shared `PostHog` +
 `OTLP` emit surface consumed by all `Rust` sidecars.
@@ -147,7 +147,7 @@ predictable everywhere.
 
 ---
 
-## Core Architecture Principles&#x2001;🏗️
+## Core Architecture Principles 🏗️
 
 | Principle          | Description                                                                                                                                    | Key Components                             |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
@@ -172,7 +172,7 @@ graph LR
     subgraph COMMON["Common 🧑🏻‍🏭 - Pure Abstract Foundation (no Tauri / gRPC deps)"]
         direction TB
         subgraph CORE["Effect System"]
-            Traits["async trait per service domain\nFileSystem · Terminal · SCM · Storage\nUI · Search · Document · TreeView…"]:::common
+            Traits["async trait per service domain\nFileSystem · Terminal · SCM · Storage\nUI · Search · Document · TreeView..."]:::common
             Effects["ActionEffect - operations as values\nConstructors per domain"]:::common
             Effects -. depends on .-> Traits
         end
@@ -209,12 +209,12 @@ graph LR
 
 | Path                                                       | Relationship                             | Use Case                                    |
 | ---------------------------------------------------------- | ---------------------------------------- | ------------------------------------------- |
-| `Mountain`&#x2001;⛰️ → `Common`&#x2001;🧑🏻‍🏭                  | Implements traits, consumes effects      | Primary consumer of all service definitions |
-| `Grove`&#x2001;🌳 → `Common`&#x2001;🧑🏻‍🏭 transport layer     | Implements `TransportStrategy`           | `gRPC`, `IPC`, `WASM`, `Mist` transports    |
-| `Air`&#x2001;🪁 → `Common`&#x2001;🧑🏻‍🏭 transport + telemetry | Uses `Transport` and `Telemetry` modules | Background daemon communication             |
-| Sidecars → `Common`&#x2001;🧑🏻‍🏭 telemetry                    | Consumes `PostHog` + `OTLP` emit surface | Shared telemetry across all `Rust` sidecars |
-| Mock tests → `Common`&#x2001;🧑🏻‍🏭 traits                     | Implements mock providers                | Fast, isolated unit tests                   |
-| `Cocoon`&#x2001;🦋 ↔ `Common`&#x2001;🧑🏻‍🏭                    | Shares DTOs via `serde`                  | IPC data contract compatibility             |
+| `Mountain` ⛰️ → `Common` 🧑🏻‍🏭                  | Implements traits, consumes effects      | Primary consumer of all service definitions |
+| `Grove` 🌳 → `Common` 🧑🏻‍🏭 transport layer     | Implements `TransportStrategy`           | `gRPC`, `IPC`, `WASM`, `Mist` transports    |
+| `Air` 🪁 → `Common` 🧑🏻‍🏭 transport + telemetry | Uses `Transport` and `Telemetry` modules | Background daemon communication             |
+| Sidecars → `Common` 🧑🏻‍🏭 telemetry                    | Consumes `PostHog` + `OTLP` emit surface | Shared telemetry across all `Rust` sidecars |
+| Mock tests → `Common` 🧑🏻‍🏭 traits                     | Implements mock providers                | Fast, isolated unit tests                   |
+| `Cocoon` 🦋 ↔ `Common` 🧑🏻‍🏭                    | Shares DTOs via `serde`                  | IPC data contract compatibility             |
 
 ---
 
@@ -257,7 +257,7 @@ graph LR
 
 ---
 
-## Project Structure&#x2001;🗺️
+## Project Structure 🗺️
 
 ```
 Element/Common/
@@ -560,16 +560,16 @@ it.
 
 | Element                | Relationship       | Description                                                                                                 |
 | ---------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
-| **Mountain**&#x2001;⛰️ | Primary consumer   | Implements traits with concrete `Environment/` providers, executes `ActionEffect`s via `ApplicationRunTime` |
-| **Grove**&#x2001;🌳    | Transport consumer | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports                           |
-| **Cocoon**&#x2001;🦋   | DTO consumer       | Shares DTOs via `serde` for IPC data contract compatibility                                                 |
-| **Air**&#x2001;🪁      | Module consumer    | Uses `Transport` and `Telemetry` modules for daemon communication                                           |
-| **Echo**&#x2001;📣     | Telemetry consumer | Consumes the shared `PostHog` + `OTLP` telemetry pipe                                                       |
+| **Mountain** ⛰️ | Primary consumer   | Implements traits with concrete `Environment/` providers, executes `ActionEffect`s via `ApplicationRunTime` |
+| **Grove** 🌳    | Transport consumer | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports                           |
+| **Cocoon** 🦋   | DTO consumer       | Shares DTOs via `serde` for IPC data contract compatibility                                                 |
+| **Air** 🪁      | Module consumer    | Uses `Transport` and `Telemetry` modules for daemon communication                                           |
+| **Echo** 📣     | Telemetry consumer | Consumes the shared `PostHog` + `OTLP` telemetry pipe                                                       |
 | **Tests**              | Mock consumer      | Implements mock trait providers for fast, isolated unit testing                                             |
 
 ---
 
-## Getting Started&#x2001;🚀
+## Getting Started 🚀
 
 ### Prerequisites
 
@@ -638,7 +638,7 @@ async fn SomeLogic(Runtime: Arc<impl ApplicationRunTime>) {
 
 ---
 
-## Security&#x2001;🔒
+## Security 🔒
 
 Common enforces security at the architectural level:
 
@@ -659,10 +659,10 @@ Common is designed to be compatible with:
 
 | Target                 | Integration                                                                       |
 | ---------------------- | --------------------------------------------------------------------------------- |
-| **Mountain**&#x2001;⛰️ | Primary consumer - implements all traits, executes effects                        |
-| **Grove**&#x2001;🌳    | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports |
-| **Cocoon**&#x2001;🦋   | Shares DTOs via `serde` for IPC data contract compatibility                       |
-| **Air**&#x2001;🪁      | Consumes `Transport` and `Telemetry` modules for daemon communication             |
+| **Mountain** ⛰️ | Primary consumer - implements all traits, executes effects                        |
+| **Grove** 🌳    | Implements `TransportStrategy` trait for `gRPC`, `IPC`, `WASM`, `Mist` transports |
+| **Cocoon** 🦋   | Shares DTOs via `serde` for IPC data contract compatibility                       |
+| **Air** 🪁      | Consumes `Transport` and `Telemetry` modules for daemon communication             |
 | **Sidecars**           | All `Rust` sidecars consume the shared `PostHog` + `OTLP` telemetry pipe          |
 | **Tests**              | Mock implementations of all traits enable fast, isolated unit testing             |
 
@@ -670,7 +670,7 @@ Common is designed to be compatible with:
 
 ## API Reference
 
-- **[Rust API Documentation](https://rust.documentation.common.editor.land/)**&#x2001;📖
+- **[Rust API Documentation](https://rust.documentation.common.editor.land/)** 📖
 - [Architecture Overview](https://Editor.Land/Doc/architecture)
 - [Deep Dive](Documentation/GitHub/DeepDive.md) - The `ActionEffect` system,
   trait-based DI model, and guide for adding new services
@@ -684,16 +684,16 @@ Common is designed to be compatible with:
 - [Deep Dive](Documentation/GitHub/DeepDive.md) - In-depth technical details
 - [Land Documentation](../../Documentation/GitHub/README.md) - Complete
   documentation index
-- [`Mountain`](https://github.com/CodeEditorLand/Mountain)&#x2001;⛰️ - Primary
+- [`Mountain`](https://github.com/CodeEditorLand/Mountain) ⛰️ - Primary
   consumer implementing Common traits
-- [`Echo`](https://github.com/CodeEditorLand/Echo)&#x2001;📣 - Work-stealing
+- [`Echo`](https://github.com/CodeEditorLand/Echo) 📣 - Work-stealing
   scheduler
-- [`Air`](https://github.com/CodeEditorLand/Air)&#x2001;🪁 - Background daemon
+- [`Air`](https://github.com/CodeEditorLand/Air) 🪁 - Background daemon
 - [Why Rust](https://Editor.Land/Doc/why-rust)
 
 ---
 
-## License&#x2001;⚖️
+## License ⚖️
 
 This project is released into the public domain under the **Creative Commons CC0
 Universal** license. You are free to use, modify, distribute, and build upon
@@ -703,7 +703,7 @@ file.
 
 ---
 
-## Changelog&#x2001;📜
+## Changelog 📜
 
 Stay updated with our progress! See
 [`CHANGELOG.md`](https://github.com/CodeEditorLand/Common/tree/Current/CHANGELOG.md)
@@ -711,9 +711,9 @@ for a history of changes.
 
 ---
 
-## Funding & Acknowledgements&#x2001;🙏🏻
+## Funding & Acknowledgements 🙏🏻
 
-**Land**&#x2001;🏞️ is proud to be an open-source endeavor. Our journey is
+**Land** 🏞️ is proud to be an open-source endeavor. Our journey is
 significantly supported by the organizations and projects that believe in the
 future of open-source software.
 

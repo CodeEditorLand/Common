@@ -9,13 +9,13 @@
 				</picture>
 			</h3>
 		</td>
-		<td colspan="3" valign="top"><h3 align="center">Common&#x2001;🧑🏻‍🏭</h3></td>
+		<td colspan="3" valign="top"><h3 align="center">Common 🧑🏻‍🏭</h3></td>
 	</tr>
 </table>
 
 ---
 
-# **Common**&#x2001;🧑🏻‍🏭&#x2001;Architecture
+# **Common** 🧑🏻‍🏭 Architecture
 
 `Common` is the architectural foundation of `Land`'s native `Rust` backend. It
 is a pure abstract library that defines:
@@ -70,7 +70,7 @@ graph TB
     AE -->|"execute via"| RUNTIME["ApplicationRunTime<br/>(Echo-backed)"]
 ```
 
-## Overview&#x2001;📋
+## Overview 📋
 
 `Common` defines the architectural language of the entire native ecosystem:
 
@@ -88,7 +88,7 @@ graph TB
 
 ---
 
-## Architecture Principles&#x2001;📐
+## Architecture Principles 📐
 
 | Principle                    | Description                                                                               | Key Components                             |
 | ---------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------ |
@@ -101,7 +101,7 @@ graph TB
 
 ---
 
-## Trait Architecture&#x2001;📋
+## Trait Architecture 📋
 
 Every application capability is defined as an async trait:
 
@@ -120,7 +120,7 @@ pub trait FileSystem: Send + Sync {
 }
 ```
 
-### Defined Service Traits&#x2001;📋
+### Defined Service Traits 📋
 
 | Module                     | Trait                                   | Domain          | Methods                                                           |
 | -------------------------- | --------------------------------------- | --------------- | ----------------------------------------------------------------- |
@@ -149,7 +149,7 @@ pub trait FileSystem: Send + Sync {
 
 ---
 
-## ActionEffect System&#x2001;⚡
+## ActionEffect System ⚡
 
 The `ActionEffect` system treats operations as data structures rather than
 direct function calls. This declarative approach enables:
@@ -158,7 +158,7 @@ direct function calls. This declarative approach enables:
 - **Testing** - Effects are data, easy to mock and assert
 - **Controlled execution** - Effects are executed by a runtime
 
-### Type Signature&#x2001;📝
+### Type Signature 📝
 
 ```rust
 pub struct ActionEffect<TCapability, TError, TOutput> {
@@ -175,7 +175,7 @@ pub struct ActionEffect<TCapability, TError, TOutput> {
 - **TError**: The error type that may result
 - **TOutput**: The successful result type
 
-### Effect Composition&#x2001;🔄
+### Effect Composition 🔄
 
 ```rust
 // Sequential composition
@@ -191,7 +191,7 @@ let resilient = effect.fallback(backup_effect);
 let mapped = effect.map(|result| transform(result));
 ```
 
-### Execution&#x2001;▶️
+### Execution ▶️
 
 ```rust
 // Effects are executed by ApplicationRunTime
@@ -203,7 +203,7 @@ let result: Result<Vec<u8>, CommonError> = runtime
 
 ---
 
-## Environment and Dependency Injection&#x2001;🧩
+## Environment and Dependency Injection 🧩
 
 `Common` implements compile-time dependency injection through the `Environment`
 and `Requires` traits:
@@ -224,7 +224,7 @@ pub trait Environment {
 }
 ```
 
-### Capability Resolution Flow&#x2001;🗺️
+### Capability Resolution Flow 🗺️
 
 ```
 ActionEffect<C, E, T>
@@ -247,7 +247,7 @@ Effect executed with concrete implementation
 
 ---
 
-## Data Transfer Objects&#x2001;📦
+## Data Transfer Objects 📦
 
 `Common` defines all `DTO`s shared across components:
 
@@ -264,7 +264,7 @@ Effect executed with concrete implementation
 
 ---
 
-## CommonError&#x2001;⚠️
+## CommonError ⚠️
 
 A single error type covering all failure modes across every service domain:
 
@@ -284,7 +284,7 @@ pub enum CommonError {
 
 ---
 
-## Transport Layer&#x2001;🔗
+## Transport Layer 🔗
 
 `Common` provides a transport-agnostic communication interface:
 
@@ -305,7 +305,7 @@ pub trait TransportStrategy: Send + Sync {
 
 ---
 
-## Telemetry Module&#x2001;📡
+## Telemetry Module 📡
 
 `Common`'s telemetry module provides a dual-pipe emit surface:
 
@@ -319,7 +319,7 @@ pub trait TransportStrategy: Send + Sync {
 
 ---
 
-## Service Domain Map&#x2001;🗺️
+## Service Domain Map 🗺️
 
 ```
 Common/
@@ -357,7 +357,7 @@ Common/
 
 ---
 
-## Related Documentation&#x2001;📚
+## Related Documentation 📚
 
 - [Mountain](https://github.com/CodeEditorLand/Mountain/tree/Current/Documentation/GitHub/Architecture.md) -
   Trait implementations
