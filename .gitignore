@@ -19,3 +19,5 @@ Documentation/Rust/release
 Documentation/Rust/.rustc_info.json
 Documentation/Rust/.rustdoc_fingerprint.json
 Documentation/Rust/CACHEDIR.TAG
+
+tsconfig.tsbuildinfo
