@@ -15,15 +15,12 @@
 //!
 //! ## Sub-modules
 //!
+//! - [`TransportStrategy`] - Core trait all transports must implement
+//! - [`TransportError`] - Unified error taxonomy
+//! - [`UnifiedRequest`] - Common request message format
+//! - [`UnifiedResponse`] - Common response message format
+//! - [`TransportConfig`] - Configuration structures
 //! - [`Common`] - Shared types and utilities
-//! - [`gRPC`] - gRPC transport implementation
-//! - [`IPC`] - IPC (Unix sockets/Named pipes) implementation
-//! - [`WASM`] - WebAssembly/WebWorker implementation
-//! - [`Registry`] - Transport registry and selection
-//! - [`Metrics`] - Metrics collection and monitoring
-//! - [`Retry`] - Retry strategies with backoff
-//! - [`CircuitBreaker`] - Circuit breaker pattern
-//! - [`DTO`] - Data Transfer Objects
 //!
 //! ## Usage
 //!
