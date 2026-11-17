@@ -259,7 +259,7 @@ graph LR
 
 ## Project Structure 🗺️
 
-```
+```text
 Element/Common/
 ├── Source/
 │   ├── Library.rs                       # Crate root, declares all modules
@@ -775,3 +775,10 @@ This project is funded through
 		</tr>
 	</tbody>
 </table>
+
+---
+
+**Project Maintainers:** Source Open
+([Source/Open@Editor.Land](mailto:Source/Open@Editor.Land)) |
+[GitHub Repository](https://github.com/CodeEditorLand/Common) |
+[Report an Issue](https://github.com/CodeEditorLand/Common/issues)

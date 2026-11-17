@@ -226,7 +226,7 @@ pub trait Environment {
 
 ### Capability Resolution Flow 🗺️
 
-```
+```text
 ActionEffect<C, E, T>
     |
     v
@@ -336,7 +336,7 @@ pub trait TransportStrategy: Send + Sync {
 
 ## Service Domain Map 🗺️
 
-```
+```text
 Common/
 +-- Command/            - Command execution and registration
 +-- Configuration/      - Settings and configuration management
