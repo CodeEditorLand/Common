@@ -1,4 +1,4 @@
-# **Common** 🧑🏻‍🏭
+# **Common**
 
 <table>
 	<tr>
@@ -56,7 +56,7 @@ required."_
 
 ---
 
-## Overview
+## Overview 📋
 
 **Common** is the architectural core of the Land Code Editor's native backend.
 It contains no working code - only abstract definitions. Think of it as the
@@ -159,7 +159,7 @@ predictable everywhere.
 
 ---
 
-## System Architecture
+## System Architecture 🏗️
 
 ```mermaid
 graph LR
@@ -218,7 +218,7 @@ graph LR
 
 ---
 
-## Key Components
+## Key Components 🧩
 
 | Component               | Path                              | Description                                                        |
 | ----------------------- | --------------------------------- | ------------------------------------------------------------------ |
@@ -552,7 +552,7 @@ Element/Common/
 
 ---
 
-## In the Land Project
+## In the Land Project 🔌
 
 `Common` is the foundational layer upon which the entire native backend is
 built. It has no knowledge of its consumers, but they are entirely dependent on
@@ -571,11 +571,11 @@ it.
 
 ## Getting Started 🚀
 
-### Prerequisites
+### Prerequisites 📦
 
 - **`Rust`** 1.85 or later
 
-### Build
+### Build 📦
 
 `Common` is intended to be used as a local path dependency within the `Land`
 workspace. In `Mountain`'s `Cargo.toml`:
@@ -585,7 +585,7 @@ workspace. In `Mountain`'s `Cargo.toml`:
 Common = { path = "../Common" }
 ```
 
-### Usage
+### Usage 🚀
 
 1. **Implement a Trait:** In `Mountain/Source/Environment/`, provide the
    concrete implementation for a `Common` trait.
@@ -624,7 +624,7 @@ async fn SomeLogic(Runtime: Arc<impl ApplicationRunTime>) {
 }
 ```
 
-### Key Dependencies
+### Key Dependencies 🧩
 
 | Crate         | Purpose                                    |
 | ------------- | ------------------------------------------ |
@@ -646,14 +646,14 @@ Common enforces security at the architectural level:
 | ------------------ | ---------------------------------------------------------------------------------- |
 | **Architecture**   | No concrete implementations - consumers cannot bypass trait boundaries             |
 | **Type system**    | All capabilities are abstract `async trait`s with explicit type signatures         |
-| **Error model**    | Single `CommonError` enum prevents information leakage through ad-hoc error types  |
+| **Error types**    | Single `CommonError` enum prevents information leakage through ad-hoc error types  |
 | **Dependencies**   | Zero dependency on `Tauri`, `gRPC`, or any networking crate - no ambient authority |
 | **Testing**        | Mock implementations allow security-critical paths to be tested in isolation       |
 | **Data contracts** | `serde`-compatible DTOs with explicit schemas prevent deserialization attacks      |
 
 ---
 
-## Compatibility
+## Compatibility 🔌
 
 Common is designed to be compatible with:
 
@@ -668,21 +668,23 @@ Common is designed to be compatible with:
 
 ---
 
-## API Reference
+## API Reference 📖
+
+- [Architecture](https://github.com/CodeEditorLand/Common/tree/Current/Documentation/GitHub/Architecture.md) - abstract core traits, DTO layout and transport contract
 
 - **[Rust API Documentation](https://rust.documentation.common.editor.land/)** 📖
 - [Architecture Overview](https://Editor.Land/Doc/architecture)
 - [Deep Dive](Documentation/GitHub/DeepDive.md) - The `ActionEffect` system,
-  trait-based DI model, and guide for adding new services
+  trait-based dependency injection, and guide for adding new services
 
 ---
 
-## Related Documentation
+## Related Documentation 📖
 
 - [Architecture Overview](https://Editor.Land/Doc/architecture) - Internal
   module structure
 - [Deep Dive](Documentation/GitHub/DeepDive.md) - In-depth technical details
-- [Land Documentation](../../Documentation/GitHub/README.md) - Complete
+- [Land Documentation](https://github.com/CodeEditorLand/Land/tree/Current/Documentation/GitHub/README.md) - Complete
   documentation index
 - [`Mountain`](https://github.com/CodeEditorLand/Mountain) ⛰️ - Primary
   consumer implementing Common traits

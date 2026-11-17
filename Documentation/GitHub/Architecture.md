@@ -15,7 +15,7 @@
 
 ---
 
-# **Common** 🧑🏻‍🏭 Architecture
+# **Common** Architecture
 
 `Common` is the architectural foundation of `Land`'s native `Rust` backend. It
 is a pure abstract library that defines:
@@ -29,7 +29,7 @@ It contains no concrete implementations.
 
 ---
 
-## Table of Contents
+## Table of Contents 📖
 
 1. [Overview](#overview)
 2. [Architecture Principles](#architecture-principles)
@@ -286,6 +286,21 @@ pub enum CommonError {
 
 ## Transport Layer 🔗
 
+```mermaid
+sequenceDiagram
+    participant Frontend as Wind TypeScript frontend
+    participant DTO as Common DTOs
+    participant Transport as Common Transport
+    participant Backend as Mountain trait implementation
+
+    Frontend->>DTO: typed request object
+    DTO->>Transport: serialise over gRPC or Tauri command
+    Transport->>Backend: dispatch to service trait method
+    Backend-->>Transport: typed result or CommonError
+    Transport-->>Frontend: deserialised result
+```
+
+
 `Common` provides a transport-agnostic communication interface:
 
 ```rust
@@ -370,7 +385,7 @@ Common/
 
 ---
 
-## Shim Compatibility
+## Shim Compatibility 🛡️
 
 | 🟠 Low-Level Shim                              | 🔵 Coverage Shim                   |
 | ---------------------------------------------- | ---------------------------------- |
