@@ -53,3 +53,5 @@ pub mod UnifiedResponse;
 pub mod TransportConfig;
 
 pub mod Common;
+
+pub mod Registry;

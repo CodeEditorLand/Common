@@ -18,3 +18,7 @@ pub mod SendNotificationToSideCar;
 
 /// Effect constructor for sending request-response RPC calls to a sidecar.
 pub mod SendRequestToSideCar;
+
+/// Effect constructor that proxies a generic RPC call to a target sidecar,
+/// routing a request received from one process through to another.
+pub mod ProxyCallToSideCar;
